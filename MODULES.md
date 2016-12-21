@@ -23,21 +23,21 @@ Below are listed modules that are available for download also with theirs depend
 _depends on:_
 [`universum.studios.android:utils`](https://github.com/universum-studios/android_utils)
 
-**[Event](https://github.com/universum-studios/android_officium/tree/master/library/src/contact)**
+**[Event](https://github.com/universum-studios/android_officium/tree/master/library/src/event)**
 
     compile 'universum.studios.android:officium-event:1.0.0@aar'
 
 _depends on:_
 [`com.squareup:otto`](http://square.github.io/otto/)
 
-**[Event-Core](https://github.com/universum-studios/android_officium/tree/master/library/src/contact)**
+**[Event-Core](https://github.com/universum-studios/android_officium/tree/master/library/src/event/core)**
 
     compile 'universum.studios.android:officium-event-core:1.0.0@aar'
 
 _depends on:_
 [`com.squareup:otto`](http://square.github.io/otto/)
 
-**[Event-Common](https://github.com/universum-studios/android_officium/tree/master/library/src/contact)**
+**[Event-Common](https://github.com/universum-studios/android_officium/tree/master/library/src/event/common)**
 
     compile 'universum.studios.android:officium-event-common:1.0.0@aar'
 
