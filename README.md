@@ -11,12 +11,17 @@ Download the latest **[release](https://github.com/universum-studios/android_off
 
 ## Compatibility ##
 
-Available from the **Android [API Level 14](http://developer.android.com/about/versions/android-4.0.html "See API highlights")**.
+Available from the **Android [API Level 11](http://developer.android.com/about/versions/android-3.0.html "See API highlights")**.
 
 ### Dependencies ###
 
 - [`com.android.support:support-annotations`](http://developer.android.com/tools/support-library/features.html#annotations)
-- [`com.android.support:support-v4`](http://developer.android.com/tools/support-library/features.html#v4)
+- [`com.squareup:otto`](http://square.github.io/otto/)
+- [`com.squareup.okio:okio`](https://github.com/square/okio)
+- [`com.squareup.okhttp3:okhttp`](http://square.github.io/okhttp/)
+- [`com.squareup.retrofit2:retrofit`](http://square.github.io/retrofit/)
+- [`com.google.code.gson:gson`](https://github.com/google/gson)
+- [`universum.studios.android:utils`](https://github.com/universum-studios/android_utils)
 
 ## License ##
 
