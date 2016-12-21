@@ -24,7 +24,7 @@ import com.squareup.otto.Bus;
 
 /**
  * An {@link EventBus} implementation that wraps {@link Bus} provided by the <b><a href="http://square.github.io/otto/">Otto</a></b>
- * framework. Simple bus need to be created with an instance of Otto's bus via {@link #SimpleEventBus(Bus)}.
+ * library. Simple bus need to be created with an instance of Otto's bus via {@link #SimpleEventBus(Bus)}.
  * The wrapped bus may be than obtained via {@link #getBus()} if needed.
  *
  * @author Martin Albedinsky

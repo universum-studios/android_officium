@@ -71,7 +71,7 @@ public class ErrorResponse extends ServiceResponse {
 	/**
 	 * Creates a new instance of ErrorResponse without error.
 	 * <p>
-	 * This constructor should be used only by <b>Gson</b> framework.
+	 * This constructor should be used only by <b>Gson</b> library.
 	 */
 	public ErrorResponse() {
 	}

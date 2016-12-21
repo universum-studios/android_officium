@@ -58,7 +58,7 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 	/**
 	 * Creates a new instance of SingleUserAccountManager for the specified <var>accountType</var>.
 	 *
-	 * @param context     Context used to access framework's {@link AccountManager}.
+	 * @param context     Context used to access {@link AccountManager}.
 	 * @param accountType The desired account type that will be managed by the new user account manager.
 	 */
 	public SingleUserAccountManager(@NonNull Context context, @NonNull String accountType) {
