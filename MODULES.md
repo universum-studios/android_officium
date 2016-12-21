@@ -42,37 +42,22 @@ _depends on:_
     compile 'universum.studios.android:officium-event-common:1.0.0@aar'
 
 _depends on:_
-[`event-core`](https://github.com/universum-studios/android_officium/tree/master/library/src/main)
+[officium-event-core](https://github.com/universum-studios/android_officium/tree/master/library/src/main)
 
-**[Content](https://github.com/universum-studios/android_officium/tree/master/library/src/content)**
+**[Service](https://github.com/universum-studios/android_officium/tree/master/library/src/service)**
 
-    compile 'universum.studios.android:officium-content:1.0.0@aar'
+    compile 'universum.studios.android:officium-service:1.0.0@aar'
 
 _depends on:_
 [officium-core](https://github.com/universum-studios/android_officium/tree/master/library/src/main),
-[officium-mime-type](https://github.com/universum-studios/android_officium/tree/master/library/src/mime-type)
+[`com.squareup.okio:okio`](https://github.com/square/okio),
+[`com.squareup.okhttp3:okhttp`](http://square.github.io/okhttp/),
+[`com.squareup.retrofit2:retrofit`](http://square.github.io/retrofit/)
 
-**[Map](https://github.com/universum-studios/android_officium/tree/master/library/src/map)**
+**[Sync](https://github.com/universum-studios/android_officium/tree/master/library/src/sync)**
 
-    compile 'universum.studios.android:officium-map:1.0.0@aar'
-
-_depends on:_
-[officium-core](https://github.com/universum-studios/android_officium/tree/master/library/src/main)
-
-**[Play](https://github.com/universum-studios/android_officium/tree/master/library/src/play)**
-
-    compile 'universum.studios.android:officium-play:1.0.0@aar'
+    compile 'universum.studios.android:officium-sync:1.0.0@aar'
 
 _depends on:_
-[officium-core](https://github.com/universum-studios/android_officium/tree/master/library/src/main)
-
-**[Web](https://github.com/universum-studios/android_officium/tree/master/library/src/web)**
-
-    compile 'universum.studios.android:officium-web:1.0.0@aar'
-
-_depends on:_
-[officium-core](https://github.com/universum-studios/android_officium/tree/master/library/src/main)
-
-**[Mime-Type](https://github.com/universum-studios/android_officium/tree/master/library/src/mime-type)**
-
-    compile 'universum.studios.android:officium-mime-type:1.0.0@aar'
+[officium-core](https://github.com/universum-studios/android_officium/tree/master/library/src/main),
+[`com.google.code.gson:gson`](https://github.com/google/gson)
