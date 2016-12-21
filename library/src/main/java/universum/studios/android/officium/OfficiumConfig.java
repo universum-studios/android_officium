@@ -21,14 +21,14 @@ package universum.studios.android.officium;
 import android.util.Log;
 
 /**
- * Configuration options for the Officium framework.
+ * Configuration options for the Officium library.
  *
  * @author Martin Albedinsky
  */
 public final class OfficiumConfig {
 
 	/**
-	 * Flag indicating whether the <b>verbose</b> output for the Officium framework trough log-cat is
+	 * Flag indicating whether the <b>verbose</b> output for the Officium library trough log-cat is
 	 * enabled or not.
 	 *
 	 * @see Log#v(String, String)
@@ -36,7 +36,7 @@ public final class OfficiumConfig {
 	public static boolean LOG_ENABLED = true;
 
 	/**
-	 * Flag indicating whether the <b>debug</b> output for the Officium framework trough log-cat is
+	 * Flag indicating whether the <b>debug</b> output for the Officium library trough log-cat is
 	 * enabled or not.
 	 *
 	 * @see Log#d(String, String)

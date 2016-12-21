@@ -14,51 +14,50 @@ Below are listed modules that are available for download also with theirs depend
 
 **[Core](https://github.com/universum-studios/android_officium/tree/master/library/src/main)**
 
-    compile 'universum.studios.android:intents-core:1.0.0@aar'
+    compile 'universum.studios.android:officium-core:1.0.0@aar'
 
-**[Calendar](https://github.com/universum-studios/android_officium/tree/master/library/src/calendar)**
+**[Account](https://github.com/universum-studios/android_officium/tree/master/library/src/account)**
 
-    compile 'universum.studios.android:intents-calendar:1.0.0@aar'
-
-_depends on:_
-[intents-core](https://github.com/universum-studios/android_officium/tree/master/library/src/main)
-
-**[Contact](https://github.com/universum-studios/android_officium/tree/master/library/src/contact)**
-
-    compile 'universum.studios.android:intents-contact:1.0.0@aar'
+    compile 'universum.studios.android:officium-account:1.0.0@aar'
 
 _depends on:_
-[intents-contact](https://github.com/universum-studios/android_officium/tree/master/library/src/contact)
+[`universum.studios.android:utils`](https://github.com/universum-studios/android_utils)
 
-**[Content](https://github.com/universum-studios/android_officium/tree/master/library/src/content)**
+**[Event](https://github.com/universum-studios/android_officium/tree/master/library/src/contact)**
 
-    compile 'universum.studios.android:intents-content:1.0.0@aar'
-
-_depends on:_
-[intents-core](https://github.com/universum-studios/android_officium/tree/master/library/src/main),
-[intents-mime-type](https://github.com/universum-studios/android_officium/tree/master/library/src/mime-type)
-
-**[Map](https://github.com/universum-studios/android_officium/tree/master/library/src/map)**
-
-    compile 'universum.studios.android:intents-map:1.0.0@aar'
+    compile 'universum.studios.android:officium-event:1.0.0@aar'
 
 _depends on:_
-[intents-core](https://github.com/universum-studios/android_officium/tree/master/library/src/main)
+[`com.squareup:otto`](http://square.github.io/otto/)
 
-**[Play](https://github.com/universum-studios/android_officium/tree/master/library/src/play)**
+**[Event-Core](https://github.com/universum-studios/android_officium/tree/master/library/src/contact)**
 
-    compile 'universum.studios.android:intents-play:1.0.0@aar'
-
-_depends on:_
-[intents-core](https://github.com/universum-studios/android_officium/tree/master/library/src/main)
-
-**[Web](https://github.com/universum-studios/android_officium/tree/master/library/src/web)**
-
-    compile 'universum.studios.android:intents-web:1.0.0@aar'
+    compile 'universum.studios.android:officium-event-core:1.0.0@aar'
 
 _depends on:_
-[intents-core](https://github.com/universum-studios/android_officium/tree/master/library/src/main)
+[`com.squareup:otto`](http://square.github.io/otto/)
 
-**[Mime-Type](https://github.com/universum-studios/android_officium/tree/master/library/src/mime-type)**
+**[Event-Common](https://github.com/universum-studios/android_officium/tree/master/library/src/contact)**
 
-    compile 'universum.studios.android:intents-mime-type:1.0.0@aar'
+    compile 'universum.studios.android:officium-event-common:1.0.0@aar'
+
+_depends on:_
+[officium-event-core](https://github.com/universum-studios/android_officium/tree/master/library/src/main)
+
+**[Service](https://github.com/universum-studios/android_officium/tree/master/library/src/service)**
+
+    compile 'universum.studios.android:officium-service:1.0.0@aar'
+
+_depends on:_
+[officium-core](https://github.com/universum-studios/android_officium/tree/master/library/src/main),
+[`com.squareup.okio:okio`](https://github.com/square/okio),
+[`com.squareup.okhttp3:okhttp`](http://square.github.io/okhttp/),
+[`com.squareup.retrofit2:retrofit`](http://square.github.io/retrofit/)
+
+**[Sync](https://github.com/universum-studios/android_officium/tree/master/library/src/sync)**
+
+    compile 'universum.studios.android:officium-sync:1.0.0@aar'
+
+_depends on:_
+[officium-core](https://github.com/universum-studios/android_officium/tree/master/library/src/main),
+[`com.google.code.gson:gson`](https://github.com/google/gson)

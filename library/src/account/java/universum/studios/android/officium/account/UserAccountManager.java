@@ -182,7 +182,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	/**
 	 * Creates a new instance of UserAccountManager for the specified <var>accountType</var>.
 	 *
-	 * @param context     Context used to access framework's {@link AccountManager}.
+	 * @param context     Context used to access {@link AccountManager}.
 	 * @param accountType The desired type of accounts that can be managed by the new manager.
 	 */
 	public UserAccountManager(@NonNull Context context, @NonNull String accountType) {
