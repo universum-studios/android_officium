@@ -1,0 +1,81 @@
+/*
+ * =================================================================================================
+ *                             Copyright (C) 2016 Universum Studios
+ * =================================================================================================
+ *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
+ * -------------------------------------------------------------------------------------------------
+ * You may use this file only in compliance with the License. More details and copy of this License
+ * you may obtain at
+ *
+ * 		http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * You can redistribute, modify or publish any part of the code written within this file but as it
+ * is described in the License, the software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
+ *
+ * See the License for the specific language governing permissions and limitations under the License.
+ * =================================================================================================
+ */
+apply plugin: 'com.android.application'
+apply plugin: 'android-apt'
+
+/**
+ * Application options =============================================================================
+ */
+android {
+    compileSdkVersion Integer.valueOf((String) project.property('android.compileSdkVersion'))
+    buildToolsVersion project.property('android.buildToolsVersion')
+
+    defaultConfig {
+        applicationId project.property('samples.applicationId')
+        minSdkVersion project.property('samples.minSdkVersion')
+        targetSdkVersion project.property('samples.targetSdkVersion')
+        versionCode Integer.valueOf((String) project.property('samples.versionCode'))
+        versionName project.property('samples.versionName')
+    }
+
+    if (project.hasProperty('signing.properties') && new File((String) project.property('signing.properties')).exists()) {
+        final Properties properties = new Properties();
+        properties.load(new FileInputStream(file(project.property('signing.properties'))))
+
+        signingConfigs {
+            release {
+                storeFile file(properties['store.file'])
+                storePassword properties['store.password']
+                keyAlias properties['key.alias']
+                keyPassword properties['key.password']
+            }
+        }
+
+        buildTypes {
+            release {
+                signingConfig signingConfigs.release
+                minifyEnabled false
+                proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+}
+
+/**
+ * Application dependencies ========================================================================
+ */
+repositories {
+    mavenLocal()
+}
+
+dependencies {
+    compile project(':library')
+    final String supportVersion = project.property('android.support.version')
+    compile 'com.android.support:design:' + supportVersion
+    compile 'com.android.support:support-vector-drawable:' + supportVersion
+    compile 'com.android.support:recyclerview-v7:' + supportVersion
+    compile 'com.jakewharton:butterknife:8.4.0'
+    apt 'com.jakewharton:butterknife-compiler:8.4.0'
+    compile 'universum.studios.android:samples:0.1.1@aar'
+}

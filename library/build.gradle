@@ -1,0 +1,96 @@
+/*
+ * =================================================================================================
+ *                             Copyright (C) 2016 Universum Studios
+ * =================================================================================================
+ *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
+ * -------------------------------------------------------------------------------------------------
+ * You may use this file only in compliance with the License. More details and copy of this License
+ * you may obtain at
+ *
+ * 		http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * You can redistribute, modify or publish any part of the code written within this file but as it
+ * is described in the License, the software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
+ *
+ * See the License for the specific language governing permissions and limitations under the License.
+ * =================================================================================================
+ */
+apply plugin: 'com.android.library'
+
+/**
+ * Library options =================================================================================
+ */
+android {
+    compileSdkVersion Integer.valueOf((String) project.property('android.compileSdkVersion'))
+    buildToolsVersion project.property('android.buildToolsVersion')
+
+    defaultConfig {
+        minSdkVersion project.property('library.minSdkVersion')
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+        debug {
+            minifyEnabled false
+            testCoverageEnabled true
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+}
+
+/**
+ * Library dependencies ============================================================================
+ */
+repositories {
+    mavenLocal()
+}
+
+dependencies {
+    /*
+     * RELEASE DEPENDENCIES ------------------------------------------------------------------------
+     */
+    final String supportVersion = project.property('android.support.version')
+    if (Boolean.valueOf((String) project.property('library.module.build'))) {
+        compile 'com.android.support:support-v4:' + supportVersion
+    }
+
+    /*
+     * TEST DEPENDENCIES ---------------------------------------------------------------------------
+     */
+    // Local JUnit test dependencies.
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:2.0.57-beta'
+    // Android Instrumentation test dependencies.
+    androidTestCompile 'com.android.support:support-annotations:' + supportVersion
+    androidTestCompile 'com.android.support.test:runner:0.5'
+    androidTestCompile 'com.android.support.test:rules:0.5'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
+    androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.2'
+    androidTestCompile('com.android.support.test.espresso:espresso-contrib:2.2.2') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude group: 'com.android.support', module: 'appcompat-v7'
+        exclude group: 'com.android.support', module: 'design'
+        exclude group: 'com.android.support', module: 'recyclerview-v7'
+    }
+}
+
+// Apply MODULE specific build script.
+if (Boolean.valueOf((String) project.property('library.module.build'))) {
+    // Apply separate module configuration.
+    apply from: 'gradle/module-' + project.property('library.module.name') + '.gradle'
+} else {
+    // Apply all modules configuration.
+    apply from: 'gradle/module-all.gradle'
+}
+
+// Apply MAVEN script.
+apply from: 'maven.gradle'
