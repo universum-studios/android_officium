@@ -15,7 +15,7 @@ Available from the **Android [API Level 11](http://developer.android.com/about/v
 
 ### Dependencies ###
 
-- [`com.android.support:support-annotations`](http://developer.android.com/tools/support-library/features.html#annotations)
+- [`com.android.support:support-annotations`](https://developer.android.com/topic/libraries/support-library/packages.html#annotations)
 - [`com.squareup:otto`](http://square.github.io/otto/)
 - [`com.squareup.okio:okio`](https://github.com/square/okio)
 - [`com.squareup.okhttp3:okhttp`](http://square.github.io/okhttp/)
