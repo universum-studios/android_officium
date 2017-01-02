@@ -54,10 +54,10 @@ repositories {
 }
 
 dependencies {
+    final String supportVersion = project.property('android.support.version')
     /*
      * RELEASE DEPENDENCIES ------------------------------------------------------------------------
      */
-    final String supportVersion = project.property('android.support.version')
     compile 'com.android.support:support-annotations:' + supportVersion
 
     /*
