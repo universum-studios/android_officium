@@ -1,4 +1,4 @@
-Android Officium
+Officium
 ===============
 
 ## Download ##

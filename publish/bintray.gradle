@@ -1,0 +1,114 @@
+/*
+ * =================================================================================================
+ *                             Copyright (C) 2017 Universum Studios
+ * =================================================================================================
+ *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
+ * -------------------------------------------------------------------------------------------------
+ * You may use this file only in compliance with the License. More details and copy of this License
+ * you may obtain at
+ *
+ * 		http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * You can redistribute, modify or publish any part of the code written within this file but as it
+ * is described in the License, the software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
+ *
+ * See the License for the specific language governing permissions and limitations under the License.
+ * =================================================================================================
+ */
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven-publish'
+
+def pomConfig = {
+    name project.property('maven.pom.project.name')
+    description project.property('maven.pom.project.description')
+    url project.property('maven.pom.project.url')
+    inceptionYear project.property('maven.pom.project.inceptionYear')
+    issueManagement {
+        system 'GitHub Issues'
+        url project.property('maven.pom.project.issueManagement.url')
+    }
+    licenses {
+        license {
+            name 'The Apache Software License, Version 2.0'
+            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+            distribution 'repo'
+        }
+    }
+    organization {
+        name 'Universum Studios'
+        url 'https://universum-studios.github.io'
+    }
+    developers {
+        developer {
+            id 'albedinsky'
+            name 'Martin Albedinsky'
+            email 'martin.albedinsky@gmail.com'
+            roles {
+                role 'Android Software Engineer'
+            }
+        }
+    }
+}
+
+publishing {
+    publications {
+        LibraryPublication(MavenPublication) {
+            groupId project.property('maven.pom.groupId')
+            artifactId project.property('maven.pom.artifactId')
+            version project.property('maven.pom.version')
+            artifact bundleRelease
+            artifact(classesJar)
+            artifact(javadocJar)
+            artifact(sourcesJar)
+            pom.withXml {
+                def projectNode = asNode()
+                // Append POM configuration.
+                projectNode.children().last() + pomConfig
+                // Append dependencies.
+                def dependenciesNode = projectNode.appendNode('dependencies')
+                // Iterate over the dependencies (except the test ones),
+                // adding a <dependency></dependency> node for each.
+                configurations.compile.allDependencies.each {
+                    if(it.group != null && (it.name != null || !"unspecified".equals(it.name)) && it.version != null) {
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', it.group)
+                        dependencyNode.appendNode('artifactId', it.name)
+                        dependencyNode.appendNode('version', it.version)
+                    }
+                }
+                configurations.releaseCompile.allDependencies.each {
+                    if(it.group != null && (it.name != null || !"unspecified".equals(it.name)) && it.version != null) {
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', it.group)
+                        dependencyNode.appendNode('artifactId', it.name)
+                        dependencyNode.appendNode('version', it.version)
+                    }
+                }
+            }
+        }
+    }
+}
+
+bintray {
+    user = project.hasProperty('bintray.user') ? project.property('bintray.user') : System.getenv('BINTRAY_USER')
+    key = project.hasProperty('bintray.apiKey') ? project.property('bintray.apiKey') : System.getenv('BINTRAY_API_KEY')
+    publications = ['LibraryPublication']
+    override = true
+    pkg {
+        repo = 'android'
+        name = project.property('bintray.package.name')
+        userOrg = 'universum-studios'
+        licenses = ['Apache-2.0']
+        vcsUrl = project.property('maven.pom.project.url') + '.git'
+        labels = ['android', 'account', 'synchronization', 'service', 'event']
+        publicDownloadNumbers = true
+        version {
+            name = project.property('bintray.package.version.name')
+            desc = project.property('bintray.package.version.description')
+            released = new Date()
+            vcsTag = project.property('bintray.package.version.tag')
+        }
+    }
+}
+

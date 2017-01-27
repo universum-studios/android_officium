@@ -9,6 +9,13 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/library" />
+            <option value="$PROJECT_DIR$/library-account" />
+            <option value="$PROJECT_DIR$/library-core" />
+            <option value="$PROJECT_DIR$/library-event-common" />
+            <option value="$PROJECT_DIR$/library-event-core" />
+            <option value="$PROJECT_DIR$/library-event_group" />
+            <option value="$PROJECT_DIR$/library-service" />
+            <option value="$PROJECT_DIR$/library-sync" />
             <option value="$PROJECT_DIR$/samples" />
           </set>
         </option>
