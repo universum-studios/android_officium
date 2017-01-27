@@ -31,14 +31,14 @@ afterEvaluate { project ->
         repositories.mavenDeployer {
             repository(url: 'file:///' + String.valueOf(project.property('maven.url.local')))
             /**
-             * Project artifact ------------------------------------------------------------------------
+             * Project artifact --------------------------------------------------------------------
              */
             pom.groupId = project.property('maven.pom.groupId')
             pom.artifactId = project.property('maven.pom.artifactId')
             pom.version = project.property('maven.pom.version')
             pom.packaging = project.property('maven.pom.packaging')
             /**
-             * Project description ---------------------------------------------------------------------
+             * Project description -----------------------------------------------------------------
              */
             pom.project {
                 name project.property('maven.pom.project.name')
