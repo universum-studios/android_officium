@@ -16,39 +16,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  * =================================================================================================
  */
-package universum.studios.android.samples.officium.service.api;
-
-import android.support.annotation.NonNull;
-
-import universum.studios.android.officium.service.ServiceCall;
-
-import retrofit2.Call;
-
 /**
  * @author Martin Albedinsky
  */
-public final class ApiCall<T> extends ServiceCall<T> {
-
-	@SuppressWarnings("unused")
-	private static final String TAG = "ApiCall";
-
-	ApiCall(@NonNull Call<T> call) {
-		super(call);
-	}
-
-	@Override
-	public ApiCall<T> withServiceId(int serviceId) {
-		return (ApiCall<T>) super.withServiceId(serviceId);
-	}
-
-	@NonNull
-	public String enqueue() {
-		return enqueue(new ApiCallback<T>());
-	}
-
-	@NonNull
-	@Override
-	protected String requestId() {
-		return Long.toString(System.currentTimeMillis());
-	}
-}
+package universum.studios.android.officium;

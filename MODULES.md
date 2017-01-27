@@ -22,52 +22,13 @@ as usually.
         }
     }
 
-**[Core](https://github.com/universum-studios/android_officium/tree/master/library/src/main)**
+## Available modules ##
+> Following modules are available in the [latest](https://github.com/universum-studios/android_officium/releases "Latest Releases page") release.
 
-    compile 'universum.studios.android:officium-core:1.0.0@aar'
-
-**[Account](https://github.com/universum-studios/android_officium/tree/master/library/src/account)**
-
-    compile 'universum.studios.android:officium-account:1.0.0@aar'
-
-_depends on:_
-[`universum.studios.android:utils`](https://github.com/universum-studios/android_utils)
-
-**[Event](https://github.com/universum-studios/android_officium/tree/master/library/src/event)**
-
-    compile 'universum.studios.android:officium-event:1.0.0@aar'
-
-_depends on:_
-[`com.squareup:otto`](http://square.github.io/otto/)
-
-**[Event-Core](https://github.com/universum-studios/android_officium/tree/master/library/src/event/core)**
-
-    compile 'universum.studios.android:officium-event-core:1.0.0@aar'
-
-_depends on:_
-[`com.squareup:otto`](http://square.github.io/otto/)
-
-**[Event-Common](https://github.com/universum-studios/android_officium/tree/master/library/src/event/common)**
-
-    compile 'universum.studios.android:officium-event-common:1.0.0@aar'
-
-_depends on:_
-[officium-event-core](https://github.com/universum-studios/android_officium/tree/master/library/src/main)
-
-**[Service](https://github.com/universum-studios/android_officium/tree/master/library/src/service)**
-
-    compile 'universum.studios.android:officium-service:1.0.0@aar'
-
-_depends on:_
-[officium-core](https://github.com/universum-studios/android_officium/tree/master/library/src/main),
-[`com.squareup.okio:okio`](https://github.com/square/okio),
-[`com.squareup.okhttp3:okhttp`](http://square.github.io/okhttp/),
-[`com.squareup.retrofit2:retrofit`](http://square.github.io/retrofit/)
-
-**[Sync](https://github.com/universum-studios/android_officium/tree/master/library/src/sync)**
-
-    compile 'universum.studios.android:officium-sync:1.0.0@aar'
-
-_depends on:_
-[officium-core](https://github.com/universum-studios/android_officium/tree/master/library/src/main),
-[`com.google.code.gson:gson`](https://github.com/google/gson)
+- **[Core](https://github.com/universum-studios/android_officium/tree/master/library-core)**
+- **[Account](https://github.com/universum-studios/android_officium/tree/master/library-account)**
+- **[@Event](https://github.com/universum-studios/android_officium/tree/master/library-event_group)**
+- **[Event-Core](https://github.com/universum-studios/android_officium/tree/master/library-event-core)**
+- **[Event-Common](https://github.com/universum-studios/android_officium/tree/master/library-event-common)**
+- **[Service](https://github.com/universum-studios/android_officium/tree/master/library-service)**
+- **[Sync](https://github.com/universum-studios/android_officium/tree/master/library-sync)**
