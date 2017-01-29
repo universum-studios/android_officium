@@ -35,7 +35,7 @@ android {
     }
 
     if (project.hasProperty('signing.properties') && new File((String) project.property('signing.properties')).exists()) {
-        final Properties properties = new Properties();
+        def Properties properties = new Properties();
         properties.load(new FileInputStream(file(project.property('signing.properties'))))
 
         signingConfigs {
@@ -71,7 +71,7 @@ repositories {
 
 dependencies {
     compile project(':library')
-    final String supportVersion = project.property('android.support.version')
+    def String supportVersion = project.property('android.support.version')
     compile 'com.android.support:design:' + supportVersion
     compile 'com.android.support:support-vector-drawable:' + supportVersion
     compile 'com.android.support:recyclerview-v7:' + supportVersion

@@ -54,7 +54,7 @@ repositories {
 }
 
 dependencies {
-    final String supportVersion = project.property('android.support.version')
+    def String supportVersion = project.property('android.support.version')
     /*
      * RELEASE DEPENDENCIES ------------------------------------------------------------------------
      */
