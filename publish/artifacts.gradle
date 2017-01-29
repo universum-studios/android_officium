@@ -16,6 +16,8 @@
  * See the License for the specific language governing permissions and limitations under the License.
  * =================================================================================================
  */
+def boolean isModule = project.name.startsWith('library-') && !project.name.endsWith('_group')
+
 /**
  * Bundles project's classes into a .jar! file.
  */
@@ -28,10 +30,10 @@ task classesJar(type: Jar) {
  * Generates javadoc documentation for the current project.
  */
 task generateJavadoc(type: Javadoc) {
-    source android.sourceSets.main.java.sourceFiles
-    final Properties properties = new Properties()
+    source isModule ? android.sourceSets.main.java.sourceFiles : android.sourceSets.release.java.sourceFiles
+    def Properties properties = new Properties()
     properties.load(project.rootProject.file('local.properties').newDataInputStream())
-    final String sdkDir = properties.getProperty('sdk.dir')
+    def String sdkDir = properties.getProperty('sdk.dir')
     options {
         author = true
         memberLevel = JavadocMemberLevel.PROTECTED
@@ -69,9 +71,9 @@ task javadocJar(type: Jar) {
 task sourcesJar(type: Jar) {
     classifier = 'sources'
     description 'Bundles Raw sources into a .jar! file.'
-    from android.sourceSets.main.java.sourceFiles
+    from isModule ? android.sourceSets.main.java.sourceFiles : android.sourceSets.release.java.sourceFiles
     // Uncomment if this project contains res/ folder.
-    from android.sourceSets.main.res.sourceFiles
+    // from isModule ? android.sourceSets.main.res.sourceFiles : android.sourceSets.release.res.sourceFiles
 }
 
 /**
