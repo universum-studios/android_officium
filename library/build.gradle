@@ -41,7 +41,7 @@ android {
     }
 
     sourceSets {
-        main.java.srcDirs = [
+        release.java.srcDirs = [
                 '../library-core/src/main/java',
                 '../library-account/src/main/java',
                 '../library-event-core/src/main/java',
@@ -49,6 +49,7 @@ android {
                 '../library-service/src/main/java',
                 '../library-sync/src/main/java'
         ]
+        debug.java.srcDirs = release.java.srcDirs
     }
 
     compileOptions {

@@ -41,10 +41,11 @@ android {
     }
 
     sourceSets {
-        main.java.srcDirs = [
+        release.java.srcDirs = [
                 '../library-event-core/src/main/java',
                 '../library-event-common/src/main/java'
         ]
+        debug.java.srcDirs = release.java.srcDirs
     }
 
     compileOptions {
