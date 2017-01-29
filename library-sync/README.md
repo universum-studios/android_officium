@@ -1,4 +1,4 @@
-@Officium-Sync
+Officium-Sync
 ===============
 
 ## Download ##
