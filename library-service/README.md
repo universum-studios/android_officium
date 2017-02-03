@@ -5,7 +5,7 @@ Officium-Service
 
 ### Gradle ###
 
-    compile 'universum.studios.android:officium-service:1.0.0@aar'
+    compile 'universum.studios.android:officium-service:1.0.1@aar'
 
 _depends on:_
 [officium-core](https://github.com/universum-studios/android_officium/tree/master/library-core),

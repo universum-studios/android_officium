@@ -5,4 +5,4 @@
 
 ### Gradle ###
 
-    compile 'universum.studios.android:officium-event-core:1.0.0@aar'
+    compile 'universum.studios.android:officium-event-core:1.0.1@aar'
