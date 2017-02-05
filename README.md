@@ -3,11 +3,11 @@ Officium
 
 ## Download ##
 
-Download the latest **[release](https://github.com/universum-studios/android_officium/releases/tag/1.0.0 "Latest Releases page")** or **add as dependency** in your project via:
+Download the latest **[release](https://github.com/universum-studios/android_officium/releases/tag/1.0.1 "Latest Releases page")** or **add as dependency** in your project via:
 
 ### Gradle ###
 
-    compile 'universum.studios.android:officium:1.0.0@aar'
+    compile 'universum.studios.android:officium:1.0.1@aar'
 
 ## Compatibility ##
 

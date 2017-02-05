@@ -5,7 +5,7 @@
 
 ### Gradle ###
 
-    compile 'universum.studios.android:officium-event-common:1.0.0@aar'
+    compile 'universum.studios.android:officium-event-common:1.0.1@aar'
 
 _depends on:_
 [officium-event-core](https://github.com/universum-studios/android_officium/tree/master/library-event-core),

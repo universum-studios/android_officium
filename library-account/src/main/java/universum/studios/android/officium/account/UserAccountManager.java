@@ -27,6 +27,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresPermission;
@@ -169,6 +170,11 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	protected final String mAccountType;
 
 	/**
+	 * Handler that is used to dispatch callbacks on the Ui thread.
+	 */
+	private final Handler mUiHandler;
+
+	/**
 	 * List of watchers that will be notified whenever a new account is created <b>asynchronously</b>
 	 * via {@link #createAccountAsync(UserAccount)} or an old one deleted <b>asynchronously</b> via
 	 * {@link #deleteAccountAsync(UserAccount)}.
@@ -189,6 +195,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 		this.mContext = context;
 		this.mManager = AccountManager.get(mContext);
 		this.mAccountType = accountType;
+		this.mUiHandler = new Handler(Looper.getMainLooper());
 	}
 
 	/**
@@ -255,9 +262,17 @@ public abstract class UserAccountManager<A extends UserAccount> {
 			PERMISSION_GET_ACCOUNTS,
 			PERMISSION_AUTHENTICATE_ACCOUNTS
 	})
-	public boolean createAccount(@NonNull A userAccount) {
+	public boolean createAccount(@NonNull final A userAccount) {
 		if (onCreateAccount(userAccount)) {
-			notifyAccountCreated(userAccount);
+			mUiHandler.post(new Runnable() {
+
+				/**
+				 */
+				@Override
+				public void run() {
+					notifyAccountCreated(userAccount);
+				}
+			});
 			return true;
 		}
 		return false;
@@ -538,9 +553,17 @@ public abstract class UserAccountManager<A extends UserAccount> {
 			PERMISSION_GET_ACCOUNTS,
 			PERMISSION_AUTHENTICATE_ACCOUNTS
 	})
-	public boolean deleteAccount(@NonNull A userAccount) {
+	public boolean deleteAccount(@NonNull final A userAccount) {
 		if (onDeleteAccount(userAccount)) {
-			notifyAccountDeleted(userAccount);
+			mUiHandler.post(new Runnable() {
+
+				/**
+				 */
+				@Override
+				public void run() {
+					notifyAccountDeleted(userAccount);
+				}
+			});
 			return true;
 		}
 		return false;
