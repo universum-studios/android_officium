@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  * =================================================================================================
  */
-def boolean isModule = project.name.startsWith('library-') && !project.name.endsWith('_group')
+final boolean isModule = project.name.startsWith('library-') && !project.name.endsWith('_group')
 
 /**
  * Bundles project's classes into a .jar! file.
@@ -31,9 +31,9 @@ task classesJar(type: Jar) {
  */
 task generateJavadoc(type: Javadoc) {
     source isModule ? android.sourceSets.main.java.sourceFiles : android.sourceSets.release.java.sourceFiles
-    def Properties properties = new Properties()
+    final Properties properties = new Properties()
     properties.load(project.rootProject.file('local.properties').newDataInputStream())
-    def String sdkDir = properties.getProperty('sdk.dir')
+    final String sdkDir = properties.getProperty('sdk.dir')
     options {
         author = true
         memberLevel = JavadocMemberLevel.PROTECTED
@@ -47,11 +47,10 @@ task generateJavadoc(type: Javadoc) {
     }
     // Append class path with dependencies.
     final String mavenLocalDir = project.property('maven.url.local')
-    final String supportVersion = project.property('android.support.version')
     classpath += files(
             android.getBootClasspath(),
-            sdkDir + '\\extras\\android\\m2repository\\com\\android\\support\\support-annotations\\' + supportVersion + '\\support-annotations-' + supportVersion + '.jar',
-            mavenLocalDir + '\\universum\\studios\\android\\utils\\2.0.0\\utils-2.0.0-sources.jar'
+            sdkDir + "\\extras\\android\\m2repository\\com\\android\\support\\support-annotations\\${androidSupportVersion}\\support-annotations-${androidSupportVersion}.jar",
+            mavenLocalDir + "\\universum\\studios\\android\\utils\\2.0.0\\utils-2.0.0-sources.jar"
     )
     failOnError false
 }

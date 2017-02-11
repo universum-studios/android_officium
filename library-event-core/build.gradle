@@ -54,11 +54,10 @@ repositories {
 }
 
 dependencies {
-    def String supportVersion = project.property('android.support.version')
     /*
      * RELEASE DEPENDENCIES ------------------------------------------------------------------------
      */
-    compile 'com.android.support:support-annotations:' + supportVersion
+    compile releaseDependencies.androidSupportAnnotations
 }
 
 // Apply PUBLISH script.

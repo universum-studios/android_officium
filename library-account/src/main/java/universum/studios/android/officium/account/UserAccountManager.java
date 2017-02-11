@@ -303,6 +303,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	protected boolean onCreateAccount(@NonNull A userAccount) {
 		final Account account = new Account(userAccount.getName(), mAccountType);
 		onDeleteAccount(userAccount);
+		// todo: encrypt data bundle
 		if (mManager.addAccountExplicitly(account, userAccount.getPassword(), userAccount.getDataBundle())) {
 			final String[] authTokenTypes = userAccount.getAuthTokenTypes();
 			final Map<String, String> authTokens = userAccount.getAuthTokens();
@@ -449,6 +450,8 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 */
 	@RequiresPermission(PERMISSION_AUTHENTICATE_ACCOUNTS)
 	public void setAccountData(@NonNull Account account, @NonNull String key, @Nullable String value) {
+		// todo: encrypt key
+		// todo: encrypt data
 		mManager.setUserData(account, key, value);
 	}
 
@@ -467,6 +470,8 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	@Nullable
 	@RequiresPermission(PERMISSION_AUTHENTICATE_ACCOUNTS)
 	public String getAccountData(@NonNull Account account, @NonNull String key) {
+		// todo: encrypt key
+		// todo: decrypt data
 		return mManager.getUserData(account, key);
 	}
 
@@ -484,6 +489,8 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	public void setAccountDataBundle(@NonNull Account account, @NonNull Bundle dataBundle) {
 		if (dataBundle.isEmpty()) return;
 		for (String key : dataBundle.keySet()) {
+			// todo: encrypt key
+			// todo: encrypt data
 			mManager.setUserData(account, key, dataBundle.getString(key));
 		}
 	}
@@ -506,6 +513,8 @@ public abstract class UserAccountManager<A extends UserAccount> {
 		final Bundle bundle = new Bundle();
 		if (keys.length > 0) {
 			for (String key : keys) {
+				// todo: encrypt key
+				// todo: decrypt data
 				bundle.putString(key, mManager.getUserData(account, key));
 			}
 		}

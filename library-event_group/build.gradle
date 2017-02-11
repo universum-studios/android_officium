@@ -62,12 +62,11 @@ repositories {
 }
 
 dependencies {
-    def String supportVersion = project.property('android.support.version')
     /*
      * RELEASE DEPENDENCIES ------------------------------------------------------------------------
      */
-    compile 'com.android.support:support-annotations:' + supportVersion
-    compile 'com.squareup:otto:1.3.8'
+    compile releaseDependencies.androidSupportAnnotations
+    compile releaseDependencies.otto
 }
 
 // Apply PUBLISH script.

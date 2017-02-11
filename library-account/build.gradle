@@ -54,12 +54,12 @@ repositories {
 }
 
 dependencies {
-    def String supportVersion = project.property('android.support.version')
     /*
      * RELEASE DEPENDENCIES ------------------------------------------------------------------------
      */
-    compile 'com.android.support:support-annotations:' + supportVersion
-    compile 'universum.studios.android:utils:2.0.0@aar'
+    compile releaseDependencies.androidSupportAnnotations
+    compile releaseDependencies.androidUniversumUtils
+    compile releaseDependencies.androidUniversumCrypto
 }
 
 // Apply PUBLISH script.
