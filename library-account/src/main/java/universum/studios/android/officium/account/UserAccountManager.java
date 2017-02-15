@@ -36,7 +36,11 @@ import android.text.TextUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import universum.studios.android.crypto.Crypto;
+import universum.studios.android.crypto.Encrypto;
+import universum.studios.android.crypto.util.CryptographyUtils;
 import universum.studios.android.util.ErrorException;
 
 /**
@@ -182,6 +186,21 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	private final List<AccountWatcher<A>> mWatchers = new ArrayList<>(5);
 
 	/**
+	 * Encrypto implementation that is used to encrypt keys of accounts data managed by this manager.
+	 *
+	 * @see #encryptKey(String)
+	 */
+	private Encrypto mKeyEncrypto;
+
+	/**
+	 * Crypto implementation that is used to encrypt and decrypt accounts data managed by this manager.
+	 *
+	 * @see #encryptData(String)
+	 * @see #decryptData(String)
+	 */
+	private Crypto mDataCrypto;
+
+	/**
 	 * Constructors ================================================================================
 	 */
 
@@ -221,6 +240,86 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 */
 	public void unregisterWatcher(@NonNull AccountWatcher<A> watcher) {
 		mWatchers.remove(watcher);
+	}
+
+	/**
+	 * Sets an implementation of {@link Encrypto} that should be used by this account manager to
+	 * perform account data keys encryption operation.
+	 *
+	 * @param encrypto The desired encrypto implementation. May be {@code null} to not perform keys
+	 *                 encryption.
+	 * @see #setDataCrypto(Crypto)
+	 */
+	public final void setKeyEncrypto(@Nullable Encrypto encrypto) {
+		this.mKeyEncrypto = encrypto;
+	}
+
+	/**
+	 * Sets an implementation of {@link Crypto} that should be used by this account manager to
+	 * perform account data encryption/decryption operations.
+	 * <p>
+	 * <b>Note</b>, that if specified, the provided crypto will be also used for password
+	 * encryption/decryption operations.
+	 *
+	 * @param crypto The desired crypto implementation. May be {@code null} to not perform data
+	 *               encryption/decryption.
+	 * @see #setKeyEncrypto(Encrypto)
+	 * @see #setAccountData(Account, String, String)
+	 * @see #getAccountData(Account, String)
+	 * @see #getAccountDataBundle(Account, String...)
+	 */
+	public final void setDataCrypto(@Nullable Crypto crypto) {
+		this.mDataCrypto = crypto;
+	}
+
+	/**
+	 * Encrypts keys and data contained within the specified <var>bundle</var>.
+	 *
+	 * @param bundle The desired bundle to be encrypted.
+	 * @return Bundle with encrypted keys and data or the same bundle if there is no cryptographic
+	 * tool specified.
+	 * @see #encryptKey(String)
+	 * @see #encryptData(String)
+	 */
+	private Bundle encryptBundle(Bundle bundle) {
+		if (bundle == null || bundle.isEmpty()) {
+			return bundle;
+		}
+		final Set<String> keys = bundle.keySet();
+		for (String key : keys) {
+			bundle.putString(encryptKey(key), encryptData(bundle.getString(key)));
+		}
+		return bundle;
+	}
+
+	/**
+	 * Encrypts the specified <var>key</var> using {@link #mKeyEncrypto}, if presented.
+	 *
+	 * @param key The desired key to be encrypted.
+	 * @return Encrypted key or the same key if there is no cryptographic tool specified.
+	 */
+	private String encryptKey(String key) {
+		return mKeyEncrypto == null ? key : CryptographyUtils.encrypt(key, mKeyEncrypto);
+	}
+
+	/**
+	 * Encrypts the specified <var>value</var> using {@link #mDataCrypto}, if presented.
+	 *
+	 * @param value The desired data value to be encrypted.
+	 * @return Encrypted data value or the same value if there is no cryptographic tool specified.
+	 */
+	private String encryptData(String value) {
+		return mDataCrypto == null ? value : CryptographyUtils.encrypt(value, mDataCrypto);
+	}
+
+	/**
+	 * Decrypts the specified <var>value</var> using {@link #mDataCrypto}, if presented.
+	 *
+	 * @param value The desired data value to be decrypted.
+	 * @return Decrypted data value or the same value if there is no cryptographic tool specified.
+	 */
+	private String decryptData(String value) {
+		return mDataCrypto == null ? value : CryptographyUtils.decrypt(value, mDataCrypto);
 	}
 
 	/**
@@ -303,8 +402,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	protected boolean onCreateAccount(@NonNull A userAccount) {
 		final Account account = new Account(userAccount.getName(), mAccountType);
 		onDeleteAccount(userAccount);
-		// todo: encrypt data bundle
-		if (mManager.addAccountExplicitly(account, userAccount.getPassword(), userAccount.getDataBundle())) {
+		if (mManager.addAccountExplicitly(account, encryptData(userAccount.getPassword()), encryptBundle(userAccount.getDataBundle()))) {
 			final String[] authTokenTypes = userAccount.getAuthTokenTypes();
 			final Map<String, String> authTokens = userAccount.getAuthTokens();
 			if (authTokenTypes != null && authTokenTypes.length > 0 && authTokens != null && !authTokens.isEmpty()) {
@@ -402,7 +500,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 */
 	@RequiresPermission(PERMISSION_AUTHENTICATE_ACCOUNTS)
 	public void setAccountPassword(@NonNull Account account, @Nullable String password) {
-		mManager.setPassword(account, password);
+		mManager.setPassword(account, encryptData(password));
 	}
 
 	/**
@@ -420,7 +518,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	@Nullable
 	@RequiresPermission(PERMISSION_AUTHENTICATE_ACCOUNTS)
 	public String getAccountPassword(@NonNull Account account) {
-		return mManager.getPassword(account);
+		return decryptData(mManager.getPassword(account));
 	}
 
 	/**
@@ -450,9 +548,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 */
 	@RequiresPermission(PERMISSION_AUTHENTICATE_ACCOUNTS)
 	public void setAccountData(@NonNull Account account, @NonNull String key, @Nullable String value) {
-		// todo: encrypt key
-		// todo: encrypt data
-		mManager.setUserData(account, key, value);
+		mManager.setUserData(account, encryptKey(key), encryptData(value));
 	}
 
 	/**
@@ -470,9 +566,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	@Nullable
 	@RequiresPermission(PERMISSION_AUTHENTICATE_ACCOUNTS)
 	public String getAccountData(@NonNull Account account, @NonNull String key) {
-		// todo: encrypt key
-		// todo: decrypt data
-		return mManager.getUserData(account, key);
+		return decryptData(mManager.getUserData(account, encryptKey(key)));
 	}
 
 	/**
@@ -489,9 +583,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	public void setAccountDataBundle(@NonNull Account account, @NonNull Bundle dataBundle) {
 		if (dataBundle.isEmpty()) return;
 		for (String key : dataBundle.keySet()) {
-			// todo: encrypt key
-			// todo: encrypt data
-			mManager.setUserData(account, key, dataBundle.getString(key));
+			mManager.setUserData(account, encryptKey(key), encryptData(dataBundle.getString(key)));
 		}
 	}
 
@@ -513,9 +605,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 		final Bundle bundle = new Bundle();
 		if (keys.length > 0) {
 			for (String key : keys) {
-				// todo: encrypt key
-				// todo: decrypt data
-				bundle.putString(key, mManager.getUserData(account, key));
+				bundle.putString(key, decryptData(mManager.getUserData(account, encryptKey(key))));
 			}
 		}
 		return bundle;

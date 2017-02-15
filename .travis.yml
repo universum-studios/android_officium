@@ -1,0 +1,51 @@
+language: android
+jdk: oraclejdk8
+sudo: false
+
+# Android components
+android:
+  components:
+    - platform-tools
+    - tools
+    - build-tools-25.0.2
+    - android-25
+    - android-22
+    - sys-img-armeabi-v7a-android-22
+    - extra-android-m2repository
+
+# Branches
+branches:
+  only:
+    - develop
+    - /^release.*$/
+    - master
+
+# Continous integration scripts
+before_script:
+  - ./ci/permissions.sh
+  # Emulator management (create, start and wait)
+  - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
+  - emulator -avd test -no-skin -no-audio -no-window &
+  - android-wait-for-emulator
+  - adb shell input keyevent 82 &
+
+script:
+  - ./ci/tests.sh
+
+after_success:
+  - ./ci/coverage.sh
+  - ./ci/deploy.sh
+
+# Notications
+notifications:
+  email: false
+
+# Cache configuraiton
+cache:
+  directories:
+    - $HOME/.m2
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/daemon
+    - $HOME/.gradle/native
+    - $HOME/.gradle/wrapper
+    - $HOME/.android/build-cache
