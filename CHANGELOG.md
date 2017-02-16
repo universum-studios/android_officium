@@ -2,11 +2,11 @@ Change-Log
 ===============
 
 ### Release 1.1.0 ###
-> --.02.2017
+> 16.02.2017
 
 - For `UserAccountManager` may be specified a [`Crypto`](https://github.com/universum-studios/android_crypto)
-  instance to support encryption and decryption for account data. Also data keys may be encrypted
-  by specifying an `Encrypto` instance for the account manager.
+  implementation to support encryption and decryption for account data. Also data keys may be encrypted
+  by specifying an `Encrypto` implementation for the desired account manager.
 
 ### Release 1.0.1 ###
 > 05.02.2017

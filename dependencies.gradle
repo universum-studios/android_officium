@@ -1,7 +1,7 @@
 // Defines all dependencies used across the library project.
 ext {
     // Versions.
-    libraryVersion = '1.0.1'
+    libraryVersion = '1.1.0'
     androidSupportVersion = '25.1.1'
     androidUniversumUtilsVersion = '2.0.0'
     androidUniversumCryptoVersion = '0.1.2'
