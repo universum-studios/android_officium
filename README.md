@@ -16,7 +16,7 @@ Download the latest **[release](https://github.com/universum-studios/android_off
 
 ## Compatibility ##
 
-Available from the **Android [API Level 11](http://developer.android.com/about/versions/android-3.0.html "See API highlights")**.
+Supported down to the **Android [API Level 11](http://developer.android.com/about/versions/android-3.0.html "See API highlights")**.
 
 ### Dependencies ###
 
