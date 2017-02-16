@@ -1,0 +1,83 @@
+/*
+ * =================================================================================================
+ *                             Copyright (C) 2017 Universum Studios
+ * =================================================================================================
+ *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
+ * -------------------------------------------------------------------------------------------------
+ * You may use this file only in compliance with the License. More details and copy of this License
+ * you may obtain at
+ *
+ * 		http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * You can redistribute, modify or publish any part of the code written within this file but as it
+ * is described in the License, the software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
+ *
+ * See the License for the specific language governing permissions and limitations under the License.
+ * =================================================================================================
+ */
+final boolean isModule = project.name.startsWith('library-') && !project.name.endsWith('_group')
+
+/**
+ * Bundles project's classes into a .jar! file.
+ */
+task classesJar(type: Jar) {
+    description 'Bundles classes into a .jar! file'
+    from 'build\\intermediates\\classes\\release'
+}
+
+/**
+ * Generates javadoc documentation for the current project.
+ */
+task generateJavadoc(type: Javadoc) {
+    source isModule ? android.sourceSets.main.java.sourceFiles : android.sourceSets.release.java.sourceFiles
+    options {
+        author = true
+        memberLevel = JavadocMemberLevel.PROTECTED
+        header = project.property('maven.pom.project.name') + ' ' + project.property('maven.pom.version') + ' Documentation'
+        links "http://docs.oracle.com/javase/8/docs/api/"
+        linksOffline "http://developer.android.com/reference", "${android.sdkDirectory}\\docs\\reference"
+    }
+    if (JavaVersion.current().isJava8Compatible()) {
+        // Uncomment this when Javadoc tool outputs some (not resolvable) errors like 'reference not found for R.attr#...'.
+        //options.addStringOption('Xdoclint:none', '-quiet')
+    }
+    // Append class path with dependencies.
+    final String mavenLocalDirectory = System.getenv('MAVEN_URL_LOCAL')
+    classpath += files(
+            android.getBootClasspath(),
+            "${android.sdkDirectory}\\extras\\android\\m2repository\\com\\android\\support\\support-annotations\\${androidSupportVersion}\\support-annotations-${androidSupportVersion}.jar",
+            "${mavenLocalDirectory}\\universum\\studios\\android\\utils\\${androidUniversumUtilsVersion}\\utils-${androidUniversumUtilsVersion}-sources.jar",
+            "${mavenLocalDirectory}\\universum\\studios\\android\\crypto\\${androidUniversumCryptoVersion}\\crypto-${androidUniversumCryptoVersion}-sources.jar"
+    )
+    failOnError false
+}
+
+/**
+ * Bundles project's Javadoc into a .jar! file.
+ */
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    description 'Bundles Javadoc into a .jar! file.'
+    from generateJavadoc
+}
+
+/**
+ * Bundles project's Raw sources into a .jar! file.
+ */
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    description 'Bundles Raw sources into a .jar! file.'
+    from isModule ? android.sourceSets.main.java.sourceFiles : android.sourceSets.release.java.sourceFiles
+    // Uncomment if this project contains res/ folder.
+    // from isModule ? android.sourceSets.main.res.sourceFiles : android.sourceSets.release.res.sourceFiles
+}
+
+/**
+ * Set of artifacts to be generated.
+ */
+artifacts {
+    archives classesJar
+    archives javadocJar
+    archives sourcesJar
+}

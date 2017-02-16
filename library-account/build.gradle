@@ -44,23 +44,28 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
+
+    lintOptions {
+        abortOnError false
+    }
 }
 
 /**
  * Library dependencies ============================================================================
  */
 repositories {
-    mavenLocal()
+    maven { url = '../artifacts/' }
+    maven { url "http://dl.bintray.com/universum-studios/android" }
 }
 
 dependencies {
-    def String supportVersion = project.property('android.support.version')
     /*
      * RELEASE DEPENDENCIES ------------------------------------------------------------------------
      */
-    compile 'com.android.support:support-annotations:' + supportVersion
-    compile 'universum.studios.android:utils:2.0.0@aar'
+    compile releaseDependencies.androidSupportAnnotations
+    compile releaseDependencies.androidUniversumUtils
+    compile releaseDependencies.androidUniversumCrypto
 }
 
-// Apply PUBLISH script.
-apply from: '../publish/publish.gradle'
+// Apply DEPLOY script.
+apply from: '../deploy/deploy.gradle'

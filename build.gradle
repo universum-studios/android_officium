@@ -1,4 +1,6 @@
 // Global gradle configuration. This configuration will be used for all sub-projects.
+apply from: './dependencies.gradle'
+
 /**
  * Global build script configuration ===============================================================
  */
@@ -33,9 +35,27 @@ task clean(type: Delete) {
 }
 
 /**
- * Task that publishes all library modules into Maven local repository.
+ * Task that cleans local artifacts directory.
  */
-task publishToMavenLocal() {
+task cleanLocalArtifacts() {
+    // delete 'artifacts/universum/studios/android'
+}
+
+/**
+ * Task that updates local artifacts directory.
+ */
+task updateLocalArtifacts() {
+    subprojects.findAll {
+        if (it.name.startsWith("library")) {
+            dependsOn ':' + it.name + ':updateLocalArtifacts'
+        }
+    }
+}
+
+/**
+ * Task that deploys (uploads) all library modules into Maven local repository.
+ */
+task deployToMavenLocal() {
     subprojects.findAll {
         if (it.name.startsWith("library")) {
             dependsOn ':' + it.name + ':uploadArchives'
@@ -44,9 +64,9 @@ task publishToMavenLocal() {
 }
 
 /**
- * Task that publishes (uploads) all library modules up to the Bintray repository.
+ * Task that deploys (uploads) all library modules up to the Bintray repository.
  */
-task publishToBintray() {
+task deployToBintray() {
     subprojects.findAll {
         if (it.name.startsWith("library")) {
             dependsOn ':' + it.name + ':bintrayUpload'
