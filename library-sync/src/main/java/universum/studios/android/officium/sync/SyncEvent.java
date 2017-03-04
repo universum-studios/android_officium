@@ -34,11 +34,7 @@ import android.support.annotation.NonNull;
  *
  * @author Martin Albedinsky
  */
-public class SyncEvent {
-
-	/**
-	 * Interface ===================================================================================
-	 */
+public final class SyncEvent {
 
 	/**
 	 * Constants ===================================================================================
@@ -68,6 +64,10 @@ public class SyncEvent {
 	 * Type flag for {@link SyncEvent} determining <b>error</b> occurred during synchronization.
 	 */
 	public static final int ERROR = 0x04;
+
+	/**
+	 * Interface ===================================================================================
+	 */
 
 	/**
 	 * Static members ==============================================================================
@@ -139,7 +139,7 @@ public class SyncEvent {
 	 *
 	 * @author Martin Albedinsky
 	 */
-	public static class Builder {
+	public static final class Builder {
 
 		/**
 		 * See {@link SyncEvent#id}.

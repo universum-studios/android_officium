@@ -35,10 +35,6 @@ import android.support.annotation.RequiresPermission;
 public class SingleUserAccountManager<A extends UserAccount> extends UserAccountManager<A> {
 
 	/**
-	 * Interface ===================================================================================
-	 */
-
-	/**
 	 * Constants ===================================================================================
 	 */
 
@@ -46,6 +42,10 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 	 * Log TAG.
 	 */
 	// private static final String TAG = "SingleUserAccountManager";
+
+	/**
+	 * Interface ===================================================================================
+	 */
 
 	/**
 	 * Static members ==============================================================================
@@ -174,7 +174,7 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 	})
 	public String peekAccountAuthToken(@NonNull String authTokenType) {
 		final Account account = acquireAccount();
-		return account != null ? peekAccountAuthToken(account, authTokenType) : null;
+		return account == null ? null : peekAccountAuthToken(account, authTokenType);
 	}
 
 	/**
@@ -244,7 +244,7 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 	})
 	public String getAccountPassword() {
 		final Account account = acquireAccount();
-		return account != null ? getAccountPassword(account) : null;
+		return account == null ? null : getAccountPassword(account);
 	}
 
 	/**
@@ -316,7 +316,7 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 	})
 	public String getAccountData(@NonNull String key) {
 		final Account account = acquireAccount();
-		return account != null ? getAccountData(account, key) : null;
+		return account == null ? null : getAccountData(account, key);
 	}
 
 
@@ -363,7 +363,7 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 	})
 	public Bundle getAccountDataBundle(@NonNull String... keys) {
 		final Account account = acquireAccount();
-		return account != null ? getAccountDataBundle(account, keys) : null;
+		return account == null ? null : getAccountDataBundle(account, keys);
 	}
 
 	/**

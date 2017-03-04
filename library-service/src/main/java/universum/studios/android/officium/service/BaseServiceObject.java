@@ -30,10 +30,6 @@ import android.text.TextUtils;
 public abstract class BaseServiceObject implements ServiceObject {
 
 	/**
-	 * Interface ===================================================================================
-	 */
-
-	/**
 	 * Constants ===================================================================================
 	 */
 
@@ -41,6 +37,10 @@ public abstract class BaseServiceObject implements ServiceObject {
 	 * Log TAG.
 	 */
 	// private static final String TAG = "BaseServiceObject";
+
+	/**
+	 * Interface ===================================================================================
+	 */
 
 	/**
 	 * Static members ==============================================================================
@@ -89,17 +89,18 @@ public abstract class BaseServiceObject implements ServiceObject {
 	 */
 	@Override
 	public final void setServiceId(int serviceId) {
-		if (mServiceId != null) {
+		if (mServiceId == null) {
+			this.mServiceId = serviceId;
+		} else {
 			throw new UnsupportedOperationException("Cannot change already specified service id(" + mServiceId + ")!");
 		}
-		this.mServiceId = serviceId;
 	}
 
 	/**
 	 */
 	@Override
 	public final int getServiceId() {
-		return mServiceId != null ? mServiceId : NO_SERVICE;
+		return mServiceId == null ? NO_SERVICE : mServiceId;
 	}
 
 	/**
@@ -108,10 +109,11 @@ public abstract class BaseServiceObject implements ServiceObject {
 	 */
 	@Override
 	public final void setRequestId(@NonNull String requestId) {
-		if (mRequestId != null) {
+		if (mRequestId == null) {
+			this.mRequestId = requestId;
+		} else {
 			throw new UnsupportedOperationException("Cannot change already specified request id(" + mRequestId + ")!");
 		}
-		this.mRequestId = requestId;
 	}
 
 	/**
@@ -119,7 +121,7 @@ public abstract class BaseServiceObject implements ServiceObject {
 	@NonNull
 	@Override
 	public final String getRequestId() {
-		return mRequestId != null ? mRequestId : NO_REQUEST;
+		return mRequestId == null ? NO_REQUEST : mRequestId;
 	}
 
 	/**

@@ -41,10 +41,6 @@ import android.support.annotation.NonNull;
 public abstract class ServiceApiProvider<A> {
 
 	/**
-	 * Interface ===================================================================================
-	 */
-
-	/**
 	 * Constants ===================================================================================
 	 */
 
@@ -52,6 +48,10 @@ public abstract class ServiceApiProvider<A> {
 	 * Log TAG.
 	 */
 	// private static final String TAG = "ServiceApiProvider";
+
+	/**
+	 * Interface ===================================================================================
+	 */
 
 	/**
 	 * Static members ==============================================================================

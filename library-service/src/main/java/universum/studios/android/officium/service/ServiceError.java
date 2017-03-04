@@ -39,10 +39,6 @@ import retrofit2.Converter;
 public class ServiceError extends BaseServiceObject {
 
 	/**
-	 * Interface ===================================================================================
-	 */
-
-	/**
 	 * Constants ===================================================================================
 	 */
 
@@ -50,6 +46,10 @@ public class ServiceError extends BaseServiceObject {
 	 * Log TAG.
 	 */
 	// private static final String TAG = "ServiceError";
+
+	/**
+	 * Interface ===================================================================================
+	 */
 
 	/**
 	 * Static members ==============================================================================
@@ -103,6 +103,7 @@ public class ServiceError extends BaseServiceObject {
 	 * @see #getErrorBody()
 	 */
 	public ServiceError(int errorCode, @NonNull ResponseBody errorBody) {
+		super();
 		this.mErrorCode = errorCode;
 		this.mErrorBody = errorBody;
 		this.mFailure = null;
@@ -116,6 +117,7 @@ public class ServiceError extends BaseServiceObject {
 	 * @see #getFailure()
 	 */
 	public ServiceError(@NonNull Throwable failure) {
+		super();
 		this.mErrorCode = 0;
 		this.mErrorBody = null;
 		this.mFailure = failure;
@@ -129,6 +131,7 @@ public class ServiceError extends BaseServiceObject {
 	 * @param other The other service error of which data to copy to the new one.
 	 */
 	public ServiceError(@NonNull ServiceError other) {
+		super();
 		this.mErrorCode = other.mErrorCode;
 		this.mErrorBody = other.mErrorBody;
 		this.mFailure = other.mFailure;
@@ -157,11 +160,11 @@ public class ServiceError extends BaseServiceObject {
 	 * service and request.
 	 *
 	 * @return Error code specified for this service error.
-	 * @throws NullPointerException If this error is not an error response but a failure.
+	 * @throws IllegalStateException If this error is not an error response but a failure.
 	 * @see #getErrorBody()
 	 */
 	public int getErrorCode() {
-		if (mErrorBody == null) throw new NullPointerException("Not an error but a failure!");
+		if (mErrorBody == null) throw new IllegalStateException("Not an error but a failure!");
 		return mErrorCode;
 	}
 
@@ -170,12 +173,12 @@ public class ServiceError extends BaseServiceObject {
 	 * service and request.
 	 *
 	 * @return Error body specified for this service error.
-	 * @throws NullPointerException If this error is not an error response but a failure.
+	 * @throws IllegalStateException If this error is not an error response but a failure.
 	 * @see #getErrorCode()
 	 */
 	@NonNull
 	public ResponseBody getErrorBody() {
-		if (mErrorBody == null) throw new NullPointerException("Not an error but a failure!");
+		if (mErrorBody == null) throw new IllegalStateException("Not an error but a failure!");
 		return mErrorBody;
 	}
 
@@ -194,15 +197,15 @@ public class ServiceError extends BaseServiceObject {
 	 * Returns the error body of this service error as the desired type.
 	 *
 	 * @param classOfT Class ot the type to which to convert the error body.
-	 * @param <T> The desired type as which to return error body or {@code null} if conversion fails.
+	 * @param <T>      The desired type as which to return error body or {@code null} if conversion fails.
 	 * @return Error body converted to the requested type.
-	 * @throws NullPointerException If this error is not an error response but a failure.
-	 * @throws NullPointerException If no converter has been specified.
+	 * @throws IllegalStateException If this error is not an error response but a failure.
+	 * @throws IllegalStateException If no converter has been specified.
 	 */
 	@Nullable
 	public <T> T getErrorBodyAs(@NonNull Class<T> classOfT) {
-		if (mErrorBody == null) throw new NullPointerException("Not an error but a failure!");
-		if (mErrorBodyConverter == null) throw new NullPointerException("No error body converter specified!");
+		if (mErrorBody == null) throw new IllegalStateException("Not an error but a failure!");
+		if (mErrorBodyConverter == null) throw new IllegalStateException("No error body converter specified!");
 		T errorBody = null;
 		try {
 			errorBody = (T) mErrorBodyConverter.convert(mErrorBody);
@@ -232,11 +235,11 @@ public class ServiceError extends BaseServiceObject {
 	 * Returns the failure that has caused the associated service and request to fail.
 	 *
 	 * @return Throwable failure specified for this service error.
-	 * @throws NullPointerException If this error is not a failure but an error response.
+	 * @throws IllegalStateException If this error is not a failure but an error response.
 	 */
 	@NonNull
 	public Throwable getFailure() {
-		if (mFailure == null) throw new NullPointerException("Not a failure but an error!");
+		if (mFailure == null) throw new IllegalStateException("Not a failure but an error!");
 		return mFailure;
 	}
 

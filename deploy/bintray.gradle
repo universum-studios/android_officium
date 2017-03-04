@@ -109,6 +109,6 @@ bintray {
             released = new Date()
             vcsTag = project.property('bintray.package.version.tag')
         }
+        githubReleaseNotesFile = 'CHANGELOG.md'
     }
 }
-

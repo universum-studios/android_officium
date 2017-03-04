@@ -39,10 +39,6 @@ import android.support.annotation.NonNull;
 public class ErrorResponse extends ServiceResponse {
 
 	/**
-	 * Interface ===================================================================================
-	 */
-
-	/**
 	 * Constants ===================================================================================
 	 */
 
@@ -50,6 +46,10 @@ public class ErrorResponse extends ServiceResponse {
 	 * Log TAG.
 	 */
 	// private static final String TAG = "ErrorResponse";
+
+	/**
+	 * Interface ===================================================================================
+	 */
 
 	/**
 	 * Static members ==============================================================================
@@ -74,6 +74,8 @@ public class ErrorResponse extends ServiceResponse {
 	 * This constructor should be used only by <b>Gson</b> library.
 	 */
 	public ErrorResponse() {
+		super();
+		// Empty constructor to allow instantiation of this class via reflection.
 	}
 
 	/**
@@ -82,26 +84,8 @@ public class ErrorResponse extends ServiceResponse {
 	 * @param error The error for the new error response.
 	 */
 	public ErrorResponse(@NonNull Error error) {
+		super();
 		this.error = error;
-	}
-
-	/**
-	 * Returns the code of the error (if any) of this response.
-	 *
-	 * @return Error code or {@code 0} if there is no error presented.
-	 */
-	public int getErrorCode() {
-		return error != null ? error.code : 0;
-	}
-
-	/**
-	 * Returns the message of the error (if any) of this response.
-	 *
-	 * @return Error message or {@code ""} if there is no error presented.
-	 */
-	@NonNull
-	public String getErrorMessage() {
-		return error != null ? error.message : "";
 	}
 
 	/**
@@ -118,6 +102,25 @@ public class ErrorResponse extends ServiceResponse {
 		builder.append("{error: ");
 		builder.append(error);
 		return builder.append("}").toString();
+	}
+
+	/**
+	 * Returns the code of the error (if any) of this response.
+	 *
+	 * @return Error code or {@code 0} if there is no error presented.
+	 */
+	public int getErrorCode() {
+		return error == null ? 0 : error.code;
+	}
+
+	/**
+	 * Returns the message of the error (if any) of this response.
+	 *
+	 * @return Error message or {@code ""} if there is no error presented.
+	 */
+	@NonNull
+	public String getErrorMessage() {
+		return error == null ? "" : error.message;
 	}
 
 	/**

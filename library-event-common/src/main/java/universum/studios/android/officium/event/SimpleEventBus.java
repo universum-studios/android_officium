@@ -32,10 +32,6 @@ import com.squareup.otto.Bus;
 public class SimpleEventBus implements EventBus {
 
 	/**
-	 * Interface ===================================================================================
-	 */
-
-	/**
 	 * Constants ===================================================================================
 	 */
 
@@ -43,6 +39,10 @@ public class SimpleEventBus implements EventBus {
 	 * Log TAG.
 	 */
 	// private static final String TAG = "SimpleEventBus";
+
+	/**
+	 * Interface ===================================================================================
+	 */
 
 	/**
 	 * Static members ==============================================================================
@@ -55,6 +55,7 @@ public class SimpleEventBus implements EventBus {
 	/**
 	 * The bus used by this event bus wrapper.
 	 */
+	@NonNull
 	protected final Bus mBus;
 
 	/**

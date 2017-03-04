@@ -38,10 +38,6 @@ import android.support.annotation.NonNull;
 public abstract class BaseAccountAuthenticator extends AbstractAccountAuthenticator {
 
 	/**
-	 * Interface ===================================================================================
-	 */
-
-	/**
 	 * Constants ===================================================================================
 	 */
 
@@ -49,6 +45,10 @@ public abstract class BaseAccountAuthenticator extends AbstractAccountAuthentica
 	 * Log TAG.
 	 */
 	// private static final String TAG = "BaseAccountAuthenticator";
+
+	/**
+	 * Interface ===================================================================================
+	 */
 
 	/**
 	 * Static members ==============================================================================
