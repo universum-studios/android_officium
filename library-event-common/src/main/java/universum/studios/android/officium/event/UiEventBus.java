@@ -35,10 +35,6 @@ import com.squareup.otto.Bus;
 public class UiEventBus extends SimpleEventBus {
 
 	/**
-	 * Interface ===================================================================================
-	 */
-
-	/**
 	 * Constants ===================================================================================
 	 */
 
@@ -46,6 +42,10 @@ public class UiEventBus extends SimpleEventBus {
 	 * Log TAG.
 	 */
 	// private static final String TAG = "UiEventBus";
+
+	/**
+	 * Interface ===================================================================================
+	 */
 
 	/**
 	 * Static members ==============================================================================
@@ -95,6 +95,9 @@ public class UiEventBus extends SimpleEventBus {
 			mBus.post(event);
 		} else {
 			mHandler.post(new Runnable() {
+
+				/**
+				 */
 				@Override
 				public void run() {
 					mBus.post(event);

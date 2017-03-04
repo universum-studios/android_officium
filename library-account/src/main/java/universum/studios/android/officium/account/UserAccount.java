@@ -46,10 +46,6 @@ import java.util.Map;
 public class UserAccount {
 
 	/**
-	 * Interface ===================================================================================
-	 */
-
-	/**
 	 * Constants ===================================================================================
 	 */
 
@@ -73,6 +69,10 @@ public class UserAccount {
 	protected static final String[] AUTH_TOKEN_TYPES = {TOKEN_TYPE_O_AUTH};
 
 	/**
+	 * Interface ===================================================================================
+	 */
+
+	/**
 	 * Static members ==============================================================================
 	 */
 
@@ -83,11 +83,13 @@ public class UserAccount {
 	/**
 	 * Name specified for this user account.
 	 */
+	@NonNull
 	protected final String mName;
 
 	/**
 	 * Password specified for this user account.
 	 */
+	@Nullable
 	protected String mPassword;
 
 	/**
@@ -200,7 +202,7 @@ public class UserAccount {
 	 */
 	@Nullable
 	public String getData(@NonNull String key) {
-		return mDataBundle != null ? mDataBundle.getString(key) : null;
+		return mDataBundle == null ? null : mDataBundle.getString(key);
 	}
 
 	/**
@@ -291,7 +293,7 @@ public class UserAccount {
 	 */
 	@Nullable
 	public String getAuthToken(@Nullable String tokenType) {
-		return mAuthTokens != null ? mAuthTokens.get(tokenType) : null;
+		return mAuthTokens == null ? null : mAuthTokens.get(tokenType);
 	}
 
 	/**
@@ -323,7 +325,7 @@ public class UserAccount {
 	@Override
 	public int hashCode() {
 		// Hashing and equals functions assume that as name is unique for each account.
-		return mName != null ? mName.hashCode() : 0;
+		return mName.hashCode();
 	}
 
 	/**

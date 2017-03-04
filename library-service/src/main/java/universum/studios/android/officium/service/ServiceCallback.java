@@ -34,10 +34,6 @@ import retrofit2.Response;
 public abstract class ServiceCallback<R> extends BaseServiceObject implements Callback<R> {
 
 	/**
-	 * Interface ===================================================================================
-	 */
-
-	/**
 	 * Constants ===================================================================================
 	 */
 
@@ -45,6 +41,10 @@ public abstract class ServiceCallback<R> extends BaseServiceObject implements Ca
 	 * Log TAG.
 	 */
 	// private static final String TAG = "ServiceCallback";
+
+	/**
+	 * Interface ===================================================================================
+	 */
 
 	/**
 	 * Static members ==============================================================================

@@ -46,4 +46,10 @@ final class SyncExtras {
 	 * Key used to store state of synchronization task within extras {@link Bundle}.
 	 */
 	static final String EXTRA_TASK_STATE = PREFIX + "Task.State";
+
+	/**
+	 */
+	private SyncExtras() {
+		// Creation of instances of this class is not publicly allowed.
+	}
 }

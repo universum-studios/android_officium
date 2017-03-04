@@ -48,10 +48,6 @@ import android.util.Log;
 public abstract class SyncHandler<Request extends SyncTask.Request, Result> {
 
 	/**
-	 * Interface ===================================================================================
-	 */
-
-	/**
 	 * Constants ===================================================================================
 	 */
 
@@ -59,6 +55,10 @@ public abstract class SyncHandler<Request extends SyncTask.Request, Result> {
 	 * Log TAG.
 	 */
 	// private static final String TAG = "SyncHandler";
+
+	/**
+	 * Interface ===================================================================================
+	 */
 
 	/**
 	 * Static members ==============================================================================
@@ -149,7 +149,7 @@ public abstract class SyncHandler<Request extends SyncTask.Request, Result> {
 	@Nullable
 	@SuppressWarnings("unchecked")
 	public final Result handleSync(@NonNull Context context, @NonNull SyncOperation syncOperation) {
-		final Request syncRequest = mRequestClass != null ? (Request) syncOperation.task.getRequest(mRequestClass) : null;
+		final Request syncRequest = mRequestClass == null ? null : (Request) syncOperation.task.getRequest(mRequestClass);
 		try {
 			return onHandleSync(context, syncOperation, syncRequest);
 		} catch (Exception error) {

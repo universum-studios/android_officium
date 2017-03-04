@@ -42,4 +42,10 @@ public final class OfficiumConfig {
 	 * @see Log#d(String, String)
 	 */
 	public static boolean DEBUG_LOG_ENABLED = false;
+
+	/**
+	 */
+	private OfficiumConfig() {
+		// Creation of instances of this class is not publicly allowed.
+	}
 }

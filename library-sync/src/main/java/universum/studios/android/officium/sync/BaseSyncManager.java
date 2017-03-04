@@ -50,10 +50,6 @@ import universum.studios.android.officium.OfficiumConfig;
 public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 
 	/**
-	 * Interface ===================================================================================
-	 */
-
-	/**
 	 * Constants ===================================================================================
 	 */
 
@@ -61,6 +57,10 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	 * Log TAG.
 	 */
 	private static final String TAG = "BaseSyncManager";
+
+	/**
+	 * Interface ===================================================================================
+	 */
 
 	/**
 	 * Static members ==============================================================================
@@ -162,20 +162,20 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	 */
 	public void requestSync(@NonNull SyncTask syncTask) {
 		final Account account = pickAccountForSync();
-		if (account != null) {
-			if (shouldRequestSync(syncTask, account)) {
-				syncTask.setState(SyncTask.PENDING);
-				onSyncTaskStateChanged(syncTask, account);
-				final Bundle extras = syncTask.intoExtras(new Bundle());
-				extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-				extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-				if (OfficiumConfig.LOG_ENABLED) {
-					Log.v(TAG, "Requesting synchronization for task(" + syncTask + ").");
-				}
-				ContentResolver.requestSync(account, mAuthority, extras);
+		if (account == null) {
+			if (OfficiumConfig.LOG_ENABLED) {
+				Log.v(TAG, "Cannot perform synchronization for task(" + syncTask + "). No account picked for synchronization.");
 			}
-		} else if (OfficiumConfig.LOG_ENABLED) {
-			Log.v(TAG, "Cannot perform synchronization for task(" + syncTask + "). No account picked for synchronization.");
+		} else if (shouldRequestSync(syncTask, account)) {
+			syncTask.setState(SyncTask.PENDING);
+			onSyncTaskStateChanged(syncTask, account);
+			final Bundle extras = syncTask.intoExtras(new Bundle());
+			extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+			extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+			if (OfficiumConfig.LOG_ENABLED) {
+				Log.v(TAG, "Requesting synchronization for task(" + syncTask + ").");
+			}
+			ContentResolver.requestSync(account, mAuthority, extras);
 		}
 	}
 

@@ -43,10 +43,6 @@ import retrofit2.Response;
 public class ServiceCall<T> implements Call<T> {
 
 	/**
-	 * Interface ===================================================================================
-	 */
-
-	/**
 	 * Constants ===================================================================================
 	 */
 
@@ -54,6 +50,10 @@ public class ServiceCall<T> implements Call<T> {
 	 * Log TAG.
 	 */
 	// private static final String TAG = "ServiceCall";
+
+	/**
+	 * Interface ===================================================================================
+	 */
 
 	/**
 	 * Static members ==============================================================================
@@ -100,9 +100,11 @@ public class ServiceCall<T> implements Call<T> {
 	 * @throws UnsupportedOperationException If service id for this call has been already specified.
 	 */
 	public ServiceCall<T> withServiceId(int serviceId) {
-		if (mServiceId != null) throw new UnsupportedOperationException("Service id is already specified!");
-		this.mServiceId = serviceId;
-		return this;
+		if (mServiceId == null) {
+			this.mServiceId = serviceId;
+			return this;
+		}
+		throw new UnsupportedOperationException("Service id is already specified!");
 	}
 
 	/**

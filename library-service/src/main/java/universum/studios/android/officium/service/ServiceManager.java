@@ -24,6 +24,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import retrofit2.Retrofit;
 
@@ -44,10 +45,6 @@ import retrofit2.Retrofit;
 public class ServiceManager {
 
 	/**
-	 * Interface ===================================================================================
-	 */
-
-	/**
 	 * Constants ===================================================================================
 	 */
 
@@ -55,6 +52,10 @@ public class ServiceManager {
 	 * Log TAG.
 	 */
 	// private static final String TAG = "ServiceManager";
+
+	/**
+	 * Interface ===================================================================================
+	 */
 
 	/**
 	 * Static members ==============================================================================
@@ -67,7 +68,7 @@ public class ServiceManager {
 	/**
 	 * Map containing services configuration objects mapped to class of services that they configure.
 	 */
-	private final HashMap<Class<?>, ServicesConfiguration> mServices = new HashMap<>(1);
+	private final Map<Class<?>, ServicesConfiguration> mServices = new HashMap<>(1);
 
 	/**
 	 * End point for services managed by this manager.

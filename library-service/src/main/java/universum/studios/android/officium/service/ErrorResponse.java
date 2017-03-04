@@ -39,10 +39,6 @@ import android.support.annotation.NonNull;
 public class ErrorResponse extends ServiceResponse {
 
 	/**
-	 * Interface ===================================================================================
-	 */
-
-	/**
 	 * Constants ===================================================================================
 	 */
 
@@ -50,6 +46,10 @@ public class ErrorResponse extends ServiceResponse {
 	 * Log TAG.
 	 */
 	// private static final String TAG = "ErrorResponse";
+
+	/**
+	 * Interface ===================================================================================
+	 */
 
 	/**
 	 * Static members ==============================================================================

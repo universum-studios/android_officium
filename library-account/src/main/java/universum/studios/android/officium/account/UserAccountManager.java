@@ -66,6 +66,43 @@ import universum.studios.android.util.ErrorException;
 public abstract class UserAccountManager<A extends UserAccount> {
 
 	/**
+	 * Constants ===================================================================================
+	 */
+
+	/**
+	 * Log TAG.
+	 */
+	@SuppressWarnings("unused")
+	private static final String TAG = "UserAccountManager";
+
+	/**
+	 * Error code indicating that an error occurred during asynchronous execution of
+	 * {@link #onCreateAccount(UserAccount)} requested via {@link #createAccountAsync(UserAccount)}.
+	 */
+	public static final int ERROR_CREATE_ACCOUNT = -0x01;
+
+	/**
+	 * Error code indicating that an error occurred during asynchronous execution of
+	 * {@link #onDeleteAccount(UserAccount)} requested via {@link #deleteAccountAsync(UserAccount)}.
+	 */
+	public static final int ERROR_DELETE_ACCOUNT = -0x02;
+
+	/**
+	 * Value for Android permission to <b>GET</b> accounts.
+	 */
+	protected static final String PERMISSION_GET_ACCOUNTS = Manifest.permission.GET_ACCOUNTS;
+
+	/**
+	 * Value for Android permission to <b>MANAGE</b> accounts.
+	 */
+	protected static final String PERMISSION_MANAGE_ACCOUNTS = "android.permission.MANAGE_ACCOUNTS";
+
+	/**
+	 * Value for Android permission to <b>AUTHENTICATE</b> accounts.
+	 */
+	protected static final String PERMISSION_AUTHENTICATE_ACCOUNTS = "android.permission.AUTHENTICATE_ACCOUNTS";
+
+	/**
 	 * Interface ===================================================================================
 	 */
 
@@ -114,43 +151,6 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	}
 
 	/**
-	 * Constants ===================================================================================
-	 */
-
-	/**
-	 * Log TAG.
-	 */
-	@SuppressWarnings("unused")
-	private static final String TAG = "UserAccountManager";
-
-	/**
-	 * Error code indicating that an error occurred during asynchronous execution of
-	 * {@link #onCreateAccount(UserAccount)} requested via {@link #createAccountAsync(UserAccount)}.
-	 */
-	public static final int ERROR_CREATE_ACCOUNT = -0x01;
-
-	/**
-	 * Error code indicating that an error occurred during asynchronous execution of
-	 * {@link #onDeleteAccount(UserAccount)} requested via {@link #deleteAccountAsync(UserAccount)}.
-	 */
-	public static final int ERROR_DELETE_ACCOUNT = -0x02;
-
-	/**
-	 * Value for Android permission to <b>GET</b> accounts.
-	 */
-	protected static final String PERMISSION_GET_ACCOUNTS = Manifest.permission.GET_ACCOUNTS;
-
-	/**
-	 * Value for Android permission to <b>MANAGE</b> accounts.
-	 */
-	protected static final String PERMISSION_MANAGE_ACCOUNTS = "android.permission.MANAGE_ACCOUNTS";
-
-	/**
-	 * Value for Android permission to <b>AUTHENTICATE</b> accounts.
-	 */
-	protected static final String PERMISSION_AUTHENTICATE_ACCOUNTS = "android.permission.AUTHENTICATE_ACCOUNTS";
-
-	/**
 	 * Static members ==============================================================================
 	 */
 
@@ -183,7 +183,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 * via {@link #createAccountAsync(UserAccount)} or an old one deleted <b>asynchronously</b> via
 	 * {@link #deleteAccountAsync(UserAccount)}.
 	 */
-	private final List<AccountWatcher<A>> mWatchers = new ArrayList<>(5);
+	private final List<AccountWatcher<A>> mWatchers = new ArrayList<>();
 
 	/**
 	 * Encrypto implementation that is used to encrypt keys of accounts data managed by this manager.
@@ -286,7 +286,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 			return bundle;
 		}
 		final Set<String> keys = bundle.keySet();
-		for (String key : keys) {
+		for (final String key : keys) {
 			bundle.putString(encryptKey(key), encryptData(bundle.getString(key)));
 		}
 		return bundle;
@@ -406,7 +406,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 			final String[] authTokenTypes = userAccount.getAuthTokenTypes();
 			final Map<String, String> authTokens = userAccount.getAuthTokens();
 			if (authTokenTypes != null && authTokenTypes.length > 0 && authTokens != null && !authTokens.isEmpty()) {
-				for (String authTokenType : authTokenTypes) {
+				for (final String authTokenType : authTokenTypes) {
 					mManager.setAuthToken(account, authTokenType, authTokens.get(authTokenType));
 				}
 			}
@@ -582,7 +582,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	@RequiresPermission(PERMISSION_AUTHENTICATE_ACCOUNTS)
 	public void setAccountDataBundle(@NonNull Account account, @NonNull Bundle dataBundle) {
 		if (dataBundle.isEmpty()) return;
-		for (String key : dataBundle.keySet()) {
+		for (final String key : dataBundle.keySet()) {
 			mManager.setUserData(account, encryptKey(key), encryptData(dataBundle.getString(key)));
 		}
 	}
@@ -604,7 +604,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	public Bundle getAccountDataBundle(@NonNull Account account, @NonNull String... keys) {
 		final Bundle bundle = new Bundle();
 		if (keys.length > 0) {
-			for (String key : keys) {
+			for (final String key : keys) {
 				bundle.putString(key, decryptData(mManager.getUserData(account, encryptKey(key))));
 			}
 		}
@@ -701,7 +701,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 			mManager.setPassword(account, null);
 			final String[] authTokenTypes = userAccount.getAuthTokenTypes();
 			if (authTokenTypes != null && authTokenTypes.length > 0) {
-				for (String authTokenType : authTokenTypes) {
+				for (final String authTokenType : authTokenTypes) {
 					mManager.invalidateAuthToken(account.type, mManager.peekAuthToken(account, authTokenType));
 				}
 			}
@@ -729,7 +729,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 		final Account[] accounts = mManager.getAccountsByType(mAccountType);
 		if (accounts.length > 0) {
 			final String accountName = userAccount.getName();
-			for (Account account : accounts) {
+			for (final Account account : accounts) {
 				if (account.name.equals(accountName)) return account;
 			}
 		}
@@ -746,7 +746,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	final void notifyAccountCreated(@NonNull A userAccount) {
 		synchronized (mWatchers) {
 			if (!mWatchers.isEmpty()) {
-				for (AccountWatcher<A> watcher : mWatchers) {
+				for (final AccountWatcher<A> watcher : mWatchers) {
 					watcher.onAccountCreated(userAccount);
 				}
 			}
@@ -763,7 +763,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	final void notifyAccountDeleted(@NonNull A userAccount) {
 		synchronized (mWatchers) {
 			if (!mWatchers.isEmpty()) {
-				for (AccountWatcher<A> watcher : mWatchers) {
+				for (final AccountWatcher<A> watcher : mWatchers) {
 					watcher.onAccountDeleted(userAccount);
 				}
 			}
@@ -781,7 +781,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	final void notifyAccountError(@NonNull A userAccount, @NonNull ErrorException error) {
 		synchronized (mWatchers) {
 			if (!mWatchers.isEmpty()) {
-				for (AccountWatcher<A> watcher : mWatchers) {
+				for (final AccountWatcher<A> watcher : mWatchers) {
 					watcher.onAccountError(userAccount, error);
 				}
 			}

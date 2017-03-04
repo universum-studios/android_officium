@@ -56,31 +56,6 @@ import java.lang.annotation.RetentionPolicy;
 public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 
 	/**
-	 * Interface ===================================================================================
-	 */
-
-	/**
-	 * Required interface for all synchronization requests.
-	 *
-	 * @author Martin Albedinsky
-	 */
-	public interface Request {
-	}
-
-	/**
-	 * A {@link Request} implementation that can be used for {@link SyncHandler SyncHandlers} that
-	 * do not require any synchronization request.
-	 *
-	 * @author Martin Albedinsky
-	 */
-	public static final class EmptyRequest implements Request {
-
-		/* We do not allow to create instances of this request. */
-		private EmptyRequest() {
-		}
-	}
-
-	/**
 	 * Constants ===================================================================================
 	 */
 
@@ -88,32 +63,6 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	 * Log TAG.
 	 */
 	// private static final String TAG = "SyncTask";
-
-	/**
-	 * Defines an annotation for determining set of available states for {@link SyncTask}.
-	 * <h3>Available states</h3>
-	 * <ul>
-	 * <li>{@link #IDLE}</li>
-	 * <li>{@link #PENDING}</li>
-	 * <li>{@link #RUNNING}</li>
-	 * <li>{@link #FINISHED}</li>
-	 * <li>{@link #FAILED}</li>
-	 * <li>{@link #CANCELED}</li>
-	 * </ul>
-	 *
-	 * @see #getState()
-	 */
-	@IntDef({
-			IDLE,
-			PENDING,
-			RUNNING,
-			FINISHED,
-			FAILED,
-			CANCELED
-	})
-	@Retention(RetentionPolicy.SOURCE)
-	public @interface State {
-	}
 
 	/**
 	 * Initial state for each new {@link SyncTask}.
@@ -161,9 +110,64 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	public static final int CANCELED = 0x05;
 
 	/**
+	 * Defines an annotation for determining set of available states for {@link SyncTask}.
+	 * <h3>Available states</h3>
+	 * <ul>
+	 * <li>{@link #IDLE}</li>
+	 * <li>{@link #PENDING}</li>
+	 * <li>{@link #RUNNING}</li>
+	 * <li>{@link #FINISHED}</li>
+	 * <li>{@link #FAILED}</li>
+	 * <li>{@link #CANCELED}</li>
+	 * </ul>
+	 *
+	 * @see #getState()
+	 */
+	@IntDef({
+			IDLE,
+			PENDING,
+			RUNNING,
+			FINISHED,
+			FAILED,
+			CANCELED
+	})
+	@Retention(RetentionPolicy.SOURCE)
+	public @interface State {
+	}
+
+	/**
 	 * Default id for synchronization task. This id may be used to identify <b>global synchronization task</b>.
 	 */
 	public static final int DEFAULT_ID = 0;
+
+	/**
+	 * Interface ===================================================================================
+	 */
+
+	/**
+	 * Required interface for all synchronization requests.
+	 *
+	 * @author Martin Albedinsky
+	 */
+	public interface Request {
+	}
+
+	/**
+	 * A {@link Request} implementation that can be used for {@link SyncHandler SyncHandlers} that
+	 * do not require any synchronization request.
+	 *
+	 * @author Martin Albedinsky
+	 */
+	public static final class EmptyRequest implements Request {
+
+		/* We do not allow to create instances of this request. */
+		private EmptyRequest() {
+		}
+	}
+
+	/**
+	 * Static members ==============================================================================
+	 */
 
 	/**
 	 * Empty instance of {@link SyncTask} that may be used to pass a sync task to a sync handler that
@@ -171,10 +175,6 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	 */
 	@SuppressWarnings("unused")
 	public static SyncTask<EmptyRequest> EMPTY = new SyncTask<>();
-
-	/**
-	 * Static members ==============================================================================
-	 */
 
 	/**
 	 * Instance of Gson used to parse {@link #mRequestBody} into {@link #mRequest} instance and
@@ -242,7 +242,7 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	protected SyncTask(@NonNull Builder<R> builder) {
 		this.mId = builder.id;
 		this.mRequest = builder.request;
-		this.mRequestBody = mRequest != null ? GSON.toJson(mRequest) : null;
+		this.mRequestBody = mRequest == null ? null : GSON.toJson(mRequest);
 	}
 
 	/**
@@ -308,7 +308,7 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	@Nullable
 	public final R getRequest(@NonNull Class<R> classOfRequest) {
 		if (mRequest == null) {
-			this.mRequest = !TextUtils.isEmpty(mRequestBody) ? GSON.fromJson(mRequestBody, classOfRequest) : null;
+			this.mRequest = TextUtils.isEmpty(mRequestBody) ? null : GSON.fromJson(mRequestBody, classOfRequest);
 		}
 		return mRequest;
 	}
@@ -359,8 +359,8 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 		if (task.mId != mId) {
 			return false;
 		}
-		final int requestHash = mRequestBody != null ? mRequestBody.hashCode() : 0;
-		final int otherRequestHash = task.mRequestBody != null ? task.mRequestBody.hashCode() : 0;
+		final int requestHash = mRequestBody == null ? 0 : mRequestBody.hashCode();
+		final int otherRequestHash = task.mRequestBody == null ? 0 : task.mRequestBody.hashCode();
 		return requestHash == otherRequestHash;
 	}
 

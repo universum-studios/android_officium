@@ -42,10 +42,6 @@ import okhttp3.Response;
 public final class AuthRequestInterceptor implements Interceptor {
 
 	/**
-	 * Interface ===================================================================================
-	 */
-
-	/**
 	 * Constants ===================================================================================
 	 */
 
@@ -53,6 +49,10 @@ public final class AuthRequestInterceptor implements Interceptor {
 	 * Log TAG.
 	 */
 	// private static final String TAG = "AuthRequestInterceptor";
+
+	/**
+	 * Interface ===================================================================================
+	 */
 
 	/**
 	 * Static members ==============================================================================
