@@ -426,7 +426,7 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 */
 	@SuppressWarnings("unchecked")
 	protected void onPerformSync(@NonNull SyncOperation syncOperation) {
-		final SyncHandler taskHandler = mTaskHandlers != null ? mTaskHandlers.get(syncOperation.task.getId()) : null;
+		final SyncHandler taskHandler = mTaskHandlers == null ? null : mTaskHandlers.get(syncOperation.task.getId());
 		if (taskHandler == null) {
 			Log.e(TAG, "No synchronization handler found for task with id(" + syncOperation.task.getId() + ").");
 			return;

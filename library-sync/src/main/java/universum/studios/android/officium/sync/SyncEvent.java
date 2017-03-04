@@ -34,7 +34,7 @@ import android.support.annotation.NonNull;
  *
  * @author Martin Albedinsky
  */
-public class SyncEvent {
+public final class SyncEvent {
 
 	/**
 	 * Constants ===================================================================================
@@ -139,7 +139,7 @@ public class SyncEvent {
 	 *
 	 * @author Martin Albedinsky
 	 */
-	public static class Builder {
+	public static final class Builder {
 
 		/**
 		 * See {@link SyncEvent#id}.

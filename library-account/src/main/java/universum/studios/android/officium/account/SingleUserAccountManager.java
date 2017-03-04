@@ -174,7 +174,7 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 	})
 	public String peekAccountAuthToken(@NonNull String authTokenType) {
 		final Account account = acquireAccount();
-		return account != null ? peekAccountAuthToken(account, authTokenType) : null;
+		return account == null ? null : peekAccountAuthToken(account, authTokenType);
 	}
 
 	/**

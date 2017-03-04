@@ -103,6 +103,7 @@ public class ServiceError extends BaseServiceObject {
 	 * @see #getErrorBody()
 	 */
 	public ServiceError(int errorCode, @NonNull ResponseBody errorBody) {
+		super();
 		this.mErrorCode = errorCode;
 		this.mErrorBody = errorBody;
 		this.mFailure = null;
@@ -116,6 +117,7 @@ public class ServiceError extends BaseServiceObject {
 	 * @see #getFailure()
 	 */
 	public ServiceError(@NonNull Throwable failure) {
+		super();
 		this.mErrorCode = 0;
 		this.mErrorBody = null;
 		this.mFailure = failure;
@@ -129,6 +131,7 @@ public class ServiceError extends BaseServiceObject {
 	 * @param other The other service error of which data to copy to the new one.
 	 */
 	public ServiceError(@NonNull ServiceError other) {
+		super();
 		this.mErrorCode = other.mErrorCode;
 		this.mErrorBody = other.mErrorBody;
 		this.mFailure = other.mFailure;

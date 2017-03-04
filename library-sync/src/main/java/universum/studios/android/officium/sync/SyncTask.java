@@ -374,7 +374,7 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 		builder.append("{id: ");
 		builder.append(mId);
 		builder.append(", request: ");
-		builder.append(mRequest != null ? mRequest : mRequestBody);
+		builder.append(mRequest == null ? mRequestBody : mRequest);
 		builder.append(", state: ");
 		builder.append(stateName(mState));
 		return builder.append("}").toString();
