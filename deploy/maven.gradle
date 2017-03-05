@@ -76,9 +76,9 @@ afterEvaluate { project ->
 }
 
 /**
- * Task that updates local artifacts directory with artifacts from the Maven local directory.
+ * Task that updates library artifacts directory with artifacts from the Maven local directory.
  */
-task updateLocalArtifacts() {
+task updateArtifacts() {
     if (!Boolean.parseBoolean(System.getenv('TRAVIS'))) {
         final String mavenLocalDir = System.getenv('MAVEN_URL_LOCAL')
         final String artifactId = String.valueOf(project.property('maven.pom.artifactId'))
