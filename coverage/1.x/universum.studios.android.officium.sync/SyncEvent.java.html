@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>SyncEvent.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">universum.studios.android.officium.sync</a> &gt; <span class="el_source">SyncEvent.java</span></div><h1>SyncEvent.java</h1><pre class="source lang-java linenums">/*
+ * =================================================================================================
+ *                             Copyright (C) 2016 Universum Studios
+ * =================================================================================================
+ *         Licensed under the Apache License, Version 2.0 or later (further &quot;License&quot; only).
+ * -------------------------------------------------------------------------------------------------
+ * You may use this file only in compliance with the License. More details and copy of this License
+ * you may obtain at
+ *
+ * 		http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * You can redistribute, modify or publish any part of the code written within this file but as it
+ * is described in the License, the software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
+ *
+ * See the License for the specific language governing permissions and limitations under the License.
+ * =================================================================================================
+ */
+package universum.studios.android.officium.sync;
+
+import android.accounts.Account;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+
+/**
+ * Event that can be fired/post for receivers that listen for state of a concrete synchronization
+ * process/task. Each instance of SyncEvent can be identified by its {@link SyncEvent#id id} and
+ * {@link SyncEvent#type type}. Additionally for events type of {@link #PROGRESS} can be specified
+ * {@link SyncEvent#progress progress} value and for events type of {@link #ERROR} can be specified
+ * occurred synchronization {@link SyncEvent#error}.
+ * &lt;p&gt;
+ * Creation of instances of {@link SyncEvent SyncEvents} is restricted via {@link Builder}
+ * only.
+ *
+ * @author Martin Albedinsky
+ */
+public final class SyncEvent {
+
+	/**
+	 * Constants ===================================================================================
+	 */
+
+	/**
+	 * Log TAG.
+	 */
+	// private static final String TAG = &quot;SyncEvent&quot;;
+
+	/**
+	 * Type flag for {@link SyncEvent} determining &lt;b&gt;start&lt;/b&gt; of synchronization.
+	 */
+	public static final int START = 0x01;
+
+	/**
+	 * Type flag for {@link SyncEvent} determining &lt;b&gt;progress&lt;/b&gt; of synchronization.
+	 */
+	public static final int PROGRESS = 0x02;
+
+	/**
+	 * Type flag for {@link SyncEvent} determining &lt;b&gt;finish&lt;/b&gt; of synchronization.
+	 */
+	public static final int FINISH = 0x03;
+
+	/**
+	 * Type flag for {@link SyncEvent} determining &lt;b&gt;error&lt;/b&gt; occurred during synchronization.
+	 */
+	public static final int ERROR = 0x04;
+
+	/**
+	 * Interface ===================================================================================
+	 */
+
+	/**
+	 * Static members ==============================================================================
+	 */
+
+	/**
+	 * Members =====================================================================================
+	 */
+
+	/**
+	 * Id of the synchronization task for which has been this synchronization event fired.
+	 */
+	public final int id;
+
+	/**
+	 * Type of this synchronization event. One of {@link #START}, {@link #PROGRESS}, {@link #FINISH}
+	 * or {@link #ERROR} or some custom specified type.
+	 */
+	public final int type;
+
+	/**
+	 * Current progress of synchronization task with {@link #id}.
+	 */
+	public final int progress;
+
+	/**
+	 * Error that has occurred during execution of synchronization task with {@link #id}.
+	 */
+	public final Exception error;
+
+	/**
+	 * Account used during execution of synchronization task with {@link #id}.
+	 */
+	public final Account account;
+
+	/**
+	 * Bundle with additional extra information.
+	 */
+	public final Bundle extras;
+
+	/**
+	 * Constructors ================================================================================
+	 */
+
+	/**
+	 * Creates a new instance of SyncEvent from the specified &lt;var&gt;builder&lt;/var&gt;.
+	 *
+	 * @param builder The builder with data for the new event instance.
+	 */
+<span class="nc" id="L120">	private SyncEvent(@NonNull Builder builder) {</span>
+<span class="nc" id="L121">		this.id = builder.id;</span>
+<span class="nc" id="L122">		this.type = builder.type;</span>
+<span class="nc" id="L123">		this.progress = builder.progress;</span>
+<span class="nc" id="L124">		this.error = builder.error;</span>
+<span class="nc" id="L125">		this.account = builder.account;</span>
+<span class="nc" id="L126">		this.extras = builder.extras;</span>
+<span class="nc" id="L127">	}</span>
+
+	/**
+	 * Methods =====================================================================================
+	 */
+
+	/**
+	 * Inner classes ===============================================================================
+	 */
+
+	/**
+	 * Builder that can be used to create a new instance of {@link SyncEvent}.
+	 *
+	 * @author Martin Albedinsky
+	 */
+	public static final class Builder {
+
+		/**
+		 * See {@link SyncEvent#id}.
+		 */
+		private final int id;
+
+		/**
+		 * See {@link SyncEvent#error}.
+		 */
+		private int type;
+
+		/**
+		 * See {@link SyncEvent#progress}.
+		 */
+		private int progress;
+
+		/**
+		 * See {@link SyncEvent#error}.
+		 */
+		private Exception error;
+
+		/**
+		 * See {@link SyncEvent#account}.
+		 */
+		private Account account;
+
+		/**
+		 * See {@link SyncEvent#extras}.
+		 */
+		private Bundle extras;
+
+		/**
+		 * Creates a new instance of Builder with the specified &lt;var&gt;id&lt;/var&gt;.
+		 *
+		 * @param id The desired id for the new SyncEvent.
+		 * @see SyncEvent#id
+		 */
+<span class="nc" id="L180">		public Builder(int id) {</span>
+<span class="nc" id="L181">			this.id = id;</span>
+<span class="nc" id="L182">		}</span>
+
+		/**
+		 * Specifies a type of SyncEvent that will be fired.
+		 *
+		 * @param type The desired type. May be one of {@link #START}, {@link #PROGRESS}, {@link #FINISH}
+		 * or {@link #ERROR} or custom specified type.
+		 * @return This builder to allow methods chaining.
+		 * @see SyncEvent#type
+		 */
+		public Builder type(int type) {
+<span class="nc" id="L193">			this.type = type;</span>
+<span class="nc" id="L194">			return this;</span>
+		}
+
+		/**
+		 * Specifies a progress of running synchronization.
+		 *
+		 * @param progress The desired progress.
+		 * @return This builder to allow methods chaining.
+		 * @see SyncEvent#progress
+		 */
+		public Builder progress(int progress) {
+<span class="nc" id="L205">			this.progress = progress;</span>
+<span class="nc" id="L206">			return this;</span>
+		}
+
+		/**
+		 * Specifies an error that occurred during synchronization.
+		 *
+		 * @param error The desired error.
+		 * @return This builder to allow methods chaining.
+		 * @see SyncEvent#error
+		 */
+		public Builder error(@NonNull Exception error) {
+<span class="nc" id="L217">			this.error = error;</span>
+<span class="nc" id="L218">			return this;</span>
+		}
+
+		/**
+		 * Specifies an account for which SyncEvent will be fired.
+		 *
+		 * @param account The desired account.
+		 * @return This builder to allow methods chaining.
+		 * @see SyncEvent#account
+		 */
+		public Builder account(@NonNull Account account) {
+<span class="nc" id="L229">			this.account = account;</span>
+<span class="nc" id="L230">			return this;</span>
+		}
+
+		/**
+		 * Specifies a bundle with extra information for the event.
+		 *
+		 * @param extras The desired bundle with extras.
+		 * @return This builder to allow methods chaining.
+		 * @see SyncEvent#extras
+		 */
+		public Builder extras(@NonNull Bundle extras) {
+<span class="nc" id="L241">			this.extras = extras;</span>
+<span class="nc" id="L242">			return this;</span>
+		}
+
+		/**
+		 * Builds a new instance of SyncEvent.
+		 *
+		 * @return New instance of SyncEvent with data specified for this builder.
+		 */
+		@NonNull
+		public SyncEvent build() {
+<span class="nc" id="L252">			return new SyncEvent(this);</span>
+		}
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span>Generated by the Android Gradle plugin 2.3.0</div></body></html>

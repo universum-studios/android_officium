@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>SyncOperation.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">universum.studios.android.officium.sync</a> &gt; <span class="el_source">SyncOperation.java</span></div><h1>SyncOperation.java</h1><pre class="source lang-java linenums">/*
+ * =================================================================================================
+ *                             Copyright (C) 2016 Universum Studios
+ * =================================================================================================
+ *         Licensed under the Apache License, Version 2.0 or later (further &quot;License&quot; only).
+ * -------------------------------------------------------------------------------------------------
+ * You may use this file only in compliance with the License. More details and copy of this License
+ * you may obtain at
+ *
+ * 		http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * You can redistribute, modify or publish any part of the code written within this file but as it
+ * is described in the License, the software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
+ *
+ * See the License for the specific language governing permissions and limitations under the License.
+ * =================================================================================================
+ */
+package universum.studios.android.officium.sync;
+
+import android.accounts.Account;
+import android.text.TextUtils;
+
+/**
+ * SyncOperation contains data that are describing a specific synchronization request to be executed
+ * in {@link BaseSyncAdapter}.
+ */
+public final class SyncOperation {
+
+	/**
+	 * Account associated with this sync operation.
+	 */
+	public final Account account;
+
+	/**
+	 * Authority associated with this sync operation.
+	 */
+	public final String authority;
+
+	/**
+	 * Task associated with this sync operation.
+	 */
+	public final SyncTask task;
+
+	/**
+	 * Creates a new instance of SyncOperation with data provided by the specified &lt;var&gt;builder&lt;/var&gt;.
+	 *
+	 * @param builder The builder with data for the new SyncOperation.
+	 */
+<span class="nc" id="L50">	private SyncOperation(Builder builder) {</span>
+<span class="nc" id="L51">		this.account = builder.account;</span>
+<span class="nc" id="L52">		this.authority = builder.authority;</span>
+<span class="nc" id="L53">		this.task = builder.task;</span>
+<span class="nc" id="L54">	}</span>
+
+	/**
+	 * Builder that may be used to build instances of {@link SyncOperation}.
+	 */
+<span class="nc" id="L59">	static final class Builder {</span>
+
+		/**
+		 * See {@link SyncOperation#account}.
+		 */
+		Account account;
+
+		/**
+		 * See {@link SyncOperation#authority}.
+		 */
+		String authority;
+
+		/**
+		 * See {@link SyncOperation#task}.
+		 */
+		SyncTask task;
+
+		/**
+		 * Specifies an account for the sync operation.
+		 *
+		 * @param account The account to associate with the sync operation.
+		 * @return This builder to allow methods chaining.
+		 * @see SyncOperation#account
+		 */
+		Builder account(Account account) {
+<span class="nc" id="L84">			this.account = account;</span>
+<span class="nc" id="L85">			return this;</span>
+		}
+
+		/**
+		 * Specifies an authority for the sync operation.
+		 *
+		 * @param authority The authority to associate with the sync operation.
+		 * @return This builder to allow methods chaining.
+		 * @see SyncOperation#authority
+		 */
+		Builder authority(String authority) {
+<span class="nc" id="L96">			this.authority = authority;</span>
+<span class="nc" id="L97">			return this;</span>
+		}
+
+		/**
+		 * Specifies a task for the sync operation.
+		 *
+		 * @param task The task to associate with the sync operation.
+		 * @return This builder to allow methods chaining.
+		 * @see SyncOperation#task
+		 */
+		Builder task(SyncTask task) {
+<span class="nc" id="L108">			this.task = task;</span>
+<span class="nc" id="L109">			return this;</span>
+		}
+
+		/**
+		 * Builds a new instance of SyncOperation from the current data.
+		 *
+		 * @return New instance of SyncOperation.
+		 */
+		SyncOperation build() {
+<span class="nc bnc" id="L118" title="All 2 branches missed.">			if (account == null) throw new IllegalArgumentException(&quot;No account specified!&quot;);</span>
+<span class="nc bnc" id="L119" title="All 2 branches missed.">			if (TextUtils.isEmpty(authority)) throw new IllegalArgumentException(&quot;No authority specified!&quot;);</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">			if (task == null) throw new IllegalArgumentException(&quot;No task specified!&quot;);</span>
+<span class="nc" id="L121">			return new SyncOperation(this);</span>
+		}
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span>Generated by the Android Gradle plugin 2.3.0</div></body></html>

@@ -1,0 +1,522 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>BaseSyncAdapter.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">universum.studios.android.officium.sync</a> &gt; <span class="el_source">BaseSyncAdapter.java</span></div><h1>BaseSyncAdapter.java</h1><pre class="source lang-java linenums">/*
+ * =================================================================================================
+ *                             Copyright (C) 2016 Universum Studios
+ * =================================================================================================
+ *         Licensed under the Apache License, Version 2.0 or later (further &quot;License&quot; only).
+ * -------------------------------------------------------------------------------------------------
+ * You may use this file only in compliance with the License. More details and copy of this License
+ * you may obtain at
+ *
+ * 		http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * You can redistribute, modify or publish any part of the code written within this file but as it
+ * is described in the License, the software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
+ *
+ * See the License for the specific language governing permissions and limitations under the License.
+ * =================================================================================================
+ */
+package universum.studios.android.officium.sync;
+
+import android.accounts.Account;
+import android.content.AbstractThreadedSyncAdapter;
+import android.content.ContentProviderClient;
+import android.content.Context;
+import android.content.SyncResult;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.util.Log;
+import android.util.SparseArray;
+
+import universum.studios.android.officium.OfficiumConfig;
+
+/**
+ * An {@link AbstractThreadedSyncAdapter} implementation that provides simple API for registration
+ * of {@link SyncHandler SyncHandlers} that are responsible for synchronization tasks handling. Each
+ * synchronization handler can be registered via {@link #registerTaskHandler(SyncHandler)}. Every
+ * registered handler is mapped within BaseSyncAdapter based on the id ({@link SyncHandler#getTaskId()})
+ * of a task for which handling is such handler responsible. Each handler may be responsible only for
+ * single task handling. To unregister already registered handler, call {@link #unregisterTaskHandler(SyncHandler)}.
+ * &lt;p&gt;
+ * This class is closely connected with {@link SyncTask} as instance of BaseSyncAdapter assumes that
+ * extras {@link Bundle} received in {@link #onPerformSync(Account, Bundle, String, ContentProviderClient, SyncResult)}
+ * contains data from which can be re-created instance of SyncTask and than that instance of task
+ * passed to its associated handler. For simplified synchronization requesting can be used implementation
+ * of {@link BaseSyncManager} that handles putting of a specific instance of SyncTask into extras
+ * Bundle that is than by the Android framework delivered to implementation of this BaseSyncAdapter.
+ * &lt;p&gt;
+ * Whenever {@link #onPerformSync(Account, Bundle, String, ContentProviderClient, SyncResult)} method
+ * is invoked by the Android framework, BaseSyncAdapter checks the received extras Bundle if it
+ * contains data for SyncTask instantiation. If yes, an instance of SyncTask is created from that
+ * extras and the associated SyncHandler is retrieved and requested to handle synchronization
+ * via {@link SyncHandler#handleSync(Context, SyncOperation)} with that instance of SyncTask.
+ * If the received extras Bundle does not contain data for SyncTask or contains data for task with
+ * default id ({@link SyncTask#DEFAULT_ID}), {@link #onPerformGlobalSync(SyncOperation)}
+ * method is invoked to perform global synchronization. Handler that should handle this global
+ * synchronization can be specified via {@link #setGlobalSyncHandler(SyncHandler)}.
+ *
+ * &lt;h3&gt;Sync task state change listening&lt;/h3&gt;
+ * To listen for changes in state of {@link SyncTask SyncTasks} within the sync adapter implementation,
+ * register {@link OnSyncTaskStateChangeListener} via {@link #setOnTaskStateChangeListener(OnSyncTaskStateChangeListener)}
+ * where this listener will be notified whenever a state of a particular sync task is changed within
+ * the adapter.
+ *
+ * &lt;h3&gt;Sync events dispatching&lt;/h3&gt;
+ * By default BaseSyncAdapter does not dispatch/notify any state about the current running synchronization
+ * process however there can be specified an instance of {@link EventDispatcher} that can be used for
+ * such dispatching. If this dispatcher is specified via {@link #setEventDispatcher(EventDispatcher)}
+ * BaseSyncAdapter will dispatch instances of {@link SyncEvent} as described below:
+ * &lt;ul&gt;
+ * &lt;li&gt;
+ * {@link #onPerformGlobalSync(SyncOperation)}
+ * &lt;p&gt;
+ * - dispatches {@link SyncEvent} type of {@link SyncEvent#START} with default task id
+ * {@link SyncTask#DEFAULT_ID} along with &lt;var&gt;account&lt;/var&gt;
+ * &lt;/li&gt;
+ * &lt;li&gt;
+ * {@link #onGlobalSyncFinished(SyncOperation)}
+ * &lt;p&gt;
+ * - dispatches {@link SyncEvent} type of {@link SyncEvent#FINISH} with default task id
+ * {@link SyncTask#DEFAULT_ID} along with &lt;var&gt;account&lt;/var&gt;
+ * &lt;/li&gt;
+ * &lt;li&gt;
+ * {@link #onGlobalSyncFailed(SyncOperation, Exception)}
+ * &lt;p&gt;
+ * - dispatches {@link SyncEvent} type of {@link SyncEvent#ERROR} with default task id
+ * {@link SyncTask#DEFAULT_ID} along with occurred &lt;var&gt;error&lt;/var&gt; and &lt;var&gt;account&lt;/var&gt;
+ * &lt;/li&gt;
+ * &lt;li&gt;
+ * {@link #onPerformSync(SyncOperation)}
+ * &lt;p&gt;
+ * - dispatches {@link SyncEvent} type of {@link SyncEvent#START} with id of the specified task
+ * along with &lt;var&gt;account&lt;/var&gt;
+ * &lt;/li&gt;
+ * &lt;li&gt;
+ * {@link #onSyncFinished(SyncOperation)}
+ * &lt;p&gt;
+ * - dispatches {@link SyncEvent} type of {@link SyncEvent#FINISH} with id of the specified task
+ * along with &lt;var&gt;account&lt;/var&gt;
+ * &lt;/li&gt;
+ * &lt;li&gt;
+ * {@link #onSyncFailed(SyncOperation, Exception)}
+ * &lt;p&gt;
+ * - dispatches {@link SyncEvent} type of {@link SyncEvent#ERROR} with id of the specified task
+ * along with occurred &lt;var&gt;error&lt;/var&gt; and &lt;var&gt;account&lt;/var&gt;
+ * &lt;/li&gt;
+ * &lt;/ul&gt;
+ * &lt;b&gt;Dispatching of synchronization events type of {@link SyncEvent#PROGRESS} is responsibility of
+ * each specific {@link SyncHandler} implementation&lt;/b&gt;.
+ *
+ * @author Martin Albedinsky
+ * @see BaseSyncManager
+ * @see SyncHandler
+ * @see SyncEvent
+ */
+public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
+
+	/**
+	 * Constants ===================================================================================
+	 */
+
+	/**
+	 * Log TAG.
+	 */
+	private static final String TAG = &quot;BaseSyncAdapter&quot;;
+
+	/**
+	 * Interface ===================================================================================
+	 */
+
+	/**
+	 * Interface used by BaseSyncAdapter to dispatch occurred synchronization events.
+	 * &lt;p&gt;
+	 * See {@link BaseSyncAdapter BaseSyncAdapter description} for events that are dispatched
+	 * by this adapter.
+	 *
+	 * @author Martin Albedinsky
+	 * @see #setEventDispatcher(EventDispatcher)
+	 */
+	public interface EventDispatcher {
+
+		/**
+		 * Called by a specific implementation of BaseSyncAdapter to dispatch the given synchronization
+		 * &lt;var&gt;event&lt;/var&gt;.
+		 *
+		 * @param event The synchronization event to be dispatched.
+		 */
+		void dispatch(@NonNull Object event);
+	}
+
+	/**
+	 * Static members ==============================================================================
+	 */
+
+	/**
+	 * Members =====================================================================================
+	 */
+
+	/**
+	 * Listener that are notified about state change of a particular {@link SyncTask}.
+	 */
+	private OnSyncTaskStateChangeListener mTaskStateChangeListener;
+
+	/**
+	 * Dispatcher that is used to dispatch synchronization events.
+	 */
+	private EventDispatcher mEventDispatcher;
+
+	/**
+	 * Handler that is responsible for global synchronization handling.
+	 *
+	 * @see #onPerformGlobalSync(SyncOperation)
+	 */
+	private SyncHandler mGlobalSyncHandler;
+
+	/**
+	 * Array map containing registered handlers that are responsible for synchronization handling
+	 * associated with a specific {@link SyncTask}. These handlers are mapped under the id of theirs
+	 * associated SyncTask ({@link SyncHandler#getTaskId()}).
+	 *
+	 * @see #onPerformSync(SyncOperation)
+	 */
+	private SparseArray&lt;SyncHandler&gt; mTaskHandlers;
+
+	/**
+	 * Constructors ================================================================================
+	 */
+
+	/**
+	 * Same as {@link #BaseSyncAdapter(Context, boolean, boolean)} with &lt;var&gt;allowParallelSyncs&lt;/var&gt;
+	 * parameter set to {@code false}.
+	 */
+	public BaseSyncAdapter(@NonNull Context context, boolean autoInitialize) {
+<span class="nc" id="L194">		this(context, autoInitialize, false);</span>
+<span class="nc" id="L195">	}</span>
+
+	/**
+	 * Creates a new instance of BaseSyncAdapter with the specified &lt;var&gt;context&lt;/var&gt; and configuration
+	 * flags.
+	 * &lt;p&gt;
+	 * See {@link AbstractThreadedSyncAdapter#AbstractThreadedSyncAdapter(Context, boolean, boolean)}
+	 * for more information.
+	 */
+	public BaseSyncAdapter(@NonNull Context context, boolean autoInitialize, boolean allowParallelSyncs) {
+<span class="nc" id="L205">		super(context, autoInitialize, allowParallelSyncs);</span>
+<span class="nc" id="L206">	}</span>
+
+	/**
+	 * Methods =====================================================================================
+	 */
+
+
+	/**
+	 * Registers a callback to be invoked whenever a state is changed for a particular {@link SyncTask}
+	 * within this sync adapter.
+	 *
+	 * @param listener The desired listener callback. May be {@code null} to clear the current one.
+	 * @see SyncTask#getState()
+	 */
+	protected final void setOnTaskStateChangeListener(@Nullable OnSyncTaskStateChangeListener listener) {
+<span class="nc" id="L221">		this.mTaskStateChangeListener = listener;</span>
+<span class="nc" id="L222">	}</span>
+
+	/**
+	 * Sets an dispatcher that is used by this sync adapter to dispatch synchronization events.
+	 * &lt;p&gt;
+	 * See class {@link BaseSyncAdapter description} for events that are dispatched by this adapter.
+	 *
+	 * @param dispatcher The desired event dispatcher. May be {@code null} to not dispatch any events.
+	 * @see #getEventDispatcher()
+	 * @see #dispatchSyncEvent(Object)
+	 */
+	protected final void setEventDispatcher(@Nullable EventDispatcher dispatcher) {
+<span class="nc" id="L234">		this.mEventDispatcher = dispatcher;</span>
+<span class="nc" id="L235">	}</span>
+
+	/**
+	 * Returns the event dispatcher specified for this sync adapter.
+	 *
+	 * @return This adapter's event dispatcher.
+	 * @see #setEventDispatcher(EventDispatcher)
+	 */
+	@Nullable
+	protected final EventDispatcher getEventDispatcher() {
+<span class="nc" id="L245">		return mEventDispatcher;</span>
+	}
+
+	/**
+	 * Registers a sync handler that will be used by this sync adapter for synchronization handling
+	 * of a {@link SyncTask} associated with the given &lt;var&gt;handler&lt;/var&gt; via {@link SyncHandler#getTaskId()}.
+	 * &lt;p&gt;
+	 * The given handler will be used to perform synchronization whenever
+	 * {@link #onPerformSync(Account, Bundle, String, ContentProviderClient, SyncResult)} is invoked
+	 * with extras Bundle that contains data for the associated SyncTask (mainly its id). Instance
+	 * of such SyncTask is created from the delivered extras and passed to the registered handler
+	 * via {@link SyncHandler#handleSync(Context, SyncOperation)}.
+	 * &lt;p&gt;
+	 * &lt;b&gt;Note&lt;/b&gt;, that if there is already registered sync handler with the same task id, such
+	 * handler will be replaced by the new one.
+	 *
+	 * @param handler The desired sync handler to be registered.
+	 * @see #onPerformSync(SyncOperation)
+	 * @see #unregisterTaskHandler(SyncHandler)
+	 */
+	protected void registerTaskHandler(@NonNull SyncHandler handler) {
+<span class="nc bnc" id="L266" title="All 2 branches missed.">		if (mTaskHandlers == null) {</span>
+<span class="nc" id="L267">			this.mTaskHandlers = new SparseArray&lt;&gt;();</span>
+		}
+<span class="nc" id="L269">		final int taskId = handler.getTaskId();</span>
+<span class="nc bnc" id="L270" title="All 2 branches missed.">		if (mTaskHandlers.indexOfKey(taskId) &gt;= 0) {</span>
+<span class="nc bnc" id="L271" title="All 2 branches missed.">			if (OfficiumConfig.DEBUG_LOG_ENABLED) {</span>
+<span class="nc" id="L272">				Log.v(TAG, &quot;Replacing old synchronization handler by a new one for task with id(&quot; + taskId + &quot;).&quot;);</span>
+			}
+<span class="nc" id="L274">			mTaskHandlers.append(taskId, handler);</span>
+		} else {
+<span class="nc bnc" id="L276" title="All 2 branches missed.">			if (OfficiumConfig.DEBUG_LOG_ENABLED) {</span>
+<span class="nc" id="L277">				Log.v(TAG, &quot;Registering new synchronization handler for task with id(&quot; + taskId + &quot;).&quot;);</span>
+			}
+<span class="nc" id="L279">			mTaskHandlers.append(taskId, handler);</span>
+		}
+<span class="nc" id="L281">	}</span>
+
+	/**
+	 * Un-registers previously registered sync handler.
+	 * &lt;p&gt;
+	 * If the given handler has not been registered before this method does nothing.
+	 *
+	 * @param handler The desired sync handler to un-register.
+	 * @see #onPerformSync(SyncOperation)
+	 */
+	protected void unregisterTaskHandler(@NonNull SyncHandler handler) {
+<span class="nc bnc" id="L292" title="All 4 branches missed.">		if (mTaskHandlers != null &amp;&amp; mTaskHandlers.size() &gt; 0)</span>
+<span class="nc" id="L293">			mTaskHandlers.remove(handler.getTaskId());</span>
+<span class="nc" id="L294">	}</span>
+
+	/**
+	 * Sets a sync handler that is responsible for global synchronization handling.
+	 *
+	 * @param handler The desired sync handler. May be {@code null} if handling of global synchronization
+	 *                is not desired.
+	 * @see #onPerformGlobalSync(SyncOperation)
+	 * @see #getGlobalSyncHandler()
+	 */
+	protected void setGlobalSyncHandler(@Nullable SyncHandler handler) {
+<span class="nc" id="L305">		this.mGlobalSyncHandler = handler;</span>
+<span class="nc" id="L306">	}</span>
+
+	/**
+	 * Returns the sync handler that is responsible for global synchronization handling.
+	 *
+	 * @return This adapter's global sync handler.
+	 * @see #setGlobalSyncHandler(SyncHandler)
+	 */
+	@Nullable
+	protected SyncHandler getGlobalSyncHandler() {
+<span class="nc" id="L316">		return mGlobalSyncHandler;</span>
+	}
+
+	/**
+	 * @see #createTaskFromExtras(Bundle)
+	 * @see #onPerformGlobalSync(SyncOperation)
+	 * @see #onPerformSync(SyncOperation)
+	 */
+	@Override
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
+<span class="nc" id="L327">		final SyncOperation syncOperation = new SyncOperation.Builder()</span>
+<span class="nc" id="L328">				.account(account)</span>
+<span class="nc" id="L329">				.authority(authority)</span>
+<span class="nc" id="L330">				.task(createTaskFromExtras(extras))</span>
+<span class="nc" id="L331">				.build();</span>
+<span class="nc" id="L332">		changeTaskStateToAndNotify(syncOperation, SyncTask.RUNNING);</span>
+<span class="nc bnc" id="L333" title="All 2 branches missed.">		if (syncOperation.task.getId() == SyncTask.DEFAULT_ID) {</span>
+<span class="nc" id="L334">			onPerformGlobalSync(syncOperation);</span>
+		} else {
+<span class="nc" id="L336">			onPerformSync(syncOperation);</span>
+		}
+<span class="nc" id="L338">	}</span>
+
+	/**
+	 * Called to create instance of SyncTask from the given &lt;var&gt;extras&lt;/var&gt; whenever
+	 * {@link #onPerformSync(Account, Bundle, String, ContentProviderClient, SyncResult)} is invoked.
+	 * &lt;p&gt;
+	 * Inheritance hierarchies may override this method to instantiate custom implementations of
+	 * {@link SyncTask SyncTasks}.
+	 *
+	 * @param extras The synchronization extras passed to {@link #onPerformSync(Account, Bundle, String, ContentProviderClient, SyncResult)}.
+	 * @return New instance of SyncTask with data parsed from the given extras.
+	 */
+	@NonNull
+	protected SyncTask createTaskFromExtras(@NonNull Bundle extras) {
+<span class="nc" id="L352">		return new SyncTask(extras);</span>
+	}
+
+	/**
+	 * Invoked whenever {@link #onPerformSync(Account, Bundle, String, ContentProviderClient, SyncResult)}
+	 * is invoked and the &lt;var&gt;extras&lt;/var&gt; Bundle does not contain data for a specific {@link SyncTask}
+	 * but rather for a global SyncTask. This is determined whether the extras contains id of that
+	 * specific synchronization task or not.
+	 *
+	 * @param syncOperation Operation describing the global synchronization request. The operation's
+	 *                      associated task will always have {@link SyncTask#DEFAULT_ID} id.
+	 * @see #onGlobalSyncFinished(SyncOperation)
+	 * @see #onGlobalSyncFailed(SyncOperation, Exception)
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	protected void onPerformGlobalSync(@NonNull SyncOperation syncOperation) {
+<span class="nc bnc" id="L368" title="All 2 branches missed.">		if (mGlobalSyncHandler == null) return;</span>
+<span class="nc" id="L369">		dispatchSyncEvent(</span>
+<span class="nc" id="L370">				new SyncEvent.Builder(syncOperation.task.getId())</span>
+<span class="nc" id="L371">						.type(SyncEvent.START)</span>
+<span class="nc" id="L372">						.account(syncOperation.account)</span>
+<span class="nc" id="L373">						.build()</span>
+		);
+		try {
+<span class="nc" id="L376">			mGlobalSyncHandler.handleSync(getContext(), syncOperation);</span>
+<span class="nc" id="L377">			changeTaskStateToAndNotify(syncOperation, SyncTask.FINISHED);</span>
+<span class="nc" id="L378">			onGlobalSyncFinished(syncOperation);</span>
+<span class="nc" id="L379">		} catch (Exception error) {</span>
+<span class="nc" id="L380">			changeTaskStateToAndNotify(syncOperation, SyncTask.FAILED);</span>
+<span class="nc" id="L381">			onGlobalSyncFailed(syncOperation, error);</span>
+<span class="nc" id="L382">		}</span>
+<span class="nc" id="L383">	}</span>
+
+	/**
+	 * Invoked whenever {@link #onPerformGlobalSync(SyncOperation)} finishes without any error.
+	 *
+	 * @param syncOperation Operation describing the global synchronization request.
+	 * @see #onGlobalSyncFailed(SyncOperation, Exception)
+	 */
+	protected void onGlobalSyncFinished(@NonNull SyncOperation syncOperation) {
+<span class="nc" id="L392">		dispatchSyncEvent(</span>
+<span class="nc" id="L393">				new SyncEvent.Builder(syncOperation.task.getId())</span>
+<span class="nc" id="L394">						.type(SyncEvent.FINISH)</span>
+<span class="nc" id="L395">						.account(syncOperation.account)</span>
+<span class="nc" id="L396">						.build()</span>
+		);
+<span class="nc" id="L398">	}</span>
+
+	/**
+	 * Invoked whenever {@link #onPerformGlobalSync(SyncOperation)} is invoked and there is thrown
+	 * the given &lt;var&gt;error&lt;/var&gt; exception during its execution.
+	 *
+	 * @param syncOperation Operation describing the global synchronization request.
+	 * @param error         The error exception thrown by {@link #onPerformGlobalSync(SyncOperation)}.
+	 * @see #onSyncFinished(SyncOperation)
+	 */
+	protected void onGlobalSyncFailed(@NonNull SyncOperation syncOperation, @NonNull Exception error) {
+<span class="nc" id="L409">		dispatchSyncEvent(</span>
+<span class="nc" id="L410">				new SyncEvent.Builder(syncOperation.task.getId())</span>
+<span class="nc" id="L411">						.type(SyncEvent.ERROR)</span>
+<span class="nc" id="L412">						.account(syncOperation.account)</span>
+<span class="nc" id="L413">						.error(error)</span>
+<span class="nc" id="L414">						.build()</span>
+		);
+<span class="nc" id="L416">	}</span>
+
+	/**
+	 * Invoked whenever {@link #onPerformSync(Account, Bundle, String, ContentProviderClient, SyncResult)}
+	 * is invoked and the &lt;var&gt;extras&lt;/var&gt; Bundle does contain data for a specific {@link SyncTask}.
+	 * This is determined whether the extras contains id of that specific synchronization task or not.
+	 *
+	 * @param syncOperation Operation describing the synchronization request.
+	 * @see #onSyncFinished(SyncOperation)
+	 * @see #onSyncFailed(SyncOperation, Exception)
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	protected void onPerformSync(@NonNull SyncOperation syncOperation) {
+<span class="nc bnc" id="L429" title="All 2 branches missed.">		final SyncHandler taskHandler = mTaskHandlers == null ? null : mTaskHandlers.get(syncOperation.task.getId());</span>
+<span class="nc bnc" id="L430" title="All 2 branches missed.">		if (taskHandler == null) {</span>
+<span class="nc" id="L431">			Log.e(TAG, &quot;No synchronization handler found for task with id(&quot; + syncOperation.task.getId() + &quot;).&quot;);</span>
+<span class="nc" id="L432">			return;</span>
+		}
+<span class="nc" id="L434">		dispatchSyncEvent(</span>
+<span class="nc" id="L435">				new SyncEvent.Builder(syncOperation.task.getId())</span>
+<span class="nc" id="L436">						.type(SyncEvent.START)</span>
+<span class="nc" id="L437">						.account(syncOperation.account)</span>
+<span class="nc" id="L438">						.build()</span>
+		);
+		try {
+<span class="nc" id="L441">			taskHandler.handleSync(getContext(), syncOperation);</span>
+<span class="nc" id="L442">			changeTaskStateToAndNotify(syncOperation, SyncTask.FINISHED);</span>
+<span class="nc" id="L443">			onSyncFinished(syncOperation);</span>
+<span class="nc" id="L444">		} catch (Exception error) {</span>
+<span class="nc" id="L445">			changeTaskStateToAndNotify(syncOperation, SyncTask.FAILED);</span>
+<span class="nc" id="L446">			onSyncFailed(syncOperation, error);</span>
+<span class="nc" id="L447">		}</span>
+<span class="nc" id="L448">	}</span>
+
+	/**
+	 * Invoked whenever {@link #onPerformSync(SyncOperation)} finishes without any error.
+	 *
+	 * @param syncOperation Operation describing the synchronization request.
+	 * @see #onSyncFailed(SyncOperation, Exception)
+	 */
+	protected void onSyncFinished(@NonNull SyncOperation syncOperation) {
+<span class="nc" id="L457">		dispatchSyncEvent(</span>
+<span class="nc" id="L458">				new SyncEvent.Builder(syncOperation.task.getId())</span>
+<span class="nc" id="L459">						.type(SyncEvent.FINISH)</span>
+<span class="nc" id="L460">						.account(syncOperation.account)</span>
+<span class="nc" id="L461">						.build()</span>
+		);
+<span class="nc" id="L463">	}</span>
+
+	/**
+	 * Invoked whenever {@link #onPerformSync(SyncOperation)} is invoked and there is thrown the
+	 * given &lt;var&gt;error&lt;/var&gt; exception during its execution.
+	 *
+	 * @param syncOperation Operation describing the synchronization request.
+	 * @param error         The error exception thrown by {@link #onPerformSync(SyncOperation)}.
+	 * @see #onSyncFinished(SyncOperation)
+	 */
+	protected void onSyncFailed(@NonNull SyncOperation syncOperation, @NonNull Exception error) {
+<span class="nc" id="L474">		dispatchSyncEvent(</span>
+<span class="nc" id="L475">				new SyncEvent.Builder(syncOperation.task.getId())</span>
+<span class="nc" id="L476">						.type(SyncEvent.ERROR)</span>
+<span class="nc" id="L477">						.account(syncOperation.account)</span>
+<span class="nc" id="L478">						.error(error)</span>
+<span class="nc" id="L479">						.build()</span>
+		);
+<span class="nc" id="L481">	}</span>
+
+	/**
+	 * Changes current state of {@link SyncTask} associated with the given &lt;var&gt;syncOperation&lt;/var&gt;
+	 * to the specified one via {@link SyncTask#setState(int)}. If the task's state is changed, also
+	 * the current registered {@link OnSyncTaskStateChangeListener} (if any) is notified about the
+	 * change.
+	 *
+	 * @param syncOperation The sync operation containing the sync task of which state to change.
+	 * @param state         The new state for the task. Should be one of states defined by {@link SyncTask.State @State}
+	 *                      annotation.
+	 */
+	private void changeTaskStateToAndNotify(SyncOperation syncOperation, @SyncTask.State int state) {
+<span class="nc bnc" id="L494" title="All 2 branches missed.">		if (syncOperation.task.getState() != state) {</span>
+<span class="nc" id="L495">			syncOperation.task.setState(state);</span>
+<span class="nc bnc" id="L496" title="All 2 branches missed.">			if (mTaskStateChangeListener != null) {</span>
+<span class="nc" id="L497">				mTaskStateChangeListener.onSyncTaskStateChanged(syncOperation.task, syncOperation.account);</span>
+			}
+		}
+<span class="nc" id="L500">	}</span>
+
+	/**
+	 * Invoked whenever this sync adapter wants to dispatch the given synchronization &lt;var&gt;event&lt;/var&gt;
+	 * to its clients.
+	 * &lt;p&gt;
+	 * Default implementation uses {@link EventDispatcher} specified via {@link #setEventDispatcher(EventDispatcher)}
+	 * (if any). If there is no dispatcher specified this method does nothing.
+	 * &lt;p&gt;
+	 * See class {@link BaseSyncAdapter description} for events that are dispatched by this adapter.
+	 *
+	 * @param event The synchronization event to be dispatched.
+	 */
+	protected void dispatchSyncEvent(@NonNull Object event) {
+<span class="nc bnc" id="L514" title="All 2 branches missed.">		if (mEventDispatcher != null) mEventDispatcher.dispatch(event);</span>
+<span class="nc" id="L515">	}</span>
+
+	/**
+	 * Inner classes ===============================================================================
+	 */
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span>Generated by the Android Gradle plugin 2.3.0</div></body></html>

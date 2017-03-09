@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ErrorResponse.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">universum.studios.android.officium.service</a> &gt; <span class="el_source">ErrorResponse.java</span></div><h1>ErrorResponse.java</h1><pre class="source lang-java linenums">/*
+ * =================================================================================================
+ *                             Copyright (C) 2016 Universum Studios
+ * =================================================================================================
+ *         Licensed under the Apache License, Version 2.0 or later (further &quot;License&quot; only).
+ * -------------------------------------------------------------------------------------------------
+ * You may use this file only in compliance with the License. More details and copy of this License
+ * you may obtain at
+ *
+ * 		http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * You can redistribute, modify or publish any part of the code written within this file but as it
+ * is described in the License, the software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
+ *
+ * See the License for the specific language governing permissions and limitations under the License.
+ * =================================================================================================
+ */
+package universum.studios.android.officium.service;
+
+import android.support.annotation.NonNull;
+
+/**
+ * A {@link ServiceResponse} that may be used to parse body of response send by a server that
+ * contains an {@link Error} object.
+ *
+ * &lt;h3&gt;Response body&lt;/h3&gt;
+ * &lt;pre&gt;
+ * {
+ *     &quot;error&quot;: {
+ *         &quot;code&quot;: 486,
+ *         &quot;message&quot;: &quot;Item not found on the server!&quot;
+ *     }
+ * }
+ * &lt;/pre&gt;
+ *
+ * @author Martin Albedinsky
+ */
+public class ErrorResponse extends ServiceResponse {
+
+	/**
+	 * Constants ===================================================================================
+	 */
+
+	/**
+	 * Log TAG.
+	 */
+	// private static final String TAG = &quot;ErrorResponse&quot;;
+
+	/**
+	 * Interface ===================================================================================
+	 */
+
+	/**
+	 * Static members ==============================================================================
+	 */
+
+	/**
+	 * Members =====================================================================================
+	 */
+
+	/**
+	 * Error specified for this response during its initialization or parsed using &lt;b&gt;Gson&lt;/b&gt;.
+	 */
+	public Error error;
+
+	/**
+	 * Constructors ================================================================================
+	 */
+
+	/**
+	 * Creates a new instance of ErrorResponse without error.
+	 * &lt;p&gt;
+	 * This constructor should be used only by &lt;b&gt;Gson&lt;/b&gt; library.
+	 */
+	public ErrorResponse() {
+<span class="nc" id="L77">		super();</span>
+		// Empty constructor to allow instantiation of this class via reflection.
+<span class="nc" id="L79">	}</span>
+
+	/**
+	 * Creates a new instance of ErrorResponse with the specified &lt;var&gt;error&lt;/var&gt;.
+	 *
+	 * @param error The error for the new error response.
+	 */
+	public ErrorResponse(@NonNull Error error) {
+<span class="nc" id="L87">		super();</span>
+<span class="nc" id="L88">		this.error = error;</span>
+<span class="nc" id="L89">	}</span>
+
+	/**
+	 * Methods =====================================================================================
+	 */
+
+	/**
+	 */
+	@Override
+	@SuppressWarnings(&quot;StringBufferReplaceableByString&quot;)
+	public String toString() {
+<span class="nc" id="L100">		final StringBuilder builder = new StringBuilder(64);</span>
+<span class="nc" id="L101">		builder.append(getClass().getSimpleName());</span>
+<span class="nc" id="L102">		builder.append(&quot;{error: &quot;);</span>
+<span class="nc" id="L103">		builder.append(error);</span>
+<span class="nc" id="L104">		return builder.append(&quot;}&quot;).toString();</span>
+	}
+
+	/**
+	 * Returns the code of the error (if any) of this response.
+	 *
+	 * @return Error code or {@code 0} if there is no error presented.
+	 */
+	public int getErrorCode() {
+<span class="nc bnc" id="L113" title="All 2 branches missed.">		return error == null ? 0 : error.code;</span>
+	}
+
+	/**
+	 * Returns the message of the error (if any) of this response.
+	 *
+	 * @return Error message or {@code &quot;&quot;} if there is no error presented.
+	 */
+	@NonNull
+	public String getErrorMessage() {
+<span class="nc bnc" id="L123" title="All 2 branches missed.">		return error == null ? &quot;&quot; : error.message;</span>
+	}
+
+	/**
+	 * Inner classes ===============================================================================
+	 */
+
+	/**
+	 * Simple error object that can hold two attributes: {@link Error#code} and {@link Error#message}.
+	 *
+	 * @author Martin Albedinsky
+	 */
+<span class="nc" id="L135">	public static final class Error {</span>
+
+		/**
+		 * Code of this error.
+		 */
+		public int code;
+
+		/**
+		 * Message of this error.
+		 */
+		public String message;
+
+		/**
+		 */
+		@Override
+		@SuppressWarnings(&quot;StringBufferReplaceableByString&quot;)
+		public String toString() {
+<span class="nc" id="L152">			final StringBuilder builder = new StringBuilder(64);</span>
+<span class="nc" id="L153">			builder.append(getClass().getSimpleName());</span>
+<span class="nc" id="L154">			builder.append(&quot;{code: &quot;);</span>
+<span class="nc" id="L155">			builder.append(Integer.toString(code));</span>
+<span class="nc" id="L156">			builder.append(&quot;, message: &quot;);</span>
+<span class="nc" id="L157">			builder.append(message);</span>
+<span class="nc" id="L158">			return builder.append(&quot;}&quot;).toString();</span>
+		}
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span>Generated by the Android Gradle plugin 2.3.0</div></body></html>

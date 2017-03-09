@@ -1,0 +1,889 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>UserAccountManager.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">universum.studios.android.officium.account</a> &gt; <span class="el_source">UserAccountManager.java</span></div><h1>UserAccountManager.java</h1><pre class="source lang-java linenums">/*
+ * =================================================================================================
+ *                             Copyright (C) 2015 Martin Albedinsky
+ * =================================================================================================
+ *         Licensed under the Apache License, Version 2.0 or later (further &quot;License&quot; only).
+ * -------------------------------------------------------------------------------------------------
+ * You may use this file only in compliance with the License. More details and copy of this License
+ * you may obtain at
+ *
+ * 		http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * You can redistribute, modify or publish any part of the code written within this file but as it
+ * is described in the License, the software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
+ *
+ * See the License for the specific language governing permissions and limitations under the License.
+ * =================================================================================================
+ */
+package universum.studios.android.officium.account;
+
+import android.Manifest;
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.content.Context;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.RequiresPermission;
+import android.text.TextUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import universum.studios.android.crypto.Crypto;
+import universum.studios.android.crypto.Encrypto;
+import universum.studios.android.crypto.util.CryptographyUtils;
+import universum.studios.android.util.ErrorException;
+
+/**
+ * Wrapper for {@link AccountManager} that can be used to simplify management of an Android application
+ * accounts. Each instance of UserAccountManager can manage accounts only of a single type that is
+ * specified during initialization via {@link #UserAccountManager(Context, String)} constructor.
+ * UserAccountManager can be used for both creation and deletion of Android accounts via
+ * {@link #createAccount(UserAccount)} and {@link #deleteAccount(UserAccount)} or via theirs asynchronous
+ * relatives {@link #createAccountAsync(UserAccount)} and {@link #deleteAccountAsync(UserAccount)}.
+ * &lt;p&gt;
+ * This manager also provides API methods to store and peek authentication tokens for a specific
+ * account via {@link #setAccountAuthToken(Account, String, String)} and {@link #peekAccountAuthToken(Account, String)}
+ * along with account's password management via {@link #setAccountPassword(Account, String)} and
+ * {@link #getAccountPassword(Account)}. Data for a specific account can be stored either as single
+ * values via {@link #setAccountData(Account, String, String)} or as data {@link Bundle} via
+ * {@link #setAccountDataBundle(Account, Bundle)} which is basically bulk method for the single
+ * value storing method. Stored account data can be than obtained via {@link #getAccountData(Account, String)}
+ * or via {@link #getAccountDataBundle(Account, String...)}.
+ *
+ * @param &lt;A&gt; Type of the user account that will be managed by the UserAccountManager subclass.
+ * @author Martin Albedinsky
+ */
+public abstract class UserAccountManager&lt;A extends UserAccount&gt; {
+
+	/**
+	 * Constants ===================================================================================
+	 */
+
+	/**
+	 * Log TAG.
+	 */
+	@SuppressWarnings(&quot;unused&quot;)
+	private static final String TAG = &quot;UserAccountManager&quot;;
+
+	/**
+	 * Error code indicating that an error occurred during asynchronous execution of
+	 * {@link #onCreateAccount(UserAccount)} requested via {@link #createAccountAsync(UserAccount)}.
+	 */
+	public static final int ERROR_CREATE_ACCOUNT = -0x01;
+
+	/**
+	 * Error code indicating that an error occurred during asynchronous execution of
+	 * {@link #onDeleteAccount(UserAccount)} requested via {@link #deleteAccountAsync(UserAccount)}.
+	 */
+	public static final int ERROR_DELETE_ACCOUNT = -0x02;
+
+	/**
+	 * Value for Android permission to &lt;b&gt;GET&lt;/b&gt; accounts.
+	 */
+	protected static final String PERMISSION_GET_ACCOUNTS = Manifest.permission.GET_ACCOUNTS;
+
+	/**
+	 * Value for Android permission to &lt;b&gt;MANAGE&lt;/b&gt; accounts.
+	 */
+	protected static final String PERMISSION_MANAGE_ACCOUNTS = &quot;android.permission.MANAGE_ACCOUNTS&quot;;
+
+	/**
+	 * Value for Android permission to &lt;b&gt;AUTHENTICATE&lt;/b&gt; accounts.
+	 */
+	protected static final String PERMISSION_AUTHENTICATE_ACCOUNTS = &quot;android.permission.AUTHENTICATE_ACCOUNTS&quot;;
+
+	/**
+	 * Interface ===================================================================================
+	 */
+
+	/**
+	 * Watcher that may be used to listen for callbacks fired whenever a new Android {@link Account}
+	 * is &lt;b&gt;created&lt;/b&gt; or &lt;b&gt;deleted&lt;/b&gt; asynchronously for its associated {@link UserAccount}.
+	 *
+	 * @param &lt;A&gt; Type of the user account managed by an UserAccountManager implementation to which
+	 *            will be this watcher attached.
+	 * @author Martin Albedinsky
+	 * @see #createAccountAsync(UserAccount)
+	 * @see #deleteAccountAsync(UserAccount)
+	 */
+	public interface AccountWatcher&lt;A extends UserAccount&gt; {
+
+		/**
+		 * Invoked whenever a new Android {@link Account} has been created for the specified
+		 * &lt;var&gt;userAccount&lt;/var&gt; after call to {@link #createAccountAsync(UserAccount)}.
+		 *
+		 * @param userAccount The user account for which has been the corresponding Android account
+		 *                    created.
+		 * @see #onAccountError(UserAccount, ErrorException)
+		 */
+		void onAccountCreated(@NonNull A userAccount);
+
+		/**
+		 * Invoked whenever an old Android {@link Account} has been deleted for the specified
+		 * &lt;var&gt;userAccount&lt;/var&gt; after call to {@link #deleteAccountAsync(UserAccount)}.
+		 *
+		 * @param userAccount The user account for which has been the corresponding Android account
+		 *                    deleted.
+		 * @see #onAccountError(UserAccount, ErrorException)
+		 */
+		void onAccountDeleted(@NonNull A userAccount);
+
+		/**
+		 * Invoked whenever an error occurs during execution of one of account management related
+		 * tasks.
+		 *
+		 * @param userAccount The user account for which has the error occurred.
+		 * @param error       The occurred error. The error's code that may be obtained via
+		 *                    {@link ErrorException#getCode()} describes the error. Will be one
+		 *                    of {@link #ERROR_CREATE_ACCOUNT} or {@link #ERROR_DELETE_ACCOUNT}.
+		 */
+		void onAccountError(@NonNull A userAccount, @NonNull ErrorException error);
+	}
+
+	/**
+	 * Static members ==============================================================================
+	 */
+
+	/**
+	 * Members =====================================================================================
+	 */
+
+	/**
+	 * Context used to access {@link #mManager} and other needed application data about accounts.
+	 */
+	protected final Context mContext;
+
+	/**
+	 * Account manager used to create/update/delete accounts of the type specified for this manager.
+	 */
+	protected final AccountManager mManager;
+
+	/**
+	 * Type of accounts that can be managed by this manager.
+	 */
+	protected final String mAccountType;
+
+	/**
+	 * Handler that is used to dispatch callbacks on the Ui thread.
+	 */
+	private final Handler mUiHandler;
+
+	/**
+	 * List of watchers that will be notified whenever a new account is created &lt;b&gt;asynchronously&lt;/b&gt;
+	 * via {@link #createAccountAsync(UserAccount)} or an old one deleted &lt;b&gt;asynchronously&lt;/b&gt; via
+	 * {@link #deleteAccountAsync(UserAccount)}.
+	 */
+<span class="nc" id="L186">	private final List&lt;AccountWatcher&lt;A&gt;&gt; mWatchers = new ArrayList&lt;&gt;();</span>
+
+	/**
+	 * Encrypto implementation that is used to encrypt keys of accounts data managed by this manager.
+	 *
+	 * @see #encryptKey(String)
+	 */
+	private Encrypto mKeyEncrypto;
+
+	/**
+	 * Crypto implementation that is used to encrypt and decrypt accounts data managed by this manager.
+	 *
+	 * @see #encryptData(String)
+	 * @see #decryptData(String)
+	 */
+	private Crypto mDataCrypto;
+
+	/**
+	 * Constructors ================================================================================
+	 */
+
+	/**
+	 * Creates a new instance of UserAccountManager for the specified &lt;var&gt;accountType&lt;/var&gt;.
+	 *
+	 * @param context     Context used to access {@link AccountManager}.
+	 * @param accountType The desired type of accounts that can be managed by the new manager.
+	 */
+<span class="nc" id="L213">	public UserAccountManager(@NonNull Context context, @NonNull String accountType) {</span>
+<span class="nc" id="L214">		this.mContext = context;</span>
+<span class="nc" id="L215">		this.mManager = AccountManager.get(mContext);</span>
+<span class="nc" id="L216">		this.mAccountType = accountType;</span>
+<span class="nc" id="L217">		this.mUiHandler = new Handler(Looper.getMainLooper());</span>
+<span class="nc" id="L218">	}</span>
+
+	/**
+	 * Methods =====================================================================================
+	 */
+
+	/**
+	 * Registers a watcher to be notified whenever a new user account is created or an old one
+	 * deleted.
+	 *
+	 * @param watcher The desired watcher to register.
+	 * @see #unregisterWatcher(AccountWatcher)
+	 */
+	public void registerWatcher(@NonNull AccountWatcher&lt;A&gt; watcher) {
+<span class="nc bnc" id="L232" title="All 2 branches missed.">		if (!mWatchers.contains(watcher)) mWatchers.add(watcher);</span>
+<span class="nc" id="L233">	}</span>
+
+	/**
+	 * Unregisters the given &lt;var&gt;watcher&lt;/var&gt; from the registered ones.
+	 *
+	 * @param watcher The desired watcher to unregister.
+	 * @see #registerWatcher(AccountWatcher)
+	 */
+	public void unregisterWatcher(@NonNull AccountWatcher&lt;A&gt; watcher) {
+<span class="nc" id="L242">		mWatchers.remove(watcher);</span>
+<span class="nc" id="L243">	}</span>
+
+	/**
+	 * Sets an implementation of {@link Encrypto} that should be used by this account manager to
+	 * perform account data keys encryption operation.
+	 *
+	 * @param encrypto The desired encrypto implementation. May be {@code null} to not perform keys
+	 *                 encryption.
+	 * @see #setDataCrypto(Crypto)
+	 */
+	public final void setKeyEncrypto(@Nullable Encrypto encrypto) {
+<span class="nc" id="L254">		this.mKeyEncrypto = encrypto;</span>
+<span class="nc" id="L255">	}</span>
+
+	/**
+	 * Sets an implementation of {@link Crypto} that should be used by this account manager to
+	 * perform account data encryption/decryption operations.
+	 * &lt;p&gt;
+	 * &lt;b&gt;Note&lt;/b&gt;, that if specified, the provided crypto will be also used for password
+	 * encryption/decryption operations.
+	 *
+	 * @param crypto The desired crypto implementation. May be {@code null} to not perform data
+	 *               encryption/decryption.
+	 * @see #setKeyEncrypto(Encrypto)
+	 * @see #setAccountData(Account, String, String)
+	 * @see #getAccountData(Account, String)
+	 * @see #getAccountDataBundle(Account, String...)
+	 */
+	public final void setDataCrypto(@Nullable Crypto crypto) {
+<span class="nc" id="L272">		this.mDataCrypto = crypto;</span>
+<span class="nc" id="L273">	}</span>
+
+	/**
+	 * Encrypts keys and data contained within the specified &lt;var&gt;bundle&lt;/var&gt;.
+	 *
+	 * @param bundle The desired bundle to be encrypted.
+	 * @return Bundle with encrypted keys and data or the same bundle if there is no cryptographic
+	 * tool specified.
+	 * @see #encryptKey(String)
+	 * @see #encryptData(String)
+	 */
+	private Bundle encryptBundle(Bundle bundle) {
+<span class="nc bnc" id="L285" title="All 4 branches missed.">		if (bundle == null || bundle.isEmpty()) {</span>
+<span class="nc" id="L286">			return bundle;</span>
+		}
+<span class="nc" id="L288">		final Set&lt;String&gt; keys = bundle.keySet();</span>
+<span class="nc bnc" id="L289" title="All 2 branches missed.">		for (final String key : keys) {</span>
+<span class="nc" id="L290">			bundle.putString(encryptKey(key), encryptData(bundle.getString(key)));</span>
+<span class="nc" id="L291">		}</span>
+<span class="nc" id="L292">		return bundle;</span>
+	}
+
+	/**
+	 * Encrypts the specified &lt;var&gt;key&lt;/var&gt; using {@link #mKeyEncrypto}, if presented.
+	 *
+	 * @param key The desired key to be encrypted.
+	 * @return Encrypted key or the same key if there is no cryptographic tool specified.
+	 */
+	private String encryptKey(String key) {
+<span class="nc bnc" id="L302" title="All 2 branches missed.">		return mKeyEncrypto == null ? key : CryptographyUtils.encrypt(key, mKeyEncrypto);</span>
+	}
+
+	/**
+	 * Encrypts the specified &lt;var&gt;value&lt;/var&gt; using {@link #mDataCrypto}, if presented.
+	 *
+	 * @param value The desired data value to be encrypted.
+	 * @return Encrypted data value or the same value if there is no cryptographic tool specified.
+	 */
+	private String encryptData(String value) {
+<span class="nc bnc" id="L312" title="All 2 branches missed.">		return mDataCrypto == null ? value : CryptographyUtils.encrypt(value, mDataCrypto);</span>
+	}
+
+	/**
+	 * Decrypts the specified &lt;var&gt;value&lt;/var&gt; using {@link #mDataCrypto}, if presented.
+	 *
+	 * @param value The desired data value to be decrypted.
+	 * @return Decrypted data value or the same value if there is no cryptographic tool specified.
+	 */
+	private String decryptData(String value) {
+<span class="nc bnc" id="L322" title="All 2 branches missed.">		return mDataCrypto == null ? value : CryptographyUtils.decrypt(value, mDataCrypto);</span>
+	}
+
+	/**
+	 * Same as {@link #createAccount(UserAccount)} where creation of the given &lt;var&gt;userAccount&lt;/var&gt;
+	 * will be executed &lt;b&gt;asynchronously&lt;/b&gt; using {@link AsyncTask}. When the creation process is
+	 * finished the current {@link AccountWatcher AccountWatchers} (if any) will be notified through
+	 * {@link AccountWatcher#onAccountCreated(UserAccount)} callback.
+	 * &lt;p&gt;
+	 * This method requires the caller to hold &lt;b&gt;{@link #PERMISSION_GET_ACCOUNTS}&lt;/b&gt; along with
+	 * &lt;b&gt;{@link #PERMISSION_AUTHENTICATE_ACCOUNTS}&lt;/b&gt; permissions.
+	 *
+	 * @param userAccount The desired user account for which to create a corresponding Android {@link Account}.
+	 * @see #registerWatcher(AccountWatcher)
+	 * @see #deleteAccountAsync(UserAccount)
+	 */
+	@RequiresPermission(allOf = {
+			PERMISSION_GET_ACCOUNTS,
+			PERMISSION_AUTHENTICATE_ACCOUNTS
+	})
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public void createAccountAsync(@NonNull A userAccount) {
+<span class="nc" id="L344">		new CreateAccountTask().execute(userAccount);</span>
+<span class="nc" id="L345">	}</span>
+
+	/**
+	 * Creates a new Android {@link Account} for the given &lt;var&gt;userAccount&lt;/var&gt;.
+	 * &lt;p&gt;
+	 * This method requires the caller to hold &lt;b&gt;{@link #PERMISSION_GET_ACCOUNTS}&lt;/b&gt; along with
+	 * &lt;b&gt;{@link #PERMISSION_AUTHENTICATE_ACCOUNTS}&lt;/b&gt; permissions.
+	 *
+	 * @param userAccount The desired user account for which to create the corresponding Android {@link Account}.
+	 * @return {@code True} if the account has been created, {@code false} otherwise.
+	 * @see #createAccountAsync(UserAccount)
+	 * @see #deleteAccount(UserAccount)
+	 * @see AccountManager#addAccountExplicitly(Account, String, Bundle)
+	 * @see AccountManager#setAuthToken(Account, String, String)
+	 */
+	@RequiresPermission(allOf = {
+			PERMISSION_GET_ACCOUNTS,
+			PERMISSION_AUTHENTICATE_ACCOUNTS
+	})
+	public boolean createAccount(@NonNull final A userAccount) {
+<span class="nc bnc" id="L365" title="All 2 branches missed.">		if (onCreateAccount(userAccount)) {</span>
+<span class="nc" id="L366">			mUiHandler.post(new Runnable() {</span>
+
+				/**
+				 */
+				@Override
+				public void run() {
+<span class="nc" id="L372">					notifyAccountCreated(userAccount);</span>
+<span class="nc" id="L373">				}</span>
+			});
+<span class="nc" id="L375">			return true;</span>
+		}
+<span class="nc" id="L377">		return false;</span>
+	}
+
+	/**
+	 * Invoked whenever {@link #createAccount(UserAccount)} or {@link #createAccountAsync(UserAccount)}
+	 * is called to create new Android {@link Account}.
+	 * &lt;p&gt;
+	 * &lt;b&gt;Note&lt;/b&gt;, that this method can be invoked on a background thread.
+	 * &lt;p&gt;
+	 * Current implementation always returns {@code true}.
+	 * &lt;p&gt;
+	 * This method requires the caller to hold &lt;b&gt;{@link #PERMISSION_GET_ACCOUNTS}&lt;/b&gt; along with
+	 * &lt;b&gt;{@link #PERMISSION_AUTHENTICATE_ACCOUNTS}&lt;/b&gt; permissions.
+	 *
+	 * @param userAccount The desired user account for which to create the corresponding Android
+	 *                    {@link Account}.
+	 * @return {@code True} if account has been created, {@code false} otherwise.
+	 * @see #onDeleteAccount(UserAccount)
+	 * @see AccountManager#addAccountExplicitly(Account, String, Bundle)
+	 * @see AccountManager#setAuthToken(Account, String, String)
+	 */
+	@RequiresPermission(allOf = {
+			PERMISSION_GET_ACCOUNTS,
+			PERMISSION_AUTHENTICATE_ACCOUNTS
+	})
+	protected boolean onCreateAccount(@NonNull A userAccount) {
+<span class="nc" id="L403">		final Account account = new Account(userAccount.getName(), mAccountType);</span>
+<span class="nc" id="L404">		onDeleteAccount(userAccount);</span>
+<span class="nc bnc" id="L405" title="All 2 branches missed.">		if (mManager.addAccountExplicitly(account, encryptData(userAccount.getPassword()), encryptBundle(userAccount.getDataBundle()))) {</span>
+<span class="nc" id="L406">			final String[] authTokenTypes = userAccount.getAuthTokenTypes();</span>
+<span class="nc" id="L407">			final Map&lt;String, String&gt; authTokens = userAccount.getAuthTokens();</span>
+<span class="nc bnc" id="L408" title="All 8 branches missed.">			if (authTokenTypes != null &amp;&amp; authTokenTypes.length &gt; 0 &amp;&amp; authTokens != null &amp;&amp; !authTokens.isEmpty()) {</span>
+<span class="nc bnc" id="L409" title="All 2 branches missed.">				for (final String authTokenType : authTokenTypes) {</span>
+<span class="nc" id="L410">					mManager.setAuthToken(account, authTokenType, authTokens.get(authTokenType));</span>
+				}
+			}
+		}
+<span class="nc" id="L414">		return true;</span>
+	}
+
+	/**
+	 * Sets an authentication token for the given &lt;var&gt;account&lt;/var&gt; with the specified &lt;var&gt;authTokenType&lt;/var&gt;.
+	 * &lt;p&gt;
+	 * This method requires the caller to hold &lt;b&gt;{@link #PERMISSION_AUTHENTICATE_ACCOUNTS}&lt;/b&gt; permission.
+	 *
+	 * @param account       The account for which to update its authentication token.
+	 * @param authTokenType Type of the authentication token to be stored used as key.
+	 * @param authToken     The desired authentication token to be stored.
+	 * @see #peekAccountAuthToken(Account, String)
+	 * @see #isAccountAuthenticated(Account, String)
+	 * @see AccountManager#setAuthToken(Account, String, String)
+	 */
+	@RequiresPermission(PERMISSION_AUTHENTICATE_ACCOUNTS)
+	public void setAccountAuthToken(@NonNull Account account, @NonNull String authTokenType, @Nullable String authToken) {
+<span class="nc" id="L431">		mManager.setAuthToken(account, authTokenType, authToken);</span>
+<span class="nc" id="L432">	}</span>
+
+	/**
+	 * Checks whether the given &lt;var&gt;account&lt;/var&gt; is authenticated or not.
+	 * &lt;p&gt;
+	 * By default the account is considered authenticated if there is stored authentication token for
+	 * that account with the specified &lt;var&gt;authTokenType&lt;/var&gt;.
+	 * &lt;p&gt;
+	 * This method requires the caller to hold &lt;b&gt;{@link #PERMISSION_AUTHENTICATE_ACCOUNTS}&lt;/b&gt; permission.
+	 *
+	 * @param account       The account for which to check its authentication state.
+	 * @param authTokenType Type of the authentication token used to resolve whether the account is
+	 *                      authenticated or not.
+	 * @return {@code True} if there is stored valid authentication token for the account with the
+	 * specified token type, {@code false} otherwise.
+	 * @see #setAccountAuthToken(Account, String, String)
+	 * @see #peekAccountAuthToken(Account, String)
+	 */
+	@RequiresPermission(PERMISSION_AUTHENTICATE_ACCOUNTS)
+	public boolean isAccountAuthenticated(@NonNull Account account, @NonNull String authTokenType) {
+<span class="nc bnc" id="L452" title="All 2 branches missed.">		return !TextUtils.isEmpty(peekAccountAuthToken(account, authTokenType));</span>
+	}
+
+	/**
+	 * Returns the authentication token for the given &lt;var&gt;account&lt;/var&gt; stored for the specified
+	 * &lt;var&gt;authTokenType&lt;/var&gt;.
+	 * &lt;p&gt;
+	 * This method requires the caller to hold &lt;b&gt;{@link #PERMISSION_AUTHENTICATE_ACCOUNTS}&lt;/b&gt; permission.
+	 *
+	 * @param account       The account for which to peek the requested authentication token.
+	 * @param authTokenType Type of the requested authentication token to peek.
+	 * @return Authentication token or {@code null} if there has not been stored token for the requested
+	 * type yet or the token has been invalidated.
+	 * @see #setAccountAuthToken(Account, String, String)
+	 * @see #invalidateAccountAuthToken(Account, String)
+	 * @see AccountManager#peekAuthToken(Account, String)
+	 */
+	@Nullable
+	@RequiresPermission(PERMISSION_AUTHENTICATE_ACCOUNTS)
+	public String peekAccountAuthToken(@NonNull Account account, @NonNull String authTokenType) {
+<span class="nc" id="L472">		return mManager.peekAuthToken(account, authTokenType);</span>
+	}
+
+	/**
+	 * Invalidates the specified &lt;var&gt;authToken&lt;/var&gt; for the given &lt;var&gt;account&lt;/var&gt;.
+	 * &lt;p&gt;
+	 * This method requires the caller to hold &lt;b&gt;{@link #PERMISSION_MANAGE_ACCOUNTS}&lt;/b&gt; permission.
+	 *
+	 * @param account   The account for which to invalidate the authentication token.
+	 * @param authToken The token that should be invalidated.
+	 * @see #peekAccountAuthToken(Account, String)
+	 * @see AccountManager#invalidateAuthToken(String, String)
+	 */
+	@RequiresPermission(PERMISSION_MANAGE_ACCOUNTS)
+	public void invalidateAccountAuthToken(@NonNull Account account, @NonNull String authToken) {
+<span class="nc" id="L487">		mManager.invalidateAuthToken(account.type, authToken);</span>
+<span class="nc" id="L488">	}</span>
+
+	/**
+	 * Sets a password for the given &lt;var&gt;account&lt;/var&gt;.
+	 * &lt;p&gt;
+	 * This method requires the caller to hold &lt;b&gt;{@link #PERMISSION_AUTHENTICATE_ACCOUNTS}&lt;/b&gt; permission.
+	 *
+	 * @param account  The account for which to update its password.
+	 * @param password The desired password to be stored.
+	 * @see #getAccountPassword(Account)
+	 * @see #clearAccountPassword(Account)
+	 * @see AccountManager#setPassword(Account, String)
+	 */
+	@RequiresPermission(PERMISSION_AUTHENTICATE_ACCOUNTS)
+	public void setAccountPassword(@NonNull Account account, @Nullable String password) {
+<span class="nc" id="L503">		mManager.setPassword(account, encryptData(password));</span>
+<span class="nc" id="L504">	}</span>
+
+	/**
+	 * Returns the password for the given &lt;var&gt;account&lt;/var&gt;.
+	 * &lt;p&gt;
+	 * This method requires the caller to hold &lt;b&gt;{@link #PERMISSION_AUTHENTICATE_ACCOUNTS}&lt;/b&gt; permission.
+	 *
+	 * @param account The account for which to obtain the requested password.
+	 * @return Requested password or {@code null} if there has not been stored any password for the
+	 * account yet.
+	 * @see #setAccountPassword(Account, String)
+	 * @see #clearAccountPassword(Account)
+	 * @see AccountManager#getPassword(Account)
+	 */
+	@Nullable
+	@RequiresPermission(PERMISSION_AUTHENTICATE_ACCOUNTS)
+	public String getAccountPassword(@NonNull Account account) {
+<span class="nc" id="L521">		return decryptData(mManager.getPassword(account));</span>
+	}
+
+	/**
+	 * Clears the password for the given &lt;var&gt;account&lt;/var&gt;.
+	 * &lt;p&gt;
+	 * This method requires the caller to hold &lt;b&gt;{@link #PERMISSION_MANAGE_ACCOUNTS}&lt;/b&gt; permission.
+	 *
+	 * @param account The account for which to clear its password.
+	 * @see AccountManager#clearPassword(Account)
+	 */
+	@RequiresPermission(PERMISSION_MANAGE_ACCOUNTS)
+	public void clearAccountPassword(@NonNull Account account) {
+<span class="nc" id="L534">		mManager.clearPassword(account);</span>
+<span class="nc" id="L535">	}</span>
+
+	/**
+	 * Sets a single data &lt;var&gt;value&lt;/var&gt; for the given &lt;var&gt;account&lt;/var&gt; with the specified &lt;var&gt;key&lt;/var&gt;.
+	 * &lt;p&gt;
+	 * This method requires the caller to hold &lt;b&gt;{@link #PERMISSION_AUTHENTICATE_ACCOUNTS}&lt;/b&gt; permission.
+	 *
+	 * @param account The account for which to update its data.
+	 * @param key     The key under which will be the desired value stored.
+	 * @param value   The desired data value to be stored.
+	 * @see #getAccountData(Account, String)
+	 * @see #setAccountDataBundle(Account, Bundle)
+	 * @see AccountManager#setUserData(Account, String, String)
+	 */
+	@RequiresPermission(PERMISSION_AUTHENTICATE_ACCOUNTS)
+	public void setAccountData(@NonNull Account account, @NonNull String key, @Nullable String value) {
+<span class="nc" id="L551">		mManager.setUserData(account, encryptKey(key), encryptData(value));</span>
+<span class="nc" id="L552">	}</span>
+
+	/**
+	 * Returns the single data for the given &lt;var&gt;account&lt;/var&gt; stored under the specified &lt;var&gt;key&lt;/var&gt;.
+	 * &lt;p&gt;
+	 * This method requires the caller to hold &lt;b&gt;{@link #PERMISSION_AUTHENTICATE_ACCOUNTS}&lt;/b&gt; permission.
+	 *
+	 * @param account The account for which to obtain its data.
+	 * @param key     The key for which to obtain the requested account data.
+	 * @return Requested account data or {@code null} if there are no data stored for the requested
+	 * key.
+	 * @see #setAccountData(Account, String, String)
+	 * @see AccountManager#getUserData(Account, String)
+	 */
+	@Nullable
+	@RequiresPermission(PERMISSION_AUTHENTICATE_ACCOUNTS)
+	public String getAccountData(@NonNull Account account, @NonNull String key) {
+<span class="nc" id="L569">		return decryptData(mManager.getUserData(account, encryptKey(key)));</span>
+	}
+
+	/**
+	 * Sets a bundle with data for the given &lt;var&gt;account&lt;/var&gt;.
+	 * &lt;p&gt;
+	 * This method requires the caller to hold &lt;b&gt;{@link #PERMISSION_AUTHENTICATE_ACCOUNTS}&lt;/b&gt; permission.
+	 *
+	 * @param account    The account for which to update its data bundle.
+	 * @param dataBundle Bundle with the desired data.
+	 * @see #getAccountDataBundle(Account, String...)
+	 * @see #setAccountData(Account, String, String)
+	 */
+	@RequiresPermission(PERMISSION_AUTHENTICATE_ACCOUNTS)
+	public void setAccountDataBundle(@NonNull Account account, @NonNull Bundle dataBundle) {
+<span class="nc bnc" id="L584" title="All 2 branches missed.">		if (dataBundle.isEmpty()) return;</span>
+<span class="nc bnc" id="L585" title="All 2 branches missed.">		for (final String key : dataBundle.keySet()) {</span>
+<span class="nc" id="L586">			mManager.setUserData(account, encryptKey(key), encryptData(dataBundle.getString(key)));</span>
+<span class="nc" id="L587">		}</span>
+<span class="nc" id="L588">	}</span>
+
+	/**
+	 * Returns the bundle with data for the given &lt;var&gt;account&lt;/var&gt;.
+	 * &lt;p&gt;
+	 * This method requires the caller to hold &lt;b&gt;{@link #PERMISSION_AUTHENTICATE_ACCOUNTS}&lt;/b&gt; permission.
+	 *
+	 * @param account The account for which to obtain its data bundle.
+	 * @param keys    Set of keys for which to obtain the desired data.
+	 * @return Bundle with account data for the requested keys. May be empty if the specified keys
+	 * are also empty.
+	 * @see #setAccountDataBundle(Account, Bundle)
+	 * @see #getAccountData(Account, String)
+	 */
+	@NonNull
+	@RequiresPermission(PERMISSION_AUTHENTICATE_ACCOUNTS)
+	public Bundle getAccountDataBundle(@NonNull Account account, @NonNull String... keys) {
+<span class="nc" id="L605">		final Bundle bundle = new Bundle();</span>
+<span class="nc bnc" id="L606" title="All 2 branches missed.">		if (keys.length &gt; 0) {</span>
+<span class="nc bnc" id="L607" title="All 2 branches missed.">			for (final String key : keys) {</span>
+<span class="nc" id="L608">				bundle.putString(key, decryptData(mManager.getUserData(account, encryptKey(key))));</span>
+			}
+		}
+<span class="nc" id="L611">		return bundle;</span>
+	}
+
+	/**
+	 * Same as {@link #deleteAccount(UserAccount)} where deletion of the given &lt;var&gt;userAccount&lt;/var&gt;
+	 * will be executed &lt;b&gt;asynchronously&lt;/b&gt; using {@link AsyncTask}. When the deletion process is
+	 * finished the current {@link AccountWatcher AccountWatchers} (if any) will be notified through
+	 * {@link AccountWatcher#onAccountDeleted(UserAccount)} callback.
+	 * &lt;p&gt;
+	 * This method requires the caller to hold &lt;b&gt;{@link #PERMISSION_GET_ACCOUNTS}&lt;/b&gt; along with
+	 * &lt;b&gt;{@link #PERMISSION_AUTHENTICATE_ACCOUNTS}&lt;/b&gt; permissions.
+	 *
+	 * @param userAccount The desired user account for which to delete the corresponding Android
+	 *                    {@link Account}.
+	 * @see #registerWatcher(AccountWatcher)
+	 * @see #deleteAccount(UserAccount)
+	 * @see #createAccountAsync(UserAccount)
+	 */
+	@RequiresPermission(allOf = {
+			PERMISSION_GET_ACCOUNTS,
+			PERMISSION_AUTHENTICATE_ACCOUNTS
+	})
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public void deleteAccountAsync(@NonNull A userAccount) {
+<span class="nc" id="L635">		new DeleteAccountTask().execute(userAccount);</span>
+<span class="nc" id="L636">	}</span>
+
+	/**
+	 * Deletes an existing Android {@link Account} for the given &lt;var&gt;userAccount&lt;/var&gt;.
+	 * &lt;p&gt;
+	 * This method requires the caller to hold &lt;b&gt;{@link #PERMISSION_GET_ACCOUNTS}&lt;/b&gt; along with
+	 * &lt;b&gt;{@link #PERMISSION_AUTHENTICATE_ACCOUNTS}&lt;/b&gt; permissions.
+	 *
+	 * @param userAccount The desired user account for which to delete the corresponding Android {@link Account}.
+	 * @return {@code True} if the account has been deleted, {@code false} otherwise.
+	 * @see #deleteAccountAsync(UserAccount)
+	 * @see #createAccount(UserAccount)
+	 * @see AccountManager#removeAccount(Account, AccountManagerCallback, Handler)
+	 * @see AccountManager#invalidateAuthToken(String, String)
+	 */
+	@RequiresPermission(allOf = {
+			PERMISSION_GET_ACCOUNTS,
+			PERMISSION_AUTHENTICATE_ACCOUNTS
+	})
+	public boolean deleteAccount(@NonNull final A userAccount) {
+<span class="nc bnc" id="L656" title="All 2 branches missed.">		if (onDeleteAccount(userAccount)) {</span>
+<span class="nc" id="L657">			mUiHandler.post(new Runnable() {</span>
+
+				/**
+				 */
+				@Override
+				public void run() {
+<span class="nc" id="L663">					notifyAccountDeleted(userAccount);</span>
+<span class="nc" id="L664">				}</span>
+			});
+<span class="nc" id="L666">			return true;</span>
+		}
+<span class="nc" id="L668">		return false;</span>
+	}
+
+	/**
+	 * Invoked whenever {@link #createAccount(UserAccount)} or {@link #createAccountAsync(UserAccount)}
+	 * is called to create new Android {@link Account}.
+	 * &lt;p&gt;
+	 * &lt;b&gt;Note&lt;/b&gt;, that this method can be invoked on a background thread.
+	 * &lt;p&gt;
+	 * Current implementation returns {@code true} whenever there has been found Android account to
+	 * be deleted for the given user account, {@code false} otherwise.
+	 * &lt;p&gt;
+	 * This method requires the caller to hold &lt;b&gt;{@link #PERMISSION_GET_ACCOUNTS}&lt;/b&gt; along with
+	 * &lt;b&gt;{@link #PERMISSION_AUTHENTICATE_ACCOUNTS}&lt;/b&gt; permissions.
+	 *
+	 * @param userAccount The desired user account for which to delete the corresponding Android
+	 *                    {@link Account}.
+	 * @return {@code True} if account has been deleted, {@code false} otherwise.
+	 * @see #onCreateAccount(UserAccount)
+	 */
+	@RequiresPermission(allOf = {
+			PERMISSION_GET_ACCOUNTS,
+			PERMISSION_AUTHENTICATE_ACCOUNTS
+	})
+	@SuppressWarnings({&quot;MissingPermission&quot;, &quot;deprecation&quot;})
+	protected boolean onDeleteAccount(@NonNull A userAccount) {
+<span class="nc" id="L694">		final Account account = findAccountForUser(userAccount);</span>
+<span class="nc bnc" id="L695" title="All 2 branches missed.">		if (account != null) {</span>
+<span class="nc bnc" id="L696" title="All 2 branches missed.">			if (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.LOLLIPOP_MR1) {</span>
+<span class="nc" id="L697">				mManager.removeAccount(account, null, null, null);</span>
+			} else {
+<span class="nc" id="L699">				mManager.removeAccount(account, null, null);</span>
+			}
+<span class="nc" id="L701">			mManager.setPassword(account, null);</span>
+<span class="nc" id="L702">			final String[] authTokenTypes = userAccount.getAuthTokenTypes();</span>
+<span class="nc bnc" id="L703" title="All 4 branches missed.">			if (authTokenTypes != null &amp;&amp; authTokenTypes.length &gt; 0) {</span>
+<span class="nc bnc" id="L704" title="All 2 branches missed.">				for (final String authTokenType : authTokenTypes) {</span>
+<span class="nc" id="L705">					mManager.invalidateAuthToken(account.type, mManager.peekAuthToken(account, authTokenType));</span>
+				}
+			}
+<span class="nc" id="L708">			return true;</span>
+		}
+<span class="nc" id="L710">		return false;</span>
+	}
+
+	/**
+	 * Called to find the Android {@link Account} associated with the given &lt;var&gt;userAccount&lt;/var&gt;.
+	 * &lt;p&gt;
+	 * Default implementation retrieves all current accounts by the account type specified for this
+	 * manager and searches for one that has same name specified as the given user account. See
+	 * {@link UserAccount#getName()} and {@link Account#name} for additional information.
+	 * &lt;p&gt;
+	 * This method requires the caller to hold &lt;b&gt;{@link #PERMISSION_GET_ACCOUNTS}&lt;/b&gt; permission.
+	 *
+	 * @param userAccount The user account for which to find the corresponding Android account.
+	 * @return Android account that has been previously created for the given user account or
+	 * {@code null} if there is no account created for the requested user account.
+	 */
+	@Nullable
+	@RequiresPermission(PERMISSION_GET_ACCOUNTS)
+	protected Account findAccountForUser(@NonNull A userAccount) {
+<span class="nc" id="L729">		final Account[] accounts = mManager.getAccountsByType(mAccountType);</span>
+<span class="nc bnc" id="L730" title="All 2 branches missed.">		if (accounts.length &gt; 0) {</span>
+<span class="nc" id="L731">			final String accountName = userAccount.getName();</span>
+<span class="nc bnc" id="L732" title="All 2 branches missed.">			for (final Account account : accounts) {</span>
+<span class="nc bnc" id="L733" title="All 2 branches missed.">				if (account.name.equals(accountName)) return account;</span>
+			}
+		}
+<span class="nc" id="L736">		return null;</span>
+	}
+
+	/**
+	 * Notifies the current {@link AccountWatcher AccountWatchers} (if any) that the given
+	 * &lt;var&gt;userAccount&lt;/var&gt; has been just created.
+	 *
+	 * @param userAccount The created account.
+	 */
+	@SuppressWarnings(&quot;WeakerAccess&quot;)
+	final void notifyAccountCreated(@NonNull A userAccount) {
+<span class="nc" id="L747">		synchronized (mWatchers) {</span>
+<span class="nc bnc" id="L748" title="All 2 branches missed.">			if (!mWatchers.isEmpty()) {</span>
+<span class="nc bnc" id="L749" title="All 2 branches missed.">				for (final AccountWatcher&lt;A&gt; watcher : mWatchers) {</span>
+<span class="nc" id="L750">					watcher.onAccountCreated(userAccount);</span>
+<span class="nc" id="L751">				}</span>
+			}
+<span class="nc" id="L753">		}</span>
+<span class="nc" id="L754">	}</span>
+
+	/**
+	 * Notifies the current {@link AccountWatcher AccountWatchers} (if any) that the given
+	 * &lt;var&gt;userAccount&lt;/var&gt; has been just deleted.
+	 *
+	 * @param userAccount The deleted account.
+	 */
+	@SuppressWarnings(&quot;WeakerAccess&quot;)
+	final void notifyAccountDeleted(@NonNull A userAccount) {
+<span class="nc" id="L764">		synchronized (mWatchers) {</span>
+<span class="nc bnc" id="L765" title="All 2 branches missed.">			if (!mWatchers.isEmpty()) {</span>
+<span class="nc bnc" id="L766" title="All 2 branches missed.">				for (final AccountWatcher&lt;A&gt; watcher : mWatchers) {</span>
+<span class="nc" id="L767">					watcher.onAccountDeleted(userAccount);</span>
+<span class="nc" id="L768">				}</span>
+			}
+<span class="nc" id="L770">		}</span>
+<span class="nc" id="L771">	}</span>
+
+	/**
+	 * Notifies the current {@link AccountWatcher AccountWatchers} (if any) that the specified
+	 * &lt;var&gt;error&lt;/var&gt; has occurred for the given &lt;var&gt;userAccount&lt;/var&gt;.
+	 *
+	 * @param userAccount The account for which error has occurred.
+	 * @param error       The occurred error.
+	 */
+	@SuppressWarnings(&quot;WeakerAccess&quot;)
+	final void notifyAccountError(@NonNull A userAccount, @NonNull ErrorException error) {
+<span class="nc" id="L782">		synchronized (mWatchers) {</span>
+<span class="nc bnc" id="L783" title="All 2 branches missed.">			if (!mWatchers.isEmpty()) {</span>
+<span class="nc bnc" id="L784" title="All 2 branches missed.">				for (final AccountWatcher&lt;A&gt; watcher : mWatchers) {</span>
+<span class="nc" id="L785">					watcher.onAccountError(userAccount, error);</span>
+<span class="nc" id="L786">				}</span>
+			}
+<span class="nc" id="L788">		}</span>
+<span class="nc" id="L789">	}</span>
+
+	/**
+	 * Inner classes ===============================================================================
+	 */
+
+	/**
+	 * An {@link AsyncTask} implementation used to perform execution of {@link #onCreateAccount(UserAccount)}
+	 * &lt;b&gt;asynchronously&lt;/b&gt; used whenever {@link #createAccountAsync(UserAccount)} is called.
+	 */
+<span class="nc" id="L799">	private final class CreateAccountTask extends AsyncTask&lt;A, Void, TaskResult&lt;A&gt;&gt; {</span>
+
+		/**
+		 */
+		@Override
+		@SafeVarargs
+		@SuppressWarnings(&quot;MissingPermission&quot;)
+		protected final TaskResult&lt;A&gt; doInBackground(A... accounts) {
+<span class="nc" id="L807">			final A account = accounts[0];</span>
+<span class="nc" id="L808">			ErrorException error = null;</span>
+			try {
+<span class="nc bnc" id="L810" title="All 2 branches missed.">				if (!onCreateAccount(account)) {</span>
+<span class="nc" id="L811">					error = ErrorException.withCode(ERROR_CREATE_ACCOUNT);</span>
+				}
+<span class="nc" id="L813">			} catch (Exception e) {</span>
+<span class="nc" id="L814">				error = new ErrorException(ERROR_CREATE_ACCOUNT, e);</span>
+<span class="nc" id="L815">			}</span>
+<span class="nc" id="L816">			return new TaskResult&lt;&gt;(account, error);</span>
+		}
+
+		/**
+		 */
+		@Override
+		protected final void onPostExecute(@NonNull TaskResult&lt;A&gt; result) {
+<span class="nc bnc" id="L823" title="All 2 branches missed.">			if (result.error == null) notifyAccountCreated(result.account);</span>
+<span class="nc" id="L824">			else notifyAccountError(result.account, result.error);</span>
+<span class="nc" id="L825">		}</span>
+	}
+
+	/**
+	 * An {@link AsyncTask} implementation used to perform execution of {@link #onDeleteAccount(UserAccount)}
+	 * &lt;b&gt;asynchronously&lt;/b&gt; used whenever {@link #deleteAccountAsync(UserAccount)} is called.
+	 */
+<span class="nc" id="L832">	private final class DeleteAccountTask extends AsyncTask&lt;A, Void, TaskResult&lt;A&gt;&gt; {</span>
+
+		/**
+		 */
+		@Override
+		@SafeVarargs
+		@SuppressWarnings(&quot;MissingPermission&quot;)
+		protected final TaskResult&lt;A&gt; doInBackground(A... accounts) {
+<span class="nc" id="L840">			final A account = accounts[0];</span>
+<span class="nc" id="L841">			ErrorException error = null;</span>
+			try {
+<span class="nc bnc" id="L843" title="All 2 branches missed.">				if (!onDeleteAccount(account)) {</span>
+<span class="nc" id="L844">					error = ErrorException.withCode(ERROR_DELETE_ACCOUNT);</span>
+				}
+<span class="nc" id="L846">			} catch (Exception e) {</span>
+<span class="nc" id="L847">				error = new ErrorException(ERROR_DELETE_ACCOUNT, e);</span>
+<span class="nc" id="L848">			}</span>
+<span class="nc" id="L849">			return new TaskResult&lt;&gt;(account, error);</span>
+		}
+
+		/**
+		 */
+		@Override
+		protected final void onPostExecute(@NonNull TaskResult&lt;A&gt; result) {
+<span class="nc bnc" id="L856" title="All 2 branches missed.">			if (result.error == null) notifyAccountDeleted(result.account);</span>
+<span class="nc" id="L857">			else notifyAccountError(result.account, result.error);</span>
+<span class="nc" id="L858">		}</span>
+	}
+
+	/**
+	 * Class that may hold result of either {@link UserAccountManager.CreateAccountTask} or
+	 * {@link UserAccountManager.DeleteAccountTask}.
+	 */
+	private static final class TaskResult&lt;A extends UserAccount&gt; {
+
+		/**
+		 * Account for which has been background task executed.
+		 */
+		final A account;
+
+		/**
+		 * Error occurred during execution of background task. May be {@code null}.
+		 */
+		final ErrorException error;
+
+		/**
+		 * Creates a new instance of TaskResult with the given &lt;var&gt;account&lt;/var&gt; and &lt;var&gt;error&lt;/var&gt;.
+		 *
+		 * @param account The account for which has been background task executed.
+		 * @param error   The optional error if occurred during execution of background task.
+		 */
+<span class="nc" id="L883">		TaskResult(A account, ErrorException error) {</span>
+<span class="nc" id="L884">			this.account = account;</span>
+<span class="nc" id="L885">			this.error = error;</span>
+<span class="nc" id="L886">		}</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span>Generated by the Android Gradle plugin 2.3.0</div></body></html>

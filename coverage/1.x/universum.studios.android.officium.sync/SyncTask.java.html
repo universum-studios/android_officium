@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>SyncTask.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">universum.studios.android.officium.sync</a> &gt; <span class="el_source">SyncTask.java</span></div><h1>SyncTask.java</h1><pre class="source lang-java linenums">/*
+ * =================================================================================================
+ *                             Copyright (C) 2016 Universum Studios
+ * =================================================================================================
+ *         Licensed under the Apache License, Version 2.0 or later (further &quot;License&quot; only).
+ * -------------------------------------------------------------------------------------------------
+ * You may use this file only in compliance with the License. More details and copy of this License
+ * you may obtain at
+ *
+ * 		http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * You can redistribute, modify or publish any part of the code written within this file but as it
+ * is described in the License, the software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
+ *
+ * See the License for the specific language governing permissions and limitations under the License.
+ * =================================================================================================
+ */
+package universum.studios.android.officium.sync;
+
+import android.accounts.Account;
+import android.content.ContentProviderClient;
+import android.content.SyncResult;
+import android.os.Bundle;
+import android.support.annotation.IntDef;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.text.TextUtils;
+
+import com.google.gson.Gson;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+/**
+ * Task that can be used to request synchronization via implementation of {@link BaseSyncManager}.
+ * Each instance of SyncTask may be identified by its id that can be obtained via {@link #getId()}.
+ * &lt;p&gt;
+ * Creation of instances of {@link SyncTask SyncTasks} is restricted via {@link Builder} only.
+ * &lt;p&gt;
+ * If synchronization related to a particular SyncTask depends on some additional data that are needed
+ * to perform synchronization logic, these data can be specified via {@link Builder#request(Request)}.
+ * The synchronization request object should be a simple POJO object that can be processed by {@link Gson}
+ * into its {@link String} representation and also from it. The request object will be processed into
+ * Json data whenever instance of SyncTask is requested to put its data into extras {@link Bundle}
+ * via {@link #intoExtras(Bundle)} and instantiated from that Json data whenever {@link #getRequest(Class)}
+ * is called and the request instance has not been parsed yet.
+ * &lt;p&gt;
+ * Inheritance instance should override both {@link #SyncTask(Builder)} and {@link #SyncTask(Bundle)}
+ * constructors along with {@link #intoExtras(Bundle)} method to perform custom instantiation logic
+ * via custom implementation of {@link Builder} or from/into extras {@link Bundle}.
+ *
+ * @param &lt;R&gt; Type of the request specific for the SyncTask implementation.
+ * @author Martin Albedinsky
+ */
+public class SyncTask&lt;R extends SyncTask.Request&gt; implements Cloneable {
+
+	/**
+	 * Constants ===================================================================================
+	 */
+
+	/**
+	 * Log TAG.
+	 */
+	// private static final String TAG = &quot;SyncTask&quot;;
+
+	/**
+	 * Initial state for each new {@link SyncTask}.
+	 */
+	public static final int IDLE = 0x00;
+
+	/**
+	 * State indicating that {@link SyncTask} is in pending state waiting to be executed.
+	 * &lt;p&gt;
+	 * Task becomes pending when {@link BaseSyncManager#requestSync(SyncTask)} has been called with
+	 * that particular task.
+	 */
+	public static final int PENDING = 0x01;
+
+	/**
+	 * State indicating that {@link SyncTask} is currently being executed.
+	 * &lt;p&gt;
+	 * Task becomes running when {@link BaseSyncAdapter#onPerformSync(Account, Bundle, String, ContentProviderClient, SyncResult)}
+	 * has been called with extras containing that particular task.
+	 */
+	public static final int RUNNING = 0x02;
+
+	/**
+	 * State indicating that {@link SyncTask} has been already executed without any error.
+	 * &lt;p&gt;
+	 * Task becomes finished when {@link BaseSyncAdapter#onSyncFinished(SyncOperation)} has been
+	 * called with sync operation containing that particular task.
+	 */
+	public static final int FINISHED = 0x03;
+
+	/**
+	 * State indicating that {@link SyncTask} has been already executed but an error occurred during
+	 * its execution.
+	 * &lt;p&gt;
+	 * Task becomes finished when {@link BaseSyncAdapter#onSyncFailed(SyncOperation, Exception)} has
+	 * been called with sync operation containing that particular task.
+	 */
+	public static final int FAILED = 0x04;
+
+	/**
+	 * State indicating that {@link SyncTask} has been canceled.
+	 * &lt;p&gt;
+	 * Task becomes canceled when {@link BaseSyncManager#cancelSync()} has been called.
+	 */
+	public static final int CANCELED = 0x05;
+
+	/**
+	 * Defines an annotation for determining set of available states for {@link SyncTask}.
+	 * &lt;h3&gt;Available states&lt;/h3&gt;
+	 * &lt;ul&gt;
+	 * &lt;li&gt;{@link #IDLE}&lt;/li&gt;
+	 * &lt;li&gt;{@link #PENDING}&lt;/li&gt;
+	 * &lt;li&gt;{@link #RUNNING}&lt;/li&gt;
+	 * &lt;li&gt;{@link #FINISHED}&lt;/li&gt;
+	 * &lt;li&gt;{@link #FAILED}&lt;/li&gt;
+	 * &lt;li&gt;{@link #CANCELED}&lt;/li&gt;
+	 * &lt;/ul&gt;
+	 *
+	 * @see #getState()
+	 */
+	@IntDef({
+			IDLE,
+			PENDING,
+			RUNNING,
+			FINISHED,
+			FAILED,
+			CANCELED
+	})
+	@Retention(RetentionPolicy.SOURCE)
+	public @interface State {
+	}
+
+	/**
+	 * Default id for synchronization task. This id may be used to identify &lt;b&gt;global synchronization task&lt;/b&gt;.
+	 */
+	public static final int DEFAULT_ID = 0;
+
+	/**
+	 * Interface ===================================================================================
+	 */
+
+	/**
+	 * Required interface for all synchronization requests.
+	 *
+	 * @author Martin Albedinsky
+	 */
+	public interface Request {
+	}
+
+	/**
+	 * A {@link Request} implementation that can be used for {@link SyncHandler SyncHandlers} that
+	 * do not require any synchronization request.
+	 *
+	 * @author Martin Albedinsky
+	 */
+	public static final class EmptyRequest implements Request {
+
+		/* We do not allow to create instances of this request. */
+<span class="nc" id="L164">		private EmptyRequest() {</span>
+<span class="nc" id="L165">		}</span>
+	}
+
+	/**
+	 * Static members ==============================================================================
+	 */
+
+	/**
+	 * Empty instance of {@link SyncTask} that may be used to pass a sync task to a sync handler that
+	 * does not require any data from a caller to perform its synchronization.
+	 */
+	@SuppressWarnings(&quot;unused&quot;)
+<span class="nc" id="L177">	public static SyncTask&lt;EmptyRequest&gt; EMPTY = new SyncTask&lt;&gt;();</span>
+
+	/**
+	 * Instance of Gson used to parse {@link #mRequestBody} into {@link #mRequest} instance and
+	 * vice versa.
+	 */
+<span class="nc" id="L183">	private static final Gson GSON = new Gson();</span>
+
+	/**
+	 * Members =====================================================================================
+	 */
+
+	/**
+	 * Id specified for this task.
+	 */
+	private final int mId;
+
+	/**
+	 * Request specified for this task. May be {@code null}.
+	 */
+	private R mRequest;
+
+	/**
+	 * Json data of request obtained from {@link Bundle} when this task is created from synchronization
+	 * extras via {@link #SyncTask(Bundle)}. This string is used when parsing instance of Request
+	 * specific for this
+	 *
+	 * @see #getRequest(Class)
+	 */
+	private final String mRequestBody;
+
+	/**
+	 * Current state of this synchronization task. May be one of states defined by {@link State @State}
+	 * annotation.
+	 */
+<span class="nc" id="L212">	private int mState = IDLE;</span>
+
+	/**
+	 * Constructors ================================================================================
+	 */
+
+	/**
+	 * Creates an empty instance of SyncTask.
+	 */
+<span class="nc" id="L221">	private SyncTask() {</span>
+<span class="nc" id="L222">		this.mId = -1;</span>
+<span class="nc" id="L223">		this.mRequestBody = null;</span>
+<span class="nc" id="L224">	}</span>
+
+	/**
+	 * Creates a new instance of SyncTask with data of the given one.
+	 *
+	 * @param other The other sync task of which data to copy to the new one.
+	 */
+<span class="nc" id="L231">	private SyncTask(SyncTask other) {</span>
+<span class="nc" id="L232">		this.mId = other.mId;</span>
+<span class="nc" id="L233">		this.mRequestBody = other.mRequestBody;</span>
+<span class="nc" id="L234">		this.mState = other.mState;</span>
+<span class="nc" id="L235">	}</span>
+
+	/**
+	 * Creates a new instance of SyncTask with data specified within the given &lt;var&gt;builder&lt;/var&gt;.
+	 *
+	 * @param builder The builder containing data for the new SyncTask instance.
+	 */
+<span class="nc" id="L242">	protected SyncTask(@NonNull Builder&lt;R&gt; builder) {</span>
+<span class="nc" id="L243">		this.mId = builder.id;</span>
+<span class="nc" id="L244">		this.mRequest = builder.request;</span>
+<span class="nc bnc" id="L245" title="All 2 branches missed.">		this.mRequestBody = mRequest == null ? null : GSON.toJson(mRequest);</span>
+<span class="nc" id="L246">	}</span>
+
+	/**
+	 * Creates a new instance of SyncTask with data specified within the given &lt;var&gt;extras&lt;/var&gt;
+	 * Bundle.
+	 * &lt;p&gt;
+	 * &lt;b&gt;Note&lt;/b&gt;, that proper instantiation of SyncTask from the given &lt;var&gt;extras&lt;/var&gt; Bundle
+	 * may be performed only if data for the new SyncTask instance has been previously stored within
+	 * the given bundle via {@link #intoExtras(Bundle)} method.
+	 *
+	 * @param extras The synchronization extras Bundle containing data for the new SyncTask instance.
+	 * @see #intoExtras(Bundle)
+	 */
+<span class="nc" id="L259">	protected SyncTask(@NonNull Bundle extras) {</span>
+<span class="nc" id="L260">		this.mId = extras.getInt(SyncExtras.EXTRA_TASK_ID, DEFAULT_ID);</span>
+<span class="nc" id="L261">		this.mRequestBody = extras.getString(SyncExtras.EXTRA_TASK_REQUEST_BODY);</span>
+<span class="nc" id="L262">		this.mState = extras.getInt(SyncExtras.EXTRA_TASK_STATE, mState);</span>
+<span class="nc" id="L263">	}</span>
+
+	/**
+	 * Methods =====================================================================================
+	 */
+
+	/**
+	 * Returns the id of this task.
+	 *
+	 * @return Id specified for this task.
+	 */
+	public final int getId() {
+<span class="nc" id="L275">		return mId;</span>
+	}
+
+	/**
+	 * Changes the current state of this task to the specified one.
+	 *
+	 * @param state The new state for this task. Should be one of states defined by {@link State @State}
+	 *              annotation.
+	 * @see #getState()
+	 */
+	final void setState(@State int state) {
+<span class="nc" id="L286">		this.mState = state;</span>
+<span class="nc" id="L287">	}</span>
+
+	/**
+	 * Returns the current state of this task.
+	 *
+	 * @return This task's state. May be one of states defined by {@link State @State} annotation.
+	 */
+	@State
+	public final int getState() {
+<span class="nc" id="L296">		return mState;</span>
+	}
+
+	/**
+	 * Returns the request specified for this task. If request is {@code null} but there is request
+	 * body available after this sync task has been created from the extras {@link Bundle} the desired
+	 * request will be parsed from its body using {@link Gson}.
+	 *
+	 * @param classOfRequest Class used to parse the desired request if it is not parsed yet and there
+	 *                       is request body available.
+	 * @return This task's request or {@code null} if there is no request specified.
+	 */
+	@Nullable
+	public final R getRequest(@NonNull Class&lt;R&gt; classOfRequest) {
+<span class="nc bnc" id="L310" title="All 2 branches missed.">		if (mRequest == null) {</span>
+<span class="nc bnc" id="L311" title="All 2 branches missed.">			this.mRequest = TextUtils.isEmpty(mRequestBody) ? null : GSON.fromJson(mRequestBody, classOfRequest);</span>
+		}
+<span class="nc" id="L313">		return mRequest;</span>
+	}
+
+	/**
+	 * Returns a body of the request specified for this task.
+	 *
+	 * @return This task's request body in Json format or {@code null} if there is not request specified.
+	 */
+	@Nullable
+	public final String getRequestBody() {
+<span class="nc" id="L323">		return mRequestBody;</span>
+	}
+
+	/**
+	 * Puts all data of this task into the given &lt;var&gt;extras&lt;/var&gt; Bundle. Instance of this SyncTask
+	 * may be than instantiated from the specified extras via {@link #SyncTask(Bundle)} constructor.
+	 *
+	 * @param extras The synchronization extras Bundle into which to put data of this task.
+	 * @return The given extras Bundle with this task's data.
+	 */
+	@NonNull
+	public Bundle intoExtras(@NonNull Bundle extras) {
+<span class="nc" id="L335">		extras.putInt(SyncExtras.EXTRA_TASK_ID, mId);</span>
+<span class="nc" id="L336">		extras.putString(SyncExtras.EXTRA_TASK_REQUEST_BODY, mRequestBody);</span>
+<span class="nc" id="L337">		extras.putInt(SyncExtras.EXTRA_TASK_STATE, mState);</span>
+<span class="nc" id="L338">		return extras;</span>
+	}
+
+	/**
+	 */
+	@Override
+	public int hashCode() {
+<span class="nc" id="L345">		int hash = mId;</span>
+<span class="nc bnc" id="L346" title="All 2 branches missed.">		if (!TextUtils.isEmpty(mRequestBody)) {</span>
+<span class="nc" id="L347">			hash = 31 * hash + mRequestBody.hashCode();</span>
+		}
+<span class="nc" id="L349">		return hash;</span>
+	}
+
+	/**
+	 */
+	@Override
+	public boolean equals(Object other) {
+<span class="nc bnc" id="L356" title="All 2 branches missed.">		if (other == this) return true;</span>
+<span class="nc bnc" id="L357" title="All 2 branches missed.">		if (!(other instanceof SyncTask)) return false;</span>
+<span class="nc" id="L358">		final SyncTask task = (SyncTask) other;</span>
+<span class="nc bnc" id="L359" title="All 2 branches missed.">		if (task.mId != mId) {</span>
+<span class="nc" id="L360">			return false;</span>
+		}
+<span class="nc bnc" id="L362" title="All 2 branches missed.">		final int requestHash = mRequestBody == null ? 0 : mRequestBody.hashCode();</span>
+<span class="nc bnc" id="L363" title="All 2 branches missed.">		final int otherRequestHash = task.mRequestBody == null ? 0 : task.mRequestBody.hashCode();</span>
+<span class="nc bnc" id="L364" title="All 2 branches missed.">		return requestHash == otherRequestHash;</span>
+	}
+
+	/**
+	 */
+	@Override
+	@SuppressWarnings(&quot;StringBufferReplaceableByString&quot;)
+	public String toString() {
+<span class="nc" id="L372">		final StringBuilder builder = new StringBuilder(64);</span>
+<span class="nc" id="L373">		builder.append(getClass().getSimpleName());</span>
+<span class="nc" id="L374">		builder.append(&quot;{id: &quot;);</span>
+<span class="nc" id="L375">		builder.append(mId);</span>
+<span class="nc" id="L376">		builder.append(&quot;, request: &quot;);</span>
+<span class="nc bnc" id="L377" title="All 2 branches missed.">		builder.append(mRequest == null ? mRequestBody : mRequest);</span>
+<span class="nc" id="L378">		builder.append(&quot;, state: &quot;);</span>
+<span class="nc" id="L379">		builder.append(stateName(mState));</span>
+<span class="nc" id="L380">		return builder.append(&quot;}&quot;).toString();</span>
+	}
+
+	/**
+	 * Returns name of the specified &lt;var&gt;state&lt;/var&gt;.
+	 *
+	 * @param state The desired state of which name to return.
+	 * @return The state's name.
+	 */
+	private static String stateName(int state) {
+<span class="nc bnc" id="L390" title="All 6 branches missed.">		switch (state) {</span>
+			case IDLE:
+<span class="nc" id="L392">				return &quot;IDLE&quot;;</span>
+			case PENDING:
+<span class="nc" id="L394">				return &quot;PENDING&quot;;</span>
+			case RUNNING:
+<span class="nc" id="L396">				return &quot;RUNNING&quot;;</span>
+			case FINISHED:
+<span class="nc" id="L398">				return &quot;FINISHED&quot;;</span>
+			case FAILED:
+<span class="nc" id="L400">				return &quot;FAILED&quot;;</span>
+			default:
+<span class="nc" id="L402">				return &quot;UNKNOWN&quot;;</span>
+		}
+	}
+
+	/**
+	 * Makes a clone of this task with the same id and request body but with the initial state, which
+	 * is {@link #IDLE}.
+	 */
+	@Override
+	@SuppressWarnings({&quot;CloneDoesntDeclareCloneNotSupportedException&quot;, &quot;CloneDoesntCallSuperClone&quot;})
+	protected SyncTask clone() {
+<span class="nc" id="L413">		final SyncTask clone = new SyncTask(this);</span>
+<span class="nc" id="L414">		clone.mState = IDLE;</span>
+<span class="nc" id="L415">		return clone;</span>
+	}
+
+	/**
+	 * Inner classes ===============================================================================
+	 */
+
+	/**
+	 * Builder that can be used to create a new instance of {@link SyncTask}.
+	 *
+	 * @author Martin Albedinsky
+	 */
+	public static class Builder&lt;R extends Request&gt; {
+
+		/**
+		 * See {@link SyncTask#mId}.
+		 */
+		private final int id;
+
+		/**
+		 * See {@link SyncTask#mRequest}.
+		 */
+		private R request;
+
+		/**
+		 * Creates a new instance of Builder for the specified synchronization &lt;var&gt;taskId&lt;/var&gt;.
+		 *
+		 * @param taskId Id of the synchronization task to build.
+		 */
+<span class="nc" id="L444">		public Builder(int taskId) {</span>
+<span class="nc" id="L445">			this.id = taskId;</span>
+<span class="nc" id="L446">		}</span>
+
+		/**
+		 * Specifies a request for the synchronization task to build.
+		 *
+		 * @param request The desired request. This should be a simple POJO object that can be processed
+		 *                by {@link Gson}. May be {@code null} if request is not necessary for the
+		 *                sync task.
+		 * @return This builder to allow methods chaining.
+		 */
+		public Builder request(@Nullable R request) {
+<span class="nc" id="L457">			this.request = request;</span>
+<span class="nc" id="L458">			return this;</span>
+		}
+
+		/**
+		 * Builds a new instance of SyncTask.
+		 *
+		 * @return New instance of SyncTask with data specified for this builder.
+		 */
+		@NonNull
+		public SyncTask&lt;R&gt; build() {
+<span class="nc" id="L468">			return new SyncTask&lt;&gt;(this);</span>
+		}
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span>Generated by the Android Gradle plugin 2.3.0</div></body></html>
