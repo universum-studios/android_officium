@@ -1,0 +1,52 @@
+// Defines configuration used across the library project.
+def buildConfig = [
+        compileSdkVersion: 25,
+        minSdkVersion    : 11,
+        targetSdkVersion : 25,
+        buildToolsVersion: '25.0.2'
+]
+
+def testConfig = [
+        instrumentationRunner: 'android.support.test.runner.AndroidJUnitRunner'
+]
+
+def libraryConfig = [
+        version: '1.1.0'
+]
+
+def mavenConfig = [
+        localUrl                 : System.getenv('MAVEN_URL_LOCAL'),
+        groupId                  : 'universum.studios.android',
+        artifactId               : 'officium',
+        version                  : libraryConfig.version,
+        packaging                : 'pom',
+        projectName              : 'Android Officium',
+        projectDescription       : 'Account, synchronization, services and events management for the Android platform.',
+        projectUrl               : 'https://github.com/universum-studios/android_officium',
+        projectInceptionYear     : '2016',
+        projectIssueManagementUrl: 'https://github.com/universum-studios/android_officium/issues'
+]
+
+def bintrayConfig = [
+        publish                  : false,
+        packageName              : mavenConfig.groupId + ':' + mavenConfig.artifactId,
+        packageLabels            : ['android', 'account', 'synchronization', 'service', 'event'],
+        packageVersionName       : mavenConfig.version,
+        packageVersionDescription: 'Version minor release.',
+        packageVersionTag        : mavenConfig.version
+]
+
+def codacyConfig = [
+        // This path must be relative to the codacy.gradle file placed in the /library directory.
+        tokensPath : '../../codacy.tokens',
+        projectName: 'android_officium'
+]
+
+ext.config = [
+        "build"  : buildConfig,
+        "test"   : testConfig,
+        "library": libraryConfig,
+        "maven"  : mavenConfig,
+        "bintray": bintrayConfig,
+        "codacy" : codacyConfig
+]

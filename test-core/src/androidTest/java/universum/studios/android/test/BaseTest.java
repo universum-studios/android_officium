@@ -1,6 +1,6 @@
 /*
  * =================================================================================================
- *                             Copyright (C) 2016 Universum Studios
+ *                             Copyright (C) 2017 Martin Albedinsky
  * =================================================================================================
  *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
  * -------------------------------------------------------------------------------------------------
@@ -16,23 +16,31 @@
  * See the License for the specific language governing permissions and limitations under the License.
  * =================================================================================================
  */
-package universum.studios.android.samples.officium.ui;
+package universum.studios.android.test;
 
-import android.support.annotation.NonNull;
-import android.view.MenuItem;
-
-import universum.studios.android.support.samples.ui.SamplesNavigationActivity;
+import org.junit.After;
+import org.junit.Before;
 
 /**
+ * Class that may be used as base for <b>Android Instrumented Tests</b>.
+ *
  * @author Martin Albedinsky
  */
-public final class MainActivity extends SamplesNavigationActivity {
+public abstract class BaseTest {
 
-	@SuppressWarnings("unused")
-	private static final String TAG = "MainActivity";
+	/**
+	 * Called before execution of each test method starts.
+	 */
+	@Before
+	public void beforeTest() {
+		// Inheritance hierarchies may for example acquire here resources needed for each test.
+	}
 
-	@Override
-	protected boolean onHandleNavigationItemSelected(@NonNull MenuItem item) {
-		return super.onHandleNavigationItemSelected(item);
+	/**
+	 * Called after execution of each test method finishes.
+	 */
+	@After
+	public void afterTest() {
+		// Inheritance hierarchies may for example release here resources acquired in beforeTest() call.
 	}
 }

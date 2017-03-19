@@ -12,6 +12,7 @@
       <module fileurl="file://$PROJECT_DIR$/library-service/library-service.iml" filepath="$PROJECT_DIR$/library-service/library-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/library-sync/library-sync.iml" filepath="$PROJECT_DIR$/library-sync/library-sync.iml" />
       <module fileurl="file://$PROJECT_DIR$/samples/samples.iml" filepath="$PROJECT_DIR$/samples/samples.iml" />
+      <module fileurl="file://$PROJECT_DIR$/test-core/test-core.iml" filepath="$PROJECT_DIR$/test-core/test-core.iml" />
     </modules>
   </component>
 </project>

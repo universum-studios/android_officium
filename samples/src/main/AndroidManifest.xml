@@ -24,7 +24,7 @@
 
 	<application
 		android:allowBackup="true"
-		android:icon="@mipmap/ic_launcher"
+		android:icon="@mipmap/samples_ic_launcher"
 		android:label="@string/app_name"
 		android:supportsRtl="true"
 		android:theme="@style/Samples.Theme">
@@ -32,12 +32,14 @@
 		<activity
 			android:name=".ui.MainActivity"
 			android:theme="@style/Samples.Theme.Navigation">
+
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 
-			<meta-data android:name="universum.studios.android.samples.SamplesMetaData.NAVIGATION_MENU" android:resource="@menu/navigation"/>
+			<meta-data android:name="universum.studios.android.support.samples.SamplesMetaData.NAVIGATION_MENU" android:resource="@menu/navigation"/>
+			<meta-data android:name="universum.studios.android.support.samples.SamplesMetaData.INTRO_TEXT" android:resource="@string/app_intro"/>
 		</activity>
 	</application>
 </manifest>

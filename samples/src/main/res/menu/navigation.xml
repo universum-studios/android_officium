@@ -2,7 +2,7 @@
 <!--
 /*
  * =================================================================================================
- *                             Copyright (C) 2016 Universum Studios
+ *                             Copyright (C) 2017 Universum Studios
  * =================================================================================================
  *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
  * *************************************************************************************************
@@ -22,9 +22,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<group android:checkableBehavior="single">
+
 		<item
 			android:id="@+id/navigation_item_home"
 			android:checked="true"
-			android:title="Home"/>
+			android:title="@string/navigation_item_home"/>
 	</group>
 </menu>

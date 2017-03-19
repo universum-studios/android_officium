@@ -29,25 +29,25 @@ afterEvaluate { project ->
      */
     uploadArchives {
         repositories.mavenDeployer {
-            repository(url: 'file:///' + System.getenv('MAVEN_URL_LOCAL'))
+            repository(url: 'file:///' + config.maven.localUrl)
             /**
              * Project artifact --------------------------------------------------------------------
              */
-            pom.groupId = project.property('maven.pom.groupId')
+            pom.groupId = config.maven.groupId
             pom.artifactId = project.property('maven.pom.artifactId')
-            pom.version = project.property('maven.pom.version')
-            pom.packaging = project.property('maven.pom.packaging')
+            pom.version = config.maven.version
+            pom.packaging = config.maven.packaging
             /**
              * Project description -----------------------------------------------------------------
              */
             pom.project {
-                name project.property('maven.pom.project.name')
-                description project.property('maven.pom.project.description')
-                url project.property('maven.pom.project.url')
-                inceptionYear project.property('maven.pom.project.inceptionYear')
+                name config.maven.projectName
+                description config.maven.projectDescription
+                url config.maven.projectUrl
+                inceptionYear config.maven.projectInceptionYear
                 issueManagement {
                     system 'GitHub Issues'
-                    url project.property('maven.pom.project.issueManagement.url')
+                    url config.maven.projectIssueManagementUrl
                 }
                 licenses {
                     license {
@@ -79,11 +79,11 @@ afterEvaluate { project ->
  * Task that updates library artifacts directory with artifacts from the Maven local directory.
  */
 task updateArtifacts() {
-    if (!Boolean.parseBoolean(System.getenv('TRAVIS'))) {
-        final String mavenLocalDir = System.getenv('MAVEN_URL_LOCAL')
+    final String mavenLocalDir = config.maven.localUrl
+    if (mavenLocalDir != null && !Boolean.parseBoolean(System.getenv('TRAVIS'))) {
         final String artifactId = String.valueOf(project.property('maven.pom.artifactId'))
-        final String artifactsSourceDir = "${mavenLocalDir}\\universum\\studios\\android\\${artifactId}\\${libraryVersion}"
-        final String artifactsDestinationDir = "..\\artifacts\\universum\\studios\\android\\${artifactId}\\${libraryVersion}"
+        final String artifactsSourceDir = "${mavenLocalDir}\\universum\\studios\\android\\${artifactId}\\${config.library.version}"
+        final String artifactsDestinationDir = "..\\artifacts\\universum\\studios\\android\\${artifactId}\\${config.library.version}"
         delete artifactsDestinationDir
         copy {
             from artifactsSourceDir

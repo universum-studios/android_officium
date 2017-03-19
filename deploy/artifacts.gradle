@@ -34,7 +34,7 @@ task generateJavadoc(type: Javadoc) {
     options {
         author = true
         memberLevel = JavadocMemberLevel.PROTECTED
-        header = project.property('maven.pom.project.name') + ' ' + project.property('maven.pom.version') + ' Documentation'
+        header = config.maven.projectName + ' ' + config.maven.version + ' Documentation'
         links "http://docs.oracle.com/javase/8/docs/api/"
         linksOffline "http://developer.android.com/reference", "${android.sdkDirectory}\\docs\\reference"
     }
@@ -43,12 +43,11 @@ task generateJavadoc(type: Javadoc) {
         //options.addStringOption('Xdoclint:none', '-quiet')
     }
     // Append class path with dependencies.
-    final String mavenLocalDirectory = System.getenv('MAVEN_URL_LOCAL')
     classpath += files(
             android.getBootClasspath(),
-            "${android.sdkDirectory}\\extras\\android\\m2repository\\com\\android\\support\\support-annotations\\${androidSupportVersion}\\support-annotations-${androidSupportVersion}.jar",
-            "${mavenLocalDirectory}\\universum\\studios\\android\\utils\\${androidUniversumUtilsVersion}\\utils-${androidUniversumUtilsVersion}-sources.jar",
-            "${mavenLocalDirectory}\\universum\\studios\\android\\crypto\\${androidUniversumCryptoVersion}\\crypto-${androidUniversumCryptoVersion}-sources.jar"
+            "${android.sdkDirectory}\\extras\\android\\m2repository\\com\\android\\support\\support-annotations\\${versions.androidSupportVersion}\\support-annotations-${versions.androidSupportVersion}.jar",
+            "${config.maven.localUrl}\\universum\\studios\\android\\utils\\${versions.universumStudiosUtilsVersion}\\utils-${versions.universumStudiosUtilsVersion}-sources.jar",
+            "${config.maven.localUrl}\\universum\\studios\\android\\crypto\\${versions.universumStudiosCryptoVersion}\\crypto-${versions.universumStudiosCryptoVersion}-sources.jar"
     )
     failOnError false
 }

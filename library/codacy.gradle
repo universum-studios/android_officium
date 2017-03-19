@@ -17,8 +17,8 @@
  * =================================================================================================
  */
 repositories {
-    maven { url "https://jitpack.io" }
-    maven { url "http://dl.bintray.com/typesafe/maven-releases" }
+    maven { url repos.jitpack }
+    maven { url repos.bintray.typesafeMavenReleases }
 }
 
 configurations { codacy }
@@ -30,13 +30,13 @@ dependencies {
 /**
  * Task that uploads code coverage up to the Codacy cloud.
  */
-task uploadCoverageToCodacy(type: JavaExec) {
+task uploadCoverageToCodacy(type: JavaExec, dependsOn: 'createDebugCoverageReport') {
     final String token
-    final File tokensFile = file(project.property('codacy.tokens'))
+    final File tokensFile = file(config.codacy.tokensPath)
     if (tokensFile.exists()) {
         def Properties tokens = new Properties();
         tokens.load(new FileInputStream(tokensFile))
-        token = tokens[project.property('codacy.project')]
+        token = tokens[config.codacy.projectName]
     } else {
         token = System.getenv('CODACY_PROJECT_TOKEN')
     }
@@ -48,7 +48,6 @@ task uploadCoverageToCodacy(type: JavaExec) {
             "-r",
             "${buildDir}/reports/coverage/debug/report.xml",
             "--projectToken",
-            token
+            token == null ? "NO_TOKEN" : token
     ]
-    dependsOn 'createDebugCoverageReport'
 }

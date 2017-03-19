@@ -17,6 +17,7 @@
             <option value="$PROJECT_DIR$/library-service" />
             <option value="$PROJECT_DIR$/library-sync" />
             <option value="$PROJECT_DIR$/samples" />
+            <option value="$PROJECT_DIR$/test-core" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

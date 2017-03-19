@@ -1,4 +1,6 @@
 // Global gradle configuration. This configuration will be used for all sub-projects.
+apply from: './configuration.gradle'
+apply from: './repositories.gradle'
 apply from: './dependencies.gradle'
 
 /**
