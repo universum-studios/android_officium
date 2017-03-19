@@ -20,13 +20,13 @@ apply plugin: 'com.jfrog.bintray'
 apply plugin: 'maven-publish'
 
 def pomConfig = {
-    name project.property('maven.pom.project.name')
-    description project.property('maven.pom.project.description')
-    url project.property('maven.pom.project.url')
-    inceptionYear project.property('maven.pom.project.inceptionYear')
+    name config.maven.projectName
+    description config.maven.projectDescription
+    url config.maven.projectUrl
+    inceptionYear config.maven.projectInceptionYear
     issueManagement {
         system 'GitHub Issues'
-        url project.property('maven.pom.project.issueManagement.url')
+        url config.maven.projectIssueManagementUrl
     }
     licenses {
         license {
@@ -54,9 +54,9 @@ def pomConfig = {
 publishing {
     publications {
         LibraryPublication(MavenPublication) {
-            groupId project.property('maven.pom.groupId')
+            groupId config.maven.groupId
             artifactId project.property('maven.pom.artifactId')
-            version project.property('maven.pom.version')
+            version config.maven.version
             artifact bundleRelease
             artifact(classesJar)
             artifact(javadocJar)
@@ -91,23 +91,24 @@ publishing {
 }
 
 bintray {
-    user = project.hasProperty('bintray.user') ? project.property('bintray.user') : System.getenv('BINTRAY_USER')
-    key = project.hasProperty('bintray.apiKey') ? project.property('bintray.apiKey') : System.getenv('BINTRAY_API_KEY')
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_API_KEY')
     publications = ['LibraryPublication']
     override = true
+    publish = config.bintray.publish
     pkg {
         repo = 'android'
-        name = project.property('bintray.package.name')
+        name = config.bintray.packageName
         userOrg = 'universum-studios'
         licenses = ['Apache-2.0']
-        vcsUrl = project.property('maven.pom.project.url') + '.git'
-        labels = ['android', 'account', 'synchronization', 'service', 'event']
+        vcsUrl = config.maven.projectUrl + '.git'
+        labels = config.bintray.packageLabels
         publicDownloadNumbers = true
         version {
-            name = project.property('bintray.package.version.name')
-            desc = project.property('bintray.package.version.description')
+            name = config.bintray.packageVersionName
+            desc = config.bintray.packageVersionDescription
             released = new Date()
-            vcsTag = project.property('bintray.package.version.tag')
+            vcsTag = config.bintray.packageVersionTag
         }
         githubReleaseNotesFile = 'CHANGELOG.md'
     }

@@ -28,18 +28,7 @@ android {
     defaultConfig {
         minSdkVersion config.build.minSdkVersion
         targetSdkVersion config.build.targetSdkVersion
-        consumerProguardFiles 'proguard-rules.pro'
         testInstrumentationRunner config.test.instrumentationRunner
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-        }
-        debug {
-            minifyEnabled false
-            testCoverageEnabled true
-        }
     }
 
     compileOptions {
@@ -55,21 +44,21 @@ android {
 /**
  * Library dependencies ============================================================================
  */
-repositories {
-    maven { url repos.project.artifacts }
-}
-
 dependencies {
-    /*
-     * RELEASE DEPENDENCIES ------------------------------------------------------------------------
-     */
-    compile deps.androidSupport.annotations
-
-    /*
-     * TEST DEPENDENCIES ---------------------------------------------------------------------------
-     */
-    androidTestCompile project(':test-core')
+    // Android Instrumentation test dependencies.
+    compile deps.test.androidSupportAnnotations
+    compile deps.test.androidRunner
+    compile deps.test.androidRules
+    compile deps.test.androidEspressoCore
+    compile deps.test.androidEspressoIntents
+    compile(deps.test.androidEspressoContrib) {
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude group: 'com.android.support', module: 'appcompat-v7'
+        exclude group: 'com.android.support', module: 'design'
+        exclude group: 'com.android.support', module: 'recyclerview-v7'
+    }
+    // Local JUnit test dependencies.
+    compile deps.test.junit
+    compile deps.test.mockitoCore
 }
-
-// Apply DEPLOY script.
-apply from: '../deploy/deploy.gradle'

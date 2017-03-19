@@ -22,12 +22,14 @@ apply plugin: 'com.android.library'
  * Library options =================================================================================
  */
 android {
-    compileSdkVersion Integer.valueOf((String) project.property('android.compileSdkVersion'))
-    buildToolsVersion project.property('android.buildToolsVersion')
+    compileSdkVersion config.build.compileSdkVersion
+    buildToolsVersion config.build.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion project.property('library.minSdkVersion')
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        minSdkVersion config.build.minSdkVersion
+        targetSdkVersion config.build.targetSdkVersion
+        consumerProguardFiles 'proguard-rules.pro'
+        testInstrumentationRunner config.test.instrumentationRunner
     }
 
     buildTypes {
@@ -67,43 +69,28 @@ android {
  */
 repositories {
     mavenLocal()
-    maven { url "http://dl.bintray.com/universum-studios/android" }
+    maven { url repos.bintray.universumStudiosAndroid }
 }
 
 dependencies {
     /*
      * RELEASE DEPENDENCIES ------------------------------------------------------------------------
      */
-    compile releaseDependencies.androidSupportAnnotations
-    compile releaseDependencies.androidUniversumUtils
-    compile releaseDependencies.androidUniversumCrypto
-    compile releaseDependencies.otto
-    compile releaseDependencies.okio
-    compile releaseDependencies.okhttp
-    compile (releaseDependencies.retrofit) {
+    compile deps.androidSupport.annotations
+    compile deps.universumStudios.utils
+    compile deps.universumStudios.crypto
+    compile deps.other.squareupOtto
+    compile deps.other.squareupOkio
+    compile deps.other.squareupOkhttp
+    compile (deps.other.squareupRetrofit) {
         exclude module: 'okhttp'
     }
-    compile releaseDependencies.gson
+    compile deps.other.googleGson
 
     /*
      * TEST DEPENDENCIES ---------------------------------------------------------------------------
      */
-    // Android Instrumentation test dependencies.
-    androidTestCompile testDependencies.androidSupportAnnotations
-    androidTestCompile testDependencies.androidRunner
-    androidTestCompile testDependencies.androidRules
-    androidTestCompile testDependencies.androidEspressoCore
-    androidTestCompile testDependencies.androidEspressoIntents
-    androidTestCompile(testDependencies.androidEspressoContrib) {
-        exclude group: 'com.android.support', module: 'support-annotations'
-        exclude group: 'com.android.support', module: 'support-v4'
-        exclude group: 'com.android.support', module: 'appcompat-v7'
-        exclude group: 'com.android.support', module: 'design'
-        exclude group: 'com.android.support', module: 'recyclerview-v7'
-    }
-    // Local JUnit test dependencies.
-    testCompile testDependencies.junit
-    testCompile testDependencies.mockitoCore
+    androidTestCompile project(':test-core')
 }
 
 // Apply DEPLOY script.

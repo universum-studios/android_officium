@@ -22,13 +22,13 @@ apply plugin: 'com.android.application'
  * Application options =============================================================================
  */
 android {
-    compileSdkVersion Integer.valueOf((String) project.property('android.compileSdkVersion'))
-    buildToolsVersion project.property('android.buildToolsVersion')
+    compileSdkVersion config.build.compileSdkVersion
+    buildToolsVersion config.build.buildToolsVersion
 
     defaultConfig {
         applicationId project.property('samples.applicationId')
-        minSdkVersion project.property('samples.minSdkVersion')
-        targetSdkVersion project.property('samples.targetSdkVersion')
+        minSdkVersion config.build.minSdkVersion
+        targetSdkVersion config.build.targetSdkVersion
         versionCode Integer.valueOf((String) project.property('samples.versionCode'))
         versionName project.property('samples.versionName')
     }
@@ -66,15 +66,15 @@ android {
  */
 repositories {
     mavenLocal()
-    maven { url "http://dl.bintray.com/universum-studios/android" }
+    maven { url repos.bintray.universumStudiosAndroid }
 }
 
 dependencies {
     compile project(':library')
-    compile "com.android.support:design:${androidSupportVersion}"
-    compile "com.android.support:support-vector-drawable:${androidSupportVersion}"
-    compile "com.android.support:recyclerview-v7:${androidSupportVersion}"
-    compile 'com.jakewharton:butterknife:8.5.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
-    compile 'universum.studios.android:samples:0.1.2@aar'
+    compile deps.androidSupport.design
+    compile deps.androidSupport.vectorDrawable
+    compile deps.androidSupport.recyclerView
+    compile deps.other.butterknife
+    annotationProcessor deps.apt.butterknife
+    compile deps.universumStudios.supportSamples
 }

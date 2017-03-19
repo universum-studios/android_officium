@@ -22,12 +22,13 @@ apply plugin: 'com.android.library'
  * Library options =================================================================================
  */
 android {
-    compileSdkVersion Integer.valueOf((String) project.property('android.compileSdkVersion'))
-    buildToolsVersion project.property('android.buildToolsVersion')
+    compileSdkVersion config.build.compileSdkVersion
+    buildToolsVersion config.build.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion project.property('library.minSdkVersion')
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        minSdkVersion config.build.minSdkVersion
+        targetSdkVersion config.build.targetSdkVersion
+        testInstrumentationRunner config.test.instrumentationRunner
     }
 
     buildTypes {
@@ -54,17 +55,22 @@ android {
  * Library dependencies ============================================================================
  */
 repositories {
-    maven { url = '../artifacts/' }
-    maven { url "http://dl.bintray.com/universum-studios/android" }
+    maven { url repos.project.artifacts }
+    maven { url repos.bintray.universumStudiosAndroid }
 }
 
 dependencies {
     /*
      * RELEASE DEPENDENCIES ------------------------------------------------------------------------
      */
-    compile releaseDependencies.androidSupportAnnotations
-    compile releaseDependencies.androidUniversumUtils
-    compile releaseDependencies.androidUniversumCrypto
+    compile deps.androidSupport.annotations
+    compile deps.universumStudios.utils
+    compile deps.universumStudios.crypto
+
+    /*
+     * TEST DEPENDENCIES ---------------------------------------------------------------------------
+     */
+    androidTestCompile project(':test-core')
 }
 
 // Apply DEPLOY script.

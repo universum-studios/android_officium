@@ -19,16 +19,6 @@
  * =================================================================================================
  */
 -->
-<resources>
-
-	<!-- ### APPLICATION ======================================================================= -->
-
-	<string name="app_name">Officium</string>
-	<string name="app_intro">
-		Welcome to the Officium sample App.
-	</string>
-
-	<!-- ### NAVIGATION ======================================================================== -->
-
-	<string name="navigation_item_home">Home</string>
-</resources>
+<manifest package="universum.studios.android.test">
+	<application/>
+</manifest>

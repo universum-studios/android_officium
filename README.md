@@ -5,6 +5,10 @@ Officium
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/b46e219849d04733ab3cb29beeb0cfaf)](https://www.codacy.com/app/universum-studios/android_officium?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=universum-studios/android_officium&amp;utm_campaign=Badge_Grade)
 [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/b46e219849d04733ab3cb29beeb0cfaf)](https://www.codacy.com/app/universum-studios/android_officium?utm_source=github.com&utm_medium=referral&utm_content=universum-studios/android_officium&utm_campaign=Badge_Coverage)
 
+Account, synchronization, services and events management for the Android platform.
+
+For more information please visit the **[Wiki](https://github.com/universum-studios/android_officium/wiki)**.
+
 ## Download ##
 [![Download](https://api.bintray.com/packages/universum-studios/android/universum.studios.android%3Aofficium/images/download.svg)](https://bintray.com/universum-studios/android/universum.studios.android%3Aofficium/_latestVersion)
 
@@ -13,6 +17,10 @@ Download the latest **[release](https://github.com/universum-studios/android_off
 ### Gradle ###
 
     compile "universum.studios.android:officium:${DESIRED_VERSION}@aar"
+
+## Modules ##
+
+This library may be also used via **separate modules**. For more information please see **[Modules](https://github.com/universum-studios/android_officium/blob/master/MODULES.md)**.
 
 ## Compatibility ##
 

@@ -1,0 +1,16 @@
+// Defines repositories used across the library project.
+def bintrayRepos = [
+        typesafeMavenReleases  : 'http://dl.bintray.com/typesafe/maven-releases',
+        universumStudiosAndroid: 'http://dl.bintray.com/universum-studios/android'
+]
+
+def projectRepos = [
+        // This path must be relative to the project modules.
+        artifacts: '../artifacts/'
+]
+
+ext.repos = [
+        "jitpack": 'https://jitpack.io',
+        "bintray": bintrayRepos,
+        "project": projectRepos
+]

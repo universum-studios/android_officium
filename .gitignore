@@ -1,14 +1,18 @@
-### ANDROID STUDIO
+### INTELLIJ
+*.iml
+/.idea/workspace.xml
+/.idea/libraries
+/.idea/modules
+/.idea/gradle.xml
+/.idea/misc.xml
+/.idea/modules.xml
+
+### ANDROID
 /local.properties
 /build
 /captures
 .gradle
 .externalNativeBuild
-
-### INTELLIJ
-*.iml
-/.idea/workspace.xml
-/.idea/libraries
 
 ### OTHER
 *.DS_Store
