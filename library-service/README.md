@@ -1,6 +1,8 @@
 Officium-Service
 ===============
 
+This module contains ...
+
 ## Download ##
 [![Download](https://api.bintray.com/packages/universum-studios/android/universum.studios.android%3Aofficium/images/download.svg)](https://bintray.com/universum-studios/android/universum.studios.android%3Aofficium/_latestVersion)
 
@@ -13,3 +15,11 @@ _depends on:_
 [`com.squareup.okio:okio`](https://github.com/square/okio),
 [`com.squareup.okhttp3:okhttp`](http://square.github.io/okhttp/),
 [`com.squareup.retrofit2:retrofit`](http://square.github.io/retrofit/)
+
+## Components ##
+
+Below are listed some of **primary components** that are available in this module:
+
+- [ServiceManager](https://github.com/universum-studios/android_officium/blob/master/library-service/src/main/java/universum/studios/android/officium/service/ServiceManager.java)
+- [ServiceApi](https://github.com/universum-studios/android_officium/blob/master/library-service/src/main/java/universum/studios/android/officium/service/ServiceApi.java)
+- [ServiceApiProvider](https://github.com/universum-studios/android_officium/blob/master/library-service/src/main/java/universum/studios/android/officium/service/ServiceApiProvider.java)
