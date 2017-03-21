@@ -1,7 +1,8 @@
 Officium-Sync
 ===============
 
-This module contains ...
+This module contains components that may be used to build a **synchronization layer** for an
+**Android** application backed by `AbstractThreadedSyncAdapter` in a simple and consistent way.
 
 ## Download ##
 [![Download](https://api.bintray.com/packages/universum-studios/android/universum.studios.android%3Aofficium/images/download.svg)](https://bintray.com/universum-studios/android/universum.studios.android%3Aofficium/_latestVersion)

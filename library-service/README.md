@@ -1,7 +1,9 @@
 Officium-Service
 ===============
 
-This module contains ...
+This module contains components that may be used to build a **service API layer** for an **Android**
+application backed by **[Retrofit](http://square.github.io/retrofit/)** and **[OkHttp](http://square.github.io/okhttp/)**
+in a simple and consistent way.
 
 ## Download ##
 [![Download](https://api.bintray.com/packages/universum-studios/android/universum.studios.android%3Aofficium/images/download.svg)](https://bintray.com/universum-studios/android/universum.studios.android%3Aofficium/_latestVersion)

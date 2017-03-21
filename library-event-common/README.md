@@ -1,7 +1,7 @@
 Officium-Event-Common
 ===============
 
-This module contains ...
+This module contains common implementations of `EventBus` interface.
 
 ## Download ##
 [![Download](https://api.bintray.com/packages/universum-studios/android/universum.studios.android%3Aofficium/images/download.svg)](https://bintray.com/universum-studios/android/universum.studios.android%3Aofficium/_latestVersion)
