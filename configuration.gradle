@@ -42,11 +42,16 @@ def codacyConfig = [
         projectName: 'android_officium'
 ]
 
+def ciConfig = [
+        travis: Boolean.parseBoolean(System.getenv('TRAVIS'))
+]
+
 ext.config = [
         "build"  : buildConfig,
         "test"   : testConfig,
         "library": libraryConfig,
         "maven"  : mavenConfig,
         "bintray": bintrayConfig,
-        "codacy" : codacyConfig
+        "codacy" : codacyConfig,
+        "ci"     : ciConfig
 ]

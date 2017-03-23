@@ -52,6 +52,15 @@ android {
                 '../library-sync/src/main/java'
         ]
         debug.java.srcDirs = release.java.srcDirs
+        androidTest.java.srcDirs = [
+                '../library/src/androidTest/java',
+                '../library-core/src/androidTest/java',
+                '../library-account/src/androidTest/java',
+                '../library-event-core/src/androidTest/java',
+                '../library-event-common/src/androidTest/java',
+                '../library-service/src/androidTest/java',
+                '../library-sync/src/androidTest/java'
+        ]
     }
 
     compileOptions {

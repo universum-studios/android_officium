@@ -79,10 +79,9 @@ afterEvaluate { project ->
  * Task that updates library artifacts directory with artifacts from the Maven local directory.
  */
 task updateArtifacts() {
-    final String mavenLocalDir = config.maven.localUrl
-    if (mavenLocalDir != null && !Boolean.parseBoolean(System.getenv('TRAVIS'))) {
+    if (config.maven.localUrl != null && !config.ci.travis) {
         final String artifactId = String.valueOf(project.property('maven.pom.artifactId'))
-        final String artifactsSourceDir = "${mavenLocalDir}\\universum\\studios\\android\\${artifactId}\\${config.library.version}"
+        final String artifactsSourceDir = "${config.maven.localUrl}\\universum\\studios\\android\\${artifactId}\\${config.library.version}"
         final String artifactsDestinationDir = "..\\artifacts\\universum\\studios\\android\\${artifactId}\\${config.library.version}"
         delete artifactsDestinationDir
         copy {
