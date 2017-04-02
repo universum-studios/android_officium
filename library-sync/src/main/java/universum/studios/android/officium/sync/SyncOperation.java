@@ -47,7 +47,7 @@ public final class SyncOperation {
 	 *
 	 * @param builder The builder with data for the new SyncOperation.
 	 */
-	private SyncOperation(Builder builder) {
+	private SyncOperation(final Builder builder) {
 		this.account = builder.account;
 		this.authority = builder.authority;
 		this.task = builder.task;
@@ -80,7 +80,7 @@ public final class SyncOperation {
 		 * @return This builder to allow methods chaining.
 		 * @see SyncOperation#account
 		 */
-		Builder account(Account account) {
+		Builder account(final Account account) {
 			this.account = account;
 			return this;
 		}
@@ -92,7 +92,7 @@ public final class SyncOperation {
 		 * @return This builder to allow methods chaining.
 		 * @see SyncOperation#authority
 		 */
-		Builder authority(String authority) {
+		Builder authority(final String authority) {
 			this.authority = authority;
 			return this;
 		}
@@ -104,7 +104,7 @@ public final class SyncOperation {
 		 * @return This builder to allow methods chaining.
 		 * @see SyncOperation#task
 		 */
-		Builder task(SyncTask task) {
+		Builder task(final SyncTask task) {
 			this.task = task;
 			return this;
 		}

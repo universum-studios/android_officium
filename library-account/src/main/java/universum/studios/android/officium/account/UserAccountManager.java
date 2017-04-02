@@ -210,7 +210,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 * @param context     Context used to access {@link AccountManager}.
 	 * @param accountType The desired type of accounts that can be managed by the new manager.
 	 */
-	public UserAccountManager(@NonNull Context context, @NonNull String accountType) {
+	public UserAccountManager(@NonNull final Context context, @NonNull final String accountType) {
 		this.mContext = context;
 		this.mManager = AccountManager.get(mContext);
 		this.mAccountType = accountType;
@@ -228,7 +228,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 * @param watcher The desired watcher to register.
 	 * @see #unregisterWatcher(AccountWatcher)
 	 */
-	public void registerWatcher(@NonNull AccountWatcher<A> watcher) {
+	public void registerWatcher(@NonNull final AccountWatcher<A> watcher) {
 		if (!mWatchers.contains(watcher)) mWatchers.add(watcher);
 	}
 
@@ -238,7 +238,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 * @param watcher The desired watcher to unregister.
 	 * @see #registerWatcher(AccountWatcher)
 	 */
-	public void unregisterWatcher(@NonNull AccountWatcher<A> watcher) {
+	public void unregisterWatcher(@NonNull final AccountWatcher<A> watcher) {
 		mWatchers.remove(watcher);
 	}
 
@@ -250,7 +250,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 *                 encryption.
 	 * @see #setDataCrypto(Crypto)
 	 */
-	public final void setKeyEncrypto(@Nullable Encrypto encrypto) {
+	public final void setKeyEncrypto(@Nullable final Encrypto encrypto) {
 		this.mKeyEncrypto = encrypto;
 	}
 
@@ -268,7 +268,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 * @see #getAccountData(Account, String)
 	 * @see #getAccountDataBundle(Account, String...)
 	 */
-	public final void setDataCrypto(@Nullable Crypto crypto) {
+	public final void setDataCrypto(@Nullable final Crypto crypto) {
 		this.mDataCrypto = crypto;
 	}
 
@@ -281,7 +281,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 * @see #encryptKey(String)
 	 * @see #encryptData(String)
 	 */
-	private Bundle encryptBundle(Bundle bundle) {
+	private Bundle encryptBundle(final Bundle bundle) {
 		if (bundle == null || bundle.isEmpty()) {
 			return bundle;
 		}
@@ -298,7 +298,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 * @param key The desired key to be encrypted.
 	 * @return Encrypted key or the same key if there is no cryptographic tool specified.
 	 */
-	private String encryptKey(String key) {
+	private String encryptKey(final String key) {
 		return mKeyEncrypto == null ? key : CryptographyUtils.encrypt(key, mKeyEncrypto);
 	}
 
@@ -308,7 +308,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 * @param value The desired data value to be encrypted.
 	 * @return Encrypted data value or the same value if there is no cryptographic tool specified.
 	 */
-	private String encryptData(String value) {
+	private String encryptData(final String value) {
 		return mDataCrypto == null ? value : CryptographyUtils.encrypt(value, mDataCrypto);
 	}
 
@@ -318,7 +318,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 * @param value The desired data value to be decrypted.
 	 * @return Decrypted data value or the same value if there is no cryptographic tool specified.
 	 */
-	private String decryptData(String value) {
+	private String decryptData(final String value) {
 		return mDataCrypto == null ? value : CryptographyUtils.decrypt(value, mDataCrypto);
 	}
 
@@ -340,7 +340,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 			PERMISSION_AUTHENTICATE_ACCOUNTS
 	})
 	@SuppressWarnings("unchecked")
-	public void createAccountAsync(@NonNull A userAccount) {
+	public void createAccountAsync(@NonNull final A userAccount) {
 		new CreateAccountTask().execute(userAccount);
 	}
 
@@ -399,7 +399,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 			PERMISSION_GET_ACCOUNTS,
 			PERMISSION_AUTHENTICATE_ACCOUNTS
 	})
-	protected boolean onCreateAccount(@NonNull A userAccount) {
+	protected boolean onCreateAccount(@NonNull final A userAccount) {
 		final Account account = new Account(userAccount.getName(), mAccountType);
 		onDeleteAccount(userAccount);
 		if (mManager.addAccountExplicitly(account, encryptData(userAccount.getPassword()), encryptBundle(userAccount.getDataBundle()))) {
@@ -427,7 +427,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 * @see AccountManager#setAuthToken(Account, String, String)
 	 */
 	@RequiresPermission(PERMISSION_AUTHENTICATE_ACCOUNTS)
-	public void setAccountAuthToken(@NonNull Account account, @NonNull String authTokenType, @Nullable String authToken) {
+	public void setAccountAuthToken(@NonNull final Account account, @NonNull final String authTokenType, @Nullable final String authToken) {
 		mManager.setAuthToken(account, authTokenType, authToken);
 	}
 
@@ -448,7 +448,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 * @see #peekAccountAuthToken(Account, String)
 	 */
 	@RequiresPermission(PERMISSION_AUTHENTICATE_ACCOUNTS)
-	public boolean isAccountAuthenticated(@NonNull Account account, @NonNull String authTokenType) {
+	public boolean isAccountAuthenticated(@NonNull final Account account, @NonNull final String authTokenType) {
 		return !TextUtils.isEmpty(peekAccountAuthToken(account, authTokenType));
 	}
 
@@ -468,7 +468,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 */
 	@Nullable
 	@RequiresPermission(PERMISSION_AUTHENTICATE_ACCOUNTS)
-	public String peekAccountAuthToken(@NonNull Account account, @NonNull String authTokenType) {
+	public String peekAccountAuthToken(@NonNull final Account account, @NonNull final String authTokenType) {
 		return mManager.peekAuthToken(account, authTokenType);
 	}
 
@@ -483,7 +483,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 * @see AccountManager#invalidateAuthToken(String, String)
 	 */
 	@RequiresPermission(PERMISSION_MANAGE_ACCOUNTS)
-	public void invalidateAccountAuthToken(@NonNull Account account, @NonNull String authToken) {
+	public void invalidateAccountAuthToken(@NonNull final Account account, @NonNull final String authToken) {
 		mManager.invalidateAuthToken(account.type, authToken);
 	}
 
@@ -499,7 +499,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 * @see AccountManager#setPassword(Account, String)
 	 */
 	@RequiresPermission(PERMISSION_AUTHENTICATE_ACCOUNTS)
-	public void setAccountPassword(@NonNull Account account, @Nullable String password) {
+	public void setAccountPassword(@NonNull final Account account, @Nullable final String password) {
 		mManager.setPassword(account, encryptData(password));
 	}
 
@@ -517,7 +517,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 */
 	@Nullable
 	@RequiresPermission(PERMISSION_AUTHENTICATE_ACCOUNTS)
-	public String getAccountPassword(@NonNull Account account) {
+	public String getAccountPassword(@NonNull final Account account) {
 		return decryptData(mManager.getPassword(account));
 	}
 
@@ -530,7 +530,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 * @see AccountManager#clearPassword(Account)
 	 */
 	@RequiresPermission(PERMISSION_MANAGE_ACCOUNTS)
-	public void clearAccountPassword(@NonNull Account account) {
+	public void clearAccountPassword(@NonNull final Account account) {
 		mManager.clearPassword(account);
 	}
 
@@ -547,7 +547,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 * @see AccountManager#setUserData(Account, String, String)
 	 */
 	@RequiresPermission(PERMISSION_AUTHENTICATE_ACCOUNTS)
-	public void setAccountData(@NonNull Account account, @NonNull String key, @Nullable String value) {
+	public void setAccountData(@NonNull final Account account, @NonNull final String key, @Nullable final String value) {
 		mManager.setUserData(account, encryptKey(key), encryptData(value));
 	}
 
@@ -565,7 +565,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 */
 	@Nullable
 	@RequiresPermission(PERMISSION_AUTHENTICATE_ACCOUNTS)
-	public String getAccountData(@NonNull Account account, @NonNull String key) {
+	public String getAccountData(@NonNull final Account account, @NonNull final String key) {
 		return decryptData(mManager.getUserData(account, encryptKey(key)));
 	}
 
@@ -580,7 +580,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 * @see #setAccountData(Account, String, String)
 	 */
 	@RequiresPermission(PERMISSION_AUTHENTICATE_ACCOUNTS)
-	public void setAccountDataBundle(@NonNull Account account, @NonNull Bundle dataBundle) {
+	public void setAccountDataBundle(@NonNull final Account account, @NonNull final Bundle dataBundle) {
 		if (dataBundle.isEmpty()) return;
 		for (final String key : dataBundle.keySet()) {
 			mManager.setUserData(account, encryptKey(key), encryptData(dataBundle.getString(key)));
@@ -601,7 +601,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 */
 	@NonNull
 	@RequiresPermission(PERMISSION_AUTHENTICATE_ACCOUNTS)
-	public Bundle getAccountDataBundle(@NonNull Account account, @NonNull String... keys) {
+	public Bundle getAccountDataBundle(@NonNull final Account account, @NonNull final String... keys) {
 		final Bundle bundle = new Bundle();
 		if (keys.length > 0) {
 			for (final String key : keys) {
@@ -631,7 +631,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 			PERMISSION_AUTHENTICATE_ACCOUNTS
 	})
 	@SuppressWarnings("unchecked")
-	public void deleteAccountAsync(@NonNull A userAccount) {
+	public void deleteAccountAsync(@NonNull final A userAccount) {
 		new DeleteAccountTask().execute(userAccount);
 	}
 
@@ -690,7 +690,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 			PERMISSION_AUTHENTICATE_ACCOUNTS
 	})
 	@SuppressWarnings({"MissingPermission", "deprecation"})
-	protected boolean onDeleteAccount(@NonNull A userAccount) {
+	protected boolean onDeleteAccount(@NonNull final A userAccount) {
 		final Account account = findAccountForUser(userAccount);
 		if (account != null) {
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
@@ -725,7 +725,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 */
 	@Nullable
 	@RequiresPermission(PERMISSION_GET_ACCOUNTS)
-	protected Account findAccountForUser(@NonNull A userAccount) {
+	protected Account findAccountForUser(@NonNull final A userAccount) {
 		final Account[] accounts = mManager.getAccountsByType(mAccountType);
 		if (accounts.length > 0) {
 			final String accountName = userAccount.getName();
@@ -743,7 +743,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 * @param userAccount The created account.
 	 */
 	@SuppressWarnings("WeakerAccess")
-	final void notifyAccountCreated(@NonNull A userAccount) {
+	final void notifyAccountCreated(@NonNull final A userAccount) {
 		synchronized (mWatchers) {
 			if (!mWatchers.isEmpty()) {
 				for (final AccountWatcher<A> watcher : mWatchers) {
@@ -760,7 +760,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 * @param userAccount The deleted account.
 	 */
 	@SuppressWarnings("WeakerAccess")
-	final void notifyAccountDeleted(@NonNull A userAccount) {
+	final void notifyAccountDeleted(@NonNull final A userAccount) {
 		synchronized (mWatchers) {
 			if (!mWatchers.isEmpty()) {
 				for (final AccountWatcher<A> watcher : mWatchers) {
@@ -778,7 +778,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 * @param error       The occurred error.
 	 */
 	@SuppressWarnings("WeakerAccess")
-	final void notifyAccountError(@NonNull A userAccount, @NonNull ErrorException error) {
+	final void notifyAccountError(@NonNull final A userAccount, @NonNull final ErrorException error) {
 		synchronized (mWatchers) {
 			if (!mWatchers.isEmpty()) {
 				for (final AccountWatcher<A> watcher : mWatchers) {
@@ -803,7 +803,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 		@Override
 		@SafeVarargs
 		@SuppressWarnings("MissingPermission")
-		protected final TaskResult<A> doInBackground(A... accounts) {
+		protected final TaskResult<A> doInBackground(final A... accounts) {
 			final A account = accounts[0];
 			ErrorException error = null;
 			try {
@@ -836,7 +836,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 		@Override
 		@SafeVarargs
 		@SuppressWarnings("MissingPermission")
-		protected final TaskResult<A> doInBackground(A... accounts) {
+		protected final TaskResult<A> doInBackground(final A... accounts) {
 			final A account = accounts[0];
 			ErrorException error = null;
 			try {
@@ -852,7 +852,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 		/**
 		 */
 		@Override
-		protected final void onPostExecute(@NonNull TaskResult<A> result) {
+		protected final void onPostExecute(@NonNull final TaskResult<A> result) {
 			if (result.error == null) notifyAccountDeleted(result.account);
 			else notifyAccountError(result.account, result.error);
 		}
@@ -880,7 +880,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 		 * @param account The account for which has been background task executed.
 		 * @param error   The optional error if occurred during execution of background task.
 		 */
-		TaskResult(A account, ErrorException error) {
+		TaskResult(final A account, final ErrorException error) {
 			this.account = account;
 			this.error = error;
 		}

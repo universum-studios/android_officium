@@ -83,7 +83,7 @@ public class ErrorResponse extends ServiceResponse {
 	 *
 	 * @param error The error for the new error response.
 	 */
-	public ErrorResponse(@NonNull Error error) {
+	public ErrorResponse(@NonNull final Error error) {
 		super();
 		this.error = error;
 	}

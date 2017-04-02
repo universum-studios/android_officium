@@ -77,7 +77,7 @@ public class UiEventBus extends SimpleEventBus {
 	 * @param bus The bus to be wrapped.
 	 * @see #getBus()
 	 */
-	public UiEventBus(@NonNull Bus bus) {
+	public UiEventBus(@NonNull final Bus bus) {
 		super(bus);
 		this.mHandler = new Handler(Looper.getMainLooper());
 	}

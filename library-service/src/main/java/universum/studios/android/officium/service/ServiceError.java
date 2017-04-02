@@ -102,7 +102,7 @@ public class ServiceError extends BaseServiceObject {
 	 * @see #getErrorCode()
 	 * @see #getErrorBody()
 	 */
-	public ServiceError(int errorCode, @NonNull ResponseBody errorBody) {
+	public ServiceError(final int errorCode, @NonNull final ResponseBody errorBody) {
 		super();
 		this.mErrorCode = errorCode;
 		this.mErrorBody = errorBody;
@@ -116,7 +116,7 @@ public class ServiceError extends BaseServiceObject {
 	 * @see #isFailure()
 	 * @see #getFailure()
 	 */
-	public ServiceError(@NonNull Throwable failure) {
+	public ServiceError(@NonNull final Throwable failure) {
 		super();
 		this.mErrorCode = 0;
 		this.mErrorBody = null;
@@ -130,7 +130,7 @@ public class ServiceError extends BaseServiceObject {
 	 *
 	 * @param other The other service error of which data to copy to the new one.
 	 */
-	public ServiceError(@NonNull ServiceError other) {
+	public ServiceError(@NonNull final ServiceError other) {
 		super();
 		this.mErrorCode = other.mErrorCode;
 		this.mErrorBody = other.mErrorBody;
@@ -189,7 +189,7 @@ public class ServiceError extends BaseServiceObject {
 	 * @param converter The desired converter to be used for conversion. May be {@code null} to clear
 	 *                  the current one.
 	 */
-	public void setErrorBodyConverter(@Nullable Converter<ResponseBody, ?> converter) {
+	public void setErrorBodyConverter(@Nullable final Converter<ResponseBody, ?> converter) {
 		this.mErrorBodyConverter = converter;
 	}
 
@@ -203,7 +203,7 @@ public class ServiceError extends BaseServiceObject {
 	 * @throws IllegalStateException If no converter has been specified.
 	 */
 	@Nullable
-	public <T> T getErrorBodyAs(@NonNull Class<T> classOfT) {
+	public <T> T getErrorBodyAs(@NonNull final Class<T> classOfT) {
 		if (mErrorBody == null) throw new IllegalStateException("Not an error but a failure!");
 		if (mErrorBodyConverter == null) throw new IllegalStateException("No error body converter specified!");
 		T errorBody = null;

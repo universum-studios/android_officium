@@ -114,7 +114,7 @@ public abstract class ServiceApiProvider<A> {
 	 * @see #onCreateApi()
 	 */
 	@NonNull
-	protected A onPrepareApi(@NonNull A api) {
+	protected A onPrepareApi(@NonNull final A api) {
 		return api;
 	}
 
