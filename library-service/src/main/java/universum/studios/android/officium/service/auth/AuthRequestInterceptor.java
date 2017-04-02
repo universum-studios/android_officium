@@ -78,7 +78,7 @@ public final class AuthRequestInterceptor implements Interceptor {
 	 *                      the authorization token when intercepting requests.
 	 * @see #intercept(Chain)
 	 */
-	public AuthRequestInterceptor(@NonNull AuthTokenProvider tokenProvider) {
+	public AuthRequestInterceptor(@NonNull final AuthTokenProvider tokenProvider) {
 		this.tokenProvider = tokenProvider;
 	}
 
@@ -89,7 +89,7 @@ public final class AuthRequestInterceptor implements Interceptor {
 	/**
 	 */
 	@Override
-	public Response intercept(Chain chain) throws IOException {
+	public Response intercept(@NonNull final Chain chain) throws IOException {
 		final String authToken = tokenProvider.peekToken();
 		final Request request = chain.request();
 		return TextUtils.isEmpty(authToken) ? chain.proceed(request) : chain.proceed(request.newBuilder()

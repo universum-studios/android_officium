@@ -111,7 +111,7 @@ public class UserAccount {
 	 *
 	 * @param name The desired name for the new account.
 	 */
-	public UserAccount(@NonNull String name) {
+	public UserAccount(@NonNull final String name) {
 		this(name, null);
 	}
 
@@ -121,7 +121,7 @@ public class UserAccount {
 	 * @param name     The desired name for the new account.
 	 * @param password The desired password for the new account. May be {@code null}.
 	 */
-	public UserAccount(@NonNull String name, @Nullable String password) {
+	public UserAccount(@NonNull final String name, @Nullable final String password) {
 		this.mName = name;
 		this.mPassword = password;
 	}
@@ -149,7 +149,7 @@ public class UserAccount {
 	 * @see #UserAccount(String, String)
 	 * @see #getPassword()
 	 */
-	public final void setPassword(@Nullable String password) {
+	public final void setPassword(@Nullable final String password) {
 		this.mPassword = password;
 	}
 
@@ -173,7 +173,7 @@ public class UserAccount {
 	 * @see #getData(String)
 	 * @see #getDataBundle()
 	 */
-	public void putData(@NonNull String key, @Nullable String data) {
+	public void putData(@NonNull final String key, @Nullable final String data) {
 		if (mDataBundle == null) this.mDataBundle = new Bundle();
 		mDataBundle.putString(key, data);
 	}
@@ -185,7 +185,7 @@ public class UserAccount {
 	 * @return {@code True} if this account has data with the key, {@code false} otherwise.
 	 * @see #putData(String, String)
 	 */
-	public boolean hasData(@NonNull String key) {
+	public boolean hasData(@NonNull final String key) {
 		return mDataBundle != null && mDataBundle.containsKey(key);
 	}
 
@@ -201,7 +201,7 @@ public class UserAccount {
 	 * @see #getDataBundle()
 	 */
 	@Nullable
-	public String getData(@NonNull String key) {
+	public String getData(@NonNull final String key) {
 		return mDataBundle == null ? null : mDataBundle.getString(key);
 	}
 
@@ -212,7 +212,7 @@ public class UserAccount {
 	 * @see #putData(String, String)
 	 * @see #hasData(String)
 	 */
-	public void removeData(@NonNull String key) {
+	public void removeData(@NonNull final String key) {
 		if (mDataBundle != null) mDataBundle.remove(key);
 	}
 
@@ -224,7 +224,7 @@ public class UserAccount {
 	 * @see #putData(String, String)
 	 * @see #getData(String)
 	 */
-	public void setDataBundle(@Nullable Bundle dataBundle) {
+	public void setDataBundle(@Nullable final Bundle dataBundle) {
 		this.mDataBundle = dataBundle;
 	}
 
@@ -246,7 +246,7 @@ public class UserAccount {
 	 *
 	 * @param authToken The desired <b>OAuth</b> token. May be {@code null} to clear the previous one.
 	 */
-	public void putOAuthToken(@Nullable String authToken) {
+	public void putOAuthToken(@Nullable final String authToken) {
 		putAuthToken(TOKEN_TYPE_O_AUTH, authToken);
 	}
 
@@ -259,7 +259,7 @@ public class UserAccount {
 	 * @see #getAuthToken(String)
 	 * @see #getAuthTokens()
 	 */
-	public void putAuthToken(@Nullable String tokenType, @Nullable String token) {
+	public void putAuthToken(@Nullable final String tokenType, @Nullable final String token) {
 		if (mAuthTokens == null) this.mAuthTokens = new HashMap<>(1);
 		mAuthTokens.put(tokenType, token);
 	}
@@ -272,7 +272,7 @@ public class UserAccount {
 	 * @return {@code True} if {@link #putAuthToken(String, String)} has been called with the
 	 * <var>tokenType</var>, {@code false} otherwise.
 	 */
-	public boolean hasAuthToken(@Nullable String tokenType) {
+	public boolean hasAuthToken(@Nullable final String tokenType) {
 		return mAuthTokens != null && mAuthTokens.containsKey(tokenType);
 	}
 
@@ -292,7 +292,7 @@ public class UserAccount {
 	 * for that type.
 	 */
 	@Nullable
-	public String getAuthToken(@Nullable String tokenType) {
+	public String getAuthToken(@Nullable final String tokenType) {
 		return mAuthTokens == null ? null : mAuthTokens.get(tokenType);
 	}
 
@@ -331,8 +331,8 @@ public class UserAccount {
 	/**
 	 */
 	@Override
-	public boolean equals(Object other) {
-		// Hashing and equals functions assume that as name is unique for each account.
+	public boolean equals(@Nullable final Object other) {
+		// Hashing and equals functions assume that name is unique for each account.
 		if (other == this) return true;
 		if (!(other instanceof UserAccount)) return false;
 		final UserAccount account = (UserAccount) other;

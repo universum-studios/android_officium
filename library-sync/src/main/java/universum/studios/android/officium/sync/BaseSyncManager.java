@@ -93,7 +93,7 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	 * @param authority The content authority for which the manager should request synchronization
 	 *                  via {@link ContentResolver#requestSync(Account, String, Bundle)}.
 	 */
-	public BaseSyncManager(@NonNull Context context, @NonNull String authority) {
+	public BaseSyncManager(@NonNull final Context context, @NonNull final String authority) {
 		this.mContext = context;
 		this.mAuthority = authority;
 	}
@@ -129,7 +129,7 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	 *
 	 * @param enabled {@code True} to enable automatic synchronization, {@code false} to disable it.
 	 */
-	private void setAutomaticSyncEnabled(boolean enabled) {
+	private void setAutomaticSyncEnabled(final boolean enabled) {
 		final Account account = pickAccountForSync();
 		if (account != null) ContentResolver.setSyncAutomatically(account, mAuthority, enabled);
 	}
@@ -160,7 +160,7 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	 * @see #requestGlobalSync()
 	 * @see ContentResolver#requestSync(Account, String, Bundle)
 	 */
-	public void requestSync(@NonNull SyncTask syncTask) {
+	public void requestSync(@NonNull final SyncTask syncTask) {
 		final Account account = pickAccountForSync();
 		if (account == null) {
 			if (OfficiumConfig.LOG_ENABLED) {
@@ -192,7 +192,7 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	 * {@code false} otherwise.
 	 * @see #pickAccountForSync()
 	 */
-	protected boolean shouldRequestSync(@NonNull SyncTask syncTask, @NonNull Account account) {
+	protected boolean shouldRequestSync(@NonNull final SyncTask syncTask, @NonNull final Account account) {
 		return true;
 	}
 
@@ -200,7 +200,7 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	 */
 	@Override
 	@CallSuper
-	public void onSyncTaskStateChanged(@NonNull SyncTask syncTask, @NonNull Account account) {
+	public void onSyncTaskStateChanged(@NonNull final SyncTask syncTask, @NonNull final Account account) {
 		// May be implemented by the inheritance hierarchies.
 	}
 
@@ -253,7 +253,7 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	 *
 	 * @param account The account picked via {@link #pickAccountForSync()}.
 	 */
-	protected void onCancelSync(@NonNull Account account) {
+	protected void onCancelSync(@NonNull final Account account) {
 		ContentResolver.cancelSync(account, mAuthority);
 	}
 

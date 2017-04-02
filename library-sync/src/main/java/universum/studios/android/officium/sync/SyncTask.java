@@ -153,15 +153,18 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	}
 
 	/**
-	 * A {@link Request} implementation that can be used for {@link SyncHandler SyncHandlers} that
-	 * do not require any synchronization request.
+	 * A {@link Request} implementation that may be used for {@link SyncHandler SyncHandlers} that
+	 * does not require any synchronization request.
 	 *
 	 * @author Martin Albedinsky
 	 */
 	public static final class EmptyRequest implements Request {
 
-		/* We do not allow to create instances of this request. */
+		/**
+		 */
 		private EmptyRequest() {
+			// Not allowed to be instantiated publicly.
+			throw new UnsupportedOperationException();
 		}
 	}
 
@@ -170,11 +173,11 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	 */
 
 	/**
-	 * Empty instance of {@link SyncTask} that may be used to pass a sync task to a sync handler that
-	 * does not require any data from a caller to perform its synchronization.
+	 * Empty instance of {@link SyncTask} that may be used in order to pass a sync task to a sync
+	 * handler that does not require any data from a caller to perform synchronization logic.
 	 */
 	@SuppressWarnings("unused")
-	public static SyncTask<EmptyRequest> EMPTY = new SyncTask<>();
+	public static final SyncTask<EmptyRequest> EMPTY = new SyncTask<>();
 
 	/**
 	 * Instance of Gson used to parse {@link #mRequestBody} into {@link #mRequest} instance and
@@ -228,7 +231,7 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	 *
 	 * @param other The other sync task of which data to copy to the new one.
 	 */
-	private SyncTask(SyncTask other) {
+	private SyncTask(final SyncTask other) {
 		this.mId = other.mId;
 		this.mRequestBody = other.mRequestBody;
 		this.mState = other.mState;
@@ -239,7 +242,7 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	 *
 	 * @param builder The builder containing data for the new SyncTask instance.
 	 */
-	protected SyncTask(@NonNull Builder<R> builder) {
+	protected SyncTask(@NonNull final Builder<R> builder) {
 		this.mId = builder.id;
 		this.mRequest = builder.request;
 		this.mRequestBody = mRequest == null ? null : GSON.toJson(mRequest);
@@ -256,7 +259,7 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	 * @param extras The synchronization extras Bundle containing data for the new SyncTask instance.
 	 * @see #intoExtras(Bundle)
 	 */
-	protected SyncTask(@NonNull Bundle extras) {
+	protected SyncTask(@NonNull final Bundle extras) {
 		this.mId = extras.getInt(SyncExtras.EXTRA_TASK_ID, DEFAULT_ID);
 		this.mRequestBody = extras.getString(SyncExtras.EXTRA_TASK_REQUEST_BODY);
 		this.mState = extras.getInt(SyncExtras.EXTRA_TASK_STATE, mState);
@@ -282,7 +285,7 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	 *              annotation.
 	 * @see #getState()
 	 */
-	final void setState(@State int state) {
+	final void setState(@State final int state) {
 		this.mState = state;
 	}
 
@@ -306,7 +309,7 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	 * @return This task's request or {@code null} if there is no request specified.
 	 */
 	@Nullable
-	public final R getRequest(@NonNull Class<R> classOfRequest) {
+	public final R getRequest(@NonNull final Class<R> classOfRequest) {
 		if (mRequest == null) {
 			this.mRequest = TextUtils.isEmpty(mRequestBody) ? null : GSON.fromJson(mRequestBody, classOfRequest);
 		}
@@ -331,7 +334,7 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	 * @return The given extras Bundle with this task's data.
 	 */
 	@NonNull
-	public Bundle intoExtras(@NonNull Bundle extras) {
+	public Bundle intoExtras(@NonNull final Bundle extras) {
 		extras.putInt(SyncExtras.EXTRA_TASK_ID, mId);
 		extras.putString(SyncExtras.EXTRA_TASK_REQUEST_BODY, mRequestBody);
 		extras.putInt(SyncExtras.EXTRA_TASK_STATE, mState);
@@ -352,7 +355,7 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	/**
 	 */
 	@Override
-	public boolean equals(Object other) {
+	public boolean equals(@Nullable final Object other) {
 		if (other == this) return true;
 		if (!(other instanceof SyncTask)) return false;
 		final SyncTask task = (SyncTask) other;
@@ -386,7 +389,7 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	 * @param state The desired state of which name to return.
 	 * @return The state's name.
 	 */
-	private static String stateName(int state) {
+	private static String stateName(final int state) {
 		switch (state) {
 			case IDLE:
 				return "IDLE";
@@ -441,7 +444,7 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 		 *
 		 * @param taskId Id of the synchronization task to build.
 		 */
-		public Builder(int taskId) {
+		public Builder(final int taskId) {
 			this.id = taskId;
 		}
 
@@ -453,7 +456,7 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 		 *                sync task.
 		 * @return This builder to allow methods chaining.
 		 */
-		public Builder request(@Nullable R request) {
+		public Builder request(@Nullable final R request) {
 			this.request = request;
 			return this;
 		}

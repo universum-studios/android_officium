@@ -78,7 +78,7 @@ public abstract class BaseServiceObject implements ServiceObject {
 	 * @param requestId     Id of the service request to associate the service object with. May be {@code null}
 	 *                      to not associate.
 	 */
-	static void associateWith(@NonNull ServiceObject serviceObject, @Nullable Integer serviceId, @Nullable String requestId) {
+	static void associateWith(@NonNull final ServiceObject serviceObject, @Nullable final Integer serviceId, @Nullable final String requestId) {
 		if (serviceId != null && serviceObject.getServiceId() == NO_SERVICE) serviceObject.setServiceId(serviceId);
 		if (requestId != null && TextUtils.isEmpty(serviceObject.getRequestId())) serviceObject.setRequestId(requestId);
 	}
@@ -88,7 +88,7 @@ public abstract class BaseServiceObject implements ServiceObject {
 	 *                                       service object.
 	 */
 	@Override
-	public final void setServiceId(int serviceId) {
+	public final void setServiceId(final int serviceId) {
 		if (mServiceId == null) {
 			this.mServiceId = serviceId;
 		} else {
@@ -108,7 +108,7 @@ public abstract class BaseServiceObject implements ServiceObject {
 	 *                                       service object.
 	 */
 	@Override
-	public final void setRequestId(@NonNull String requestId) {
+	public final void setRequestId(@NonNull final String requestId) {
 		if (mRequestId == null) {
 			this.mRequestId = requestId;
 		} else {

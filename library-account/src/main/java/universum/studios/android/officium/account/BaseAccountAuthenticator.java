@@ -25,6 +25,7 @@ import android.accounts.NetworkErrorException;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 /**
  * A {@link AbstractAccountAuthenticator} implementation that can be used as base for custom implementations
@@ -68,7 +69,7 @@ public abstract class BaseAccountAuthenticator extends AbstractAccountAuthentica
 	 * @param context The context used by parent {@link AbstractAccountAuthenticator} for permissions
 	 *                checks.
 	 */
-	public BaseAccountAuthenticator(@NonNull Context context) {
+	public BaseAccountAuthenticator(@NonNull final Context context) {
 		super(context);
 	}
 
@@ -78,50 +79,83 @@ public abstract class BaseAccountAuthenticator extends AbstractAccountAuthentica
 
 	/**
 	 */
+	@Nullable
 	@Override
-	public Bundle editProperties(AccountAuthenticatorResponse response, String accountType) {
+	public Bundle editProperties(
+			@NonNull final AccountAuthenticatorResponse response,
+			@NonNull final String accountType
+	) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 */
+	@Nullable
+	@Override
+	public Bundle addAccount(
+			@NonNull final AccountAuthenticatorResponse response,
+			@NonNull final String accountType,
+			@Nullable final String authTokenType,
+			@Nullable final String[] requiredFeatures,
+			@Nullable final Bundle options
+	) throws NetworkErrorException {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 */
+	@Nullable
+	@Override
+	public Bundle confirmCredentials(
+			@NonNull final AccountAuthenticatorResponse response,
+			@NonNull final Account account,
+			@Nullable final Bundle options
+	) throws NetworkErrorException {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 */
+	@Nullable
+	@Override
+	public Bundle getAuthToken(
+			@NonNull final AccountAuthenticatorResponse response,
+			@NonNull final Account account,
+			@NonNull final String authTokenType,
+			@Nullable final Bundle options
+	) throws NetworkErrorException {
 		throw new UnsupportedOperationException();
 	}
 
 	/**
 	 */
 	@Override
-	public Bundle addAccount(AccountAuthenticatorResponse response, String accountType, String authTokenType, String[] requiredFeatures, Bundle options) throws NetworkErrorException {
+	public String getAuthTokenLabel(@NonNull final String authTokenType) {
 		throw new UnsupportedOperationException();
 	}
 
 	/**
 	 */
+	@Nullable
 	@Override
-	public Bundle confirmCredentials(AccountAuthenticatorResponse response, Account account, Bundle options) throws NetworkErrorException {
+	public Bundle updateCredentials(
+			@NonNull final AccountAuthenticatorResponse response,
+			@NonNull final Account account,
+			@Nullable final String authTokenType,
+			@Nullable final Bundle options
+	) throws NetworkErrorException {
 		throw new UnsupportedOperationException();
 	}
 
 	/**
 	 */
+	@Nullable
 	@Override
-	public Bundle getAuthToken(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle options) throws NetworkErrorException {
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 */
-	@Override
-	public String getAuthTokenLabel(String authTokenType) {
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 */
-	@Override
-	public Bundle updateCredentials(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle options) throws NetworkErrorException {
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 */
-	@Override
-	public Bundle hasFeatures(AccountAuthenticatorResponse response, Account account, String[] features) throws NetworkErrorException {
+	public Bundle hasFeatures(
+			@NonNull final AccountAuthenticatorResponse response,
+			@NonNull final Account account,
+			@NonNull final String[] features
+	) throws NetworkErrorException {
 		throw new UnsupportedOperationException();
 	}
 

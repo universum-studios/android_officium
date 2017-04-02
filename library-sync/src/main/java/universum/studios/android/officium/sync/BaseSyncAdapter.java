@@ -190,7 +190,7 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * Same as {@link #BaseSyncAdapter(Context, boolean, boolean)} with <var>allowParallelSyncs</var>
 	 * parameter set to {@code false}.
 	 */
-	public BaseSyncAdapter(@NonNull Context context, boolean autoInitialize) {
+	public BaseSyncAdapter(@NonNull final Context context, final boolean autoInitialize) {
 		this(context, autoInitialize, false);
 	}
 
@@ -201,7 +201,7 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * See {@link AbstractThreadedSyncAdapter#AbstractThreadedSyncAdapter(Context, boolean, boolean)}
 	 * for more information.
 	 */
-	public BaseSyncAdapter(@NonNull Context context, boolean autoInitialize, boolean allowParallelSyncs) {
+	public BaseSyncAdapter(@NonNull final Context context, final boolean autoInitialize, final boolean allowParallelSyncs) {
 		super(context, autoInitialize, allowParallelSyncs);
 	}
 
@@ -217,7 +217,7 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * @param listener The desired listener callback. May be {@code null} to clear the current one.
 	 * @see SyncTask#getState()
 	 */
-	protected final void setOnTaskStateChangeListener(@Nullable OnSyncTaskStateChangeListener listener) {
+	protected final void setOnTaskStateChangeListener(@Nullable final OnSyncTaskStateChangeListener listener) {
 		this.mTaskStateChangeListener = listener;
 	}
 
@@ -230,7 +230,7 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * @see #getEventDispatcher()
 	 * @see #dispatchSyncEvent(Object)
 	 */
-	protected final void setEventDispatcher(@Nullable EventDispatcher dispatcher) {
+	protected final void setEventDispatcher(@Nullable final EventDispatcher dispatcher) {
 		this.mEventDispatcher = dispatcher;
 	}
 
@@ -262,7 +262,7 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * @see #onPerformSync(SyncOperation)
 	 * @see #unregisterTaskHandler(SyncHandler)
 	 */
-	protected void registerTaskHandler(@NonNull SyncHandler handler) {
+	protected void registerTaskHandler(@NonNull final SyncHandler handler) {
 		if (mTaskHandlers == null) {
 			this.mTaskHandlers = new SparseArray<>();
 		}
@@ -288,7 +288,7 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * @param handler The desired sync handler to un-register.
 	 * @see #onPerformSync(SyncOperation)
 	 */
-	protected void unregisterTaskHandler(@NonNull SyncHandler handler) {
+	protected void unregisterTaskHandler(@NonNull final SyncHandler handler) {
 		if (mTaskHandlers != null && mTaskHandlers.size() > 0)
 			mTaskHandlers.remove(handler.getTaskId());
 	}
@@ -301,7 +301,7 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * @see #onPerformGlobalSync(SyncOperation)
 	 * @see #getGlobalSyncHandler()
 	 */
-	protected void setGlobalSyncHandler(@Nullable SyncHandler handler) {
+	protected void setGlobalSyncHandler(@Nullable final SyncHandler handler) {
 		this.mGlobalSyncHandler = handler;
 	}
 
@@ -323,7 +323,13 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
+	public void onPerformSync(
+			@NonNull final Account account,
+			@NonNull final Bundle extras,
+			@NonNull final String authority,
+			@NonNull final ContentProviderClient provider,
+			@NonNull final SyncResult syncResult
+	) {
 		final SyncOperation syncOperation = new SyncOperation.Builder()
 				.account(account)
 				.authority(authority)
@@ -348,7 +354,7 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * @return New instance of SyncTask with data parsed from the given extras.
 	 */
 	@NonNull
-	protected SyncTask createTaskFromExtras(@NonNull Bundle extras) {
+	protected SyncTask createTaskFromExtras(@NonNull final Bundle extras) {
 		return new SyncTask(extras);
 	}
 
@@ -364,7 +370,7 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * @see #onGlobalSyncFailed(SyncOperation, Exception)
 	 */
 	@SuppressWarnings("unchecked")
-	protected void onPerformGlobalSync(@NonNull SyncOperation syncOperation) {
+	protected void onPerformGlobalSync(@NonNull final SyncOperation syncOperation) {
 		if (mGlobalSyncHandler == null) return;
 		dispatchSyncEvent(
 				new SyncEvent.Builder(syncOperation.task.getId())
@@ -388,7 +394,7 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * @param syncOperation Operation describing the global synchronization request.
 	 * @see #onGlobalSyncFailed(SyncOperation, Exception)
 	 */
-	protected void onGlobalSyncFinished(@NonNull SyncOperation syncOperation) {
+	protected void onGlobalSyncFinished(@NonNull final SyncOperation syncOperation) {
 		dispatchSyncEvent(
 				new SyncEvent.Builder(syncOperation.task.getId())
 						.type(SyncEvent.FINISH)
@@ -405,7 +411,7 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * @param error         The error exception thrown by {@link #onPerformGlobalSync(SyncOperation)}.
 	 * @see #onSyncFinished(SyncOperation)
 	 */
-	protected void onGlobalSyncFailed(@NonNull SyncOperation syncOperation, @NonNull Exception error) {
+	protected void onGlobalSyncFailed(@NonNull final SyncOperation syncOperation, @NonNull final Exception error) {
 		dispatchSyncEvent(
 				new SyncEvent.Builder(syncOperation.task.getId())
 						.type(SyncEvent.ERROR)
@@ -425,7 +431,7 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * @see #onSyncFailed(SyncOperation, Exception)
 	 */
 	@SuppressWarnings("unchecked")
-	protected void onPerformSync(@NonNull SyncOperation syncOperation) {
+	protected void onPerformSync(@NonNull final SyncOperation syncOperation) {
 		final SyncHandler taskHandler = mTaskHandlers == null ? null : mTaskHandlers.get(syncOperation.task.getId());
 		if (taskHandler == null) {
 			Log.e(TAG, "No synchronization handler found for task with id(" + syncOperation.task.getId() + ").");
@@ -453,7 +459,7 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * @param syncOperation Operation describing the synchronization request.
 	 * @see #onSyncFailed(SyncOperation, Exception)
 	 */
-	protected void onSyncFinished(@NonNull SyncOperation syncOperation) {
+	protected void onSyncFinished(@NonNull final SyncOperation syncOperation) {
 		dispatchSyncEvent(
 				new SyncEvent.Builder(syncOperation.task.getId())
 						.type(SyncEvent.FINISH)
@@ -470,7 +476,7 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * @param error         The error exception thrown by {@link #onPerformSync(SyncOperation)}.
 	 * @see #onSyncFinished(SyncOperation)
 	 */
-	protected void onSyncFailed(@NonNull SyncOperation syncOperation, @NonNull Exception error) {
+	protected void onSyncFailed(@NonNull final SyncOperation syncOperation, @NonNull final Exception error) {
 		dispatchSyncEvent(
 				new SyncEvent.Builder(syncOperation.task.getId())
 						.type(SyncEvent.ERROR)
@@ -490,7 +496,7 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * @param state         The new state for the task. Should be one of states defined by {@link SyncTask.State @State}
 	 *                      annotation.
 	 */
-	private void changeTaskStateToAndNotify(SyncOperation syncOperation, @SyncTask.State int state) {
+	private void changeTaskStateToAndNotify(final SyncOperation syncOperation, @SyncTask.State final int state) {
 		if (syncOperation.task.getState() != state) {
 			syncOperation.task.setState(state);
 			if (mTaskStateChangeListener != null) {
@@ -510,7 +516,7 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 *
 	 * @param event The synchronization event to be dispatched.
 	 */
-	protected void dispatchSyncEvent(@NonNull Object event) {
+	protected void dispatchSyncEvent(@NonNull final Object event) {
 		if (mEventDispatcher != null) mEventDispatcher.dispatch(event);
 	}
 

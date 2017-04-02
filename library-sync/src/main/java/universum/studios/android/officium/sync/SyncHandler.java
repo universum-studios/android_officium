@@ -94,7 +94,7 @@ public abstract class SyncHandler<Request extends SyncTask.Request, Result> {
 	 *
 	 * @param taskId Id of the {@link SyncTask} associated with this handler.
 	 */
-	protected SyncHandler(int taskId) {
+	protected SyncHandler(final int taskId) {
 		this.mTaskId = taskId;
 		this.mRequestClass = null;
 	}
@@ -108,7 +108,7 @@ public abstract class SyncHandler<Request extends SyncTask.Request, Result> {
 	 *                       is called. May be {@code null} if {@link SyncTask.EmptyRequest} is used.
 	 * @see SyncTask#getRequest(Class)
 	 */
-	protected SyncHandler(int taskId, @Nullable Class<Request> classOfRequest) {
+	protected SyncHandler(final int taskId, @Nullable final Class<Request> classOfRequest) {
 		this.mTaskId = taskId;
 		this.mRequestClass = classOfRequest;
 	}
@@ -148,7 +148,7 @@ public abstract class SyncHandler<Request extends SyncTask.Request, Result> {
 	 */
 	@Nullable
 	@SuppressWarnings("unchecked")
-	public final Result handleSync(@NonNull Context context, @NonNull SyncOperation syncOperation) {
+	public final Result handleSync(@NonNull final Context context, @NonNull final SyncOperation syncOperation) {
 		final Request syncRequest = mRequestClass == null ? null : (Request) syncOperation.task.getRequest(mRequestClass);
 		try {
 			return onHandleSync(context, syncOperation, syncRequest);
@@ -198,7 +198,7 @@ public abstract class SyncHandler<Request extends SyncTask.Request, Result> {
 	 *                      {@code null} if this handler does not accept any request.
 	 * @param error         The error exception thrown by {@link #onHandleSync(Context, SyncOperation, SyncTask.Request)}.
 	 */
-	protected void onSyncError(@NonNull Context context, @NonNull SyncOperation syncOperation, @Nullable Request syncRequest, @NonNull Exception error) {
+	protected void onSyncError(@NonNull final Context context, @NonNull final SyncOperation syncOperation, @Nullable final Request syncRequest, @NonNull final Exception error) {
 		Log.e(getClass().getSimpleName(), "An error occurred during synchronization handling!", error);
 	}
 
