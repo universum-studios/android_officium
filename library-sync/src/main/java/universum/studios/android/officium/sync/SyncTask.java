@@ -173,11 +173,11 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	 */
 
 	/**
-	 * Empty instance of {@link SyncTask} that may be used to pass a sync task to a sync handler that
-	 * does not require any data from a caller to perform its synchronization.
+	 * Empty instance of {@link SyncTask} that may be used in order to pass a sync task to a sync
+	 * handler that does not require any data from a caller to perform synchronization logic.
 	 */
 	@SuppressWarnings("unused")
-	public static SyncTask<EmptyRequest> EMPTY = new SyncTask<>();
+	public static final SyncTask<EmptyRequest> EMPTY = new SyncTask<>();
 
 	/**
 	 * Instance of Gson used to parse {@link #mRequestBody} into {@link #mRequest} instance and

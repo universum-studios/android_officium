@@ -819,7 +819,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 		/**
 		 */
 		@Override
-		protected final void onPostExecute(@NonNull TaskResult<A> result) {
+		protected void onPostExecute(@NonNull TaskResult<A> result) {
 			if (result.error == null) notifyAccountCreated(result.account);
 			else notifyAccountError(result.account, result.error);
 		}
@@ -852,7 +852,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 		/**
 		 */
 		@Override
-		protected final void onPostExecute(@NonNull final TaskResult<A> result) {
+		protected void onPostExecute(@NonNull final TaskResult<A> result) {
 			if (result.error == null) notifyAccountDeleted(result.account);
 			else notifyAccountError(result.account, result.error);
 		}

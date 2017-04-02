@@ -27,6 +27,27 @@ import android.text.TextUtils;
  */
 public final class SyncOperation {
 
+	 /*
+	 * Constants ===================================================================================
+	 */
+
+	/**
+	 * Log TAG.
+	 */
+	// private static final String TAG = "SyncOperation";
+
+    /*
+	 * Interface ===================================================================================
+	 */
+
+	/*
+	 * Static members ==============================================================================
+	 */
+
+	/*
+	 * Members =====================================================================================
+	 */
+
 	/**
 	 * Account associated with this sync operation.
 	 */
@@ -42,6 +63,10 @@ public final class SyncOperation {
 	 */
 	public final SyncTask task;
 
+	/*
+	 * Constructors ================================================================================
+	 */
+
 	/**
 	 * Creates a new instance of SyncOperation with data provided by the specified <var>builder</var>.
 	 *
@@ -52,6 +77,14 @@ public final class SyncOperation {
 		this.authority = builder.authority;
 		this.task = builder.task;
 	}
+
+	/*
+	 * Methods =====================================================================================
+	 */
+
+	/*
+	 * Inner classes ===============================================================================
+	 */
 
 	/**
 	 * Builder that may be used to build instances of {@link SyncOperation}.
