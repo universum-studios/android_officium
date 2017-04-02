@@ -98,7 +98,7 @@ public abstract class BaseAccountAuthenticator extends AbstractAccountAuthentica
 			@Nullable final String authTokenType,
 			@Nullable final String[] requiredFeatures,
 			@Nullable final Bundle options
-			) throws NetworkErrorException {
+	) throws NetworkErrorException {
 		throw new UnsupportedOperationException();
 	}
 
