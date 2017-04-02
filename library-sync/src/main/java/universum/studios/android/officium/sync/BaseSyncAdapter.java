@@ -115,7 +115,7 @@ import universum.studios.android.officium.OfficiumConfig;
  */
 public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -124,7 +124,7 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 */
 	private static final String TAG = "BaseSyncAdapter";
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
@@ -148,11 +148,11 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 		void dispatch(@NonNull Object event);
 	}
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
@@ -182,7 +182,7 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 */
 	private SparseArray<SyncHandler> mTaskHandlers;
 
-	/**
+	/*
 	 * Constructors ================================================================================
 	 */
 
@@ -205,7 +205,7 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 		super(context, autoInitialize, allowParallelSyncs);
 	}
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
@@ -514,7 +514,7 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 		if (mEventDispatcher != null) mEventDispatcher.dispatch(event);
 	}
 
-	/**
+	/*
 	 * Inner classes ===============================================================================
 	 */
 

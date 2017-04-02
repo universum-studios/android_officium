@@ -29,7 +29,7 @@ import android.text.TextUtils;
  */
 public abstract class BaseServiceObject implements ServiceObject {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -38,15 +38,15 @@ public abstract class BaseServiceObject implements ServiceObject {
 	 */
 	// private static final String TAG = "BaseServiceObject";
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
@@ -60,11 +60,11 @@ public abstract class BaseServiceObject implements ServiceObject {
 	 */
 	String mRequestId;
 
-	/**
+	/*
 	 * Constructors ================================================================================
 	 */
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
@@ -124,7 +124,7 @@ public abstract class BaseServiceObject implements ServiceObject {
 		return mRequestId == null ? NO_REQUEST : mRequestId;
 	}
 
-	/**
+	/*
 	 * Inner classes ===============================================================================
 	 */
 }

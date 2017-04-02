@@ -28,7 +28,7 @@ import android.support.annotation.NonNull;
  */
 public interface ServiceObject {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -43,7 +43,7 @@ public interface ServiceObject {
 	 */
 	String NO_REQUEST = "";
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 

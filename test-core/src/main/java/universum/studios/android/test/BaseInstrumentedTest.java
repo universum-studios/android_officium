@@ -1,6 +1,6 @@
 /*
  * =================================================================================================
- *                             Copyright (C) 2017 Martin Albedinsky
+ *                             Copyright (C) 2017 Universum Studios
  * =================================================================================================
  *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
  * -------------------------------------------------------------------------------------------------
@@ -30,13 +30,13 @@ import org.junit.Before;
  *
  * @author Martin Albedinsky
  */
-public abstract class BaseTest {
+public abstract class BaseInstrumentedTest {
 
 	/**
 	 * Log TAG.
 	 */
 	@SuppressWarnings("unused")
-	private static final String TAG = "BaseTest";
+	private static final String TAG = "BaseInstrumentedTest";
 
 	/**
 	 * Target context obtained from the {@link InstrumentationRegistry}.

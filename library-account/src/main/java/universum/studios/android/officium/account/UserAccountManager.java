@@ -65,7 +65,7 @@ import universum.studios.android.util.ErrorException;
  */
 public abstract class UserAccountManager<A extends UserAccount> {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -102,7 +102,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 */
 	protected static final String PERMISSION_AUTHENTICATE_ACCOUNTS = "android.permission.AUTHENTICATE_ACCOUNTS";
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
@@ -150,11 +150,11 @@ public abstract class UserAccountManager<A extends UserAccount> {
 		void onAccountError(@NonNull A userAccount, @NonNull ErrorException error);
 	}
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
@@ -200,7 +200,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 */
 	private Crypto mDataCrypto;
 
-	/**
+	/*
 	 * Constructors ================================================================================
 	 */
 
@@ -217,7 +217,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 		this.mUiHandler = new Handler(Looper.getMainLooper());
 	}
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
@@ -788,7 +788,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 		}
 	}
 
-	/**
+	/*
 	 * Inner classes ===============================================================================
 	 */
 

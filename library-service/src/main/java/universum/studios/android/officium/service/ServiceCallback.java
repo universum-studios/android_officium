@@ -33,7 +33,7 @@ import retrofit2.Response;
  */
 public abstract class ServiceCallback<R> extends BaseServiceObject implements Callback<R> {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -42,23 +42,23 @@ public abstract class ServiceCallback<R> extends BaseServiceObject implements Ca
 	 */
 	// private static final String TAG = "ServiceCallback";
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
-	/**
+	/*
 	 * Constructors ================================================================================
 	 */
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
@@ -105,7 +105,7 @@ public abstract class ServiceCallback<R> extends BaseServiceObject implements Ca
 	 */
 	protected abstract void onDispatchError(@NonNull ServiceError error);
 
-	/**
+	/*
 	 * Inner classes ===============================================================================
 	 */
 }

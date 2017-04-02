@@ -42,7 +42,7 @@ import retrofit2.Response;
  */
 public class ServiceCall<T> implements Call<T> {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -51,15 +51,15 @@ public class ServiceCall<T> implements Call<T> {
 	 */
 	// private static final String TAG = "ServiceCall";
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
@@ -73,7 +73,7 @@ public class ServiceCall<T> implements Call<T> {
 	 */
 	private Integer mServiceId;
 
-	/**
+	/*
 	 * Constructors ================================================================================
 	 */
 
@@ -86,7 +86,7 @@ public class ServiceCall<T> implements Call<T> {
 		this.mCall = call;
 	}
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
@@ -197,7 +197,7 @@ public class ServiceCall<T> implements Call<T> {
 		return serviceCall;
 	}
 
-	/**
+	/*
 	 * Inner classes ===============================================================================
 	 */
 }

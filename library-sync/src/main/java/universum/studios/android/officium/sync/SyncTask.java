@@ -55,7 +55,7 @@ import java.lang.annotation.RetentionPolicy;
  */
 public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -140,7 +140,7 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	 */
 	public static final int DEFAULT_ID = 0;
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
@@ -165,7 +165,7 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 		}
 	}
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
@@ -182,7 +182,7 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	 */
 	private static final Gson GSON = new Gson();
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
@@ -211,7 +211,7 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	 */
 	private int mState = IDLE;
 
-	/**
+	/*
 	 * Constructors ================================================================================
 	 */
 
@@ -262,7 +262,7 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 		this.mState = extras.getInt(SyncExtras.EXTRA_TASK_STATE, mState);
 	}
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
@@ -415,7 +415,7 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 		return clone;
 	}
 
-	/**
+	/*
 	 * Inner classes ===============================================================================
 	 */
 

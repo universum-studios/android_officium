@@ -34,7 +34,7 @@ import com.squareup.otto.Bus;
  */
 public class UiEventBus extends SimpleEventBus {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -43,15 +43,15 @@ public class UiEventBus extends SimpleEventBus {
 	 */
 	// private static final String TAG = "UiEventBus";
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
@@ -60,7 +60,7 @@ public class UiEventBus extends SimpleEventBus {
 	 */
 	private final Handler mHandler;
 
-	/**
+	/*
 	 * Constructors ================================================================================
 	 */
 
@@ -82,7 +82,7 @@ public class UiEventBus extends SimpleEventBus {
 		this.mHandler = new Handler(Looper.getMainLooper());
 	}
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
@@ -106,7 +106,7 @@ public class UiEventBus extends SimpleEventBus {
 		}
 	}
 
-	/**
+	/*
 	 * Inner classes ===============================================================================
 	 */
 }

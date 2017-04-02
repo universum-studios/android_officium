@@ -45,7 +45,7 @@ import java.util.Map;
  */
 public class UserAccount {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -68,15 +68,15 @@ public class UserAccount {
 	 */
 	protected static final String[] AUTH_TOKEN_TYPES = {TOKEN_TYPE_O_AUTH};
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
@@ -102,7 +102,7 @@ public class UserAccount {
 	 */
 	private Bundle mDataBundle;
 
-	/**
+	/*
 	 * Constructors ================================================================================
 	 */
 
@@ -126,7 +126,7 @@ public class UserAccount {
 		this.mPassword = password;
 	}
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
@@ -339,7 +339,7 @@ public class UserAccount {
 		return TextUtils.equals(account.mName, mName);
 	}
 
-	/**
+	/*
 	 * Inner classes ===============================================================================
 	 */
 }

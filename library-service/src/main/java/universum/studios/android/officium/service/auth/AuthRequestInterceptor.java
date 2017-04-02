@@ -41,7 +41,7 @@ import okhttp3.Response;
  */
 public final class AuthRequestInterceptor implements Interceptor {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -50,15 +50,15 @@ public final class AuthRequestInterceptor implements Interceptor {
 	 */
 	// private static final String TAG = "AuthRequestInterceptor";
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
@@ -67,7 +67,7 @@ public final class AuthRequestInterceptor implements Interceptor {
 	 */
 	private final AuthTokenProvider tokenProvider;
 
-	/**
+	/*
 	 * Constructors ================================================================================
 	 */
 
@@ -82,7 +82,7 @@ public final class AuthRequestInterceptor implements Interceptor {
 		this.tokenProvider = tokenProvider;
 	}
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
@@ -98,7 +98,7 @@ public final class AuthRequestInterceptor implements Interceptor {
 		);
 	}
 
-	/**
+	/*
 	 * Inner classes ===============================================================================
 	 */
 }

@@ -34,7 +34,7 @@ import android.support.annotation.RequiresPermission;
  */
 public class SingleUserAccountManager<A extends UserAccount> extends UserAccountManager<A> {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -43,15 +43,15 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 	 */
 	// private static final String TAG = "SingleUserAccountManager";
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
@@ -65,11 +65,11 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 		super(context, accountType);
 	}
 
-	/**
+	/*
 	 * Constructors ================================================================================
 	 */
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
@@ -388,7 +388,7 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 		return accounts.length > 0 ? accounts[0] : null;
 	}
 
-	/**
+	/*
 	 * Inner classes ===============================================================================
 	 */
 }

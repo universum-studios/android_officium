@@ -100,7 +100,7 @@ import android.support.annotation.NonNull;
  */
 public class ServiceApi<M extends ServiceManager> {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -109,15 +109,15 @@ public class ServiceApi<M extends ServiceManager> {
 	 */
 	// private static final String TAG = "ServiceApi";
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
@@ -127,7 +127,7 @@ public class ServiceApi<M extends ServiceManager> {
 	@NonNull
 	protected M mManager;
 
-	/**
+	/*
 	 * Constructors ================================================================================
 	 */
 
@@ -140,7 +140,7 @@ public class ServiceApi<M extends ServiceManager> {
 		this.mManager = manager;
 	}
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
@@ -173,7 +173,7 @@ public class ServiceApi<M extends ServiceManager> {
 		return mManager.servicesConfiguration(servicesInterface);
 	}
 
-	/**
+	/*
 	 * Inner classes ===============================================================================
 	 */
 }

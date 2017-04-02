@@ -37,7 +37,7 @@ import android.support.annotation.NonNull;
  */
 public abstract class BaseAccountAuthenticator extends AbstractAccountAuthenticator {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -46,19 +46,19 @@ public abstract class BaseAccountAuthenticator extends AbstractAccountAuthentica
 	 */
 	// private static final String TAG = "BaseAccountAuthenticator";
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
-	/**
+	/*
 	 * Constructors ========================u========================================================
 	 */
 
@@ -72,7 +72,7 @@ public abstract class BaseAccountAuthenticator extends AbstractAccountAuthentica
 		super(context);
 	}
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
@@ -125,7 +125,7 @@ public abstract class BaseAccountAuthenticator extends AbstractAccountAuthentica
 		throw new UnsupportedOperationException();
 	}
 
-	/**
+	/*
 	 * Inner classes ===============================================================================
 	 */
 }

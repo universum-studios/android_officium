@@ -31,7 +31,7 @@ import com.squareup.otto.Bus;
  */
 public class SimpleEventBus implements EventBus {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -40,15 +40,15 @@ public class SimpleEventBus implements EventBus {
 	 */
 	// private static final String TAG = "SimpleEventBus";
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
@@ -58,7 +58,7 @@ public class SimpleEventBus implements EventBus {
 	@NonNull
 	protected final Bus mBus;
 
-	/**
+	/*
 	 * Constructors ================================================================================
 	 */
 
@@ -79,7 +79,7 @@ public class SimpleEventBus implements EventBus {
 		this.mBus = bus;
 	}
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
@@ -118,7 +118,7 @@ public class SimpleEventBus implements EventBus {
 		mBus.post(event);
 	}
 
-	/**
+	/*
 	 * Inner classes ===============================================================================
 	 */
 }

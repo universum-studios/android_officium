@@ -49,7 +49,7 @@ import universum.studios.android.officium.OfficiumConfig;
 @SuppressWarnings("ResourceType")
 public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -58,15 +58,15 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	 */
 	private static final String TAG = "BaseSyncManager";
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
@@ -81,7 +81,7 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	 */
 	protected final String mAuthority;
 
-	/**
+	/*
 	 * Constructors ================================================================================
 	 */
 
@@ -98,7 +98,7 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 		this.mAuthority = authority;
 	}
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
@@ -268,7 +268,7 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	@Nullable
 	protected abstract Account pickAccountForSync();
 
-	/**
+	/*
 	 * Inner classes ===============================================================================
 	 */
 }

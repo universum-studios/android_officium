@@ -44,7 +44,7 @@ import retrofit2.Retrofit;
  */
 public class ServiceManager {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -53,15 +53,15 @@ public class ServiceManager {
 	 */
 	// private static final String TAG = "ServiceManager";
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
@@ -75,7 +75,7 @@ public class ServiceManager {
 	 */
 	private EndPoint mEndPoint;
 
-	/**
+	/*
 	 * Constructors ================================================================================
 	 */
 
@@ -99,7 +99,7 @@ public class ServiceManager {
 		this.mEndPoint = endPoint;
 	}
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
@@ -217,7 +217,7 @@ public class ServiceManager {
 		return configuration;
 	}
 
-	/**
+	/*
 	 * Inner classes ===============================================================================
 	 */
 

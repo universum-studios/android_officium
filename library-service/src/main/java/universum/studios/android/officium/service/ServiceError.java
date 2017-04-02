@@ -38,7 +38,7 @@ import retrofit2.Converter;
  */
 public class ServiceError extends BaseServiceObject {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -47,15 +47,15 @@ public class ServiceError extends BaseServiceObject {
 	 */
 	// private static final String TAG = "ServiceError";
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
@@ -89,7 +89,7 @@ public class ServiceError extends BaseServiceObject {
 	 */
 	private Converter<ResponseBody, ?> mErrorBodyConverter;
 
-	/**
+	/*
 	 * Constructors ================================================================================
 	 */
 
@@ -138,7 +138,7 @@ public class ServiceError extends BaseServiceObject {
 		this.mErrorBodyConverter = other.mErrorBodyConverter;
 	}
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
@@ -262,7 +262,7 @@ public class ServiceError extends BaseServiceObject {
 		return builder.append("}").toString();
 	}
 
-	/**
+	/*
 	 * Inner classes ===============================================================================
 	 */
 }

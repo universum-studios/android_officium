@@ -47,7 +47,7 @@ import android.util.Log;
  */
 public abstract class SyncHandler<Request extends SyncTask.Request, Result> {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -56,15 +56,15 @@ public abstract class SyncHandler<Request extends SyncTask.Request, Result> {
 	 */
 	// private static final String TAG = "SyncHandler";
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
@@ -81,7 +81,7 @@ public abstract class SyncHandler<Request extends SyncTask.Request, Result> {
 	 */
 	private final Class<Request> mRequestClass;
 
-	/**
+	/*
 	 * Constructors ================================================================================
 	 */
 
@@ -113,7 +113,7 @@ public abstract class SyncHandler<Request extends SyncTask.Request, Result> {
 		this.mRequestClass = classOfRequest;
 	}
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
@@ -202,7 +202,7 @@ public abstract class SyncHandler<Request extends SyncTask.Request, Result> {
 		Log.e(getClass().getSimpleName(), "An error occurred during synchronization handling!", error);
 	}
 
-	/**
+	/*
 	 * Inner classes ===============================================================================
 	 */
 }
