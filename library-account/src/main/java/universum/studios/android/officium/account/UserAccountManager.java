@@ -22,6 +22,8 @@ import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
+import android.accounts.AuthenticatorException;
+import android.accounts.OperationCanceledException;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -32,7 +34,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresPermission;
 import android.text.TextUtils;
+import android.util.Log;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -640,6 +644,10 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 * <p>
 	 * This method requires the caller to hold <b>{@link #PERMISSION_GET_ACCOUNTS}</b> along with
 	 * <b>{@link #PERMISSION_AUTHENTICATE_ACCOUNTS}</b> permissions.
+	 * <p>
+	 * <b>Note, that this method may be only invoked from a background thread. If invoked from the
+	 * main UI thread an exception will be thrown. For none-blocking call use {@link #deleteAccountAsync(UserAccount)}
+	 * instead.</b>
 	 *
 	 * @param userAccount The desired user account for which to delete the corresponding Android {@link Account}.
 	 * @return {@code True} if the account has been deleted, {@code false} otherwise.
@@ -672,7 +680,8 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 * Invoked whenever {@link #createAccount(UserAccount)} or {@link #createAccountAsync(UserAccount)}
 	 * is called to create new Android {@link Account}.
 	 * <p>
-	 * <b>Note</b>, that this method can be invoked on a background thread.
+	 * <b>Note, that invocation of this method need to be always on a background thread otherwise an
+	 * exception will be thrown.</b>
 	 * <p>
 	 * Current implementation returns {@code true} whenever there has been found Android account to
 	 * be deleted for the given user account, {@code false} otherwise.
@@ -693,10 +702,18 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	protected boolean onDeleteAccount(@NonNull final A userAccount) {
 		final Account account = findAccountForUser(userAccount);
 		if (account != null) {
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-				mManager.removeAccount(account, null, null, null);
-			} else {
-				mManager.removeAccount(account, null, null);
+			boolean removed = false;
+			try {
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+					removed = mManager.removeAccount(account, null, null, null).getResult() != null;
+				} else {
+					removed = mManager.removeAccount(account, null, null).getResult();
+				}
+			} catch (OperationCanceledException | IOException | AuthenticatorException e) {
+				Log.e(TAG, "Failed to remove account via framework's account manager.", e);
+			}
+			if (!removed) {
+				return false;
 			}
 			mManager.setPassword(account, null);
 			final String[] authTokenTypes = userAccount.getAuthTokenTypes();
