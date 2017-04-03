@@ -1,4 +1,4 @@
-    /*
+/*
  * =================================================================================================
  *                             Copyright (C) 2017 Universum Studios
  * =================================================================================================
@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  * =================================================================================================
  */
-package universum.studios.android.officium.sync; 
+package universum.studios.android.officium.sync;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Test;
