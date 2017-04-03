@@ -1,6 +1,11 @@
 Change-Log
 ===============
 
+### [Release 1.1.1](https://github.com/universum-studios/android_officium/releases/tag/1.1.1) ###
+> 03.04.2017
+
+- Fixed [Issue #12](https://github.com/universum-studios/android_officium/issues/12).
+
 ### [Release 1.1.0](https://github.com/universum-studios/android_officium/releases/tag/1.1.0) ###
 > 16.02.2017
 
@@ -16,3 +21,5 @@ Change-Log
 
 ### [Release 1.0.0](https://github.com/universum-studios/android_officium/releases/tag/1.0.0) ###
 > 21.12.2016
+
+- First production release.

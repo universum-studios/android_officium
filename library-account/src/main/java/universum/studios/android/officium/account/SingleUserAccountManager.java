@@ -34,7 +34,7 @@ import android.support.annotation.RequiresPermission;
  */
 public class SingleUserAccountManager<A extends UserAccount> extends UserAccountManager<A> {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -43,15 +43,15 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 	 */
 	// private static final String TAG = "SingleUserAccountManager";
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
@@ -61,15 +61,15 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 	 * @param context     Context used to access {@link AccountManager}.
 	 * @param accountType The desired account type that will be managed by the new user account manager.
 	 */
-	public SingleUserAccountManager(@NonNull Context context, @NonNull String accountType) {
+	public SingleUserAccountManager(@NonNull final Context context, @NonNull final String accountType) {
 		super(context, accountType);
 	}
 
-	/**
+	/*
 	 * Constructors ================================================================================
 	 */
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
@@ -123,7 +123,7 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 			PERMISSION_GET_ACCOUNTS,
 			PERMISSION_AUTHENTICATE_ACCOUNTS
 	})
-	public boolean setAccountAuthToken(@NonNull String authTokenType, @Nullable String authToken) {
+	public boolean setAccountAuthToken(@NonNull final String authTokenType, @Nullable final String authToken) {
 		final Account account = acquireAccount();
 		if (account == null) return false;
 		setAccountAuthToken(account, authTokenType, authToken);
@@ -148,7 +148,7 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 			PERMISSION_GET_ACCOUNTS,
 			PERMISSION_AUTHENTICATE_ACCOUNTS
 	})
-	public boolean isAccountAuthenticated(@NonNull String authTokenType) {
+	public boolean isAccountAuthenticated(@NonNull final String authTokenType) {
 		final Account account = acquireAccount();
 		return account != null && isAccountAuthenticated(account, authTokenType);
 	}
@@ -172,7 +172,7 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 			PERMISSION_GET_ACCOUNTS,
 			PERMISSION_AUTHENTICATE_ACCOUNTS
 	})
-	public String peekAccountAuthToken(@NonNull String authTokenType) {
+	public String peekAccountAuthToken(@NonNull final String authTokenType) {
 		final Account account = acquireAccount();
 		return account == null ? null : peekAccountAuthToken(account, authTokenType);
 	}
@@ -193,7 +193,7 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 			PERMISSION_GET_ACCOUNTS,
 			PERMISSION_MANAGE_ACCOUNTS
 	})
-	public boolean invalidateAccountAuthToken(@NonNull String authToken) {
+	public boolean invalidateAccountAuthToken(@NonNull final String authToken) {
 		final Account account = acquireAccount();
 		if (account == null) return false;
 		invalidateAccountAuthToken(account, authToken);
@@ -218,7 +218,7 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 			PERMISSION_GET_ACCOUNTS,
 			PERMISSION_AUTHENTICATE_ACCOUNTS
 	})
-	public boolean setAccountPassword(@Nullable String password) {
+	public boolean setAccountPassword(@Nullable final String password) {
 		final Account account = acquireAccount();
 		if (account == null) return false;
 		setAccountPassword(account, password);
@@ -289,7 +289,7 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 			PERMISSION_GET_ACCOUNTS,
 			PERMISSION_AUTHENTICATE_ACCOUNTS
 	})
-	public boolean setAccountData(@NonNull String key, @Nullable String value) {
+	public boolean setAccountData(@NonNull final String key, @Nullable final String value) {
 		final Account account = acquireAccount();
 		if (account == null) return false;
 		setAccountData(account, key, value);
@@ -314,7 +314,7 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 			PERMISSION_GET_ACCOUNTS,
 			PERMISSION_AUTHENTICATE_ACCOUNTS
 	})
-	public String getAccountData(@NonNull String key) {
+	public String getAccountData(@NonNull final String key) {
 		final Account account = acquireAccount();
 		return account == null ? null : getAccountData(account, key);
 	}
@@ -336,7 +336,7 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 			PERMISSION_GET_ACCOUNTS,
 			PERMISSION_AUTHENTICATE_ACCOUNTS
 	})
-	public boolean setAccountDataBundle(@NonNull Bundle dataBundle) {
+	public boolean setAccountDataBundle(@NonNull final Bundle dataBundle) {
 		final Account account = acquireAccount();
 		if (account == null) return false;
 		setAccountDataBundle(account, dataBundle);
@@ -361,7 +361,7 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 			PERMISSION_GET_ACCOUNTS,
 			PERMISSION_AUTHENTICATE_ACCOUNTS
 	})
-	public Bundle getAccountDataBundle(@NonNull String... keys) {
+	public Bundle getAccountDataBundle(@NonNull final String... keys) {
 		final Account account = acquireAccount();
 		return account == null ? null : getAccountDataBundle(account, keys);
 	}
@@ -388,7 +388,7 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 		return accounts.length > 0 ? accounts[0] : null;
 	}
 
-	/**
+	/*
 	 * Inner classes ===============================================================================
 	 */
 }

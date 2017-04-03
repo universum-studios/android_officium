@@ -40,7 +40,7 @@ import android.support.annotation.NonNull;
  */
 public abstract class ServiceApiProvider<A> {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -49,15 +49,15 @@ public abstract class ServiceApiProvider<A> {
 	 */
 	// private static final String TAG = "ServiceApiProvider";
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
@@ -71,11 +71,11 @@ public abstract class ServiceApiProvider<A> {
 	 */
 	private A mApi;
 
-	/**
+	/*
 	 * Constructors ================================================================================
 	 */
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
@@ -114,7 +114,7 @@ public abstract class ServiceApiProvider<A> {
 	 * @see #onCreateApi()
 	 */
 	@NonNull
-	protected A onPrepareApi(@NonNull A api) {
+	protected A onPrepareApi(@NonNull final A api) {
 		return api;
 	}
 
@@ -128,7 +128,7 @@ public abstract class ServiceApiProvider<A> {
 		this.mApi = null;
 	}
 
-	/**
+	/*
 	 * Inner classes ===============================================================================
 	 */
 }

@@ -31,7 +31,7 @@ import com.squareup.otto.Bus;
  */
 public class SimpleEventBus implements EventBus {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -40,15 +40,15 @@ public class SimpleEventBus implements EventBus {
 	 */
 	// private static final String TAG = "SimpleEventBus";
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
@@ -58,7 +58,7 @@ public class SimpleEventBus implements EventBus {
 	@NonNull
 	protected final Bus mBus;
 
-	/**
+	/*
 	 * Constructors ================================================================================
 	 */
 
@@ -75,11 +75,11 @@ public class SimpleEventBus implements EventBus {
 	 * @param bus The bus to be wrapped.
 	 * @see #getBus()
 	 */
-	public SimpleEventBus(@NonNull Bus bus) {
+	public SimpleEventBus(@NonNull final Bus bus) {
 		this.mBus = bus;
 	}
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
@@ -98,7 +98,7 @@ public class SimpleEventBus implements EventBus {
 	 * Delegates to {@link Bus#register(Object)}.
 	 */
 	@Override
-	public void register(@NonNull Object object) {
+	public void register(@NonNull final Object object) {
 		mBus.register(object);
 	}
 
@@ -106,7 +106,7 @@ public class SimpleEventBus implements EventBus {
 	 * Delegates to {@link Bus#unregister(Object)}.
 	 */
 	@Override
-	public void unregister(@NonNull Object object) {
+	public void unregister(@NonNull final Object object) {
 		mBus.unregister(object);
 	}
 
@@ -114,11 +114,11 @@ public class SimpleEventBus implements EventBus {
 	 * Delegates to {@link Bus#post(Object)}.
 	 */
 	@Override
-	public void post(@NonNull Object event) {
+	public void post(@NonNull final Object event) {
 		mBus.post(event);
 	}
 
-	/**
+	/*
 	 * Inner classes ===============================================================================
 	 */
 }

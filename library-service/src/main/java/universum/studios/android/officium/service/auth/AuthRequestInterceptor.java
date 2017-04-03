@@ -41,7 +41,7 @@ import okhttp3.Response;
  */
 public final class AuthRequestInterceptor implements Interceptor {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -50,15 +50,15 @@ public final class AuthRequestInterceptor implements Interceptor {
 	 */
 	// private static final String TAG = "AuthRequestInterceptor";
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
@@ -67,7 +67,7 @@ public final class AuthRequestInterceptor implements Interceptor {
 	 */
 	private final AuthTokenProvider tokenProvider;
 
-	/**
+	/*
 	 * Constructors ================================================================================
 	 */
 
@@ -78,18 +78,18 @@ public final class AuthRequestInterceptor implements Interceptor {
 	 *                      the authorization token when intercepting requests.
 	 * @see #intercept(Chain)
 	 */
-	public AuthRequestInterceptor(@NonNull AuthTokenProvider tokenProvider) {
+	public AuthRequestInterceptor(@NonNull final AuthTokenProvider tokenProvider) {
 		this.tokenProvider = tokenProvider;
 	}
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
 	/**
 	 */
 	@Override
-	public Response intercept(Chain chain) throws IOException {
+	public Response intercept(@NonNull final Chain chain) throws IOException {
 		final String authToken = tokenProvider.peekToken();
 		final Request request = chain.request();
 		return TextUtils.isEmpty(authToken) ? chain.proceed(request) : chain.proceed(request.newBuilder()
@@ -98,7 +98,7 @@ public final class AuthRequestInterceptor implements Interceptor {
 		);
 	}
 
-	/**
+	/*
 	 * Inner classes ===============================================================================
 	 */
 }

@@ -36,7 +36,7 @@ import android.support.annotation.NonNull;
  */
 public final class SyncEvent {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -65,15 +65,15 @@ public final class SyncEvent {
 	 */
 	public static final int ERROR = 0x04;
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
@@ -108,7 +108,7 @@ public final class SyncEvent {
 	 */
 	public final Bundle extras;
 
-	/**
+	/*
 	 * Constructors ================================================================================
 	 */
 
@@ -117,7 +117,7 @@ public final class SyncEvent {
 	 *
 	 * @param builder The builder with data for the new event instance.
 	 */
-	private SyncEvent(@NonNull Builder builder) {
+	private SyncEvent(@NonNull final Builder builder) {
 		this.id = builder.id;
 		this.type = builder.type;
 		this.progress = builder.progress;
@@ -126,11 +126,11 @@ public final class SyncEvent {
 		this.extras = builder.extras;
 	}
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
-	/**
+	/*
 	 * Inner classes ===============================================================================
 	 */
 
@@ -177,7 +177,7 @@ public final class SyncEvent {
 		 * @param id The desired id for the new SyncEvent.
 		 * @see SyncEvent#id
 		 */
-		public Builder(int id) {
+		public Builder(final int id) {
 			this.id = id;
 		}
 
@@ -189,7 +189,7 @@ public final class SyncEvent {
 		 * @return This builder to allow methods chaining.
 		 * @see SyncEvent#type
 		 */
-		public Builder type(int type) {
+		public Builder type(final int type) {
 			this.type = type;
 			return this;
 		}
@@ -201,7 +201,7 @@ public final class SyncEvent {
 		 * @return This builder to allow methods chaining.
 		 * @see SyncEvent#progress
 		 */
-		public Builder progress(int progress) {
+		public Builder progress(final int progress) {
 			this.progress = progress;
 			return this;
 		}
@@ -213,7 +213,7 @@ public final class SyncEvent {
 		 * @return This builder to allow methods chaining.
 		 * @see SyncEvent#error
 		 */
-		public Builder error(@NonNull Exception error) {
+		public Builder error(@NonNull final Exception error) {
 			this.error = error;
 			return this;
 		}
@@ -225,7 +225,7 @@ public final class SyncEvent {
 		 * @return This builder to allow methods chaining.
 		 * @see SyncEvent#account
 		 */
-		public Builder account(@NonNull Account account) {
+		public Builder account(@NonNull final Account account) {
 			this.account = account;
 			return this;
 		}
@@ -237,7 +237,7 @@ public final class SyncEvent {
 		 * @return This builder to allow methods chaining.
 		 * @see SyncEvent#extras
 		 */
-		public Builder extras(@NonNull Bundle extras) {
+		public Builder extras(@NonNull final Bundle extras) {
 			this.extras = extras;
 			return this;
 		}

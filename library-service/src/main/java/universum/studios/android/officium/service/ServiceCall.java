@@ -42,7 +42,7 @@ import retrofit2.Response;
  */
 public class ServiceCall<T> implements Call<T> {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -51,15 +51,15 @@ public class ServiceCall<T> implements Call<T> {
 	 */
 	// private static final String TAG = "ServiceCall";
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
@@ -73,7 +73,7 @@ public class ServiceCall<T> implements Call<T> {
 	 */
 	private Integer mServiceId;
 
-	/**
+	/*
 	 * Constructors ================================================================================
 	 */
 
@@ -82,11 +82,11 @@ public class ServiceCall<T> implements Call<T> {
 	 *
 	 * @param call The Retrofit call to which will be this service call delegating its methods.
 	 */
-	public ServiceCall(@NonNull Call<T> call) {
+	public ServiceCall(@NonNull final Call<T> call) {
 		this.mCall = call;
 	}
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
@@ -99,7 +99,7 @@ public class ServiceCall<T> implements Call<T> {
 	 * @return This service call to allow methods chaining.
 	 * @throws UnsupportedOperationException If service id for this call has been already specified.
 	 */
-	public ServiceCall<T> withServiceId(int serviceId) {
+	public ServiceCall<T> withServiceId(final int serviceId) {
 		if (mServiceId == null) {
 			this.mServiceId = serviceId;
 			return this;
@@ -129,7 +129,7 @@ public class ServiceCall<T> implements Call<T> {
 	 * @see ServiceObject#getRequestId()
 	 */
 	@NonNull
-	public String enqueue(@NonNull ServiceCallback<T> callback) {
+	public String enqueue(@NonNull final ServiceCallback<T> callback) {
 		final String requestId = requestId();
 		ServiceCallback.associateWith(callback, mServiceId, requestId);
 		enqueue((Callback<T>) callback);
@@ -153,7 +153,7 @@ public class ServiceCall<T> implements Call<T> {
 	/**
 	 */
 	@Override
-	public void enqueue(Callback<T> callback) {
+	public void enqueue(@NonNull final Callback<T> callback) {
 		mCall.enqueue(callback);
 	}
 
@@ -197,7 +197,7 @@ public class ServiceCall<T> implements Call<T> {
 		return serviceCall;
 	}
 
-	/**
+	/*
 	 * Inner classes ===============================================================================
 	 */
 }

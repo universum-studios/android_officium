@@ -38,7 +38,7 @@ import android.support.annotation.NonNull;
  */
 public class ErrorResponse extends ServiceResponse {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -47,15 +47,15 @@ public class ErrorResponse extends ServiceResponse {
 	 */
 	// private static final String TAG = "ErrorResponse";
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
@@ -64,7 +64,7 @@ public class ErrorResponse extends ServiceResponse {
 	 */
 	public Error error;
 
-	/**
+	/*
 	 * Constructors ================================================================================
 	 */
 
@@ -83,12 +83,12 @@ public class ErrorResponse extends ServiceResponse {
 	 *
 	 * @param error The error for the new error response.
 	 */
-	public ErrorResponse(@NonNull Error error) {
+	public ErrorResponse(@NonNull final Error error) {
 		super();
 		this.error = error;
 	}
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
@@ -123,7 +123,7 @@ public class ErrorResponse extends ServiceResponse {
 		return error == null ? "" : error.message;
 	}
 
-	/**
+	/*
 	 * Inner classes ===============================================================================
 	 */
 

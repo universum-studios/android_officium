@@ -33,7 +33,7 @@ import retrofit2.Response;
  */
 public abstract class ServiceCallback<R> extends BaseServiceObject implements Callback<R> {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -42,30 +42,30 @@ public abstract class ServiceCallback<R> extends BaseServiceObject implements Ca
 	 */
 	// private static final String TAG = "ServiceCallback";
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
-	/**
+	/*
 	 * Constructors ================================================================================
 	 */
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
 	/**
 	 */
 	@Override
-	public void onResponse(@NonNull Call<R> call, @NonNull Response<R> response) {
+	public void onResponse(@NonNull final Call<R> call, @NonNull final Response<R> response) {
 		if (response.isSuccessful()) {
 			final R responseBody = response.body();
 			if (responseBody instanceof ServiceObject) {
@@ -91,7 +91,7 @@ public abstract class ServiceCallback<R> extends BaseServiceObject implements Ca
 	/**
 	 */
 	@Override
-	public void onFailure(@NonNull Call<R> call, @NonNull Throwable failure) {
+	public void onFailure(@NonNull final Call<R> call, @NonNull final Throwable failure) {
 		final ServiceError error = new ServiceError(failure);
 		associateWith(error, mServiceId, mRequestId);
 		onDispatchError(error);
@@ -105,7 +105,7 @@ public abstract class ServiceCallback<R> extends BaseServiceObject implements Ca
 	 */
 	protected abstract void onDispatchError(@NonNull ServiceError error);
 
-	/**
+	/*
 	 * Inner classes ===============================================================================
 	 */
 }

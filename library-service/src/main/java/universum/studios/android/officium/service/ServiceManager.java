@@ -44,7 +44,7 @@ import retrofit2.Retrofit;
  */
 public class ServiceManager {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -53,15 +53,15 @@ public class ServiceManager {
 	 */
 	// private static final String TAG = "ServiceManager";
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
@@ -75,7 +75,7 @@ public class ServiceManager {
 	 */
 	private EndPoint mEndPoint;
 
-	/**
+	/*
 	 * Constructors ================================================================================
 	 */
 
@@ -95,11 +95,11 @@ public class ServiceManager {
 	 *                 configuration created via {@link #onCreateServicesConfiguration(Class)}.
 	 * @see #getEndPoint()
 	 */
-	public ServiceManager(@NonNull EndPoint endPoint) {
+	public ServiceManager(@NonNull final EndPoint endPoint) {
 		this.mEndPoint = endPoint;
 	}
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
@@ -131,7 +131,7 @@ public class ServiceManager {
 	 * @param endPoint The desired end point.
 	 * @see #getEndPoint()
 	 */
-	public void setEndPoint(@NonNull EndPoint endPoint) {
+	public void setEndPoint(@NonNull final EndPoint endPoint) {
 		this.mEndPoint = endPoint;
 	}
 
@@ -159,7 +159,7 @@ public class ServiceManager {
 	 * @see #servicesConfiguration(Class)
 	 */
 	@SuppressWarnings("unchecked")
-	public <S> S services(@NonNull Class<S> servicesInterface) {
+	public <S> S services(@NonNull final Class<S> servicesInterface) {
 		this.ensureHasServicesConfiguration(servicesInterface);
 		return (S) mServices.get(servicesInterface).services();
 	}
@@ -174,7 +174,7 @@ public class ServiceManager {
 	 * @see #services(Class)
 	 */
 	@SuppressWarnings("unchecked")
-	public <S> ServicesConfiguration<S> servicesConfiguration(@NonNull Class<S> servicesInterface) {
+	public <S> ServicesConfiguration<S> servicesConfiguration(@NonNull final Class<S> servicesInterface) {
 		this.ensureHasServicesConfiguration(servicesInterface);
 		return mServices.get(servicesInterface);
 	}
@@ -185,7 +185,7 @@ public class ServiceManager {
 	 * @param servicesInterface The services interface for which to create new configuration if it
 	 *                          is not created yet.
 	 */
-	private void ensureHasServicesConfiguration(Class<?> servicesInterface) {
+	private void ensureHasServicesConfiguration(final Class<?> servicesInterface) {
 		synchronized (mServices) {
 			final ServicesConfiguration servicesConfiguration = mServices.get(servicesInterface);
 			if (servicesConfiguration == null) mServices.put(
@@ -211,13 +211,13 @@ public class ServiceManager {
 	 */
 	@NonNull
 	@CallSuper
-	protected ServicesConfiguration onCreateServicesConfiguration(@NonNull Class<?> servicesInterface) {
+	protected ServicesConfiguration onCreateServicesConfiguration(@NonNull final Class<?> servicesInterface) {
 		final ServicesConfiguration configuration = new ServicesConfiguration<>(servicesInterface);
 		if (mEndPoint != null) configuration.retrofitBuilder().baseUrl(mEndPoint.getBaseUrl());
 		return configuration;
 	}
 
-	/**
+	/*
 	 * Inner classes ===============================================================================
 	 */
 
@@ -278,7 +278,7 @@ public class ServiceManager {
 		 * @param servicesInterface Class of the services interface used to create PROXY services
 		 *                          instance.
 		 */
-		private ServicesConfiguration(@NonNull Class<S> servicesInterface) {
+		private ServicesConfiguration(@NonNull final Class<S> servicesInterface) {
 			this.servicesInterface = servicesInterface;
 		}
 

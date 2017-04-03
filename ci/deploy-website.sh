@@ -6,7 +6,7 @@ set -ex
 TEMP_DIR=website-temp
 LIBRARY_NAME=officium
 LIBRARY_ARTIFACT_NAME="${LIBRARY_NAME//_/-}"
-LIBRARY_VERSION=1.1.0
+LIBRARY_VERSION=1.1.1
 LIBRARY_REPO="git@github.com:universum-studios/android_${LIBRARY_NAME}.git"
 LIBRARY_DIR_ARTIFACTS=../artifacts/universum/studios/android/$LIBRARY_ARTIFACT_NAME/$LIBRARY_VERSION/
 LIBRARY_JAVADOC_FILE_NAME="${LIBRARY_ARTIFACT_NAME}-${LIBRARY_VERSION}-javadoc.jar"
@@ -47,16 +47,13 @@ cp -R $LIBRARY_DIR_TESTS. $WEBSITE_DIR_TESTS_VERSIONED
 mkdir -p $WEBSITE_DIR_COVERAGE_VERSIONED
 cp -R $LIBRARY_DIR_COVERAGE. $WEBSITE_DIR_COVERAGE_VERSIONED
 
-# Commit and push only if some of the website files have changed.
-if ! git diff-index --quiet HEAD --; then
-    # Stage all files in git and create a commit.
-    git add .
-    git add -u
-    git commit -m "Website at $(date)."
+# Stage all files in git and create a commit.
+git add . --all
+git add -u
+git commit -m "Website at $(date)."
 
-    # Push the new website files up to the GitHub.
-    git push origin gh-pages
-fi
+# Push the new website files up to the GitHub.
+git push origin gh-pages
 
 # Delete temporary directory.
 cd ..

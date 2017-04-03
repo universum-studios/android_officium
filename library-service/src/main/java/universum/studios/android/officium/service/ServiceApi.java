@@ -100,7 +100,7 @@ import android.support.annotation.NonNull;
  */
 public class ServiceApi<M extends ServiceManager> {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -109,15 +109,15 @@ public class ServiceApi<M extends ServiceManager> {
 	 */
 	// private static final String TAG = "ServiceApi";
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
@@ -127,7 +127,7 @@ public class ServiceApi<M extends ServiceManager> {
 	@NonNull
 	protected M mManager;
 
-	/**
+	/*
 	 * Constructors ================================================================================
 	 */
 
@@ -136,11 +136,11 @@ public class ServiceApi<M extends ServiceManager> {
 	 *
 	 * @param manager The desired service manager used to configure and access services.
 	 */
-	protected ServiceApi(@NonNull M manager) {
+	protected ServiceApi(@NonNull final M manager) {
 		this.mManager = manager;
 	}
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
@@ -153,7 +153,7 @@ public class ServiceApi<M extends ServiceManager> {
 	 * @see ServiceManager#services(Class)
 	 */
 	@NonNull
-	protected final <S> S services(@NonNull Class<S> servicesInterface) {
+	protected final <S> S services(@NonNull final Class<S> servicesInterface) {
 		return mManager.services(servicesInterface);
 	}
 
@@ -169,11 +169,11 @@ public class ServiceApi<M extends ServiceManager> {
 	 * @see ServiceManager#servicesConfiguration(Class)
 	 */
 	@NonNull
-	protected final <S> ServiceManager.ServicesConfiguration<S> servicesConfiguration(@NonNull Class<S> servicesInterface) {
+	protected final <S> ServiceManager.ServicesConfiguration<S> servicesConfiguration(@NonNull final Class<S> servicesInterface) {
 		return mManager.servicesConfiguration(servicesInterface);
 	}
 
-	/**
+	/*
 	 * Inner classes ===============================================================================
 	 */
 }

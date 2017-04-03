@@ -61,4 +61,5 @@ dependencies {
     // Local JUnit test dependencies.
     compile deps.test.junit
     compile deps.test.mockitoCore
+    compile deps.test.mockitoAndroid
 }
