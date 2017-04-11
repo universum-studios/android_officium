@@ -72,13 +72,19 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 
 	/**
 	 * Context with which has been this manager created.
+	 *
+	 * @deprecated Use {@link #getContext()} instead.
 	 */
+	@Deprecated
 	protected final Context mContext;
 
 	/**
 	 * Content authority with which has been this manager created. This authority is used to set up
 	 * all synchronization requests via {@link ContentResolver}.
+	 *
+	 * @deprecated Use {@link #getAuthority()} instead.
 	 */
+	@Deprecated
 	protected final String mAuthority;
 
 	/*
@@ -90,8 +96,10 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	 *
 	 * @param context   Context that may be used by inheritance hierarchies to access application
 	 *                  data and services needed to perform requested synchronization.
-	 * @param authority The content authority for which the manager should request synchronization
-	 *                  via {@link ContentResolver#requestSync(Account, String, Bundle)}.
+	 * @param authority The content authority which should the manager use when requesting synchronization
+	 *                  operations via {@link ContentResolver}.
+	 * @see #getContext()
+	 * @see #getAuthority()
 	 */
 	public BaseSyncManager(@NonNull final Context context, @NonNull final String authority) {
 		this.mContext = context;
@@ -101,6 +109,29 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	/*
 	 * Methods =====================================================================================
 	 */
+
+	/**
+	 * Returns the context with which has been this manager created.
+	 *
+	 * @return The associated context.
+	 * @see #BaseSyncManager(Context, String)
+	 */
+	@NonNull
+	public final Context getContext() {
+		return mContext;
+	}
+
+	/**
+	 * Returns the content authority with which has been this manager created. The authority is used
+	 * whenever this manager is requesting synchronization operations via {@link ContentResolver}.
+	 *
+	 * @return The associated content authority.
+	 * @see #BaseSyncManager(Context, String)
+	 */
+	@NonNull
+	public final String getAuthority() {
+		return mAuthority;
+	}
 
 	/**
 	 * Starts automatic synchronization for the content authority specified for this manager and

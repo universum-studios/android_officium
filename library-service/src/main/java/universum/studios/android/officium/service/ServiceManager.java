@@ -240,7 +240,7 @@ public class ServiceManager {
 		 * Builder used to create an instance of {@link #retrofit} for the current configuration
 		 * parameters.
 		 */
-		private final Retrofit.Builder BUILDER = new Retrofit.Builder();
+		private final Retrofit.Builder mBuilder = new Retrofit.Builder();
 
 		/**
 		 * Class of services interface used to create {@link #services} PROXY by {@link #retrofit}.
@@ -256,7 +256,7 @@ public class ServiceManager {
 		private S services;
 
 		/**
-		 * Retrofit instance created by {@link #BUILDER} for the current configuration parameters.
+		 * Retrofit instance created by {@link #mBuilder} for the current configuration parameters.
 		 * This retrofit instance is used to create an instance of services PROXY whenever
 		 * {@link #services()} is invoked and there has been registered configuration change.
 		 *
@@ -295,7 +295,7 @@ public class ServiceManager {
 		 */
 		@NonNull
 		public Retrofit.Builder retrofitBuilder() {
-			return BUILDER;
+			return mBuilder;
 		}
 
 		/**
@@ -337,9 +337,9 @@ public class ServiceManager {
 		 * current configuration.
 		 */
 		private void ensureValid() {
-			synchronized (BUILDER) {
+			synchronized (mBuilder) {
 				if (changed) {
-					this.retrofit = BUILDER.build();
+					this.retrofit = mBuilder.build();
 					this.services = retrofit.create(servicesInterface);
 					this.changed = false;
 				}
