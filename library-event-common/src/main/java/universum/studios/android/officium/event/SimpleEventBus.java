@@ -54,8 +54,11 @@ public class SimpleEventBus implements EventBus {
 
 	/**
 	 * The bus used by this event bus wrapper.
+	 *
+	 * @deprecated Use {@link #getBus()} instead.
 	 */
 	@NonNull
+	@Deprecated
 	protected final Bus mBus;
 
 	/*

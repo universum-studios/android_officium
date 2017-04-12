@@ -36,6 +36,10 @@ final class ApiImpl extends ServiceApi<ServiceManager> implements Api {
 
 	ApiImpl() {
 		super(new ServiceManager(END_POINT));
+		final ServiceManager.ServicesConfiguration configuration = mManager.servicesConfiguration(Services.class);
+		configuration.retrofitBuilder();
+		configuration.retrofit();
+		configuration.invalidate();
 	}
 
 	void setAuthTokenProvider(@NonNull AuthTokenProvider tokenProvider) {

@@ -72,7 +72,8 @@ public final class SyncOperation {
 	 *
 	 * @param builder The builder with data for the new SyncOperation.
 	 */
-	private SyncOperation(final Builder builder) {
+	@SuppressWarnings("WeakerAccess")
+	SyncOperation(final Builder builder) {
 		this.account = builder.account;
 		this.authority = builder.authority;
 		this.task = builder.task;

@@ -24,9 +24,9 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import universum.studios.android.officium.sync.BaseSyncManager;
 import universum.studios.android.samples.officium.R;
 import universum.studios.android.samples.officium.account.MobileAccountManager;
-import universum.studios.android.officium.sync.BaseSyncManager;
 
 /**
  * @author Martin Albedinsky
@@ -38,16 +38,18 @@ public final class SyncManager extends BaseSyncManager {
 	private static final String TAG = "SyncManager";
 	private static final Object LOCK = new Object();
 
-	private static SyncManager instance;
+	private static volatile SyncManager instance;
 
-	private SyncManager(@NonNull Context applicationContext) {
-		super(applicationContext, applicationContext.getString(R.string.config_account_authority));
+	private SyncManager(@NonNull Context context) {
+		super(context.getApplicationContext(), context.getString(R.string.config_account_authority));
 	}
 
 	@NonNull
 	public static SyncManager getInstance(@NonNull Context context) {
-		synchronized (LOCK) {
-			if (instance == null) instance = new SyncManager(context.getApplicationContext());
+		if (instance == null) {
+			synchronized (LOCK) {
+				instance = new SyncManager(context);
+			}
 		}
 		return instance;
 	}
