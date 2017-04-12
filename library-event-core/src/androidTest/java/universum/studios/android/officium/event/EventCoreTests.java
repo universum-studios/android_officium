@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  * =================================================================================================
  */
-package universum.studios.android.officium;
+package universum.studios.android.officium.event;
 
 /**
  * @author Martin Albedinsky
