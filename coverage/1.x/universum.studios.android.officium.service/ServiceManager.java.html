@@ -44,7 +44,7 @@ import retrofit2.Retrofit;
  */
 public class ServiceManager {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -53,15 +53,15 @@ public class ServiceManager {
 	 */
 	// private static final String TAG = &quot;ServiceManager&quot;;
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
@@ -75,7 +75,7 @@ public class ServiceManager {
 	 */
 	private EndPoint mEndPoint;
 
-	/**
+	/*
 	 * Constructors ================================================================================
 	 */
 
@@ -95,11 +95,11 @@ public class ServiceManager {
 	 *                 configuration created via {@link #onCreateServicesConfiguration(Class)}.
 	 * @see #getEndPoint()
 	 */
-<span class="nc" id="L98">	public ServiceManager(@NonNull EndPoint endPoint) {</span>
+<span class="nc" id="L98">	public ServiceManager(@NonNull final EndPoint endPoint) {</span>
 <span class="nc" id="L99">		this.mEndPoint = endPoint;</span>
 <span class="nc" id="L100">	}</span>
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
@@ -131,7 +131,7 @@ public class ServiceManager {
 	 * @param endPoint The desired end point.
 	 * @see #getEndPoint()
 	 */
-	public void setEndPoint(@NonNull EndPoint endPoint) {
+	public void setEndPoint(@NonNull final EndPoint endPoint) {
 <span class="nc" id="L135">		this.mEndPoint = endPoint;</span>
 <span class="nc" id="L136">	}</span>
 
@@ -159,7 +159,7 @@ public class ServiceManager {
 	 * @see #servicesConfiguration(Class)
 	 */
 	@SuppressWarnings(&quot;unchecked&quot;)
-	public &lt;S&gt; S services(@NonNull Class&lt;S&gt; servicesInterface) {
+	public &lt;S&gt; S services(@NonNull final Class&lt;S&gt; servicesInterface) {
 <span class="nc" id="L163">		this.ensureHasServicesConfiguration(servicesInterface);</span>
 <span class="nc" id="L164">		return (S) mServices.get(servicesInterface).services();</span>
 	}
@@ -174,7 +174,7 @@ public class ServiceManager {
 	 * @see #services(Class)
 	 */
 	@SuppressWarnings(&quot;unchecked&quot;)
-	public &lt;S&gt; ServicesConfiguration&lt;S&gt; servicesConfiguration(@NonNull Class&lt;S&gt; servicesInterface) {
+	public &lt;S&gt; ServicesConfiguration&lt;S&gt; servicesConfiguration(@NonNull final Class&lt;S&gt; servicesInterface) {
 <span class="nc" id="L178">		this.ensureHasServicesConfiguration(servicesInterface);</span>
 <span class="nc" id="L179">		return mServices.get(servicesInterface);</span>
 	}
@@ -185,7 +185,7 @@ public class ServiceManager {
 	 * @param servicesInterface The services interface for which to create new configuration if it
 	 *                          is not created yet.
 	 */
-	private void ensureHasServicesConfiguration(Class&lt;?&gt; servicesInterface) {
+	private void ensureHasServicesConfiguration(final Class&lt;?&gt; servicesInterface) {
 <span class="nc" id="L189">		synchronized (mServices) {</span>
 <span class="nc" id="L190">			final ServicesConfiguration servicesConfiguration = mServices.get(servicesInterface);</span>
 <span class="nc bnc" id="L191" title="All 2 branches missed.">			if (servicesConfiguration == null) mServices.put(</span>
@@ -211,13 +211,13 @@ public class ServiceManager {
 	 */
 	@NonNull
 	@CallSuper
-	protected ServicesConfiguration onCreateServicesConfiguration(@NonNull Class&lt;?&gt; servicesInterface) {
+	protected ServicesConfiguration onCreateServicesConfiguration(@NonNull final Class&lt;?&gt; servicesInterface) {
 <span class="nc" id="L215">		final ServicesConfiguration configuration = new ServicesConfiguration&lt;&gt;(servicesInterface);</span>
 <span class="nc bnc" id="L216" title="All 2 branches missed.">		if (mEndPoint != null) configuration.retrofitBuilder().baseUrl(mEndPoint.getBaseUrl());</span>
 <span class="nc" id="L217">		return configuration;</span>
 	}
 
-	/**
+	/*
 	 * Inner classes ===============================================================================
 	 */
 
@@ -240,7 +240,7 @@ public class ServiceManager {
 		 * Builder used to create an instance of {@link #retrofit} for the current configuration
 		 * parameters.
 		 */
-<span class="nc" id="L243">		private final Retrofit.Builder BUILDER = new Retrofit.Builder();</span>
+<span class="nc" id="L243">		private final Retrofit.Builder mBuilder = new Retrofit.Builder();</span>
 
 		/**
 		 * Class of services interface used to create {@link #services} PROXY by {@link #retrofit}.
@@ -256,7 +256,7 @@ public class ServiceManager {
 		private S services;
 
 		/**
-		 * Retrofit instance created by {@link #BUILDER} for the current configuration parameters.
+		 * Retrofit instance created by {@link #mBuilder} for the current configuration parameters.
 		 * This retrofit instance is used to create an instance of services PROXY whenever
 		 * {@link #services()} is invoked and there has been registered configuration change.
 		 *
@@ -278,7 +278,7 @@ public class ServiceManager {
 		 * @param servicesInterface Class of the services interface used to create PROXY services
 		 *                          instance.
 		 */
-<span class="nc" id="L281">		private ServicesConfiguration(@NonNull Class&lt;S&gt; servicesInterface) {</span>
+<span class="nc" id="L281">		private ServicesConfiguration(@NonNull final Class&lt;S&gt; servicesInterface) {</span>
 <span class="nc" id="L282">			this.servicesInterface = servicesInterface;</span>
 <span class="nc" id="L283">		}</span>
 
@@ -295,7 +295,7 @@ public class ServiceManager {
 		 */
 		@NonNull
 		public Retrofit.Builder retrofitBuilder() {
-<span class="nc" id="L298">			return BUILDER;</span>
+<span class="nc" id="L298">			return mBuilder;</span>
 		}
 
 		/**
@@ -337,9 +337,9 @@ public class ServiceManager {
 		 * current configuration.
 		 */
 		private void ensureValid() {
-<span class="nc" id="L340">			synchronized (BUILDER) {</span>
+<span class="nc" id="L340">			synchronized (mBuilder) {</span>
 <span class="nc bnc" id="L341" title="All 2 branches missed.">				if (changed) {</span>
-<span class="nc" id="L342">					this.retrofit = BUILDER.build();</span>
+<span class="nc" id="L342">					this.retrofit = mBuilder.build();</span>
 <span class="nc" id="L343">					this.services = retrofit.create(servicesInterface);</span>
 <span class="nc" id="L344">					this.changed = false;</span>
 				}
@@ -347,4 +347,4 @@ public class ServiceManager {
 <span class="nc" id="L347">		}</span>
 	}
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span>Generated by the Android Gradle plugin 2.3.0</div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span>Generated by the Android Gradle plugin 2.3.1</div></body></html>

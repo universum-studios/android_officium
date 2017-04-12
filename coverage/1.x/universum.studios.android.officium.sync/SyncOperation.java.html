@@ -27,6 +27,27 @@ import android.text.TextUtils;
  */
 public final class SyncOperation {
 
+	 /*
+	 * Constants ===================================================================================
+	 */
+
+	/**
+	 * Log TAG.
+	 */
+	// private static final String TAG = &quot;SyncOperation&quot;;
+
+    /*
+	 * Interface ===================================================================================
+	 */
+
+	/*
+	 * Static members ==============================================================================
+	 */
+
+	/*
+	 * Members =====================================================================================
+	 */
+
 	/**
 	 * Account associated with this sync operation.
 	 */
@@ -42,21 +63,34 @@ public final class SyncOperation {
 	 */
 	public final SyncTask task;
 
+	/*
+	 * Constructors ================================================================================
+	 */
+
 	/**
 	 * Creates a new instance of SyncOperation with data provided by the specified &lt;var&gt;builder&lt;/var&gt;.
 	 *
 	 * @param builder The builder with data for the new SyncOperation.
 	 */
-<span class="nc" id="L50">	private SyncOperation(Builder builder) {</span>
-<span class="nc" id="L51">		this.account = builder.account;</span>
-<span class="nc" id="L52">		this.authority = builder.authority;</span>
-<span class="nc" id="L53">		this.task = builder.task;</span>
-<span class="nc" id="L54">	}</span>
+	@SuppressWarnings(&quot;WeakerAccess&quot;)
+<span class="nc" id="L76">	SyncOperation(final Builder builder) {</span>
+<span class="nc" id="L77">		this.account = builder.account;</span>
+<span class="nc" id="L78">		this.authority = builder.authority;</span>
+<span class="nc" id="L79">		this.task = builder.task;</span>
+<span class="nc" id="L80">	}</span>
+
+	/*
+	 * Methods =====================================================================================
+	 */
+
+	/*
+	 * Inner classes ===============================================================================
+	 */
 
 	/**
 	 * Builder that may be used to build instances of {@link SyncOperation}.
 	 */
-<span class="nc" id="L59">	static final class Builder {</span>
+<span class="nc" id="L93">	static final class Builder {</span>
 
 		/**
 		 * See {@link SyncOperation#account}.
@@ -80,9 +114,9 @@ public final class SyncOperation {
 		 * @return This builder to allow methods chaining.
 		 * @see SyncOperation#account
 		 */
-		Builder account(Account account) {
-<span class="nc" id="L84">			this.account = account;</span>
-<span class="nc" id="L85">			return this;</span>
+		Builder account(final Account account) {
+<span class="nc" id="L118">			this.account = account;</span>
+<span class="nc" id="L119">			return this;</span>
 		}
 
 		/**
@@ -92,9 +126,9 @@ public final class SyncOperation {
 		 * @return This builder to allow methods chaining.
 		 * @see SyncOperation#authority
 		 */
-		Builder authority(String authority) {
-<span class="nc" id="L96">			this.authority = authority;</span>
-<span class="nc" id="L97">			return this;</span>
+		Builder authority(final String authority) {
+<span class="nc" id="L130">			this.authority = authority;</span>
+<span class="nc" id="L131">			return this;</span>
 		}
 
 		/**
@@ -104,9 +138,9 @@ public final class SyncOperation {
 		 * @return This builder to allow methods chaining.
 		 * @see SyncOperation#task
 		 */
-		Builder task(SyncTask task) {
-<span class="nc" id="L108">			this.task = task;</span>
-<span class="nc" id="L109">			return this;</span>
+		Builder task(final SyncTask task) {
+<span class="nc" id="L142">			this.task = task;</span>
+<span class="nc" id="L143">			return this;</span>
 		}
 
 		/**
@@ -115,11 +149,11 @@ public final class SyncOperation {
 		 * @return New instance of SyncOperation.
 		 */
 		SyncOperation build() {
-<span class="nc bnc" id="L118" title="All 2 branches missed.">			if (account == null) throw new IllegalArgumentException(&quot;No account specified!&quot;);</span>
-<span class="nc bnc" id="L119" title="All 2 branches missed.">			if (TextUtils.isEmpty(authority)) throw new IllegalArgumentException(&quot;No authority specified!&quot;);</span>
-<span class="nc bnc" id="L120" title="All 2 branches missed.">			if (task == null) throw new IllegalArgumentException(&quot;No task specified!&quot;);</span>
-<span class="nc" id="L121">			return new SyncOperation(this);</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">			if (account == null) throw new IllegalArgumentException(&quot;No account specified!&quot;);</span>
+<span class="nc bnc" id="L153" title="All 2 branches missed.">			if (TextUtils.isEmpty(authority)) throw new IllegalArgumentException(&quot;No authority specified!&quot;);</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">			if (task == null) throw new IllegalArgumentException(&quot;No task specified!&quot;);</span>
+<span class="nc" id="L155">			return new SyncOperation(this);</span>
 		}
 	}
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span>Generated by the Android Gradle plugin 2.3.0</div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span>Generated by the Android Gradle plugin 2.3.1</div></body></html>

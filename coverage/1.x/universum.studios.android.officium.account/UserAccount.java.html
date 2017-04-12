@@ -45,7 +45,7 @@ import java.util.Map;
  */
 public class UserAccount {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -68,15 +68,15 @@ public class UserAccount {
 	 */
 <span class="nc" id="L69">	protected static final String[] AUTH_TOKEN_TYPES = {TOKEN_TYPE_O_AUTH};</span>
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
@@ -102,7 +102,7 @@ public class UserAccount {
 	 */
 	private Bundle mDataBundle;
 
-	/**
+	/*
 	 * Constructors ================================================================================
 	 */
 
@@ -111,7 +111,7 @@ public class UserAccount {
 	 *
 	 * @param name The desired name for the new account.
 	 */
-	public UserAccount(@NonNull String name) {
+	public UserAccount(@NonNull final String name) {
 <span class="nc" id="L115">		this(name, null);</span>
 <span class="nc" id="L116">	}</span>
 
@@ -121,12 +121,12 @@ public class UserAccount {
 	 * @param name     The desired name for the new account.
 	 * @param password The desired password for the new account. May be {@code null}.
 	 */
-<span class="nc" id="L124">	public UserAccount(@NonNull String name, @Nullable String password) {</span>
+<span class="nc" id="L124">	public UserAccount(@NonNull final String name, @Nullable final String password) {</span>
 <span class="nc" id="L125">		this.mName = name;</span>
 <span class="nc" id="L126">		this.mPassword = password;</span>
 <span class="nc" id="L127">	}</span>
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
@@ -149,7 +149,7 @@ public class UserAccount {
 	 * @see #UserAccount(String, String)
 	 * @see #getPassword()
 	 */
-	public final void setPassword(@Nullable String password) {
+	public final void setPassword(@Nullable final String password) {
 <span class="nc" id="L153">		this.mPassword = password;</span>
 <span class="nc" id="L154">	}</span>
 
@@ -173,7 +173,7 @@ public class UserAccount {
 	 * @see #getData(String)
 	 * @see #getDataBundle()
 	 */
-	public void putData(@NonNull String key, @Nullable String data) {
+	public void putData(@NonNull final String key, @Nullable final String data) {
 <span class="nc bnc" id="L177" title="All 2 branches missed.">		if (mDataBundle == null) this.mDataBundle = new Bundle();</span>
 <span class="nc" id="L178">		mDataBundle.putString(key, data);</span>
 <span class="nc" id="L179">	}</span>
@@ -185,7 +185,7 @@ public class UserAccount {
 	 * @return {@code True} if this account has data with the key, {@code false} otherwise.
 	 * @see #putData(String, String)
 	 */
-	public boolean hasData(@NonNull String key) {
+	public boolean hasData(@NonNull final String key) {
 <span class="nc bnc" id="L189" title="All 4 branches missed.">		return mDataBundle != null &amp;&amp; mDataBundle.containsKey(key);</span>
 	}
 
@@ -201,7 +201,7 @@ public class UserAccount {
 	 * @see #getDataBundle()
 	 */
 	@Nullable
-	public String getData(@NonNull String key) {
+	public String getData(@NonNull final String key) {
 <span class="nc bnc" id="L205" title="All 2 branches missed.">		return mDataBundle == null ? null : mDataBundle.getString(key);</span>
 	}
 
@@ -212,7 +212,7 @@ public class UserAccount {
 	 * @see #putData(String, String)
 	 * @see #hasData(String)
 	 */
-	public void removeData(@NonNull String key) {
+	public void removeData(@NonNull final String key) {
 <span class="nc bnc" id="L216" title="All 2 branches missed.">		if (mDataBundle != null) mDataBundle.remove(key);</span>
 <span class="nc" id="L217">	}</span>
 
@@ -224,7 +224,7 @@ public class UserAccount {
 	 * @see #putData(String, String)
 	 * @see #getData(String)
 	 */
-	public void setDataBundle(@Nullable Bundle dataBundle) {
+	public void setDataBundle(@Nullable final Bundle dataBundle) {
 <span class="nc" id="L228">		this.mDataBundle = dataBundle;</span>
 <span class="nc" id="L229">	}</span>
 
@@ -246,7 +246,7 @@ public class UserAccount {
 	 *
 	 * @param authToken The desired &lt;b&gt;OAuth&lt;/b&gt; token. May be {@code null} to clear the previous one.
 	 */
-	public void putOAuthToken(@Nullable String authToken) {
+	public void putOAuthToken(@Nullable final String authToken) {
 <span class="nc" id="L250">		putAuthToken(TOKEN_TYPE_O_AUTH, authToken);</span>
 <span class="nc" id="L251">	}</span>
 
@@ -259,7 +259,7 @@ public class UserAccount {
 	 * @see #getAuthToken(String)
 	 * @see #getAuthTokens()
 	 */
-	public void putAuthToken(@Nullable String tokenType, @Nullable String token) {
+	public void putAuthToken(@Nullable final String tokenType, @Nullable final String token) {
 <span class="nc bnc" id="L263" title="All 2 branches missed.">		if (mAuthTokens == null) this.mAuthTokens = new HashMap&lt;&gt;(1);</span>
 <span class="nc" id="L264">		mAuthTokens.put(tokenType, token);</span>
 <span class="nc" id="L265">	}</span>
@@ -272,7 +272,7 @@ public class UserAccount {
 	 * @return {@code True} if {@link #putAuthToken(String, String)} has been called with the
 	 * &lt;var&gt;tokenType&lt;/var&gt;, {@code false} otherwise.
 	 */
-	public boolean hasAuthToken(@Nullable String tokenType) {
+	public boolean hasAuthToken(@Nullable final String tokenType) {
 <span class="nc bnc" id="L276" title="All 4 branches missed.">		return mAuthTokens != null &amp;&amp; mAuthTokens.containsKey(tokenType);</span>
 	}
 
@@ -292,7 +292,7 @@ public class UserAccount {
 	 * for that type.
 	 */
 	@Nullable
-	public String getAuthToken(@Nullable String tokenType) {
+	public String getAuthToken(@Nullable final String tokenType) {
 <span class="nc bnc" id="L296" title="All 2 branches missed.">		return mAuthTokens == null ? null : mAuthTokens.get(tokenType);</span>
 	}
 
@@ -331,16 +331,16 @@ public class UserAccount {
 	/**
 	 */
 	@Override
-	public boolean equals(Object other) {
-		// Hashing and equals functions assume that as name is unique for each account.
+	public boolean equals(@Nullable final Object other) {
+		// Hashing and equals functions assume that name is unique for each account.
 <span class="nc bnc" id="L336" title="All 2 branches missed.">		if (other == this) return true;</span>
 <span class="nc bnc" id="L337" title="All 2 branches missed.">		if (!(other instanceof UserAccount)) return false;</span>
 <span class="nc" id="L338">		final UserAccount account = (UserAccount) other;</span>
 <span class="nc" id="L339">		return TextUtils.equals(account.mName, mName);</span>
 	}
 
-	/**
+	/*
 	 * Inner classes ===============================================================================
 	 */
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span>Generated by the Android Gradle plugin 2.3.0</div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span>Generated by the Android Gradle plugin 2.3.1</div></body></html>

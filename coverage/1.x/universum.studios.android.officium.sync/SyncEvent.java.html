@@ -36,7 +36,7 @@ import android.support.annotation.NonNull;
  */
 public final class SyncEvent {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -65,15 +65,15 @@ public final class SyncEvent {
 	 */
 	public static final int ERROR = 0x04;
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
@@ -108,7 +108,7 @@ public final class SyncEvent {
 	 */
 	public final Bundle extras;
 
-	/**
+	/*
 	 * Constructors ================================================================================
 	 */
 
@@ -117,20 +117,21 @@ public final class SyncEvent {
 	 *
 	 * @param builder The builder with data for the new event instance.
 	 */
-<span class="nc" id="L120">	private SyncEvent(@NonNull Builder builder) {</span>
-<span class="nc" id="L121">		this.id = builder.id;</span>
-<span class="nc" id="L122">		this.type = builder.type;</span>
-<span class="nc" id="L123">		this.progress = builder.progress;</span>
-<span class="nc" id="L124">		this.error = builder.error;</span>
-<span class="nc" id="L125">		this.account = builder.account;</span>
-<span class="nc" id="L126">		this.extras = builder.extras;</span>
-<span class="nc" id="L127">	}</span>
+	@SuppressWarnings(&quot;WeakerAccess&quot;)
+<span class="nc" id="L121">	SyncEvent(@NonNull final Builder builder) {</span>
+<span class="nc" id="L122">		this.id = builder.id;</span>
+<span class="nc" id="L123">		this.type = builder.type;</span>
+<span class="nc" id="L124">		this.progress = builder.progress;</span>
+<span class="nc" id="L125">		this.error = builder.error;</span>
+<span class="nc" id="L126">		this.account = builder.account;</span>
+<span class="nc" id="L127">		this.extras = builder.extras;</span>
+<span class="nc" id="L128">	}</span>
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
-	/**
+	/*
 	 * Inner classes ===============================================================================
 	 */
 
@@ -144,32 +145,32 @@ public final class SyncEvent {
 		/**
 		 * See {@link SyncEvent#id}.
 		 */
-		private final int id;
+		final int id;
 
 		/**
 		 * See {@link SyncEvent#error}.
 		 */
-		private int type;
+		int type;
 
 		/**
 		 * See {@link SyncEvent#progress}.
 		 */
-		private int progress;
+		int progress;
 
 		/**
 		 * See {@link SyncEvent#error}.
 		 */
-		private Exception error;
+		Exception error;
 
 		/**
 		 * See {@link SyncEvent#account}.
 		 */
-		private Account account;
+		Account account;
 
 		/**
 		 * See {@link SyncEvent#extras}.
 		 */
-		private Bundle extras;
+		Bundle extras;
 
 		/**
 		 * Creates a new instance of Builder with the specified &lt;var&gt;id&lt;/var&gt;.
@@ -177,9 +178,9 @@ public final class SyncEvent {
 		 * @param id The desired id for the new SyncEvent.
 		 * @see SyncEvent#id
 		 */
-<span class="nc" id="L180">		public Builder(int id) {</span>
-<span class="nc" id="L181">			this.id = id;</span>
-<span class="nc" id="L182">		}</span>
+<span class="nc" id="L181">		public Builder(final int id) {</span>
+<span class="nc" id="L182">			this.id = id;</span>
+<span class="nc" id="L183">		}</span>
 
 		/**
 		 * Specifies a type of SyncEvent that will be fired.
@@ -189,9 +190,9 @@ public final class SyncEvent {
 		 * @return This builder to allow methods chaining.
 		 * @see SyncEvent#type
 		 */
-		public Builder type(int type) {
-<span class="nc" id="L193">			this.type = type;</span>
-<span class="nc" id="L194">			return this;</span>
+		public Builder type(final int type) {
+<span class="nc" id="L194">			this.type = type;</span>
+<span class="nc" id="L195">			return this;</span>
 		}
 
 		/**
@@ -201,9 +202,9 @@ public final class SyncEvent {
 		 * @return This builder to allow methods chaining.
 		 * @see SyncEvent#progress
 		 */
-		public Builder progress(int progress) {
-<span class="nc" id="L205">			this.progress = progress;</span>
-<span class="nc" id="L206">			return this;</span>
+		public Builder progress(final int progress) {
+<span class="nc" id="L206">			this.progress = progress;</span>
+<span class="nc" id="L207">			return this;</span>
 		}
 
 		/**
@@ -213,9 +214,9 @@ public final class SyncEvent {
 		 * @return This builder to allow methods chaining.
 		 * @see SyncEvent#error
 		 */
-		public Builder error(@NonNull Exception error) {
-<span class="nc" id="L217">			this.error = error;</span>
-<span class="nc" id="L218">			return this;</span>
+		public Builder error(@NonNull final Exception error) {
+<span class="nc" id="L218">			this.error = error;</span>
+<span class="nc" id="L219">			return this;</span>
 		}
 
 		/**
@@ -225,9 +226,9 @@ public final class SyncEvent {
 		 * @return This builder to allow methods chaining.
 		 * @see SyncEvent#account
 		 */
-		public Builder account(@NonNull Account account) {
-<span class="nc" id="L229">			this.account = account;</span>
-<span class="nc" id="L230">			return this;</span>
+		public Builder account(@NonNull final Account account) {
+<span class="nc" id="L230">			this.account = account;</span>
+<span class="nc" id="L231">			return this;</span>
 		}
 
 		/**
@@ -237,9 +238,9 @@ public final class SyncEvent {
 		 * @return This builder to allow methods chaining.
 		 * @see SyncEvent#extras
 		 */
-		public Builder extras(@NonNull Bundle extras) {
-<span class="nc" id="L241">			this.extras = extras;</span>
-<span class="nc" id="L242">			return this;</span>
+		public Builder extras(@NonNull final Bundle extras) {
+<span class="nc" id="L242">			this.extras = extras;</span>
+<span class="nc" id="L243">			return this;</span>
 		}
 
 		/**
@@ -249,8 +250,8 @@ public final class SyncEvent {
 		 */
 		@NonNull
 		public SyncEvent build() {
-<span class="nc" id="L252">			return new SyncEvent(this);</span>
+<span class="nc" id="L253">			return new SyncEvent(this);</span>
 		}
 	}
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span>Generated by the Android Gradle plugin 2.3.0</div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span>Generated by the Android Gradle plugin 2.3.1</div></body></html>

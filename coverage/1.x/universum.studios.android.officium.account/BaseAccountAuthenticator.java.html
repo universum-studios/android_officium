@@ -25,6 +25,7 @@ import android.accounts.NetworkErrorException;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 /**
  * A {@link AbstractAccountAuthenticator} implementation that can be used as base for custom implementations
@@ -37,7 +38,7 @@ import android.support.annotation.NonNull;
  */
 public abstract class BaseAccountAuthenticator extends AbstractAccountAuthenticator {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -46,19 +47,19 @@ public abstract class BaseAccountAuthenticator extends AbstractAccountAuthentica
 	 */
 	// private static final String TAG = &quot;BaseAccountAuthenticator&quot;;
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
-	/**
+	/*
 	 * Constructors ========================u========================================================
 	 */
 
@@ -68,65 +69,98 @@ public abstract class BaseAccountAuthenticator extends AbstractAccountAuthentica
 	 * @param context The context used by parent {@link AbstractAccountAuthenticator} for permissions
 	 *                checks.
 	 */
-	public BaseAccountAuthenticator(@NonNull Context context) {
-<span class="nc" id="L72">		super(context);</span>
-<span class="nc" id="L73">	}</span>
+	public BaseAccountAuthenticator(@NonNull final Context context) {
+<span class="nc" id="L73">		super(context);</span>
+<span class="nc" id="L74">	}</span>
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
 	/**
 	 */
+	@Nullable
 	@Override
-	public Bundle editProperties(AccountAuthenticatorResponse response, String accountType) {
-<span class="nc" id="L83">		throw new UnsupportedOperationException();</span>
+	public Bundle editProperties(
+			@NonNull final AccountAuthenticatorResponse response,
+			@NonNull final String accountType
+	) {
+<span class="nc" id="L88">		throw new UnsupportedOperationException();</span>
+	}
+
+	/**
+	 */
+	@Nullable
+	@Override
+	public Bundle addAccount(
+			@NonNull final AccountAuthenticatorResponse response,
+			@NonNull final String accountType,
+			@Nullable final String authTokenType,
+			@Nullable final String[] requiredFeatures,
+			@Nullable final Bundle options
+	) throws NetworkErrorException {
+<span class="nc" id="L102">		throw new UnsupportedOperationException();</span>
+	}
+
+	/**
+	 */
+	@Nullable
+	@Override
+	public Bundle confirmCredentials(
+			@NonNull final AccountAuthenticatorResponse response,
+			@NonNull final Account account,
+			@Nullable final Bundle options
+	) throws NetworkErrorException {
+<span class="nc" id="L114">		throw new UnsupportedOperationException();</span>
+	}
+
+	/**
+	 */
+	@Nullable
+	@Override
+	public Bundle getAuthToken(
+			@NonNull final AccountAuthenticatorResponse response,
+			@NonNull final Account account,
+			@NonNull final String authTokenType,
+			@Nullable final Bundle options
+	) throws NetworkErrorException {
+<span class="nc" id="L127">		throw new UnsupportedOperationException();</span>
 	}
 
 	/**
 	 */
 	@Override
-	public Bundle addAccount(AccountAuthenticatorResponse response, String accountType, String authTokenType, String[] requiredFeatures, Bundle options) throws NetworkErrorException {
-<span class="nc" id="L90">		throw new UnsupportedOperationException();</span>
+	public String getAuthTokenLabel(@NonNull final String authTokenType) {
+<span class="nc" id="L134">		throw new UnsupportedOperationException();</span>
 	}
 
 	/**
 	 */
+	@Nullable
 	@Override
-	public Bundle confirmCredentials(AccountAuthenticatorResponse response, Account account, Bundle options) throws NetworkErrorException {
-<span class="nc" id="L97">		throw new UnsupportedOperationException();</span>
+	public Bundle updateCredentials(
+			@NonNull final AccountAuthenticatorResponse response,
+			@NonNull final Account account,
+			@Nullable final String authTokenType,
+			@Nullable final Bundle options
+	) throws NetworkErrorException {
+<span class="nc" id="L147">		throw new UnsupportedOperationException();</span>
 	}
 
 	/**
 	 */
+	@Nullable
 	@Override
-	public Bundle getAuthToken(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle options) throws NetworkErrorException {
-<span class="nc" id="L104">		throw new UnsupportedOperationException();</span>
+	public Bundle hasFeatures(
+			@NonNull final AccountAuthenticatorResponse response,
+			@NonNull final Account account,
+			@NonNull final String[] features
+	) throws NetworkErrorException {
+<span class="nc" id="L159">		throw new UnsupportedOperationException();</span>
 	}
 
-	/**
-	 */
-	@Override
-	public String getAuthTokenLabel(String authTokenType) {
-<span class="nc" id="L111">		throw new UnsupportedOperationException();</span>
-	}
-
-	/**
-	 */
-	@Override
-	public Bundle updateCredentials(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle options) throws NetworkErrorException {
-<span class="nc" id="L118">		throw new UnsupportedOperationException();</span>
-	}
-
-	/**
-	 */
-	@Override
-	public Bundle hasFeatures(AccountAuthenticatorResponse response, Account account, String[] features) throws NetworkErrorException {
-<span class="nc" id="L125">		throw new UnsupportedOperationException();</span>
-	}
-
-	/**
+	/*
 	 * Inner classes ===============================================================================
 	 */
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span>Generated by the Android Gradle plugin 2.3.0</div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span>Generated by the Android Gradle plugin 2.3.1</div></body></html>

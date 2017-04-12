@@ -21,7 +21,8 @@ package universum.studios.android.officium.sync;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
+
+import universum.studios.android.officium.OfficiumLogging;
 
 /**
  * Base class for handlers that are used by {@link BaseSyncAdapter} to handle synchronization process
@@ -47,7 +48,7 @@ import android.util.Log;
  */
 public abstract class SyncHandler&lt;Request extends SyncTask.Request, Result&gt; {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -56,15 +57,15 @@ public abstract class SyncHandler&lt;Request extends SyncTask.Request, Result&gt
 	 */
 	// private static final String TAG = &quot;SyncHandler&quot;;
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
@@ -81,7 +82,7 @@ public abstract class SyncHandler&lt;Request extends SyncTask.Request, Result&gt
 	 */
 	private final Class&lt;Request&gt; mRequestClass;
 
-	/**
+	/*
 	 * Constructors ================================================================================
 	 */
 
@@ -94,10 +95,10 @@ public abstract class SyncHandler&lt;Request extends SyncTask.Request, Result&gt
 	 *
 	 * @param taskId Id of the {@link SyncTask} associated with this handler.
 	 */
-<span class="nc" id="L97">	protected SyncHandler(int taskId) {</span>
-<span class="nc" id="L98">		this.mTaskId = taskId;</span>
-<span class="nc" id="L99">		this.mRequestClass = null;</span>
-<span class="nc" id="L100">	}</span>
+<span class="nc" id="L98">	protected SyncHandler(final int taskId) {</span>
+<span class="nc" id="L99">		this.mTaskId = taskId;</span>
+<span class="nc" id="L100">		this.mRequestClass = null;</span>
+<span class="nc" id="L101">	}</span>
 
 	/**
 	 * Creates a new instance of SyncHandler with the specified &lt;var&gt;taskId&lt;/var&gt; and &lt;var&gt;classOfRequest&lt;/var&gt;.
@@ -108,12 +109,12 @@ public abstract class SyncHandler&lt;Request extends SyncTask.Request, Result&gt
 	 *                       is called. May be {@code null} if {@link SyncTask.EmptyRequest} is used.
 	 * @see SyncTask#getRequest(Class)
 	 */
-<span class="nc" id="L111">	protected SyncHandler(int taskId, @Nullable Class&lt;Request&gt; classOfRequest) {</span>
-<span class="nc" id="L112">		this.mTaskId = taskId;</span>
-<span class="nc" id="L113">		this.mRequestClass = classOfRequest;</span>
-<span class="nc" id="L114">	}</span>
+<span class="nc" id="L112">	protected SyncHandler(final int taskId, @Nullable final Class&lt;Request&gt; classOfRequest) {</span>
+<span class="nc" id="L113">		this.mTaskId = taskId;</span>
+<span class="nc" id="L114">		this.mRequestClass = classOfRequest;</span>
+<span class="nc" id="L115">	}</span>
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
@@ -124,7 +125,7 @@ public abstract class SyncHandler&lt;Request extends SyncTask.Request, Result&gt
 	 * @see #handleSync(Context, SyncOperation)
 	 */
 	public final int getTaskId() {
-<span class="nc" id="L127">		return mTaskId;</span>
+<span class="nc" id="L128">		return mTaskId;</span>
 	}
 
 	/**
@@ -148,14 +149,14 @@ public abstract class SyncHandler&lt;Request extends SyncTask.Request, Result&gt
 	 */
 	@Nullable
 	@SuppressWarnings(&quot;unchecked&quot;)
-	public final Result handleSync(@NonNull Context context, @NonNull SyncOperation syncOperation) {
-<span class="nc bnc" id="L152" title="All 2 branches missed.">		final Request syncRequest = mRequestClass == null ? null : (Request) syncOperation.task.getRequest(mRequestClass);</span>
+	public final Result handleSync(@NonNull final Context context, @NonNull final SyncOperation syncOperation) {
+<span class="nc bnc" id="L153" title="All 2 branches missed.">		final Request syncRequest = mRequestClass == null ? null : (Request) syncOperation.task.getRequest(mRequestClass);</span>
 		try {
-<span class="nc" id="L154">			return onHandleSync(context, syncOperation, syncRequest);</span>
-<span class="nc" id="L155">		} catch (Exception error) {</span>
-<span class="nc" id="L156">			onSyncError(context, syncOperation, syncRequest, error);</span>
+<span class="nc" id="L155">			return onHandleSync(context, syncOperation, syncRequest);</span>
+<span class="nc" id="L156">		} catch (Exception error) {</span>
+<span class="nc" id="L157">			onSyncError(context, syncOperation, syncRequest, error);</span>
 		}
-<span class="nc" id="L158">		return null;</span>
+<span class="nc" id="L159">		return null;</span>
 	}
 
 	/**
@@ -198,12 +199,12 @@ public abstract class SyncHandler&lt;Request extends SyncTask.Request, Result&gt
 	 *                      {@code null} if this handler does not accept any request.
 	 * @param error         The error exception thrown by {@link #onHandleSync(Context, SyncOperation, SyncTask.Request)}.
 	 */
-	protected void onSyncError(@NonNull Context context, @NonNull SyncOperation syncOperation, @Nullable Request syncRequest, @NonNull Exception error) {
-<span class="nc" id="L202">		Log.e(getClass().getSimpleName(), &quot;An error occurred during synchronization handling!&quot;, error);</span>
-<span class="nc" id="L203">	}</span>
+	protected void onSyncError(@NonNull final Context context, @NonNull final SyncOperation syncOperation, @Nullable final Request syncRequest, @NonNull final Exception error) {
+<span class="nc" id="L203">		OfficiumLogging.e(getClass().getSimpleName(), &quot;An error occurred during synchronization handling!&quot;, error);</span>
+<span class="nc" id="L204">	}</span>
 
-	/**
+	/*
 	 * Inner classes ===============================================================================
 	 */
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span>Generated by the Android Gradle plugin 2.3.0</div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span>Generated by the Android Gradle plugin 2.3.1</div></body></html>

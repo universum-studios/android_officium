@@ -34,7 +34,7 @@ import android.support.annotation.RequiresPermission;
  */
 public class SingleUserAccountManager&lt;A extends UserAccount&gt; extends UserAccountManager&lt;A&gt; {
 
-	/**
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -43,15 +43,15 @@ public class SingleUserAccountManager&lt;A extends UserAccount&gt; extends UserA
 	 */
 	// private static final String TAG = &quot;SingleUserAccountManager&quot;;
 
-	/**
+	/*
 	 * Interface ===================================================================================
 	 */
 
-	/**
+	/*
 	 * Static members ==============================================================================
 	 */
 
-	/**
+	/*
 	 * Members =====================================================================================
 	 */
 
@@ -61,15 +61,15 @@ public class SingleUserAccountManager&lt;A extends UserAccount&gt; extends UserA
 	 * @param context     Context used to access {@link AccountManager}.
 	 * @param accountType The desired account type that will be managed by the new user account manager.
 	 */
-	public SingleUserAccountManager(@NonNull Context context, @NonNull String accountType) {
+	public SingleUserAccountManager(@NonNull final Context context, @NonNull final String accountType) {
 <span class="nc" id="L65">		super(context, accountType);</span>
 <span class="nc" id="L66">	}</span>
 
-	/**
+	/*
 	 * Constructors ================================================================================
 	 */
 
-	/**
+	/*
 	 * Methods =====================================================================================
 	 */
 
@@ -123,7 +123,7 @@ public class SingleUserAccountManager&lt;A extends UserAccount&gt; extends UserA
 			PERMISSION_GET_ACCOUNTS,
 			PERMISSION_AUTHENTICATE_ACCOUNTS
 	})
-	public boolean setAccountAuthToken(@NonNull String authTokenType, @Nullable String authToken) {
+	public boolean setAccountAuthToken(@NonNull final String authTokenType, @Nullable final String authToken) {
 <span class="nc" id="L127">		final Account account = acquireAccount();</span>
 <span class="nc bnc" id="L128" title="All 2 branches missed.">		if (account == null) return false;</span>
 <span class="nc" id="L129">		setAccountAuthToken(account, authTokenType, authToken);</span>
@@ -148,7 +148,7 @@ public class SingleUserAccountManager&lt;A extends UserAccount&gt; extends UserA
 			PERMISSION_GET_ACCOUNTS,
 			PERMISSION_AUTHENTICATE_ACCOUNTS
 	})
-	public boolean isAccountAuthenticated(@NonNull String authTokenType) {
+	public boolean isAccountAuthenticated(@NonNull final String authTokenType) {
 <span class="nc" id="L152">		final Account account = acquireAccount();</span>
 <span class="nc bnc" id="L153" title="All 4 branches missed.">		return account != null &amp;&amp; isAccountAuthenticated(account, authTokenType);</span>
 	}
@@ -172,7 +172,7 @@ public class SingleUserAccountManager&lt;A extends UserAccount&gt; extends UserA
 			PERMISSION_GET_ACCOUNTS,
 			PERMISSION_AUTHENTICATE_ACCOUNTS
 	})
-	public String peekAccountAuthToken(@NonNull String authTokenType) {
+	public String peekAccountAuthToken(@NonNull final String authTokenType) {
 <span class="nc" id="L176">		final Account account = acquireAccount();</span>
 <span class="nc bnc" id="L177" title="All 2 branches missed.">		return account == null ? null : peekAccountAuthToken(account, authTokenType);</span>
 	}
@@ -193,7 +193,7 @@ public class SingleUserAccountManager&lt;A extends UserAccount&gt; extends UserA
 			PERMISSION_GET_ACCOUNTS,
 			PERMISSION_MANAGE_ACCOUNTS
 	})
-	public boolean invalidateAccountAuthToken(@NonNull String authToken) {
+	public boolean invalidateAccountAuthToken(@NonNull final String authToken) {
 <span class="nc" id="L197">		final Account account = acquireAccount();</span>
 <span class="nc bnc" id="L198" title="All 2 branches missed.">		if (account == null) return false;</span>
 <span class="nc" id="L199">		invalidateAccountAuthToken(account, authToken);</span>
@@ -218,7 +218,7 @@ public class SingleUserAccountManager&lt;A extends UserAccount&gt; extends UserA
 			PERMISSION_GET_ACCOUNTS,
 			PERMISSION_AUTHENTICATE_ACCOUNTS
 	})
-	public boolean setAccountPassword(@Nullable String password) {
+	public boolean setAccountPassword(@Nullable final String password) {
 <span class="nc" id="L222">		final Account account = acquireAccount();</span>
 <span class="nc bnc" id="L223" title="All 2 branches missed.">		if (account == null) return false;</span>
 <span class="nc" id="L224">		setAccountPassword(account, password);</span>
@@ -289,7 +289,7 @@ public class SingleUserAccountManager&lt;A extends UserAccount&gt; extends UserA
 			PERMISSION_GET_ACCOUNTS,
 			PERMISSION_AUTHENTICATE_ACCOUNTS
 	})
-	public boolean setAccountData(@NonNull String key, @Nullable String value) {
+	public boolean setAccountData(@NonNull final String key, @Nullable final String value) {
 <span class="nc" id="L293">		final Account account = acquireAccount();</span>
 <span class="nc bnc" id="L294" title="All 2 branches missed.">		if (account == null) return false;</span>
 <span class="nc" id="L295">		setAccountData(account, key, value);</span>
@@ -314,7 +314,7 @@ public class SingleUserAccountManager&lt;A extends UserAccount&gt; extends UserA
 			PERMISSION_GET_ACCOUNTS,
 			PERMISSION_AUTHENTICATE_ACCOUNTS
 	})
-	public String getAccountData(@NonNull String key) {
+	public String getAccountData(@NonNull final String key) {
 <span class="nc" id="L318">		final Account account = acquireAccount();</span>
 <span class="nc bnc" id="L319" title="All 2 branches missed.">		return account == null ? null : getAccountData(account, key);</span>
 	}
@@ -336,7 +336,7 @@ public class SingleUserAccountManager&lt;A extends UserAccount&gt; extends UserA
 			PERMISSION_GET_ACCOUNTS,
 			PERMISSION_AUTHENTICATE_ACCOUNTS
 	})
-	public boolean setAccountDataBundle(@NonNull Bundle dataBundle) {
+	public boolean setAccountDataBundle(@NonNull final Bundle dataBundle) {
 <span class="nc" id="L340">		final Account account = acquireAccount();</span>
 <span class="nc bnc" id="L341" title="All 2 branches missed.">		if (account == null) return false;</span>
 <span class="nc" id="L342">		setAccountDataBundle(account, dataBundle);</span>
@@ -361,7 +361,7 @@ public class SingleUserAccountManager&lt;A extends UserAccount&gt; extends UserA
 			PERMISSION_GET_ACCOUNTS,
 			PERMISSION_AUTHENTICATE_ACCOUNTS
 	})
-	public Bundle getAccountDataBundle(@NonNull String... keys) {
+	public Bundle getAccountDataBundle(@NonNull final String... keys) {
 <span class="nc" id="L365">		final Account account = acquireAccount();</span>
 <span class="nc bnc" id="L366" title="All 2 branches missed.">		return account == null ? null : getAccountDataBundle(account, keys);</span>
 	}
@@ -382,14 +382,13 @@ public class SingleUserAccountManager&lt;A extends UserAccount&gt; extends UserA
 	@Nullable
 	@RequiresPermission(PERMISSION_GET_ACCOUNTS)
 	protected Account acquireAccount() {
-<span class="nc" id="L385">		final AccountManager manager = AccountManager.get(mContext);</span>
-<span class="nc" id="L386">		final Account[] accounts = manager.getAccountsByType(mAccountType);</span>
+<span class="nc" id="L385">		final Account[] accounts = mManager.getAccountsByType(mAccountType);</span>
 		// We assume here that there can be only one user account available/created (if any).
-<span class="nc bnc" id="L388" title="All 2 branches missed.">		return accounts.length &gt; 0 ? accounts[0] : null;</span>
+<span class="nc bnc" id="L387" title="All 2 branches missed.">		return accounts.length &gt; 0 ? accounts[0] : null;</span>
 	}
 
-	/**
+	/*
 	 * Inner classes ===============================================================================
 	 */
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span>Generated by the Android Gradle plugin 2.3.0</div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span>Generated by the Android Gradle plugin 2.3.1</div></body></html>
