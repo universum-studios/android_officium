@@ -21,7 +21,8 @@ package universum.studios.android.officium.sync;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
+
+import universum.studios.android.officium.OfficiumLogging;
 
 /**
  * Base class for handlers that are used by {@link BaseSyncAdapter} to handle synchronization process
@@ -199,7 +200,7 @@ public abstract class SyncHandler<Request extends SyncTask.Request, Result> {
 	 * @param error         The error exception thrown by {@link #onHandleSync(Context, SyncOperation, SyncTask.Request)}.
 	 */
 	protected void onSyncError(@NonNull final Context context, @NonNull final SyncOperation syncOperation, @Nullable final Request syncRequest, @NonNull final Exception error) {
-		Log.e(getClass().getSimpleName(), "An error occurred during synchronization handling!", error);
+		OfficiumLogging.e(getClass().getSimpleName(), "An error occurred during synchronization handling!", error);
 	}
 
 	/*

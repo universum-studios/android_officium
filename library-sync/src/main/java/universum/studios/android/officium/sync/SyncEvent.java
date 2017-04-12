@@ -117,7 +117,8 @@ public final class SyncEvent {
 	 *
 	 * @param builder The builder with data for the new event instance.
 	 */
-	private SyncEvent(@NonNull final Builder builder) {
+	@SuppressWarnings("WeakerAccess")
+	SyncEvent(@NonNull final Builder builder) {
 		this.id = builder.id;
 		this.type = builder.type;
 		this.progress = builder.progress;
@@ -144,32 +145,32 @@ public final class SyncEvent {
 		/**
 		 * See {@link SyncEvent#id}.
 		 */
-		private final int id;
+		final int id;
 
 		/**
 		 * See {@link SyncEvent#error}.
 		 */
-		private int type;
+		int type;
 
 		/**
 		 * See {@link SyncEvent#progress}.
 		 */
-		private int progress;
+		int progress;
 
 		/**
 		 * See {@link SyncEvent#error}.
 		 */
-		private Exception error;
+		Exception error;
 
 		/**
 		 * See {@link SyncEvent#account}.
 		 */
-		private Account account;
+		Account account;
 
 		/**
 		 * See {@link SyncEvent#extras}.
 		 */
-		private Bundle extras;
+		Bundle extras;
 
 		/**
 		 * Creates a new instance of Builder with the specified <var>id</var>.

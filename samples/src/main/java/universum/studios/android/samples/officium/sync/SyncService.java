@@ -36,10 +36,6 @@ public final class SyncService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        ensureSyncAdapter();
-    }
-
-    private void ensureSyncAdapter() {
         synchronized (LOCK) {
             if (syncAdapter == null) syncAdapter = new SyncAdapter(getApplicationContext());
         }

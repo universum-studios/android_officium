@@ -12,6 +12,7 @@ accounts in an **Android** application.
     compile "universum.studios.android:officium-account:${DESIRED_VERSION}@aar"
 
 _depends on:_
+[officium-core](https://github.com/universum-studios/android_officium/tree/master/library-core),
 [`universum.studios.android:utils`](https://github.com/universum-studios/android_utils)
 
 ## Components ##

@@ -26,10 +26,9 @@ import android.content.SyncResult;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.util.SparseArray;
 
-import universum.studios.android.officium.OfficiumConfig;
+import universum.studios.android.officium.OfficiumLogging;
 
 /**
  * An {@link AbstractThreadedSyncAdapter} implementation that provides simple API for registration
@@ -266,18 +265,7 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 		if (mTaskHandlers == null) {
 			this.mTaskHandlers = new SparseArray<>();
 		}
-		final int taskId = handler.getTaskId();
-		if (mTaskHandlers.indexOfKey(taskId) >= 0) {
-			if (OfficiumConfig.DEBUG_LOG_ENABLED) {
-				Log.v(TAG, "Replacing old synchronization handler by a new one for task with id(" + taskId + ").");
-			}
-			mTaskHandlers.append(taskId, handler);
-		} else {
-			if (OfficiumConfig.DEBUG_LOG_ENABLED) {
-				Log.v(TAG, "Registering new synchronization handler for task with id(" + taskId + ").");
-			}
-			mTaskHandlers.append(taskId, handler);
-		}
+		mTaskHandlers.append(handler.getTaskId(), handler);
 	}
 
 	/**
@@ -434,7 +422,7 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	protected void onPerformSync(@NonNull final SyncOperation syncOperation) {
 		final SyncHandler taskHandler = mTaskHandlers == null ? null : mTaskHandlers.get(syncOperation.task.getId());
 		if (taskHandler == null) {
-			Log.e(TAG, "No synchronization handler found for task with id(" + syncOperation.task.getId() + ").");
+			OfficiumLogging.e(TAG, "No synchronization handler found for task with id(" + syncOperation.task.getId() + ").");
 			return;
 		}
 		dispatchSyncEvent(

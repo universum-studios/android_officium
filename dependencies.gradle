@@ -3,6 +3,7 @@ def versions = [
         androidSupportVersion                : '25.3.0',
         androidSupportTestVersion            : '0.5',
         androidSupportTestEspressoVersion    : '2.2.2',
+        universumStudiosLoggerVersion        : '1.0.0',
         universumStudiosUtilsVersion         : '2.0.0',
         universumStudiosCryptoVersion        : '0.1.2',
         universumStudiosSupportSamplesVersion: '0.1.3',
@@ -39,6 +40,7 @@ def test = [
 ]
 
 def universumStudios = [
+        logger        : "universum.studios.android:logger:${versions.universumStudiosLoggerVersion}@aar",
         utils         : "universum.studios.android:utils:${versions.universumStudiosUtilsVersion}@aar",
         crypto        : "universum.studios.android:crypto:${versions.universumStudiosCryptoVersion}@aar",
         supportSamples: "universum.studios.android.support:support-samples:${versions.universumStudiosSupportSamplesVersion}@aar"

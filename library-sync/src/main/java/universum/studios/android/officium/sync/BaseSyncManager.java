@@ -25,9 +25,8 @@ import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
-import universum.studios.android.officium.OfficiumConfig;
+import universum.studios.android.officium.OfficiumLogging;
 
 /**
  * Base class that can be used for implementation of managers responsible for requesting of synchronization
@@ -72,13 +71,19 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 
 	/**
 	 * Context with which has been this manager created.
+	 *
+	 * @deprecated Use {@link #getContext()} instead.
 	 */
+	@Deprecated
 	protected final Context mContext;
 
 	/**
 	 * Content authority with which has been this manager created. This authority is used to set up
 	 * all synchronization requests via {@link ContentResolver}.
+	 *
+	 * @deprecated Use {@link #getAuthority()} instead.
 	 */
+	@Deprecated
 	protected final String mAuthority;
 
 	/*
@@ -90,8 +95,10 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	 *
 	 * @param context   Context that may be used by inheritance hierarchies to access application
 	 *                  data and services needed to perform requested synchronization.
-	 * @param authority The content authority for which the manager should request synchronization
-	 *                  via {@link ContentResolver#requestSync(Account, String, Bundle)}.
+	 * @param authority The content authority which should the manager use when requesting synchronization
+	 *                  operations via {@link ContentResolver}.
+	 * @see #getContext()
+	 * @see #getAuthority()
 	 */
 	public BaseSyncManager(@NonNull final Context context, @NonNull final String authority) {
 		this.mContext = context;
@@ -101,6 +108,29 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	/*
 	 * Methods =====================================================================================
 	 */
+
+	/**
+	 * Returns the context with which has been this manager created.
+	 *
+	 * @return The associated context.
+	 * @see #BaseSyncManager(Context, String)
+	 */
+	@NonNull
+	public final Context getContext() {
+		return mContext;
+	}
+
+	/**
+	 * Returns the content authority with which has been this manager created. The authority is used
+	 * whenever this manager is requesting synchronization operations via {@link ContentResolver}.
+	 *
+	 * @return The associated content authority.
+	 * @see #BaseSyncManager(Context, String)
+	 */
+	@NonNull
+	public final String getAuthority() {
+		return mAuthority;
+	}
 
 	/**
 	 * Starts automatic synchronization for the content authority specified for this manager and
@@ -163,18 +193,14 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	public void requestSync(@NonNull final SyncTask syncTask) {
 		final Account account = pickAccountForSync();
 		if (account == null) {
-			if (OfficiumConfig.LOG_ENABLED) {
-				Log.v(TAG, "Cannot perform synchronization for task(" + syncTask + "). No account picked for synchronization.");
-			}
+			OfficiumLogging.w(TAG, "Cannot perform synchronization for task(" + syncTask + "). No account picked for synchronization.");
 		} else if (shouldRequestSync(syncTask, account)) {
 			syncTask.setState(SyncTask.PENDING);
 			onSyncTaskStateChanged(syncTask, account);
 			final Bundle extras = syncTask.intoExtras(new Bundle());
 			extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
 			extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-			if (OfficiumConfig.LOG_ENABLED) {
-				Log.v(TAG, "Requesting synchronization for task(" + syncTask + ").");
-			}
+			OfficiumLogging.i(TAG, "Requesting synchronization for task(" + syncTask + ").");
 			ContentResolver.requestSync(account, mAuthority, extras);
 		}
 	}

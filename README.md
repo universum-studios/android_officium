@@ -34,6 +34,7 @@ Supported down to the **Android [API Level 11](http://developer.android.com/abou
 - [`com.squareup.okhttp3:okhttp`](http://square.github.io/okhttp/)
 - [`com.squareup.retrofit2:retrofit`](http://square.github.io/retrofit/)
 - [`com.google.code.gson:gson`](https://github.com/google/gson)
+- [`universum.studios.android:logger`](https://github.com/universum-studios/android_logger)
 - [`universum.studios.android:utils`](https://github.com/universum-studios/android_utils)
 - [`universum.studios.android:crypto`](https://github.com/universum-studios/android_crypto)
 

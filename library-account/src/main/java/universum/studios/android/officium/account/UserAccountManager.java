@@ -22,6 +22,8 @@ import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
+import android.accounts.AuthenticatorException;
+import android.accounts.OperationCanceledException;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -33,6 +35,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresPermission;
 import android.text.TextUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +44,7 @@ import java.util.Set;
 import universum.studios.android.crypto.Crypto;
 import universum.studios.android.crypto.Encrypto;
 import universum.studios.android.crypto.util.CryptographyUtils;
+import universum.studios.android.officium.OfficiumLogging;
 import universum.studios.android.util.ErrorException;
 
 /**
@@ -159,18 +163,25 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 */
 
 	/**
-	 * Context used to access {@link #mManager} and other needed application data about accounts.
-	 */
-	protected final Context mContext;
-
-	/**
 	 * Account manager used to create/update/delete accounts of the type specified for this manager.
 	 */
+	@NonNull
 	protected final AccountManager mManager;
 
 	/**
-	 * Type of accounts that can be managed by this manager.
+	 * Context used to access {@link #mManager} and other needed application data about accounts.
+	 *
+	 * @deprecated Use {@link #getContext()} instead.
 	 */
+	@Deprecated
+	protected final Context mContext;
+
+	/**
+	 * Type of accounts that can be managed by this manager.
+	 *
+	 * @deprecated Use {@link #getAccountType()} instead.
+	 */
+	@Deprecated
 	protected final String mAccountType;
 
 	/**
@@ -211,8 +222,8 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 * @param accountType The desired type of accounts that can be managed by the new manager.
 	 */
 	public UserAccountManager(@NonNull final Context context, @NonNull final String accountType) {
+		this.mManager = AccountManager.get(context);
 		this.mContext = context;
-		this.mManager = AccountManager.get(mContext);
 		this.mAccountType = accountType;
 		this.mUiHandler = new Handler(Looper.getMainLooper());
 	}
@@ -220,6 +231,28 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	/*
 	 * Methods =====================================================================================
 	 */
+
+	/**
+	 * Returns the context with which has been this manager created.
+	 *
+	 * @return The associated context.
+	 * @see #UserAccountManager(Context, String)
+	 */
+	@NonNull
+	public final Context getContext() {
+		return mContext;
+	}
+
+	/**
+	 * Returns the type of account that this manager can manage (add, rename, remove).
+	 *
+	 * @return The associated account type.
+	 * @see #UserAccountManager(Context, String)
+	 */
+	@NonNull
+	public final String getAccountType() {
+		return mAccountType;
+	}
 
 	/**
 	 * Registers a watcher to be notified whenever a new user account is created or an old one
@@ -401,6 +434,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	})
 	protected boolean onCreateAccount(@NonNull final A userAccount) {
 		final Account account = new Account(userAccount.getName(), mAccountType);
+		// fixme: this should not be called implicitly but rather explicitly by users of this manager
 		onDeleteAccount(userAccount);
 		if (mManager.addAccountExplicitly(account, encryptData(userAccount.getPassword()), encryptBundle(userAccount.getDataBundle()))) {
 			final String[] authTokenTypes = userAccount.getAuthTokenTypes();
@@ -640,6 +674,10 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 * <p>
 	 * This method requires the caller to hold <b>{@link #PERMISSION_GET_ACCOUNTS}</b> along with
 	 * <b>{@link #PERMISSION_AUTHENTICATE_ACCOUNTS}</b> permissions.
+	 * <p>
+	 * <b>Note, that this method may be only invoked from a background thread. If invoked from the
+	 * main UI thread an exception will be thrown. For none-blocking call use {@link #deleteAccountAsync(UserAccount)}
+	 * instead.</b>
 	 *
 	 * @param userAccount The desired user account for which to delete the corresponding Android {@link Account}.
 	 * @return {@code True} if the account has been deleted, {@code false} otherwise.
@@ -672,7 +710,8 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 * Invoked whenever {@link #createAccount(UserAccount)} or {@link #createAccountAsync(UserAccount)}
 	 * is called to create new Android {@link Account}.
 	 * <p>
-	 * <b>Note</b>, that this method can be invoked on a background thread.
+	 * <b>Note, that invocation of this method need to be always on a background thread otherwise an
+	 * exception will be thrown.</b>
 	 * <p>
 	 * Current implementation returns {@code true} whenever there has been found Android account to
 	 * be deleted for the given user account, {@code false} otherwise.
@@ -693,10 +732,18 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	protected boolean onDeleteAccount(@NonNull final A userAccount) {
 		final Account account = findAccountForUser(userAccount);
 		if (account != null) {
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-				mManager.removeAccount(account, null, null, null);
-			} else {
-				mManager.removeAccount(account, null, null);
+			boolean removed = false;
+			try {
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+					removed = mManager.removeAccount(account, null, null, null).getResult() != null;
+				} else {
+					removed = mManager.removeAccount(account, null, null).getResult();
+				}
+			} catch (OperationCanceledException | IOException | AuthenticatorException e) {
+				OfficiumLogging.e(TAG, "Failed to remove account via framework's account manager.", e);
+			}
+			if (!removed) {
+				return false;
 			}
 			mManager.setPassword(account, null);
 			final String[] authTokenTypes = userAccount.getAuthTokenTypes();

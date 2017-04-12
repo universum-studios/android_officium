@@ -32,7 +32,7 @@ public final class SyncAdapter extends BaseSyncAdapter {
 	private static final String TAG = "SyncAdapter";
 
 	SyncAdapter(@NonNull Context context) {
-		super(context, true);
+		super(context.getApplicationContext(), true);
 		setOnTaskStateChangeListener(SyncManager.getInstance(context));
 		setEventDispatcher(new SyncEventDispatcher());
 		setGlobalSyncHandler(new GlobalSyncHandler());

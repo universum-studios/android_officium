@@ -231,7 +231,7 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	 *
 	 * @param other The other sync task of which data to copy to the new one.
 	 */
-	private SyncTask(final SyncTask other) {
+	protected SyncTask(@NonNull final SyncTask other) {
 		this.mId = other.mId;
 		this.mRequestBody = other.mRequestBody;
 		this.mState = other.mState;

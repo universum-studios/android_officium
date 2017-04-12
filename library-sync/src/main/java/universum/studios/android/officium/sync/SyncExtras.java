@@ -30,7 +30,7 @@ final class SyncExtras {
 	/**
 	 * Prefix for synchronization extra key.
 	 */
-	private static final String PREFIX = "universum.studios.android.officium.sync.EXTRA.";
+	private static final String PREFIX = SyncExtras.class.getPackage().getName() + ".EXTRA.";
 
 	/**
 	 * Key used to store id of synchronization task within extras {@link Bundle}.

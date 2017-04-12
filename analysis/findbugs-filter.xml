@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+	<!-- Ignore all classes related to Android resource components. -->
+	<Match>
+		<Or>
+			<Class name="~.*\.R\$.*"/>
+			<Class name="~.*\.Manifest\$.*"/>
+		</Or>
+	</Match>
+	<!-- Ignore all Tests. -->
+	<Match>
+		<Class name="~.*\.*Test" />
+		<Not>
+			<!-- 'IJU' is the code for bugs related to JUnit test code. -->
+			<Bug code="IJU" />
+		</Not>
+	</Match>
+</FindBugsFilter>

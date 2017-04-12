@@ -125,7 +125,7 @@ public class ServiceApi<M extends ServiceManager> {
 	 * Instance of {@link ServiceManager} used to configure and access services provided by this API.
 	 */
 	@NonNull
-	protected M mManager;
+	protected final M mManager;
 
 	/*
 	 * Constructors ================================================================================

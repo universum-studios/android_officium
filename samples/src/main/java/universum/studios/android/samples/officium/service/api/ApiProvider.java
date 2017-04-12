@@ -32,7 +32,7 @@ public final class ApiProvider extends ServiceApiProvider<Api> {
 	private static final String TAG = "ApiProvider";
 	private static final Object LOCK = new Object();
 
-	private static ApiProvider instance;
+	private static volatile ApiProvider instance;
 
 	private AuthTokenProvider mAuthTokenProvider;
 	private boolean mAuthTokenProviderChanged;
@@ -41,9 +41,11 @@ public final class ApiProvider extends ServiceApiProvider<Api> {
 	}
 
 	@NonNull
-	public static ApiProvider getInstance() {
-		synchronized (LOCK) {
-			if (instance == null) instance = new ApiProvider();
+	public static ApiProvider get() {
+		if (instance == null) {
+			synchronized (LOCK) {
+				instance = new ApiProvider();
+			}
 		}
 		return instance;
 	}
