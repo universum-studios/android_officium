@@ -67,6 +67,12 @@ dependencies {
     compile deps.androidSupport.annotations
     compile deps.universumStudios.utils
     compile deps.universumStudios.crypto
+    releaseCompile "universum.studios.android:officium-core:${config.library.version}@aar"
+
+    /*
+     * DEBUG DEPENDENCIES --------------------------------------------------------------------------
+     */
+    debugCompile project(':library-core')
 
     /*
      * TEST DEPENDENCIES ---------------------------------------------------------------------------
