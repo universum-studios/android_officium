@@ -34,7 +34,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresPermission;
 import android.text.TextUtils;
-import android.util.Log;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,6 +44,7 @@ import java.util.Set;
 import universum.studios.android.crypto.Crypto;
 import universum.studios.android.crypto.Encrypto;
 import universum.studios.android.crypto.util.CryptographyUtils;
+import universum.studios.android.officium.OfficiumLogging;
 import universum.studios.android.util.ErrorException;
 
 /**
@@ -163,18 +163,25 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 */
 
 	/**
-	 * Context used to access {@link #mManager} and other needed application data about accounts.
-	 */
-	protected final Context mContext;
-
-	/**
 	 * Account manager used to create/update/delete accounts of the type specified for this manager.
 	 */
+	@NonNull
 	protected final AccountManager mManager;
 
 	/**
-	 * Type of accounts that can be managed by this manager.
+	 * Context used to access {@link #mManager} and other needed application data about accounts.
+	 *
+	 * @deprecated Use {@link #getContext()} instead.
 	 */
+	@Deprecated
+	protected final Context mContext;
+
+	/**
+	 * Type of accounts that can be managed by this manager.
+	 *
+	 * @deprecated Use {@link #getAccountType()} instead.
+	 */
+	@Deprecated
 	protected final String mAccountType;
 
 	/**
@@ -215,8 +222,8 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 * @param accountType The desired type of accounts that can be managed by the new manager.
 	 */
 	public UserAccountManager(@NonNull final Context context, @NonNull final String accountType) {
+		this.mManager = AccountManager.get(context);
 		this.mContext = context;
-		this.mManager = AccountManager.get(mContext);
 		this.mAccountType = accountType;
 		this.mUiHandler = new Handler(Looper.getMainLooper());
 	}
@@ -224,6 +231,28 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	/*
 	 * Methods =====================================================================================
 	 */
+
+	/**
+	 * Returns the context with which has been this manager created.
+	 *
+	 * @return The associated context.
+	 * @see #UserAccountManager(Context, String)
+	 */
+	@NonNull
+	public final Context getContext() {
+		return mContext;
+	}
+
+	/**
+	 * Returns the type of account that this manager can manage (add, rename, remove).
+	 *
+	 * @return The associated account type.
+	 * @see #UserAccountManager(Context, String)
+	 */
+	@NonNull
+	public final String getAccountType() {
+		return mAccountType;
+	}
 
 	/**
 	 * Registers a watcher to be notified whenever a new user account is created or an old one
@@ -405,6 +434,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	})
 	protected boolean onCreateAccount(@NonNull final A userAccount) {
 		final Account account = new Account(userAccount.getName(), mAccountType);
+		// fixme: this should not be called implicitly but rather explicitly by users of this manager
 		onDeleteAccount(userAccount);
 		if (mManager.addAccountExplicitly(account, encryptData(userAccount.getPassword()), encryptBundle(userAccount.getDataBundle()))) {
 			final String[] authTokenTypes = userAccount.getAuthTokenTypes();
@@ -710,7 +740,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 					removed = mManager.removeAccount(account, null, null).getResult();
 				}
 			} catch (OperationCanceledException | IOException | AuthenticatorException e) {
-				Log.e(TAG, "Failed to remove account via framework's account manager.", e);
+				OfficiumLogging.e(TAG, "Failed to remove account via framework's account manager.", e);
 			}
 			if (!removed) {
 				return false;

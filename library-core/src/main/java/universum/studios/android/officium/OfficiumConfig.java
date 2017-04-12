@@ -18,29 +18,37 @@
  */
 package universum.studios.android.officium;
 
-import android.util.Log;
-
 /**
+ * <b>This class has been deprecated and will be removed in the next release.</b>
+ * <p>
  * Configuration options for the Officium library.
  *
  * @author Martin Albedinsky
+ * @deprecated No longer used across the library. For logging control use {@link OfficiumLogging} instead.
  */
+@Deprecated
 public final class OfficiumConfig {
 
 	/**
+	 * <b>This flag has been deprecated and will be removed in the next release.</b>
+	 * <p>
 	 * Flag indicating whether the <b>verbose</b> output for the Officium library trough log-cat is
 	 * enabled or not.
 	 *
-	 * @see Log#v(String, String)
+	 * @deprecated No longer used across the library.
 	 */
+	@Deprecated
 	public static boolean LOG_ENABLED = true;
 
 	/**
+	 * <b>This flag has been deprecated and will be removed in the next release.</b>
+	 * <p>
 	 * Flag indicating whether the <b>debug</b> output for the Officium library trough log-cat is
 	 * enabled or not.
 	 *
-	 * @see Log#d(String, String)
+	 * @deprecated No longer used across the library.
 	 */
+	@Deprecated
 	public static boolean DEBUG_LOG_ENABLED = false;
 
 	/**

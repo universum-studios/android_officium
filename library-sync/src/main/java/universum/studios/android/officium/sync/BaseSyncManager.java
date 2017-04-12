@@ -25,9 +25,8 @@ import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
-import universum.studios.android.officium.OfficiumConfig;
+import universum.studios.android.officium.OfficiumLogging;
 
 /**
  * Base class that can be used for implementation of managers responsible for requesting of synchronization
@@ -194,18 +193,14 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	public void requestSync(@NonNull final SyncTask syncTask) {
 		final Account account = pickAccountForSync();
 		if (account == null) {
-			if (OfficiumConfig.LOG_ENABLED) {
-				Log.v(TAG, "Cannot perform synchronization for task(" + syncTask + "). No account picked for synchronization.");
-			}
+			OfficiumLogging.w(TAG, "Cannot perform synchronization for task(" + syncTask + "). No account picked for synchronization.");
 		} else if (shouldRequestSync(syncTask, account)) {
 			syncTask.setState(SyncTask.PENDING);
 			onSyncTaskStateChanged(syncTask, account);
 			final Bundle extras = syncTask.intoExtras(new Bundle());
 			extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
 			extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-			if (OfficiumConfig.LOG_ENABLED) {
-				Log.v(TAG, "Requesting synchronization for task(" + syncTask + ").");
-			}
+			OfficiumLogging.i(TAG, "Requesting synchronization for task(" + syncTask + ").");
 			ContentResolver.requestSync(account, mAuthority, extras);
 		}
 	}

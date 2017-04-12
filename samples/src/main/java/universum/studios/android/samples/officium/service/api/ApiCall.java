@@ -48,7 +48,7 @@ public final class ApiCall<T> extends ServiceCall<T> {
 
 	@NonNull
 	@Override
-	protected String requestId() {
+	protected String nextRequestId() {
 		return Long.toString(System.currentTimeMillis());
 	}
 }

@@ -86,6 +86,7 @@ dependencies {
      * RELEASE DEPENDENCIES ------------------------------------------------------------------------
      */
     compile deps.androidSupport.annotations
+    compile deps.universumStudios.logger
     compile deps.universumStudios.utils
     compile deps.universumStudios.crypto
     compile deps.other.squareupOtto

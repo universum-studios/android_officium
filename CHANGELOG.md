@@ -2,7 +2,7 @@ Change-Log
 ===============
 
 ### [Release 1.1.2](https://github.com/universum-studios/android_officium/releases/tag/1.1.2) ###
-> 11.04.2017
+> 12.04.2017
 
 - **Deprecated** direct access to some of protected fields and replaced by protected/public getter
   methods instead.

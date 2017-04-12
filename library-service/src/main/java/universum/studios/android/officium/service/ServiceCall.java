@@ -122,7 +122,7 @@ public class ServiceCall<T> implements Call<T> {
 	 * Also id of the service specified for this service call will be attached to the callback if
 	 * it has no service id attached yet.
 	 *
-	 * @param callback The desired callback that should be notified when service requests is finished.
+	 * @param callback The desired callback that should be notified when service request is finished.
 	 * @return Unique id of this request for later identification of received callback, either
 	 * successful response or error.
 	 * @see ServiceObject#getServiceId()
@@ -130,14 +130,14 @@ public class ServiceCall<T> implements Call<T> {
 	 */
 	@NonNull
 	public String enqueue(@NonNull final ServiceCallback<T> callback) {
-		final String requestId = requestId();
+		final String requestId = nextRequestId();
 		ServiceCallback.associateWith(callback, mServiceId, requestId);
 		enqueue((Callback<T>) callback);
 		return requestId;
 	}
 
 	/**
-	 * Called to obtain a unique id for the current service request that has been requested to be
+	 * Called to generate a unique id for the current service request that has been requested to be
 	 * executed asynchronously via {@link #enqueue(ServiceCallback)}.
 	 * <p>
 	 * This implementation returns a string representation of the current time in milliseconds as
@@ -146,6 +146,17 @@ public class ServiceCall<T> implements Call<T> {
 	 * @return Unique id for the current request that will be attached to the service callback.
 	 */
 	@NonNull
+	protected String nextRequestId() {
+		return Long.toString(System.currentTimeMillis());
+	}
+
+	/**
+	 * <b>This method has been deprecated and will be removed in the next release.</b>
+	 *
+	 * @deprecated Use {@link #nextRequestId()} instead.
+	 */
+	@NonNull
+	@Deprecated
 	protected String requestId() {
 		return Long.toString(System.currentTimeMillis());
 	}

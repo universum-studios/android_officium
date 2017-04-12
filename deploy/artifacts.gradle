@@ -46,6 +46,7 @@ task generateJavadoc(type: Javadoc) {
     classpath += files(
             android.getBootClasspath(),
             "${android.sdkDirectory}\\extras\\android\\m2repository\\com\\android\\support\\support-annotations\\${versions.androidSupportVersion}\\support-annotations-${versions.androidSupportVersion}.jar",
+            "${config.maven.localUrl}\\universum\\studios\\android\\logger\\${versions.universumStudiosLoggerVersion}\\logger-${versions.universumStudiosLoggerVersion}.jar",
             "${config.maven.localUrl}\\universum\\studios\\android\\utils\\${versions.universumStudiosUtilsVersion}\\utils-${versions.universumStudiosUtilsVersion}-sources.jar",
             "${config.maven.localUrl}\\universum\\studios\\android\\crypto\\${versions.universumStudiosCryptoVersion}\\crypto-${versions.universumStudiosCryptoVersion}-sources.jar"
     )

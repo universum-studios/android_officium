@@ -43,4 +43,9 @@ public final class GlobalSyncHandler extends SyncHandler<SyncTask.EmptyRequest, 
 	protected Boolean onHandleSync(@NonNull Context context, @NonNull SyncOperation syncOperation, @Nullable SyncTask.EmptyRequest syncRequest) throws Exception {
 		return false;
 	}
+
+	@Override
+	protected void onSyncError(@NonNull Context context, @NonNull SyncOperation syncOperation, @Nullable SyncTask.EmptyRequest syncRequest, @NonNull Exception error) {
+		super.onSyncError(context, syncOperation, syncRequest, error);
+	}
 }

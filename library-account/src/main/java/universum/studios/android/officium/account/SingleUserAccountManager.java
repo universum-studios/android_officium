@@ -382,8 +382,7 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 	@Nullable
 	@RequiresPermission(PERMISSION_GET_ACCOUNTS)
 	protected Account acquireAccount() {
-		final AccountManager manager = AccountManager.get(mContext);
-		final Account[] accounts = manager.getAccountsByType(mAccountType);
+		final Account[] accounts = mManager.getAccountsByType(mAccountType);
 		// We assume here that there can be only one user account available/created (if any).
 		return accounts.length > 0 ? accounts[0] : null;
 	}
