@@ -103,8 +103,7 @@ dependencies {
     androidTestCompile project(':test-core')
 }
 
-// Apply DEPLOY script.
-apply from: '../deploy/deploy.gradle'
-
-// Apply CODACY script.
+// Apply additional scripts.
+apply from: 'analysis.gradle'
 apply from: 'codacy.gradle'
+apply from: '../deploy/deploy.gradle'
