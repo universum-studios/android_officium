@@ -22,7 +22,7 @@ android.libraryVariants.all { variant ->
     /**
      * Task that executes FindBugs tool for a specific build variant.
      */
-    task("findbugs${variant.name.capitalize()}", type: FindBugs) {
+    task("find${variant.name.capitalize()}Bugs", type: FindBugs) {
         description "Analyzes source code for ${variant.name} variant using the FindBugs tool."
         group "Verification"
         ignoreFailures = true
