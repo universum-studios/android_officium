@@ -61,6 +61,9 @@ android {
                 '../library-service/src/androidTest/java',
                 '../library-sync/src/androidTest/java'
         ]
+        androidTest.res.srcDirs = [
+                '../library-sync/src/androidTest/res'
+        ]
     }
 
     compileOptions {
@@ -107,3 +110,4 @@ dependencies {
 apply from: 'analysis.gradle'
 apply from: 'codacy.gradle'
 apply from: '../deploy/deploy.gradle'
+apply from: 'github.gradle'

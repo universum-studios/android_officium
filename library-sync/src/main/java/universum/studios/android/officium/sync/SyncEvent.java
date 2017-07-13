@@ -20,13 +20,18 @@ package universum.studios.android.officium.sync;
 
 import android.accounts.Account;
 import android.os.Bundle;
+import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 /**
  * Event that can be fired/post for receivers that listen for state of a concrete synchronization
- * process/task. Each instance of SyncEvent can be identified by its {@link SyncEvent#id id} and
- * {@link SyncEvent#type type}. Additionally for events type of {@link #PROGRESS} can be specified
- * {@link SyncEvent#progress progress} value and for events type of {@link #ERROR} can be specified
+ * process/task. Each instance of SyncEvent can be identified by its {@link SyncEvent#taskId taskId}
+ * and {@link SyncEvent#type type}. Additionally for events type of {@link #PROGRESS} can be specified
+ * {@link SyncEvent#progress progress} value and for events type of {@link #FAILURE} can be specified
  * occurred synchronization {@link SyncEvent#error}.
  * <p>
  * Creation of instances of {@link SyncEvent SyncEvents} is restricted via {@link Builder}
@@ -61,9 +66,33 @@ public final class SyncEvent {
 	public static final int FINISH = 0x03;
 
 	/**
-	 * Type flag for {@link SyncEvent} determining <b>error</b> occurred during synchronization.
+	 * Type flag for {@link SyncEvent} determining <b>failure</b> occurred during synchronization.
 	 */
-	public static final int ERROR = 0x04;
+	public static final int FAILURE = 0x04;
+
+	/**
+	 * Type flag for {@link SyncEvent} determining <b>error</b> occurred during synchronization.
+	 *
+	 * @deprecated Use {@link #FAILURE} instead.
+	 */
+	@Deprecated
+	public static final int ERROR = FAILURE;
+
+	/**
+	 * Defines an annotation for determining set of available types for {@link SyncEvent}.
+	 *
+	 * <h3>Available types</h3>
+	 * <ul>
+	 * <li>{@link #START}</li>
+	 * <li>{@link #PROGRESS}</li>
+	 * <li>{@link #FINISH}</li>
+	 * <li>{@link #FAILURE}</li>
+	 * </ul>
+	 */
+	@IntDef({START, PROGRESS, FINISH, FAILURE})
+	@Retention(RetentionPolicy.SOURCE)
+	public @interface Type {
+	}
 
 	/*
 	 * Interface ===================================================================================
@@ -79,33 +108,45 @@ public final class SyncEvent {
 
 	/**
 	 * Id of the synchronization task for which has been this synchronization event fired.
+	 *
+	 * @deprecated Use {@link #taskId} instead.
 	 */
+	@Deprecated
 	public final int id;
 
 	/**
-	 * Type of this synchronization event. One of {@link #START}, {@link #PROGRESS}, {@link #FINISH}
-	 * or {@link #ERROR} or some custom specified type.
+	 * Id of the synchronization task for which has been this synchronization event fired.
 	 */
+	public final int taskId;
+
+	/**
+	 * Type of this synchronization event. One of {@link #START}, {@link #PROGRESS}, {@link #FINISH}
+	 * or {@link #FAILURE} or some custom specified type.
+	 */
+	@Type
 	public final int type;
 
 	/**
-	 * Current progress of synchronization task with {@link #id}.
+	 * Current progress of synchronization task with id of{@link #taskId}.
 	 */
 	public final int progress;
 
 	/**
-	 * Error that has occurred during execution of synchronization task with {@link #id}.
+	 * Error that has occurred during execution of synchronization task with id of {@link #taskId}.
 	 */
+	@Nullable
 	public final Exception error;
 
 	/**
-	 * Account used during execution of synchronization task with {@link #id}.
+	 * Account used during execution of synchronization task with id of {@link #taskId}.
 	 */
+	@Nullable
 	public final Account account;
 
 	/**
 	 * Bundle with additional extra information.
 	 */
+	@Nullable
 	public final Bundle extras;
 
 	/*
@@ -119,7 +160,8 @@ public final class SyncEvent {
 	 */
 	@SuppressWarnings("WeakerAccess")
 	SyncEvent(@NonNull final Builder builder) {
-		this.id = builder.id;
+		this.id = builder.taskId;
+		this.taskId = builder.taskId;
 		this.type = builder.type;
 		this.progress = builder.progress;
 		this.error = builder.error;
@@ -143,14 +185,14 @@ public final class SyncEvent {
 	public static final class Builder {
 
 		/**
-		 * See {@link SyncEvent#id}.
+		 * See {@link SyncEvent#taskId}.
 		 */
-		final int id;
+		final int taskId;
 
 		/**
-		 * See {@link SyncEvent#error}.
+		 * See {@link SyncEvent#type}.
 		 */
-		int type;
+		int type = START;
 
 		/**
 		 * See {@link SyncEvent#progress}.
@@ -173,25 +215,39 @@ public final class SyncEvent {
 		Bundle extras;
 
 		/**
-		 * Creates a new instance of Builder with the specified <var>id</var>.
+		 * Creates a new instance of Builder with the specified <var>taskId</var>.
 		 *
-		 * @param id The desired id for the new SyncEvent.
-		 * @see SyncEvent#id
+		 * @param taskId Id of the synchronization task for which is the new SyncEvent created.
+		 * @see SyncEvent#taskId
 		 */
-		public Builder(final int id) {
-			this.id = id;
+		public Builder(final int taskId) {
+			this.taskId = taskId;
 		}
 
 		/**
 		 * Specifies a type of SyncEvent that will be fired.
+		 * <p>
+		 * Default value: <b>{@link #START}</b>
 		 *
 		 * @param type The desired type. May be one of {@link #START}, {@link #PROGRESS}, {@link #FINISH}
-		 * or {@link #ERROR} or custom specified type.
+		 *             or {@link #FAILURE} or custom specified type.
 		 * @return This builder to allow methods chaining.
 		 * @see SyncEvent#type
 		 */
-		public Builder type(final int type) {
+		public Builder type(@Type final int type) {
 			this.type = type;
+			return this;
+		}
+
+		/**
+		 * Specifies an account for which SyncEvent will be fired.
+		 *
+		 * @param account The desired account.
+		 * @return This builder to allow methods chaining.
+		 * @see SyncEvent#account
+		 */
+		public Builder account(@NonNull final Account account) {
+			this.account = account;
 			return this;
 		}
 
@@ -216,18 +272,6 @@ public final class SyncEvent {
 		 */
 		public Builder error(@NonNull final Exception error) {
 			this.error = error;
-			return this;
-		}
-
-		/**
-		 * Specifies an account for which SyncEvent will be fired.
-		 *
-		 * @param account The desired account.
-		 * @return This builder to allow methods chaining.
-		 * @see SyncEvent#account
-		 */
-		public Builder account(@NonNull final Account account) {
-			this.account = account;
 			return this;
 		}
 

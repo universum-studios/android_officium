@@ -1,6 +1,14 @@
 Change-Log
 ===============
 
+### Release 1.2.0 ###
+> --.06.2017
+
+- Removed components that has been **deprecated** in the previous version.
+- Renamed `UiEventBus` (still available but **deprecated**) to `MainEventBus` implementation.
+- Added `SimpleEndPoint` class that is implementation of `EndPoint` interface.
+- Other minor updates and improvements.
+
 ### [Release 1.1.2](https://github.com/universum-studios/android_officium/releases/tag/1.1.2) ###
 > 12.04.2017
 

@@ -19,12 +19,16 @@
 package universum.studios.android.officium.sync;
 
 import android.accounts.Account;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 /**
  * SyncOperation contains data that are describing a specific synchronization request to be executed
  * in {@link BaseSyncAdapter}.
+ *
+ * @author Martin Albedinsky
  */
+@SuppressWarnings("WeakerAccess")
 public final class SyncOperation {
 
 	 /*
@@ -51,16 +55,19 @@ public final class SyncOperation {
 	/**
 	 * Account associated with this sync operation.
 	 */
+	@NonNull
 	public final Account account;
 
 	/**
 	 * Authority associated with this sync operation.
 	 */
+	@NonNull
 	public final String authority;
 
 	/**
 	 * Task associated with this sync operation.
 	 */
+	@NonNull
 	public final SyncTask task;
 
 	/*
@@ -72,7 +79,6 @@ public final class SyncOperation {
 	 *
 	 * @param builder The builder with data for the new SyncOperation.
 	 */
-	@SuppressWarnings("WeakerAccess")
 	SyncOperation(final Builder builder) {
 		this.account = builder.account;
 		this.authority = builder.authority;
@@ -89,8 +95,10 @@ public final class SyncOperation {
 
 	/**
 	 * Builder that may be used to build instances of {@link SyncOperation}.
+	 *
+	 * @author Martin Albedinsky
 	 */
-	static final class Builder {
+	public static final class Builder {
 
 		/**
 		 * See {@link SyncOperation#account}.
@@ -114,7 +122,7 @@ public final class SyncOperation {
 		 * @return This builder to allow methods chaining.
 		 * @see SyncOperation#account
 		 */
-		Builder account(final Account account) {
+		public Builder account(@NonNull final Account account) {
 			this.account = account;
 			return this;
 		}
@@ -126,7 +134,7 @@ public final class SyncOperation {
 		 * @return This builder to allow methods chaining.
 		 * @see SyncOperation#authority
 		 */
-		Builder authority(final String authority) {
+		public Builder authority(@NonNull final String authority) {
 			this.authority = authority;
 			return this;
 		}
@@ -138,7 +146,7 @@ public final class SyncOperation {
 		 * @return This builder to allow methods chaining.
 		 * @see SyncOperation#task
 		 */
-		Builder task(final SyncTask task) {
+		public Builder task(@NonNull final SyncTask task) {
 			this.task = task;
 			return this;
 		}
@@ -147,11 +155,13 @@ public final class SyncOperation {
 		 * Builds a new instance of SyncOperation from the current data.
 		 *
 		 * @return New instance of SyncOperation.
+		 * @throws IllegalArgumentException If any of the required arguments is missing.
 		 */
-		SyncOperation build() {
-			if (account == null) throw new IllegalArgumentException("No account specified!");
-			if (TextUtils.isEmpty(authority)) throw new IllegalArgumentException("No authority specified!");
-			if (task == null) throw new IllegalArgumentException("No task specified!");
+		@NonNull
+		public SyncOperation build() {
+			if (account == null) throw new IllegalArgumentException("No account specified.");
+			if (TextUtils.isEmpty(authority)) throw new IllegalArgumentException("No authority specified.");
+			if (task == null) throw new IllegalArgumentException("No task specified.");
 			return new SyncOperation(this);
 		}
 	}

@@ -81,6 +81,7 @@ dependencies {
      * TEST DEPENDENCIES ---------------------------------------------------------------------------
      */
     androidTestCompile project(':test-core')
+    androidTestCompile deps.other.googleGson
 }
 
 // Apply DEPLOY script.

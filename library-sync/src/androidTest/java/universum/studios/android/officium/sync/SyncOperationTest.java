@@ -17,12 +17,16 @@
  * =================================================================================================
  */
 package universum.studios.android.officium.sync; 
+import android.accounts.Account;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import universum.studios.android.test.BaseInstrumentedTest;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 
 /**
  * @author Martin Albedinsky
@@ -34,7 +38,37 @@ public final class SyncOperationTest extends BaseInstrumentedTest {
 	private static final String TAG = "SyncOperationTest";
 
     @Test
-	public void test() {
-		// todo:: implement test
+	public void testBuilderBuild() {
+	    final Account account = new Account("TestName", "TestType");
+	    final String authority = "TestAuthority";
+	    final SyncTask task = new SyncTask.Builder<>(1).build();
+		final SyncOperation operation = new SyncOperation.Builder()
+				.account(account)
+				.authority(authority)
+				.task(task)
+				.build();
+	    assertThat(operation.account, is(account));
+	    assertThat(operation.authority, is(authority));
+	    assertThat(operation.task, is(task));
+    }
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testBuilderBuildWithoutAccount() {
+	    new SyncOperation.Builder().authority("TestAuthority").task(new SyncTask.Builder<>(1).build()).build();
+    }
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testBuilderBuildWithoutAuthority() {
+	    new SyncOperation.Builder().account(new Account("TestName", "TestType")).task(new SyncTask.Builder<>(1).build()).build();
+    }
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testBuilderBuildWithEmptyAuthority() {
+	    new SyncOperation.Builder().account(new Account("TestName", "TestType")).authority("").task(new SyncTask.Builder<>(1).build()).build();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+	public void testBuilderBuildWithoutTask() {
+	    new SyncOperation.Builder().account(new Account("TestName", "TestType")).authority("TestAuthority").build();
 	}
 }

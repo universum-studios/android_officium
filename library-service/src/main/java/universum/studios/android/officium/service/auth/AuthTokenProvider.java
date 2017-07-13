@@ -29,14 +29,6 @@ import android.support.annotation.Nullable;
 public interface AuthTokenProvider {
 
 	/**
-	 * Returns the auth token provided by this token provided.
-	 *
-	 * @return Peeked authorization token or {@code null} if there is no token available at this time.
-	 */
-	@Nullable
-	String peekToken();
-
-	/**
 	 * Provider instance that may be used for <b>unauthorized</b> requests that does not require
 	 * authorization token to be send to an application server.
 	 * <p>
@@ -53,4 +45,12 @@ public interface AuthTokenProvider {
 			return null;
 		}
 	};
+
+	/**
+	 * Returns the auth token provided by this token provided.
+	 *
+	 * @return Peeked authorization token or {@code null} if there is no token available at this time.
+	 */
+	@Nullable
+	String peekToken();
 }

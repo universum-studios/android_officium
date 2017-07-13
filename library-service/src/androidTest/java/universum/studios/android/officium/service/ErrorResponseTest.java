@@ -19,10 +19,16 @@
 package universum.studios.android.officium.service; 
 import android.support.test.runner.AndroidJUnit4;
 
+import com.google.gson.Gson;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import universum.studios.android.test.BaseInstrumentedTest;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.notNullValue;
 
 /**
  * @author Martin Albedinsky
@@ -34,7 +40,41 @@ public final class ErrorResponseTest extends BaseInstrumentedTest {
 	private static final String TAG = "ErrorResponseTest";
 
     @Test
-	public void test() {
-		// todo:: implement test
+	public void testInstantiationViaGson() {
+		final ErrorResponse response = new Gson().fromJson("{error: {code: 400, message: \"Unauthorized.\"}}", ErrorResponse.class);
+	    assertThat(response, is(notNullValue()));
+	    assertThat(response.getErrorCode(), is(400));
+	    assertThat(response.getErrorMessage(), is("Unauthorized."));
+	}
+
+	@Test
+	public void testInstantiationWithError() {
+		final ErrorResponse.Error error = new ErrorResponse.Error();
+		error.code = 400;
+		error.message = "Unauthorized.";
+		final ErrorResponse response = new ErrorResponse(error);
+		assertThat(response.getErrorCode(), is(error.code));
+		assertThat(response.getErrorMessage(), is(error.message));
+	}
+
+	@Test
+	public void testToString() {
+		final ErrorResponse.Error error = new ErrorResponse.Error();
+		error.code = 400;
+		error.message = "Unauthorized.";
+		assertThat(
+				new ErrorResponse(error).toString(),
+				is("ErrorResponse{error: Error{code: 400, message: Unauthorized.}}")
+		);
+	}
+
+	@Test
+	public void testGetErrorCodeWithoutErrorPresented() {
+		assertThat(new ErrorResponse().getErrorCode(), is(0));
+	}
+
+	@Test
+	public void testGetErrorMessageWithoutErrorPresented() {
+		assertThat(new ErrorResponse().getErrorMessage(), is(""));
 	}
 }

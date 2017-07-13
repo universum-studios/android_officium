@@ -24,6 +24,9 @@ import org.junit.runner.RunWith;
 
 import universum.studios.android.test.BaseInstrumentedTest;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+
 /**
  * @author Martin Albedinsky
  */
@@ -33,8 +36,55 @@ public final class BaseServiceObjectTest extends BaseInstrumentedTest {
 	@SuppressWarnings("unused")
 	private static final String TAG = "BaseServiceObjectTest";
 
+	@Test
+	public void testAssociateWith() {
+		final TestObject object = new TestObject();
+		BaseServiceObject.associateWith(object, 1, "2");
+		assertThat(object.getServiceId(), is(1));
+		assertThat(object.getRequestId(), is("2"));
+	}
+
+	@Test
+	public void testAssociateWithWhenAlreadyAssociated() {
+		final TestObject object = new TestObject();
+		BaseServiceObject.associateWith(object, 1, "2");
+		BaseServiceObject.associateWith(object, 3, "4");
+		assertThat(object.getServiceId(), is(1));
+		assertThat(object.getRequestId(), is("2"));
+	}
+
+	@Test
+	public void testAssociateWithNullValues() {
+		final TestObject object = new TestObject();
+		BaseServiceObject.associateWith(object, null, null);
+		assertThat(object.getServiceId(), is(BaseServiceObject.NO_SERVICE));
+		assertThat(object.getRequestId(), is(BaseServiceObject.NO_REQUEST));
+	}
+
+	@Test(expected = UnsupportedOperationException.class)
+	public void testSetServiceIdWhenAlreadyAssociated() {
+		final TestObject object = new TestObject();
+		BaseServiceObject.associateWith(object, 1, "2");
+		object.setServiceId(3);
+	}
+
     @Test
-	public void test() {
-		// todo:: implement test
+	public void testGetServiceIdDefault() {
+	    assertThat(new TestObject().getServiceId(), is(BaseServiceObject.NO_SERVICE));
+	}
+
+	@Test(expected = UnsupportedOperationException.class)
+	public void testSetRequestIdWhenAlreadyAssociated() {
+		final TestObject object = new TestObject();
+		BaseServiceObject.associateWith(object, 1, "2");
+		object.setRequestId("4");
+	}
+
+    @Test
+	public void testGetRequestIdDefault() {
+	    assertThat(new TestObject().getRequestId(), is(BaseServiceObject.NO_REQUEST));
+	}
+
+	private static final class TestObject extends BaseServiceObject {
 	}
 }

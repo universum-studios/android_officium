@@ -38,14 +38,14 @@ final class SyncExtras {
 	static final String EXTRA_TASK_ID = PREFIX + "Task.Id";
 
 	/**
-	 * Key used to store request body of synchronization task within extras {@link Bundle}.
-	 */
-	static final String EXTRA_TASK_REQUEST_BODY = PREFIX + "Task.RequestBody";
-
-	/**
 	 * Key used to store state of synchronization task within extras {@link Bundle}.
 	 */
 	static final String EXTRA_TASK_STATE = PREFIX + "Task.State";
+
+	/**
+	 * Key used to store request body of synchronization task within extras {@link Bundle}.
+	 */
+	static final String EXTRA_TASK_REQUEST_BODY = PREFIX + "Task.RequestBody";
 
 	/**
 	 */

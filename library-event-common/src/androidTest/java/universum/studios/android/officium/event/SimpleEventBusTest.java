@@ -19,10 +19,20 @@
 package universum.studios.android.officium.event; 
 import android.support.test.runner.AndroidJUnit4;
 
+import com.squareup.otto.Bus;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import universum.studios.android.test.BaseInstrumentedTest;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.notNullValue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 /**
  * @author Martin Albedinsky
@@ -34,7 +44,47 @@ public final class SimpleEventBusTest extends BaseInstrumentedTest {
 	private static final String TAG = "SimpleEventBusTest";
 
     @Test
-	public void test() {
-		// todo:: implement test
+	public void testInstantiationWithDefaultBus() {
+		final SimpleEventBus eventBus = new SimpleEventBus();
+	    assertThat(eventBus.getBus(), is(notNullValue()));
+	}
+
+    @Test
+	public void testInstantiationWithBus() {
+	    final Bus bus = new Bus();
+	    final SimpleEventBus eventBus = new SimpleEventBus(bus);
+	    assertThat(eventBus.getBus(), is(bus));
+	}
+
+	@Test
+	public void testRegister() {
+		final Bus mockBus = mock(Bus.class);
+		final SimpleEventBus eventBus = new SimpleEventBus(mockBus);
+		final Object handler = new Object();
+		eventBus.register(handler);
+		verify(mockBus, times(1)).register(handler);
+		verifyNoMoreInteractions(mockBus);
+	}
+
+	@Test
+	public void testUnregister() {
+		final Bus mockBus = mock(Bus.class);
+		final SimpleEventBus eventBus = new SimpleEventBus(mockBus);
+		final Object handler = new Object();
+		eventBus.register(handler);
+		eventBus.unregister(handler);
+		verify(mockBus, times(1)).register(handler);
+		verify(mockBus, times(1)).unregister(handler);
+		verifyNoMoreInteractions(mockBus);
+	}
+
+	@Test
+	public void testPost() {
+		final Bus mockBus = mock(Bus.class);
+		final SimpleEventBus eventBus = new SimpleEventBus(mockBus);
+		final Object event = new Object();
+		eventBus.post(event);
+		verify(mockBus, times(1)).post(event);
+		verifyNoMoreInteractions(mockBus);
 	}
 }

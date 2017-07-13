@@ -58,8 +58,7 @@ public class SimpleEventBus implements EventBus {
 	 * @deprecated Use {@link #getBus()} instead.
 	 */
 	@NonNull
-	@Deprecated
-	protected final Bus mBus;
+	final Bus mBus;
 
 	/*
 	 * Constructors ================================================================================
