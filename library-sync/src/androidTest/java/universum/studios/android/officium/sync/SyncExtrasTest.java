@@ -22,7 +22,13 @@ import android.support.test.runner.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 import universum.studios.android.test.BaseInstrumentedTest;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 
 /**
  * @author Martin Albedinsky
@@ -33,8 +39,22 @@ public final class SyncExtrasTest extends BaseInstrumentedTest {
 	@SuppressWarnings("unused")
 	private static final String TAG = "SyncExtrasTest";
 
-    @Test
-	public void test() {
-		// todo:: implement test
+	@Test(expected = IllegalAccessException.class)
+	public void testInstantiation() throws Exception {
+		SyncExtras.class.newInstance();
 	}
+
+	@Test(expected = InvocationTargetException.class)
+	public void testInstantiationWithAccessibleConstructor() throws Exception {
+		final Constructor<SyncExtras> constructor = SyncExtras.class.getDeclaredConstructor();
+		constructor.setAccessible(true);
+		constructor.newInstance();
+	}
+
+    @Test
+	public void testConstants() {
+		assertThat(SyncExtras.EXTRA_TASK_ID, is(SyncExtras.class.getPackage().getName() + ".EXTRA.Task.Id"));
+		assertThat(SyncExtras.EXTRA_TASK_STATE, is(SyncExtras.class.getPackage().getName() + ".EXTRA.Task.State"));
+		assertThat(SyncExtras.EXTRA_TASK_REQUEST_BODY, is(SyncExtras.class.getPackage().getName() + ".EXTRA.Task.RequestBody"));
+    }
 }

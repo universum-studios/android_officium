@@ -3,7 +3,7 @@ def buildConfig = [
         compileSdkVersion: 25,
         minSdkVersion    : 11,
         targetSdkVersion : 25,
-        buildToolsVersion: '25.0.2'
+        buildToolsVersion: '25.0.3'
 ]
 
 def testConfig = [
@@ -11,7 +11,7 @@ def testConfig = [
 ]
 
 def libraryConfig = [
-        version: '1.1.2'
+        version: '1.2.0'
 ]
 
 def mavenConfig = [
@@ -29,11 +29,17 @@ def mavenConfig = [
 
 def bintrayConfig = [
         publish                  : false,
-        packageName              : mavenConfig.groupId + ':' + mavenConfig.artifactId,
+        packageName              : "${mavenConfig.groupId}:${mavenConfig.artifactId}",
         packageLabels            : ['android', 'account', 'synchronization', 'service', 'event'],
         packageVersionName       : mavenConfig.version,
         packageVersionDescription: 'Release patch.',
         packageVersionTag        : mavenConfig.version
+]
+
+def releaseConfig = [
+        owner      : 'universum-studios',
+        repository : 'android_officium',
+        accessToken: System.getenv('GITHUB_API_TOKEN')
 ]
 
 def codacyConfig = [
@@ -52,6 +58,7 @@ ext.config = [
         "library": libraryConfig,
         "maven"  : mavenConfig,
         "bintray": bintrayConfig,
+        "release": releaseConfig,
         "codacy" : codacyConfig,
         "ci"     : ciConfig
 ]

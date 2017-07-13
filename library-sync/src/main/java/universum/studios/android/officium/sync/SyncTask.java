@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
@@ -110,8 +111,9 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	public static final int CANCELED = 0x05;
 
 	/**
-	 * Defines an annotation for determining set of available states for {@link SyncTask}.
-	 * <h3>Available states</h3>
+	 * Defines an annotation for determining set of possible states for {@link SyncTask}.
+	 *
+	 * <h3>Possible states</h3>
 	 * <ul>
 	 * <li>{@link #IDLE}</li>
 	 * <li>{@link #PENDING}</li>
@@ -176,7 +178,6 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	 * Empty instance of {@link SyncTask} that may be used in order to pass a sync task to a sync
 	 * handler that does not require any data from a caller to perform synchronization logic.
 	 */
-	@SuppressWarnings("unused")
 	public static final SyncTask<EmptyRequest> EMPTY = new SyncTask<>();
 
 	/**
@@ -227,17 +228,6 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	}
 
 	/**
-	 * Creates a new instance of SyncTask with data of the given one.
-	 *
-	 * @param other The other sync task of which data to copy to the new one.
-	 */
-	protected SyncTask(@NonNull final SyncTask other) {
-		this.mId = other.mId;
-		this.mRequestBody = other.mRequestBody;
-		this.mState = other.mState;
-	}
-
-	/**
 	 * Creates a new instance of SyncTask with data specified within the given <var>builder</var>.
 	 *
 	 * @param builder The builder containing data for the new SyncTask instance.
@@ -263,6 +253,17 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 		this.mId = extras.getInt(SyncExtras.EXTRA_TASK_ID, DEFAULT_ID);
 		this.mRequestBody = extras.getString(SyncExtras.EXTRA_TASK_REQUEST_BODY);
 		this.mState = extras.getInt(SyncExtras.EXTRA_TASK_STATE, mState);
+	}
+
+	/**
+	 * Creates a new instance of SyncTask with data of the given one.
+	 *
+	 * @param other The other sync task of which data to copy to the new one.
+	 */
+	protected SyncTask(@NonNull final SyncTask other) {
+		this.mId = other.mId;
+		this.mRequestBody = other.mRequestBody;
+		this.mState = other.mState;
 	}
 
 	/*
@@ -376,10 +377,10 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 		builder.append(getClass().getSimpleName());
 		builder.append("{id: ");
 		builder.append(mId);
-		builder.append(", request: ");
-		builder.append(mRequest == null ? mRequestBody : mRequest);
 		builder.append(", state: ");
-		builder.append(stateName(mState));
+		builder.append(getStateName(mState));
+		builder.append(", request: ");
+		builder.append(mRequest == null ? mRequestBody : GSON.toJson(mRequest));
 		return builder.append("}").toString();
 	}
 
@@ -389,20 +390,15 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	 * @param state The desired state of which name to return.
 	 * @return The state's name.
 	 */
-	private static String stateName(final int state) {
+	@VisibleForTesting static String getStateName(final int state) {
 		switch (state) {
-			case IDLE:
-				return "IDLE";
-			case PENDING:
-				return "PENDING";
-			case RUNNING:
-				return "RUNNING";
-			case FINISHED:
-				return "FINISHED";
-			case FAILED:
-				return "FAILED";
-			default:
-				return "UNKNOWN";
+			case IDLE: return "IDLE";
+			case PENDING: return "PENDING";
+			case RUNNING: return "RUNNING";
+			case FINISHED: return "FINISHED";
+			case FAILED: return "FAILED";
+			case CANCELED: return "CANCELED";
+			default: return "UNKNOWN";
 		}
 	}
 
@@ -412,8 +408,8 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	 */
 	@Override
 	@SuppressWarnings({"CloneDoesntDeclareCloneNotSupportedException", "CloneDoesntCallSuperClone"})
-	protected SyncTask clone() {
-		final SyncTask clone = new SyncTask(this);
+	public SyncTask<R> clone() {
+		final SyncTask<R> clone = new SyncTask<>(this);
 		clone.mState = IDLE;
 		return clone;
 	}
@@ -456,7 +452,7 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 		 *                sync task.
 		 * @return This builder to allow methods chaining.
 		 */
-		public Builder request(@Nullable final R request) {
+		public Builder<R> request(@Nullable final R request) {
 			this.request = request;
 			return this;
 		}

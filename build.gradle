@@ -11,8 +11,9 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.2'
+        classpath 'com.android.tools.build:gradle:2.3.3'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+        classpath 'universum.studios.gradle:github-plugin:1.1.2'
     }
 }
 
@@ -36,41 +37,27 @@ task clean(type: Delete) {
 }
 
 /**
- * Task that cleans library artifacts directory.
- */
-task cleanArtifacts(type: Delete) {
-    // delete 'artifacts/universum/studios/android'
-}
-
-/**
  * Task that updates library artifacts directory.
  */
 task updateArtifacts() {
-    subprojects.findAll {
-        if (it.name.startsWith("library")) {
-            dependsOn ':' + it.name + ':updateArtifacts'
-        }
-    }
+    subprojects.findAll { if (it.name.startsWith("library")) dependsOn ":${it.name}:updateArtifacts" }
 }
 
 /**
  * Task that deploys (uploads) all library modules into Maven local repository.
  */
 task deployToMavenLocal() {
-    subprojects.findAll {
-        if (it.name.startsWith("library")) {
-            dependsOn ':' + it.name + ':uploadArchives'
-        }
-    }
+    subprojects.findAll { if (it.name.startsWith("library")) dependsOn ":${it.name}:uploadArchives", ':updateArtifacts' }
 }
 
 /**
  * Task that deploys (uploads) all library modules up to the Bintray repository.
  */
 task deployToBintray() {
-    subprojects.findAll {
-        if (it.name.startsWith("library")) {
-            dependsOn ':' + it.name + ':bintrayUpload'
-        }
-    }
+    subprojects.findAll { if (it.name.startsWith("library")) dependsOn ":${it.name}:bintrayUpload" }
 }
+
+/**
+ * Task that deploys (uploads) the primary library module up to the GitHub repository.
+ */
+task deployToGitHub(dependsOn: ':library:githubUploadProductionRelease')

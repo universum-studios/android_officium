@@ -75,6 +75,6 @@ dependencies {
     compile deps.androidSupport.vectorDrawable
     compile deps.androidSupport.recyclerView
     compile deps.other.butterknife
-    annotationProcessor deps.apt.butterknife
+    annotationProcessor deps.other.butterknifeCompiler
     compile deps.universumStudios.supportSamples
 }

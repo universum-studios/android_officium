@@ -24,6 +24,11 @@ import org.junit.runner.RunWith;
 
 import universum.studios.android.test.BaseInstrumentedTest;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+
 /**
  * @author Martin Albedinsky
  */
@@ -34,7 +39,23 @@ public final class ServiceApiTest extends BaseInstrumentedTest {
 	private static final String TAG = "ServiceApiTest";
 
     @Test
-	public void test() {
-		// todo:: implement test
+	public void testServices() {
+		final ServiceManager mockManager = mock(ServiceManager.class);
+	    final ServiceApi api = new ServiceApi<>(mockManager);
+	    api.services(TestServices.class);
+	    verify(mockManager, times(1)).services(TestServices.class);
+	    verifyNoMoreInteractions(mockManager);
+	}
+
+    @Test
+	public void testServicesConfiguration() {
+	    final ServiceManager mockManager = mock(ServiceManager.class);
+	    final ServiceApi api = new ServiceApi<>(mockManager);
+	    api.servicesConfiguration(TestServices.class);
+	    verify(mockManager, times(1)).servicesConfiguration(TestServices.class);
+	    verifyNoMoreInteractions(mockManager);
+	}
+
+	private interface TestServices {
 	}
 }

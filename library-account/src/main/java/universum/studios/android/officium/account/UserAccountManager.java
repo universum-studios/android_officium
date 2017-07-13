@@ -92,19 +92,19 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	public static final int ERROR_DELETE_ACCOUNT = -0x02;
 
 	/**
-	 * Value for Android permission to <b>GET</b> accounts.
+	 * Value for Android permission that allows to <b>GET</b> accounts.
 	 */
-	protected static final String PERMISSION_GET_ACCOUNTS = Manifest.permission.GET_ACCOUNTS;
+	public static final String PERMISSION_GET_ACCOUNTS = Manifest.permission.GET_ACCOUNTS;
 
 	/**
-	 * Value for Android permission to <b>MANAGE</b> accounts.
+	 * Value for Android permission that allows to <b>MANAGE</b> accounts.
 	 */
-	protected static final String PERMISSION_MANAGE_ACCOUNTS = "android.permission.MANAGE_ACCOUNTS";
+	public static final String PERMISSION_MANAGE_ACCOUNTS = "android.permission.MANAGE_ACCOUNTS";
 
 	/**
-	 * Value for Android permission to <b>AUTHENTICATE</b> accounts.
+	 * Value for Android permission that allows to <b>AUTHENTICATE</b> accounts.
 	 */
-	protected static final String PERMISSION_AUTHENTICATE_ACCOUNTS = "android.permission.AUTHENTICATE_ACCOUNTS";
+	public static final String PERMISSION_AUTHENTICATE_ACCOUNTS = "android.permission.AUTHENTICATE_ACCOUNTS";
 
 	/*
 	 * Interface ===================================================================================
@@ -170,19 +170,15 @@ public abstract class UserAccountManager<A extends UserAccount> {
 
 	/**
 	 * Context used to access {@link #mManager} and other needed application data about accounts.
-	 *
-	 * @deprecated Use {@link #getContext()} instead.
 	 */
-	@Deprecated
-	protected final Context mContext;
+	@NonNull
+	private final Context mContext;
 
 	/**
 	 * Type of accounts that can be managed by this manager.
-	 *
-	 * @deprecated Use {@link #getAccountType()} instead.
 	 */
-	@Deprecated
-	protected final String mAccountType;
+	@NonNull
+	final String mAccountType;
 
 	/**
 	 * Handler that is used to dispatch callbacks on the Ui thread.

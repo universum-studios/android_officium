@@ -19,6 +19,7 @@
 package universum.studios.android.officium.service;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 
 import java.io.IOException;
 
@@ -34,7 +35,7 @@ import retrofit2.Response;
  * Each instance of service call need to be created with the original call via {@link #ServiceCall(Call)}
  * constructor along with id of the corresponding service via {@link #withServiceId(int)}. The provided
  * service id is than attached to the callback when {@link #enqueue(ServiceCallback)} is called
- * along with the request id which this method returns. Subclasses may implement {@link #requestId()}
+ * along with the request id which this method returns. Subclasses may implement {@link #nextRequestId()}
  * to generate custom unique id for a specific request. In such case, do not forget to properly override
  * also {@link #clone()} method.
  *
@@ -66,12 +67,12 @@ public class ServiceCall<T> implements Call<T> {
 	/**
 	 * Original Retrofit call to which this service call delegates all its methods.
 	 */
-	private final Call<T> mCall;
+	@VisibleForTesting final Call<T> mCall;
 
 	/**
 	 * Id of the service with which is this call associated.
 	 */
-	private Integer mServiceId;
+	@VisibleForTesting Integer mServiceId;
 
 	/*
 	 * Constructors ================================================================================
@@ -151,17 +152,6 @@ public class ServiceCall<T> implements Call<T> {
 	}
 
 	/**
-	 * <b>This method has been deprecated and will be removed in the next release.</b>
-	 *
-	 * @deprecated Use {@link #nextRequestId()} instead.
-	 */
-	@NonNull
-	@Deprecated
-	protected String requestId() {
-		return Long.toString(System.currentTimeMillis());
-	}
-
-	/**
 	 */
 	@Override
 	public void enqueue(@NonNull final Callback<T> callback) {
@@ -202,7 +192,7 @@ public class ServiceCall<T> implements Call<T> {
 	 */
 	@Override
 	@SuppressWarnings("CloneDoesntCallSuperClone")
-	public Call<T> clone() {
+	public ServiceCall<T> clone() {
 		final ServiceCall<T> serviceCall = new ServiceCall<>(mCall.clone());
 		serviceCall.mServiceId = mServiceId;
 		return serviceCall;

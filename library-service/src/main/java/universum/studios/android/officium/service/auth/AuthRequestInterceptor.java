@@ -58,6 +58,11 @@ public final class AuthRequestInterceptor implements Interceptor {
 	 * Static members ==============================================================================
 	 */
 
+	/**
+	 * Name of the header that may contain authorization token.
+	 */
+	public static final String HEADER_NAME = "Authorization";
+
 	/*
 	 * Members =====================================================================================
 	 */
@@ -93,7 +98,7 @@ public final class AuthRequestInterceptor implements Interceptor {
 		final String authToken = tokenProvider.peekToken();
 		final Request request = chain.request();
 		return TextUtils.isEmpty(authToken) ? chain.proceed(request) : chain.proceed(request.newBuilder()
-				.header("Authorization", "Bearer " + authToken)
+				.header(HEADER_NAME, "Bearer " + authToken)
 				.build()
 		);
 	}

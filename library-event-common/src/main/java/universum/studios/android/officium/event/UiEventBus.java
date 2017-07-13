@@ -26,13 +26,16 @@ import com.squareup.otto.Bus;
 
 /**
  * A {@link SimpleEventBus} implementation that may be used for event buses that should post their
- * events on the Main thread. This event bus implementation uses {@link Handler} with
+ * events on the UI thread. This event bus implementation uses {@link Handler} with
  * {@link Looper#getMainLooper() main looper} to post the events supplied to {@link #post(Object)}
  * on the Main UI thread.
  *
  * @author Martin Albedinsky
+ *
+ * @deprecated Use {@link MainEventBus} instead.
  */
-public class UiEventBus extends SimpleEventBus {
+@Deprecated
+public class UiEventBus extends MainEventBus {
 
 	/*
 	 * Constants ===================================================================================
@@ -55,11 +58,6 @@ public class UiEventBus extends SimpleEventBus {
 	 * Members =====================================================================================
 	 */
 
-	/**
-	 * Handler used to post events on the Main thread.
-	 */
-	private final Handler mHandler;
-
 	/*
 	 * Constructors ================================================================================
 	 */
@@ -79,32 +77,11 @@ public class UiEventBus extends SimpleEventBus {
 	 */
 	public UiEventBus(@NonNull final Bus bus) {
 		super(bus);
-		this.mHandler = new Handler(Looper.getMainLooper());
 	}
 
 	/*
 	 * Methods =====================================================================================
 	 */
-
-	/**
-	 */
-	@Override
-	public void post(@NonNull final Object event) {
-		// If caller is posting from the Main thread, post directly on bus, otherwise use handler.
-		if (Looper.getMainLooper().getThread().equals(Thread.currentThread())) {
-			mBus.post(event);
-		} else {
-			mHandler.post(new Runnable() {
-
-				/**
-				 */
-				@Override
-				public void run() {
-					mBus.post(event);
-				}
-			});
-		}
-	}
 
 	/*
 	 * Inner classes ===============================================================================

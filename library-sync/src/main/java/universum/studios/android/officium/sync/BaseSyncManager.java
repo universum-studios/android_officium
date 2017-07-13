@@ -18,6 +18,7 @@
  */
 package universum.studios.android.officium.sync;
 
+import android.Manifest;
 import android.accounts.Account;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -25,6 +26,7 @@ import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresPermission;
 
 import universum.studios.android.officium.OfficiumLogging;
 
@@ -57,6 +59,21 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	 */
 	private static final String TAG = "BaseSyncManager";
 
+	/**
+	 * Value for Android permission that allows to <b>WRITE</b> synchronization settings.
+	 */
+	public static final String PERMISSION_WRITE_SYNC_SETTINGS = Manifest.permission.WRITE_SYNC_SETTINGS;
+
+	/**
+	 * Value for Android permission that allows to <b>READ</b> synchronization settings.
+	 */
+	public static final String PERMISSION_READ_SYNC_SETTINGS = Manifest.permission.READ_SYNC_SETTINGS;
+
+	/**
+	 * Value for Android permission that allows to <b>READ</b> synchronization statistics.
+	 */
+	public static final String PERMISSION_READ_SYNC_STATS = Manifest.permission.READ_SYNC_STATS;
+
 	/*
 	 * Interface ===================================================================================
 	 */
@@ -71,20 +88,14 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 
 	/**
 	 * Context with which has been this manager created.
-	 *
-	 * @deprecated Use {@link #getContext()} instead.
 	 */
-	@Deprecated
-	protected final Context mContext;
+	private final Context mContext;
 
 	/**
 	 * Content authority with which has been this manager created. This authority is used to set up
 	 * all synchronization requests via {@link ContentResolver}.
-	 *
-	 * @deprecated Use {@link #getAuthority()} instead.
 	 */
-	@Deprecated
-	protected final String mAuthority;
+	private final String mAuthority;
 
 	/*
 	 * Constructors ================================================================================
@@ -135,21 +146,43 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	/**
 	 * Starts automatic synchronization for the content authority specified for this manager and
 	 * account picked for synchronization by this manager implementation.
+	 * <p>
+	 * This method requires the caller to hold <b>{@link #PERMISSION_WRITE_SYNC_SETTINGS}</b> permission.
 	 *
 	 * @see #stopAutomaticSync()
 	 * @see ContentResolver#setSyncAutomatically(Account, String, boolean)
 	 */
+	@RequiresPermission(PERMISSION_WRITE_SYNC_SETTINGS)
 	public void startAutomaticSync() {
 		setAutomaticSyncEnabled(true);
 	}
 
 	/**
+	 * Checks whether the automatic synchronization is running (enabled).
+	 * <p>
+	 * This method requires the caller to hold <b>{@link #PERMISSION_READ_SYNC_SETTINGS}</b> permission.
+	 *
+	 * @return {@code True} if the automatic synchronization is running at this time, {@code false}
+	 * otherwise.
+	 * @see #startAutomaticSync()
+	 * @see #stopAutomaticSync()
+	 */
+	@RequiresPermission(PERMISSION_READ_SYNC_SETTINGS)
+	public boolean isAutomaticSyncRunning() {
+		final Account account = pickAccountForSync();
+		return account != null && ContentResolver.getSyncAutomatically(account, mAuthority);
+	}
+
+	/**
 	 * Stops automatic synchronization for the content authority specified for this manager and
 	 * account picked for synchronization by this manager implementation.
+	 * <p>
+	 * This method requires the caller to hold <b>{@link #PERMISSION_WRITE_SYNC_SETTINGS}</b> permission.
 	 *
 	 * @see #startAutomaticSync()
 	 * @see ContentResolver#setSyncAutomatically(Account, String, boolean)
 	 */
+	@RequiresPermission(PERMISSION_WRITE_SYNC_SETTINGS)
 	public void stopAutomaticSync() {
 		setAutomaticSyncEnabled(false);
 	}
@@ -231,31 +264,37 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	}
 
 	/**
-	 * Checks whether there is currently a synchronization being processed for the content authority
-	 * specified for this manager and account picked for synchronization by this manager implementation.
-	 *
-	 * @return {@code True} if synchronization is active at this time, {@code false} otherwise.
-	 * @see ContentResolver#isSyncActive(Account, String)
-	 * @see #isSyncPedning()
-	 * @see #cancelSync()
-	 */
-	public boolean isSyncActive() {
-		final Account account = pickAccountForSync();
-		return account != null && ContentResolver.isSyncActive(account, mAuthority);
-	}
-
-	/**
 	 * Checks whether there are any pending synchronizations for the content authority specified for
 	 * this manager and account picked for synchronization by this manager implementation.
+	 * <p>
+	 * This method requires the caller to hold <b>{@link #PERMISSION_READ_SYNC_STATS}</b> permission.
 	 *
 	 * @return {@code True} if there are some synchronizations pending, {@code false} otherwise.
 	 * @see ContentResolver#isSyncPending(Account, String)
 	 * @see #isSyncActive()
 	 * @see #cancelSync()
 	 */
+	@RequiresPermission(PERMISSION_READ_SYNC_STATS)
 	public boolean isSyncPedning() {
 		final Account account = pickAccountForSync();
 		return account != null && ContentResolver.isSyncPending(account, mAuthority);
+	}
+
+	/**
+	 * Checks whether there is currently a synchronization being processed for the content authority
+	 * specified for this manager and account picked for synchronization by this manager implementation.
+	 * <p>
+	 * This method requires the caller to hold <b>{@link #PERMISSION_READ_SYNC_STATS}</b> permission.
+	 *
+	 * @return {@code True} if synchronization is active at this time, {@code false} otherwise.
+	 * @see ContentResolver#isSyncActive(Account, String)
+	 * @see #isSyncPedning()
+	 * @see #cancelSync()
+	 */
+	@RequiresPermission(PERMISSION_READ_SYNC_STATS)
+	public boolean isSyncActive() {
+		final Account account = pickAccountForSync();
+		return account != null && ContentResolver.isSyncActive(account, mAuthority);
 	}
 
 	/**
