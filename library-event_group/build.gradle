@@ -43,8 +43,8 @@ android {
 
     sourceSets {
         release.java.srcDirs = [
-                '../library-event-core/src/main/java',
-                '../library-event-common/src/main/java'
+                "${rootProject.rootDir}/library-event-core/src/main/java",
+                "${rootProject.rootDir}/library-event-common/src/main/java"
         ]
         debug.java.srcDirs = release.java.srcDirs
     }
@@ -75,5 +75,4 @@ dependencies {
     compile deps.other.squareupOtto
 }
 
-// Apply DEPLOY script.
-apply from: '../deploy/deploy.gradle'
+apply from: "${rootProject.rootDir}/deploy/deploy.gradle"

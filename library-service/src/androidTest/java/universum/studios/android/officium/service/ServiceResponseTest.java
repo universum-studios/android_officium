@@ -34,7 +34,7 @@ public final class ServiceResponseTest extends BaseInstrumentedTest {
 	private static final String TAG = "ServiceResponseTest";
 
     @Test
-	public void test() {
-		// todo:: implement test
+	public void testInstantiation() {
+		new ServiceResponse();
 	}
 }

@@ -1,63 +1,59 @@
 // Defines dependencies used across the library project.
 def versions = [
-        androidSupportVersion                : '25.3.0',
-        androidSupportTestVersion            : '0.5',
-        androidSupportTestEspressoVersion    : '2.2.2',
-        universumStudiosLoggerVersion        : '1.0.0',
-        universumStudiosUtilsVersion         : '2.0.0',
-        universumStudiosCryptoVersion        : '0.1.2',
-        universumStudiosSupportSamplesVersion: '0.1.3',
-        butterknifeVersion                   : '8.5.1',
-        junitVersion                         : '4.12',
-        mockitoVersion                       : '2.7.20'
+        androidSupport                : '26.0.0',
+        androidSupportTest            : '1.0',
+        androidSupportTestEspresso    : '3.0.0',
+        universumStudiosLogger        : '1.0.0',
+        universumStudiosUtils         : '2.0.0',
+        universumStudiosCrypto        : '0.1.2',
+        universumStudiosSupportSamples: '0.1.3',
+        butterknife                   : '8.5.1',
+        junit                         : '4.12',
+        mockito                       : '2.7.20'
 ]
 
 ext.versions = versions
 
 def androidSupport = [
-        annotations   : "com.android.support:support-annotations:${versions.androidSupportVersion}",
-        v4            : "com.android.support:support-v4:${versions.androidSupportVersion}",
-        appCompatV7   : "com.android.support:appcompat-v7:${versions.androidSupportVersion}",
-        vectorDrawable: "com.android.support:support-vector-drawable:${versions.androidSupportVersion}",
-        recyclerView  : "com.android.support:recyclerview-v7:${versions.androidSupportVersion}",
-        design        : "com.android.support:design:${versions.androidSupportVersion}"
-]
-
-def annotationProcessor = [
-        butterknife: "com.jakewharton:butterknife-compiler:${versions.butterknifeVersion}"
+        annotations   : "com.android.support:support-annotations:${versions.androidSupport}",
+        v4            : "com.android.support:support-v4:${versions.androidSupport}",
+        appCompatV7   : "com.android.support:appcompat-v7:${versions.androidSupport}",
+        vectorDrawable: "com.android.support:support-vector-drawable:${versions.androidSupport}",
+        recyclerView  : "com.android.support:recyclerview-v7:${versions.androidSupport}",
+        design        : "com.android.support:design:${versions.androidSupport}"
 ]
 
 def test = [
         androidSupportAnnotations: androidSupport.annotations,
-        androidRunner            : "com.android.support.test:runner:${versions.androidSupportTestVersion}",
-        androidRules             : "com.android.support.test:rules:${versions.androidSupportTestVersion}",
-        androidEspressoCore      : "com.android.support.test.espresso:espresso-core:${versions.androidSupportTestEspressoVersion}",
-        androidEspressoIntents   : "com.android.support.test.espresso:espresso-intents:${versions.androidSupportTestEspressoVersion}",
-        androidEspressoContrib   : "com.android.support.test.espresso:espresso-contrib:${versions.androidSupportTestEspressoVersion}",
-        junit                    : "junit:junit:${versions.junitVersion}",
-        mockitoCore              : "org.mockito:mockito-core:${versions.mockitoVersion}",
-        mockitoAndroid           : "org.mockito:mockito-android:${versions.mockitoVersion}"
+        androidRunner            : "com.android.support.test:runner:${versions.androidSupportTest}",
+        androidRules             : "com.android.support.test:rules:${versions.androidSupportTest}",
+        androidEspressoCore      : "com.android.support.test.espresso:espresso-core:${versions.androidSupportTestEspresso}",
+        androidEspressoIntents   : "com.android.support.test.espresso:espresso-intents:${versions.androidSupportTestEspresso}",
+        androidEspressoContrib   : "com.android.support.test.espresso:espresso-contrib:${versions.androidSupportTestEspresso}",
+        junit                    : "junit:junit:${versions.junit}",
+        mockitoCore              : "org.mockito:mockito-core:${versions.mockito}",
+        mockitoAndroid           : "org.mockito:mockito-android:${versions.mockito}"
 ]
 
 def universumStudios = [
-        logger        : "universum.studios.android:logger:${versions.universumStudiosLoggerVersion}@aar",
-        utils         : "universum.studios.android:utils:${versions.universumStudiosUtilsVersion}@aar",
-        crypto        : "universum.studios.android:crypto:${versions.universumStudiosCryptoVersion}@aar",
-        supportSamples: "universum.studios.android.support:support-samples:${versions.universumStudiosSupportSamplesVersion}@aar"
+        logger        : "universum.studios.android:logger:${versions.universumStudiosLogger}@aar",
+        utils         : "universum.studios.android:utils:${versions.universumStudiosUtils}@aar",
+        crypto        : "universum.studios.android:crypto:${versions.universumStudiosCrypto}@aar",
+        supportSamples: "universum.studios.android.support:support-samples:${versions.universumStudiosSupportSamples}@aar"
 ]
 
 def other = [
-        squareupOtto    : 'com.squareup:otto:1.3.8',
-        squareupOkio    : 'com.squareup.okio:okio:1.11.0',
-        squareupOkhttp  : 'com.squareup.okhttp3:okhttp:3.5.0',
-        squareupRetrofit: 'com.squareup.retrofit2:retrofit:2.1.0',
-        googleGson      : 'com.google.code.gson:gson:2.7',
-        butterknife     : "com.jakewharton:butterknife:${versions.butterknifeVersion}"
+        squareupOtto       : 'com.squareup:otto:1.3.8',
+        squareupOkio       : 'com.squareup.okio:okio:1.11.0',
+        squareupOkhttp     : 'com.squareup.okhttp3:okhttp:3.5.0',
+        squareupRetrofit   : 'com.squareup.retrofit2:retrofit:2.3.0',
+        googleGson         : 'com.google.code.gson:gson:2.7',
+        butterknife        : "com.jakewharton:butterknife:${versions.butterknife}",
+        butterknifeProcessor: "com.jakewharton:butterknife-compiler:${versions.butterknife}"
 ]
 
 ext.deps = [
         "androidSupport"  : androidSupport,
-        "apt"             : annotationProcessor,
         "test"            : test,
         "universumStudios": universumStudios,
         "other"           : other

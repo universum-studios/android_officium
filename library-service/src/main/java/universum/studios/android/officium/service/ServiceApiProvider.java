@@ -69,7 +69,7 @@ public abstract class ServiceApiProvider<A> {
 	/**
 	 * Cached api implementation created via {@link #onCreateApi()}.
 	 */
-	private A mApi;
+	private volatile A mApi;
 
 	/*
 	 * Constructors ================================================================================
@@ -88,8 +88,10 @@ public abstract class ServiceApiProvider<A> {
 	 */
 	@NonNull
 	public final A getApi() {
-		synchronized (LOCK) {
-			if (mApi == null) this.mApi = onCreateApi();
+		if (mApi == null) {
+			synchronized (LOCK) {
+				this.mApi = onCreateApi();
+			}
 		}
 		return onPrepareApi(mApi);
 	}
@@ -125,7 +127,11 @@ public abstract class ServiceApiProvider<A> {
 	 * @see #onPrepareApi(Object)
 	 */
 	protected void invalidateApi() {
-		this.mApi = null;
+		if (mApi != null) {
+			synchronized (LOCK) {
+				this.mApi = null;
+			}
+		}
 	}
 
 	/*

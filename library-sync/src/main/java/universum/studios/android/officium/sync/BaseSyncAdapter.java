@@ -26,6 +26,7 @@ import android.content.SyncResult;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 import android.util.SparseArray;
 
 import universum.studios.android.officium.OfficiumLogging;
@@ -82,7 +83,7 @@ import universum.studios.android.officium.OfficiumLogging;
  * <li>
  * {@link #onGlobalSyncFailed(SyncOperation, Exception)}
  * <p>
- * - dispatches {@link SyncEvent} type of {@link SyncEvent#ERROR} with default task id
+ * - dispatches {@link SyncEvent} type of {@link SyncEvent#FAILURE} with default task id
  * {@link SyncTask#DEFAULT_ID} along with occurred <var>error</var> and <var>account</var>
  * </li>
  * <li>
@@ -100,7 +101,7 @@ import universum.studios.android.officium.OfficiumLogging;
  * <li>
  * {@link #onSyncFailed(SyncOperation, Exception)}
  * <p>
- * - dispatches {@link SyncEvent} type of {@link SyncEvent#ERROR} with id of the specified task
+ * - dispatches {@link SyncEvent} type of {@link SyncEvent#FAILURE} with id of the specified task
  * along with occurred <var>error</var> and <var>account</var>
  * </li>
  * </ul>
@@ -245,6 +246,29 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	}
 
 	/**
+	 * Sets a sync handler that is responsible for global synchronization handling.
+	 *
+	 * @param handler The desired sync handler. May be {@code null} if handling of global synchronization
+	 *                is not desired.
+	 * @see #onPerformGlobalSync(SyncOperation)
+	 * @see #getGlobalSyncHandler()
+	 */
+	protected void setGlobalSyncHandler(@Nullable final SyncHandler handler) {
+		this.mGlobalSyncHandler = handler;
+	}
+
+	/**
+	 * Returns the sync handler that is responsible for global synchronization handling.
+	 *
+	 * @return This adapter's global sync handler.
+	 * @see #setGlobalSyncHandler(SyncHandler)
+	 */
+	@Nullable
+	protected SyncHandler getGlobalSyncHandler() {
+		return mGlobalSyncHandler;
+	}
+
+	/**
 	 * Registers a sync handler that will be used by this sync adapter for synchronization handling
 	 * of a {@link SyncTask} associated with the given <var>handler</var> via {@link SyncHandler#getTaskId()}.
 	 * <p>
@@ -277,31 +301,7 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * @see #onPerformSync(SyncOperation)
 	 */
 	protected void unregisterTaskHandler(@NonNull final SyncHandler handler) {
-		if (mTaskHandlers != null && mTaskHandlers.size() > 0)
-			mTaskHandlers.remove(handler.getTaskId());
-	}
-
-	/**
-	 * Sets a sync handler that is responsible for global synchronization handling.
-	 *
-	 * @param handler The desired sync handler. May be {@code null} if handling of global synchronization
-	 *                is not desired.
-	 * @see #onPerformGlobalSync(SyncOperation)
-	 * @see #getGlobalSyncHandler()
-	 */
-	protected void setGlobalSyncHandler(@Nullable final SyncHandler handler) {
-		this.mGlobalSyncHandler = handler;
-	}
-
-	/**
-	 * Returns the sync handler that is responsible for global synchronization handling.
-	 *
-	 * @return This adapter's global sync handler.
-	 * @see #setGlobalSyncHandler(SyncHandler)
-	 */
-	@Nullable
-	protected SyncHandler getGlobalSyncHandler() {
-		return mGlobalSyncHandler;
+		if (mTaskHandlers != null && mTaskHandlers.size() > 0) mTaskHandlers.remove(handler.getTaskId());
 	}
 
 	/**
@@ -315,7 +315,7 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 			@NonNull final Account account,
 			@NonNull final Bundle extras,
 			@NonNull final String authority,
-			@NonNull final ContentProviderClient provider,
+			@NonNull final ContentProviderClient providerClient,
 			@NonNull final SyncResult syncResult
 	) {
 		final SyncOperation syncOperation = new SyncOperation.Builder()
@@ -359,7 +359,10 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 */
 	@SuppressWarnings("unchecked")
 	protected void onPerformGlobalSync(@NonNull final SyncOperation syncOperation) {
-		if (mGlobalSyncHandler == null) return;
+		if (mGlobalSyncHandler == null) {
+			OfficiumLogging.w(TAG, "No global synchronization handler found. Skipping synchronization.");
+			return;
+		}
 		dispatchSyncEvent(
 				new SyncEvent.Builder(syncOperation.task.getId())
 						.type(SyncEvent.START)
@@ -402,7 +405,7 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	protected void onGlobalSyncFailed(@NonNull final SyncOperation syncOperation, @NonNull final Exception error) {
 		dispatchSyncEvent(
 				new SyncEvent.Builder(syncOperation.task.getId())
-						.type(SyncEvent.ERROR)
+						.type(SyncEvent.FAILURE)
 						.account(syncOperation.account)
 						.error(error)
 						.build()
@@ -422,7 +425,7 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	protected void onPerformSync(@NonNull final SyncOperation syncOperation) {
 		final SyncHandler taskHandler = mTaskHandlers == null ? null : mTaskHandlers.get(syncOperation.task.getId());
 		if (taskHandler == null) {
-			OfficiumLogging.e(TAG, "No synchronization handler found for task with id(" + syncOperation.task.getId() + ").");
+			OfficiumLogging.e(TAG, "No synchronization handler found for task with id(" + syncOperation.task.getId() + "). Skipping synchronization.");
 			return;
 		}
 		dispatchSyncEvent(
@@ -467,7 +470,7 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	protected void onSyncFailed(@NonNull final SyncOperation syncOperation, @NonNull final Exception error) {
 		dispatchSyncEvent(
 				new SyncEvent.Builder(syncOperation.task.getId())
-						.type(SyncEvent.ERROR)
+						.type(SyncEvent.FAILURE)
 						.account(syncOperation.account)
 						.error(error)
 						.build()
@@ -484,7 +487,8 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * @param state         The new state for the task. Should be one of states defined by {@link SyncTask.State @State}
 	 *                      annotation.
 	 */
-	private void changeTaskStateToAndNotify(final SyncOperation syncOperation, @SyncTask.State final int state) {
+	@VisibleForTesting
+	void changeTaskStateToAndNotify(final SyncOperation syncOperation, @SyncTask.State final int state) {
 		if (syncOperation.task.getState() != state) {
 			syncOperation.task.setState(state);
 			if (mTaskStateChangeListener != null) {

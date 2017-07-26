@@ -1,0 +1,44 @@
+/*
+ * =================================================================================================
+ *                             Copyright (C) 2017 Universum Studios
+ * =================================================================================================
+ *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
+ * -------------------------------------------------------------------------------------------------
+ * You may use this file only in compliance with the License. More details and copy of this License
+ * you may obtain at
+ *
+ * 		http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * You can redistribute, modify or publish any part of the code written within this file but as it
+ * is described in the License, the software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
+ *
+ * See the License for the specific language governing permissions and limitations under the License.
+ * =================================================================================================
+ */
+apply plugin: 'findbugs'
+
+android.libraryVariants.all { variant ->
+    /**
+     * Task that executes FindBugs tool for a specific build variant.
+     */
+    task("find${variant.name.capitalize()}Bugs", type: FindBugs, dependsOn: "compile${variant.name.capitalize()}JavaWithJavac") {
+        description "Analyzes code base of ${variant.name} variant using the FindBugs tool."
+        group "Verification"
+        ignoreFailures = true
+        effort = "max"
+        reportLevel = "high"
+        classes = files("${buildDir}/intermediates/classes/${variant.dirName}")
+        excludeFilter = file("${projectDir}/analysis/findbugs-filter.xml")
+        source = variant.javaCompiler.source
+        classpath = variant.javaCompiler.classpath
+        reports {
+            // Only one of HTML or XML can be turned on at the same time.
+            html.enabled = true
+            html.destination = file("${buildDir}/reports/findbugs/${variant.name}/index.html")
+            xml.enabled = !html.enabled
+            xml.withMessages = true
+            xml.destination = file("${buildDir}/reports/findbugs/${variant.name}/report.xml")
+        }
+    }
+}

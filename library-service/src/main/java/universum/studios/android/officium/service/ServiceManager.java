@@ -127,6 +127,8 @@ public class ServiceManager {
 	 * <p>
 	 * The specified end point will be attached to each services configuration created via
 	 * {@link #onCreateServicesConfiguration(Class)}.
+	 * <p>
+	 * <b>Note</b> that this will not change end points of the services created prior to this call.
 	 *
 	 * @param endPoint The desired end point.
 	 * @see #getEndPoint()
@@ -158,6 +160,7 @@ public class ServiceManager {
 	 * @return PROXY for the desired services interface ready for services invocation.
 	 * @see #servicesConfiguration(Class)
 	 */
+	@NonNull
 	@SuppressWarnings("unchecked")
 	public <S> S services(@NonNull final Class<S> servicesInterface) {
 		this.ensureHasServicesConfiguration(servicesInterface);
@@ -173,6 +176,7 @@ public class ServiceManager {
 	 * @see ServicesConfiguration
 	 * @see #services(Class)
 	 */
+	@NonNull
 	@SuppressWarnings("unchecked")
 	public <S> ServicesConfiguration<S> servicesConfiguration(@NonNull final Class<S> servicesInterface) {
 		this.ensureHasServicesConfiguration(servicesInterface);
@@ -269,7 +273,7 @@ public class ServiceManager {
 		 * the current instance of {@link #retrofit} should be updated the next time services
 		 * are requested via {@link #services()}.
 		 */
-		private boolean changed = true;
+		private volatile boolean changed = true;
 
 		/**
 		 * Creates a new instance of ServicesConfiguration for the specified <var>servicesInterface</var>
@@ -278,7 +282,7 @@ public class ServiceManager {
 		 * @param servicesInterface Class of the services interface used to create PROXY services
 		 *                          instance.
 		 */
-		private ServicesConfiguration(@NonNull final Class<S> servicesInterface) {
+		ServicesConfiguration(@NonNull final Class<S> servicesInterface) {
 			this.servicesInterface = servicesInterface;
 		}
 
@@ -296,15 +300,6 @@ public class ServiceManager {
 		@NonNull
 		public Retrofit.Builder retrofitBuilder() {
 			return mBuilder;
-		}
-
-		/**
-		 * Invalidates the current configuration. Next call to {@link ServiceManager#services(Class)}
-		 * with services interface associated with this configuration will create a new instance
-		 * of the desired services PROXY.
-		 */
-		public void invalidate() {
-			this.changed = true;
 		}
 
 		/**
@@ -327,7 +322,7 @@ public class ServiceManager {
 		 * @return Services PROXY configured according to this configuration.
 		 */
 		@NonNull
-		private S services() {
+		S services() {
 			this.ensureValid();
 			return services;
 		}
@@ -337,13 +332,22 @@ public class ServiceManager {
 		 * current configuration.
 		 */
 		private void ensureValid() {
-			synchronized (mBuilder) {
-				if (changed) {
+			if (changed) {
+				synchronized (mBuilder) {
 					this.retrofit = mBuilder.build();
 					this.services = retrofit.create(servicesInterface);
 					this.changed = false;
 				}
 			}
+		}
+
+		/**
+		 * Invalidates the current configuration. Next call to {@link ServiceManager#services(Class)}
+		 * with services interface associated with this configuration will create a new instance
+		 * of the desired services PROXY.
+		 */
+		public void invalidate() {
+			this.changed = true;
 		}
 	}
 }

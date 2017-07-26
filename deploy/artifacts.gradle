@@ -2,7 +2,7 @@
  * =================================================================================================
  *                             Copyright (C) 2017 Universum Studios
  * =================================================================================================
- *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
+ *         Licensed under the Apache License,  2.0 or later (further "License" only).
  * -------------------------------------------------------------------------------------------------
  * You may use this file only in compliance with the License. More details and copy of this License
  * you may obtain at
@@ -34,7 +34,7 @@ task generateJavadoc(type: Javadoc) {
     options {
         author = true
         memberLevel = JavadocMemberLevel.PROTECTED
-        header = config.maven.projectName + ' ' + config.maven.version + ' Documentation'
+        header = "${config.maven.projectName} ${config.maven.version} Documentation"
         links "http://docs.oracle.com/javase/8/docs/api/"
         linksOffline "http://developer.android.com/reference", "${android.sdkDirectory}\\docs\\reference"
     }
@@ -45,10 +45,10 @@ task generateJavadoc(type: Javadoc) {
     // Append class path with dependencies.
     classpath += files(
             android.getBootClasspath(),
-            "${android.sdkDirectory}\\extras\\android\\m2repository\\com\\android\\support\\support-annotations\\${versions.androidSupportVersion}\\support-annotations-${versions.androidSupportVersion}.jar",
-            "${config.maven.localUrl}\\universum\\studios\\android\\logger\\${versions.universumStudiosLoggerVersion}\\logger-${versions.universumStudiosLoggerVersion}.jar",
-            "${config.maven.localUrl}\\universum\\studios\\android\\utils\\${versions.universumStudiosUtilsVersion}\\utils-${versions.universumStudiosUtilsVersion}-sources.jar",
-            "${config.maven.localUrl}\\universum\\studios\\android\\crypto\\${versions.universumStudiosCryptoVersion}\\crypto-${versions.universumStudiosCryptoVersion}-sources.jar"
+            "${android.sdkDirectory}\\extras\\android\\m2repository\\com\\android\\support\\support-annotations\\${versions.androidSupport}\\support-annotations-${versions.androidSupport}.jar",
+            "${config.maven.localUrl}\\universum\\studios\\android\\logger\\${versions.universumStudiosLogger}\\logger-${versions.universumStudiosLogger}.jar",
+            "${config.maven.localUrl}\\universum\\studios\\android\\utils\\${versions.universumStudiosUtils}\\utils-${versions.universumStudiosUtils}-sources.jar",
+            "${config.maven.localUrl}\\universum\\studios\\android\\crypto\\${versions.universumStudiosCrypto}\\crypto-${versions.universumStudiosCrypto}-sources.jar"
     )
     failOnError false
 }

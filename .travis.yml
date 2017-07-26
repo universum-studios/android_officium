@@ -7,8 +7,8 @@ android:
   components:
     - platform-tools
     - tools
-    - build-tools-25.0.2
-    - android-25
+    - build-tools-25.0.3
+    - android-26
     - android-22
     - sys-img-armeabi-v7a-android-22
     - extra-android-m2repository
@@ -20,7 +20,7 @@ branches:
     - /^release.*$/
     - master
 
-# Continous integration scripts
+# Continuous integration scripts
 before_script:
   - ./ci/permissions.sh
   # Emulator management (create, start and wait)
@@ -36,11 +36,11 @@ after_success:
   - ./ci/coverage.sh
   - ./ci/deploy.sh
 
-# Notications
+# Notifications
 notifications:
   email: false
 
-# Cache configuraiton
+# Cache configuration
 cache:
   directories:
     - $HOME/.m2

@@ -17,6 +17,8 @@
  * =================================================================================================
  */
 /**
+ * Contains components which may be used for authentication in context of <b>rest</b> services.
+ *
  * @author Martin Albedinsky
  */
 package universum.studios.android.officium.service.auth;

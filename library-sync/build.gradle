@@ -78,5 +78,4 @@ dependencies {
     androidTestCompile project(':test-core')
 }
 
-// Apply DEPLOY script.
-apply from: '../deploy/deploy.gradle'
+apply from: "${rootProject.rootDir}/deploy/deploy.gradle"
