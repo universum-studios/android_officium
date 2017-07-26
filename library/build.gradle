@@ -44,25 +44,25 @@ android {
 
     sourceSets {
         release.java.srcDirs = [
-                '../library-core/src/main/java',
-                '../library-account/src/main/java',
-                '../library-event-core/src/main/java',
-                '../library-event-common/src/main/java',
-                '../library-service/src/main/java',
-                '../library-sync/src/main/java'
+                "${rootProject.rootDir}/library-core/src/main/java",
+                "${rootProject.rootDir}/library-account/src/main/java",
+                "${rootProject.rootDir}/library-event-core/src/main/java",
+                "${rootProject.rootDir}/library-event-common/src/main/java",
+                "${rootProject.rootDir}/library-service/src/main/java",
+                "${rootProject.rootDir}/library-sync/src/main/java"
         ]
         debug.java.srcDirs = release.java.srcDirs
         androidTest.java.srcDirs = [
-                '../library/src/androidTest/java',
-                '../library-core/src/androidTest/java',
-                '../library-account/src/androidTest/java',
-                '../library-event-core/src/androidTest/java',
-                '../library-event-common/src/androidTest/java',
-                '../library-service/src/androidTest/java',
-                '../library-sync/src/androidTest/java'
+                "${rootProject.rootDir}/library/src/androidTest/java",
+                "${rootProject.rootDir}/library-core/src/androidTest/java",
+                "${rootProject.rootDir}/library-account/src/androidTest/java",
+                "${rootProject.rootDir}/library-event-core/src/androidTest/java",
+                "${rootProject.rootDir}/library-event-common/src/androidTest/java",
+                "${rootProject.rootDir}/library-service/src/androidTest/java",
+                "${rootProject.rootDir}/library-sync/src/androidTest/java"
         ]
         androidTest.res.srcDirs = [
-                '../library-sync/src/androidTest/res'
+                "${rootProject.rootDir}/library-sync/src/androidTest/res"
         ]
     }
 
@@ -106,8 +106,10 @@ dependencies {
     androidTestCompile project(':test-core')
 }
 
-// Apply additional scripts.
-apply from: 'analysis.gradle'
-apply from: 'codacy.gradle'
-apply from: '../deploy/deploy.gradle'
-apply from: 'github.gradle'
+/**
+ * Additional Gradle files =========================================================================
+ */
+apply from: 'analysis/analysis.gradle'
+apply from: 'coverage/codacy.gradle'
+apply from: "${rootProject.rootDir}/deploy/deploy.gradle"
+apply from: 'github/github.gradle'

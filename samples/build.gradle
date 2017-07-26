@@ -34,7 +34,7 @@ android {
     }
 
     if (project.hasProperty('signing.properties') && new File((String) project.property('signing.properties')).exists()) {
-        def Properties properties = new Properties();
+        Properties properties = new Properties()
         properties.load(new FileInputStream(file(project.property('signing.properties'))))
 
         signingConfigs {
@@ -75,6 +75,6 @@ dependencies {
     compile deps.androidSupport.vectorDrawable
     compile deps.androidSupport.recyclerView
     compile deps.other.butterknife
-    annotationProcessor deps.other.butterknifeCompiler
+    annotationProcessor deps.other.butterknifeProcessor
     compile deps.universumStudios.supportSamples
 }

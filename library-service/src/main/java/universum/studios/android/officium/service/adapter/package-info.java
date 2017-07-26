@@ -16,38 +16,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  * =================================================================================================
  */
-repositories {
-    maven { url repos.jitpack }
-    maven { url repos.bintray.typesafeMavenReleases }
-}
-
-configurations { codacy }
-
-dependencies {
-    codacy 'com.github.codacy:codacy-coverage-reporter:-SNAPSHOT'
-}
-
 /**
- * Task that uploads code coverage up to the Codacy cloud.
+ * @author Martin Albedinsky
  */
-task uploadCoverageToCodacy(type: JavaExec, dependsOn: 'createDebugCoverageReport') {
-    final String token
-    final File tokensFile = file(config.codacy.tokensPath)
-    if (tokensFile.exists()) {
-        def Properties tokens = new Properties();
-        tokens.load(new FileInputStream(tokensFile))
-        token = tokens[config.codacy.projectName]
-    } else {
-        token = System.getenv('CODACY_PROJECT_TOKEN')
-    }
-    main = "com.codacy.CodacyCoverageReporter"
-    classpath = configurations.codacy
-    args = [
-            "-l",
-            "Java",
-            "-r",
-            "${buildDir}/reports/coverage/debug/report.xml",
-            "--projectToken",
-            token == null ? "NO_TOKEN" : token
-    ]
-}
+package universum.studios.android.officium.service.adapter;

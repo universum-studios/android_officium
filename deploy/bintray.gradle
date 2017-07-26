@@ -58,9 +58,9 @@ publishing {
             artifactId project.property('maven.pom.artifactId')
             version config.maven.version
             artifact bundleRelease
-            artifact(classesJar)
-            artifact(javadocJar)
-            artifact(sourcesJar)
+            artifact classesJar
+            artifact javadocJar
+            artifact sourcesJar
             pom.withXml {
                 def projectNode = asNode()
                 // Append POM configuration.
@@ -101,7 +101,7 @@ bintray {
         name = config.bintray.packageName
         userOrg = 'universum-studios'
         licenses = ['Apache-2.0']
-        vcsUrl = config.maven.projectUrl + '.git'
+        vcsUrl = "${config.maven.projectUrl}.git"
         labels = config.bintray.packageLabels
         publicDownloadNumbers = true
         version {
