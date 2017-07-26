@@ -84,5 +84,4 @@ dependencies {
     androidTestCompile deps.other.googleGson
 }
 
-// Apply DEPLOY script.
-apply from: '../deploy/deploy.gradle'
+apply from: "${rootProject.rootDir}/deploy/deploy.gradle"

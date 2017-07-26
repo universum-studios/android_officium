@@ -7,8 +7,11 @@ apply from: './dependencies.gradle'
  * Global build script configuration ===============================================================
  */
 buildscript {
+    apply from: './repositories.gradle'
+
     repositories {
         jcenter()
+        maven { url repos.google }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.3'
@@ -23,6 +26,7 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+        maven { url repos.google }
     }
 }
 
@@ -41,13 +45,21 @@ task clean(type: Delete) {
  */
 task updateArtifacts() {
     subprojects.findAll { if (it.name.startsWith("library")) dependsOn ":${it.name}:updateArtifacts" }
+    doLast {
+        final String artifactsDir = "${rootProject.rootDir}\\artifacts"
+        if (file(artifactsDir).exists()) {
+            exec {
+                commandLine 'git', 'add', artifactsDir, '-A'
+            }
+        }
+    }
 }
 
 /**
  * Task that deploys (uploads) all library modules into Maven local repository.
  */
 task deployToMavenLocal() {
-    subprojects.findAll { if (it.name.startsWith("library")) dependsOn ":${it.name}:uploadArchives", ':updateArtifacts' }
+    subprojects.findAll { if (it.name.startsWith("library")) dependsOn ":${it.name}:uploadArchives" }
 }
 
 /**

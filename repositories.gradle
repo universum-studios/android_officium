@@ -2,7 +2,7 @@
 def bintrayRepos = [
         typesafeMavenReleases  : 'http://dl.bintray.com/typesafe/maven-releases',
         universumStudiosAndroid: 'http://dl.bintray.com/universum-studios/android',
-        universumStudiosGradle: 'http://dl.bintray.com/universum-studios/gradle'
+        universumStudiosGradle : 'http://dl.bintray.com/universum-studios/gradle'
 ]
 
 def projectRepos = [
@@ -11,6 +11,7 @@ def projectRepos = [
 ]
 
 ext.repos = [
+        "google" : 'https://maven.google.com',
         "jitpack": 'https://jitpack.io',
         "bintray": bintrayRepos,
         "project": projectRepos

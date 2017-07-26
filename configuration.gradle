@@ -1,8 +1,8 @@
 // Defines configuration used across the library project.
 def buildConfig = [
-        compileSdkVersion: 25,
-        minSdkVersion    : 11,
-        targetSdkVersion : 25,
+        compileSdkVersion: 26,
+        minSdkVersion    : 14,
+        targetSdkVersion : 26,
         buildToolsVersion: '25.0.3'
 ]
 

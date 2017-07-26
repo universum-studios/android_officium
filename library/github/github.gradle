@@ -45,14 +45,14 @@ github {
             production {
                 tagName config.maven.version
                 releaseName config.maven.version
-                releaseBody file('github/release-body-production.md').text
+                releaseBody file("${projectDir}/github/release-body-production.md").text
                 draft true
                 overwrite true
             }
             beta {
                 tagName "${config.maven.version}-beta1"
                 releaseName "${config.maven.version}-beta1"
-                releaseBody file('github/release-body-beta.md').text
+                releaseBody file("${projectDir}/github/release-body-beta.md").text
                 draft true
                 preRelease true
                 overwrite true

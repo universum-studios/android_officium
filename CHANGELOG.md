@@ -2,11 +2,14 @@ Change-Log
 ===============
 
 ### Release 1.2.0 ###
-> --.06.2017
+> 26.07.2017
 
 - Removed components that has been **deprecated** in the previous version.
 - Renamed `UiEventBus` (still available but **deprecated**) to `MainEventBus` implementation.
 - Added `SimpleEndPoint` class that is implementation of `EndPoint` interface.
+- Added `ServiceCallAdapterFactory` implementation.
+- Updated to use **2.3.0** version of **[Retrofit](http://square.github.io/retrofit/)**.
+- **Dropped support** for _Android_ versions **below** _API Level 14_.
 - Other minor updates and improvements.
 
 ### [Release 1.1.2](https://github.com/universum-studios/android_officium/releases/tag/1.1.2) ###

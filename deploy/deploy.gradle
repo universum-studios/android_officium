@@ -16,11 +16,6 @@
  * See the License for the specific language governing permissions and limitations under the License.
  * =================================================================================================
  */
-// Add ARTIFACTS tasks.
-apply from: '../deploy/artifacts.gradle'
-
-// Apply MAVEN deployment script.
-apply from: '../deploy/maven.gradle'
-
-// Apply BINTRAY deployment script.
-apply from: '../deploy/bintray.gradle'
+apply from: "${rootProject.rootDir}/deploy/artifacts.gradle"
+apply from: "${rootProject.rootDir}/deploy/maven.gradle"
+apply from: "${rootProject.rootDir}/deploy/bintray.gradle"
