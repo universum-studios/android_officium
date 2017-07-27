@@ -107,7 +107,7 @@ dependencies {
 }
 
 /**
- * Additional Gradle files =========================================================================
+ * Additional configuration ========================================================================
  */
 apply from: 'analysis/analysis.gradle'
 apply from: 'coverage/codacy.gradle'
