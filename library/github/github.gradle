@@ -20,9 +20,9 @@ apply plugin: 'universum.studios.github'
 
 github {
     repository {
-        owner config.release.owner
-        name config.release.repository
-        accessToken config.release.accessToken
+        owner config.github.owner
+        name config.github.repository
+        accessToken config.github.accessToken
     }
 
     defaultConfig {

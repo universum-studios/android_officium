@@ -36,7 +36,7 @@ def bintrayConfig = [
         packageVersionTag        : mavenConfig.version
 ]
 
-def releaseConfig = [
+def githubConfig = [
         owner      : 'universum-studios',
         repository : 'android_officium',
         accessToken: System.getenv('GITHUB_API_TOKEN')
@@ -58,7 +58,7 @@ ext.config = [
         "library": libraryConfig,
         "maven"  : mavenConfig,
         "bintray": bintrayConfig,
-        "release": releaseConfig,
+        "github" : githubConfig,
         "codacy" : codacyConfig,
         "ci"     : ciConfig
 ]
