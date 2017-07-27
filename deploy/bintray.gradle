@@ -104,12 +104,13 @@ bintray {
         vcsUrl = "${config.maven.projectUrl}.git"
         labels = config.bintray.packageLabels
         publicDownloadNumbers = true
+        githubRepo = "${config.github.owner}/${config.github.repository}"
+        githubReleaseNotesFile = 'CHANGELOG.md'
         version {
             name = config.bintray.packageVersionName
             desc = config.bintray.packageVersionDescription
             released = new Date()
             vcsTag = config.bintray.packageVersionTag
         }
-        githubReleaseNotesFile = 'CHANGELOG.md'
     }
 }

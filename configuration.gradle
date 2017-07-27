@@ -14,6 +14,12 @@ def libraryConfig = [
         version: '1.2.0'
 ]
 
+def githubConfig = [
+        owner      : 'universum-studios',
+        repository : 'android_officium',
+        accessToken: System.getenv('GITHUB_API_TOKEN')
+]
+
 def mavenConfig = [
         localUrl                 : System.getenv('MAVEN_URL_LOCAL'),
         groupId                  : 'universum.studios.android',
@@ -22,9 +28,9 @@ def mavenConfig = [
         packaging                : 'pom',
         projectName              : 'Android Officium',
         projectDescription       : 'Account, synchronization, services and events management for the Android platform.',
-        projectUrl               : 'https://github.com/universum-studios/android_officium',
+        projectUrl               : "https://github.com/${githubConfig.owner}/${githubConfig.repository}",
         projectInceptionYear     : '2016',
-        projectIssueManagementUrl: 'https://github.com/universum-studios/android_officium/issues'
+        projectIssueManagementUrl: "https://github.com/${githubConfig.owner}/${githubConfig.repository}/issues"
 ]
 
 def bintrayConfig = [
@@ -36,16 +42,10 @@ def bintrayConfig = [
         packageVersionTag        : mavenConfig.version
 ]
 
-def githubConfig = [
-        owner      : 'universum-studios',
-        repository : 'android_officium',
-        accessToken: System.getenv('GITHUB_API_TOKEN')
-]
-
 def codacyConfig = [
         // This path must be relative to the codacy.gradle file placed in the /library directory.
         tokensPath : '../../codacy.tokens',
-        projectName: 'android_officium'
+        projectName: "${githubConfig.repository}"
 ]
 
 def ciConfig = [
@@ -56,9 +56,9 @@ ext.config = [
         "build"  : buildConfig,
         "test"   : testConfig,
         "library": libraryConfig,
+        "github" : githubConfig,
         "maven"  : mavenConfig,
         "bintray": bintrayConfig,
-        "github" : githubConfig,
         "codacy" : codacyConfig,
         "ci"     : ciConfig
 ]
