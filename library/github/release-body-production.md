@@ -1,6 +1,9 @@
+### Overview ###
+
 Minor release.
 
-**Changes:**
+### Changes ###
+
 - Removed components that has been **deprecated** in the previous version.
 - Renamed `UiEventBus` (still available but **deprecated**) to `MainEventBus` implementation.
 - Added `SimpleEndPoint` class that is implementation of `EndPoint` interface.
