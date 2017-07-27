@@ -1,7 +1,7 @@
 Change-Log
 ===============
 
-### Release 1.2.0 ###
+### [Release 1.2.0](https://github.com/universum-studios/android_officium/releases/tag/1.2.0) ###
 > 26.07.2017
 
 - Removed components that has been **deprecated** in the previous version.
