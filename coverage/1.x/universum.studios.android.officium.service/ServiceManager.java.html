@@ -68,7 +68,7 @@ public class ServiceManager {
 	/**
 	 * Map containing services configuration objects mapped to class of services that they configure.
 	 */
-<span class="nc" id="L71">	private final Map&lt;Class&lt;?&gt;, ServicesConfiguration&gt; mServices = new HashMap&lt;&gt;(1);</span>
+<span class="fc" id="L71">	private final Map&lt;Class&lt;?&gt;, ServicesConfiguration&gt; mServices = new HashMap&lt;&gt;(1);</span>
 
 	/**
 	 * End point for services managed by this manager.
@@ -84,9 +84,9 @@ public class ServiceManager {
 	 *
 	 * @see #setEndPoint(EndPoint)
 	 */
-<span class="nc" id="L87">	public ServiceManager() {</span>
-<span class="nc" id="L88">		this.mEndPoint = null;</span>
-<span class="nc" id="L89">	}</span>
+<span class="fc" id="L87">	public ServiceManager() {</span>
+<span class="fc" id="L88">		this.mEndPoint = null;</span>
+<span class="fc" id="L89">	}</span>
 
 	/**
 	 * Creates a new instance of ServiceManager with the specified &lt;var&gt;endPoint&lt;/var&gt;.
@@ -95,9 +95,9 @@ public class ServiceManager {
 	 *                 configuration created via {@link #onCreateServicesConfiguration(Class)}.
 	 * @see #getEndPoint()
 	 */
-<span class="nc" id="L98">	public ServiceManager(@NonNull final EndPoint endPoint) {</span>
-<span class="nc" id="L99">		this.mEndPoint = endPoint;</span>
-<span class="nc" id="L100">	}</span>
+<span class="fc" id="L98">	public ServiceManager(@NonNull final EndPoint endPoint) {</span>
+<span class="fc" id="L99">		this.mEndPoint = endPoint;</span>
+<span class="fc" id="L100">	}</span>
 
 	/*
 	 * Methods =====================================================================================
@@ -110,30 +110,32 @@ public class ServiceManager {
 	 * @param baseUrl Base url of the desired end point.
 	 */
 	public void setEndPoint(@NonNull final String baseUrl) {
-<span class="nc" id="L113">		setEndPoint(new EndPoint() {</span>
+<span class="fc" id="L113">		setEndPoint(new EndPoint() {</span>
 
 			/**
 			 */
 			@NonNull
 			@Override
 			public String getBaseUrl() {
-<span class="nc" id="L120">				return baseUrl;</span>
+<span class="fc" id="L120">				return baseUrl;</span>
 			}
 		});
-<span class="nc" id="L123">	}</span>
+<span class="fc" id="L123">	}</span>
 
 	/**
 	 * Sets an end point for this manager.
 	 * &lt;p&gt;
 	 * The specified end point will be attached to each services configuration created via
 	 * {@link #onCreateServicesConfiguration(Class)}.
+	 * &lt;p&gt;
+	 * &lt;b&gt;Note&lt;/b&gt; that this will not change end points of the services created prior to this call.
 	 *
 	 * @param endPoint The desired end point.
 	 * @see #getEndPoint()
 	 */
 	public void setEndPoint(@NonNull final EndPoint endPoint) {
-<span class="nc" id="L135">		this.mEndPoint = endPoint;</span>
-<span class="nc" id="L136">	}</span>
+<span class="fc" id="L137">		this.mEndPoint = endPoint;</span>
+<span class="fc" id="L138">	}</span>
 
 	/**
 	 * Returns the end point specified for this manager.
@@ -143,7 +145,7 @@ public class ServiceManager {
 	 */
 	@Nullable
 	public EndPoint getEndPoint() {
-<span class="nc" id="L146">		return mEndPoint;</span>
+<span class="fc" id="L148">		return mEndPoint;</span>
 	}
 
 	/**
@@ -158,10 +160,11 @@ public class ServiceManager {
 	 * @return PROXY for the desired services interface ready for services invocation.
 	 * @see #servicesConfiguration(Class)
 	 */
+	@NonNull
 	@SuppressWarnings(&quot;unchecked&quot;)
 	public &lt;S&gt; S services(@NonNull final Class&lt;S&gt; servicesInterface) {
-<span class="nc" id="L163">		this.ensureHasServicesConfiguration(servicesInterface);</span>
-<span class="nc" id="L164">		return (S) mServices.get(servicesInterface).services();</span>
+<span class="fc" id="L166">		this.ensureHasServicesConfiguration(servicesInterface);</span>
+<span class="fc" id="L167">		return (S) mServices.get(servicesInterface).services();</span>
 	}
 
 	/**
@@ -173,10 +176,11 @@ public class ServiceManager {
 	 * @see ServicesConfiguration
 	 * @see #services(Class)
 	 */
+	@NonNull
 	@SuppressWarnings(&quot;unchecked&quot;)
 	public &lt;S&gt; ServicesConfiguration&lt;S&gt; servicesConfiguration(@NonNull final Class&lt;S&gt; servicesInterface) {
-<span class="nc" id="L178">		this.ensureHasServicesConfiguration(servicesInterface);</span>
-<span class="nc" id="L179">		return mServices.get(servicesInterface);</span>
+<span class="fc" id="L182">		this.ensureHasServicesConfiguration(servicesInterface);</span>
+<span class="fc" id="L183">		return mServices.get(servicesInterface);</span>
 	}
 
 	/**
@@ -186,14 +190,14 @@ public class ServiceManager {
 	 *                          is not created yet.
 	 */
 	private void ensureHasServicesConfiguration(final Class&lt;?&gt; servicesInterface) {
-<span class="nc" id="L189">		synchronized (mServices) {</span>
-<span class="nc" id="L190">			final ServicesConfiguration servicesConfiguration = mServices.get(servicesInterface);</span>
-<span class="nc bnc" id="L191" title="All 2 branches missed.">			if (servicesConfiguration == null) mServices.put(</span>
+<span class="fc" id="L193">		synchronized (mServices) {</span>
+<span class="fc" id="L194">			final ServicesConfiguration servicesConfiguration = mServices.get(servicesInterface);</span>
+<span class="fc bfc" id="L195" title="All 2 branches covered.">			if (servicesConfiguration == null) mServices.put(</span>
 					servicesInterface,
-<span class="nc" id="L193">					onCreateServicesConfiguration(servicesInterface)</span>
+<span class="fc" id="L197">					onCreateServicesConfiguration(servicesInterface)</span>
 			);
-<span class="nc" id="L195">		}</span>
-<span class="nc" id="L196">	}</span>
+<span class="pc" id="L199">		}</span>
+<span class="fc" id="L200">	}</span>
 
 	/**
 	 * Invoked whenever {@link #servicesConfiguration(Class)} or {@link #services(Class)} is called
@@ -212,9 +216,9 @@ public class ServiceManager {
 	@NonNull
 	@CallSuper
 	protected ServicesConfiguration onCreateServicesConfiguration(@NonNull final Class&lt;?&gt; servicesInterface) {
-<span class="nc" id="L215">		final ServicesConfiguration configuration = new ServicesConfiguration&lt;&gt;(servicesInterface);</span>
-<span class="nc bnc" id="L216" title="All 2 branches missed.">		if (mEndPoint != null) configuration.retrofitBuilder().baseUrl(mEndPoint.getBaseUrl());</span>
-<span class="nc" id="L217">		return configuration;</span>
+<span class="fc" id="L219">		final ServicesConfiguration configuration = new ServicesConfiguration&lt;&gt;(servicesInterface);</span>
+<span class="fc bfc" id="L220" title="All 2 branches covered.">		if (mEndPoint != null) configuration.retrofitBuilder().baseUrl(mEndPoint.getBaseUrl());</span>
+<span class="fc" id="L221">		return configuration;</span>
 	}
 
 	/*
@@ -240,7 +244,7 @@ public class ServiceManager {
 		 * Builder used to create an instance of {@link #retrofit} for the current configuration
 		 * parameters.
 		 */
-<span class="nc" id="L243">		private final Retrofit.Builder mBuilder = new Retrofit.Builder();</span>
+<span class="fc" id="L247">		private final Retrofit.Builder mBuilder = new Retrofit.Builder();</span>
 
 		/**
 		 * Class of services interface used to create {@link #services} PROXY by {@link #retrofit}.
@@ -269,7 +273,7 @@ public class ServiceManager {
 		 * the current instance of {@link #retrofit} should be updated the next time services
 		 * are requested via {@link #services()}.
 		 */
-<span class="nc" id="L272">		private boolean changed = true;</span>
+<span class="fc" id="L276">		private volatile boolean changed = true;</span>
 
 		/**
 		 * Creates a new instance of ServicesConfiguration for the specified &lt;var&gt;servicesInterface&lt;/var&gt;
@@ -278,9 +282,9 @@ public class ServiceManager {
 		 * @param servicesInterface Class of the services interface used to create PROXY services
 		 *                          instance.
 		 */
-<span class="nc" id="L281">		private ServicesConfiguration(@NonNull final Class&lt;S&gt; servicesInterface) {</span>
-<span class="nc" id="L282">			this.servicesInterface = servicesInterface;</span>
-<span class="nc" id="L283">		}</span>
+<span class="fc" id="L285">		ServicesConfiguration(@NonNull final Class&lt;S&gt; servicesInterface) {</span>
+<span class="fc" id="L286">			this.servicesInterface = servicesInterface;</span>
+<span class="fc" id="L287">		}</span>
 
 		/**
 		 * Returns the Retrofit builder that is used to build instance of Retrofit and instance of
@@ -295,17 +299,8 @@ public class ServiceManager {
 		 */
 		@NonNull
 		public Retrofit.Builder retrofitBuilder() {
-<span class="nc" id="L298">			return mBuilder;</span>
+<span class="fc" id="L302">			return mBuilder;</span>
 		}
-
-		/**
-		 * Invalidates the current configuration. Next call to {@link ServiceManager#services(Class)}
-		 * with services interface associated with this configuration will create a new instance
-		 * of the desired services PROXY.
-		 */
-		public void invalidate() {
-<span class="nc" id="L307">			this.changed = true;</span>
-<span class="nc" id="L308">		}</span>
 
 		/**
 		 * Returns the Retrofit instance for the current configuration.
@@ -316,8 +311,8 @@ public class ServiceManager {
 		 */
 		@NonNull
 		public Retrofit retrofit() {
-<span class="nc" id="L319">			this.ensureValid();</span>
-<span class="nc" id="L320">			return retrofit;</span>
+<span class="fc" id="L314">			this.ensureValid();</span>
+<span class="fc" id="L315">			return retrofit;</span>
 		}
 
 		/**
@@ -327,9 +322,9 @@ public class ServiceManager {
 		 * @return Services PROXY configured according to this configuration.
 		 */
 		@NonNull
-		private S services() {
-<span class="nc" id="L331">			this.ensureValid();</span>
-<span class="nc" id="L332">			return services;</span>
+		S services() {
+<span class="fc" id="L326">			this.ensureValid();</span>
+<span class="fc" id="L327">			return services;</span>
 		}
 
 		/**
@@ -337,14 +332,23 @@ public class ServiceManager {
 		 * current configuration.
 		 */
 		private void ensureValid() {
-<span class="nc" id="L340">			synchronized (mBuilder) {</span>
-<span class="nc bnc" id="L341" title="All 2 branches missed.">				if (changed) {</span>
-<span class="nc" id="L342">					this.retrofit = mBuilder.build();</span>
-<span class="nc" id="L343">					this.services = retrofit.create(servicesInterface);</span>
-<span class="nc" id="L344">					this.changed = false;</span>
-				}
-<span class="nc" id="L346">			}</span>
-<span class="nc" id="L347">		}</span>
+<span class="fc bfc" id="L335" title="All 2 branches covered.">			if (changed) {</span>
+<span class="fc" id="L336">				synchronized (mBuilder) {</span>
+<span class="fc" id="L337">					this.retrofit = mBuilder.build();</span>
+<span class="fc" id="L338">					this.services = retrofit.create(servicesInterface);</span>
+<span class="fc" id="L339">					this.changed = false;</span>
+<span class="fc" id="L340">				}</span>
+			}
+<span class="fc" id="L342">		}</span>
+
+		/**
+		 * Invalidates the current configuration. Next call to {@link ServiceManager#services(Class)}
+		 * with services interface associated with this configuration will create a new instance
+		 * of the desired services PROXY.
+		 */
+		public void invalidate() {
+<span class="fc" id="L350">			this.changed = true;</span>
+<span class="fc" id="L351">		}</span>
 	}
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span>Generated by the Android Gradle plugin 2.3.1</div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span>Generated by the Android Gradle plugin 2.3.3</div></body></html>

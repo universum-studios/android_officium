@@ -103,11 +103,11 @@ public class ServiceError extends BaseServiceObject {
 	 * @see #getErrorBody()
 	 */
 	public ServiceError(final int errorCode, @NonNull final ResponseBody errorBody) {
-<span class="nc" id="L106">		super();</span>
-<span class="nc" id="L107">		this.mErrorCode = errorCode;</span>
-<span class="nc" id="L108">		this.mErrorBody = errorBody;</span>
-<span class="nc" id="L109">		this.mFailure = null;</span>
-<span class="nc" id="L110">	}</span>
+<span class="fc" id="L106">		super();</span>
+<span class="fc" id="L107">		this.mErrorCode = errorCode;</span>
+<span class="fc" id="L108">		this.mErrorBody = errorBody;</span>
+<span class="fc" id="L109">		this.mFailure = null;</span>
+<span class="fc" id="L110">	}</span>
 
 	/**
 	 * Creates a new instance of ServiceError with the specified &lt;var&gt;failure&lt;/var&gt;.
@@ -117,11 +117,11 @@ public class ServiceError extends BaseServiceObject {
 	 * @see #getFailure()
 	 */
 	public ServiceError(@NonNull final Throwable failure) {
-<span class="nc" id="L120">		super();</span>
-<span class="nc" id="L121">		this.mErrorCode = 0;</span>
-<span class="nc" id="L122">		this.mErrorBody = null;</span>
-<span class="nc" id="L123">		this.mFailure = failure;</span>
-<span class="nc" id="L124">	}</span>
+<span class="fc" id="L120">		super();</span>
+<span class="fc" id="L121">		this.mErrorCode = 0;</span>
+<span class="fc" id="L122">		this.mErrorBody = null;</span>
+<span class="fc" id="L123">		this.mFailure = failure;</span>
+<span class="fc" id="L124">	}</span>
 
 	/**
 	 * Creates a new instance of ServiceError with data of the given one.
@@ -131,12 +131,12 @@ public class ServiceError extends BaseServiceObject {
 	 * @param other The other service error of which data to copy to the new one.
 	 */
 	public ServiceError(@NonNull final ServiceError other) {
-<span class="nc" id="L134">		super();</span>
-<span class="nc" id="L135">		this.mErrorCode = other.mErrorCode;</span>
-<span class="nc" id="L136">		this.mErrorBody = other.mErrorBody;</span>
-<span class="nc" id="L137">		this.mFailure = other.mFailure;</span>
-<span class="nc" id="L138">		this.mErrorBodyConverter = other.mErrorBodyConverter;</span>
-<span class="nc" id="L139">	}</span>
+<span class="fc" id="L134">		super();</span>
+<span class="fc" id="L135">		this.mErrorCode = other.mErrorCode;</span>
+<span class="fc" id="L136">		this.mErrorBody = other.mErrorBody;</span>
+<span class="fc" id="L137">		this.mFailure = other.mFailure;</span>
+<span class="fc" id="L138">		this.mErrorBodyConverter = other.mErrorBodyConverter;</span>
+<span class="fc" id="L139">	}</span>
 
 	/*
 	 * Methods =====================================================================================
@@ -152,7 +152,7 @@ public class ServiceError extends BaseServiceObject {
 	 * @see #isFailure()
 	 */
 	public final boolean isError() {
-<span class="nc bnc" id="L155" title="All 2 branches missed.">		return mErrorBody != null;</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">		return mErrorBody != null;</span>
 	}
 
 	/**
@@ -160,12 +160,12 @@ public class ServiceError extends BaseServiceObject {
 	 * service and request.
 	 *
 	 * @return Error code specified for this service error.
-	 * @throws IllegalStateException If this error is not an error response but a failure.
+	 * @throws UnsupportedOperationException If this error is not an error response but a failure.
 	 * @see #getErrorBody()
 	 */
 	public int getErrorCode() {
-<span class="nc bnc" id="L167" title="All 2 branches missed.">		if (mErrorBody == null) throw new IllegalStateException(&quot;Not an error but a failure!&quot;);</span>
-<span class="nc" id="L168">		return mErrorCode;</span>
+<span class="fc bfc" id="L167" title="All 2 branches covered.">		if (mErrorBody == null) throw new UnsupportedOperationException(&quot;Not an error but a failure!&quot;);</span>
+<span class="fc" id="L168">		return mErrorCode;</span>
 	}
 
 	/**
@@ -173,13 +173,13 @@ public class ServiceError extends BaseServiceObject {
 	 * service and request.
 	 *
 	 * @return Error body specified for this service error.
-	 * @throws IllegalStateException If this error is not an error response but a failure.
+	 * @throws UnsupportedOperationException If this error is not an error response but a failure.
 	 * @see #getErrorCode()
 	 */
 	@NonNull
 	public ResponseBody getErrorBody() {
-<span class="nc bnc" id="L181" title="All 2 branches missed.">		if (mErrorBody == null) throw new IllegalStateException(&quot;Not an error but a failure!&quot;);</span>
-<span class="nc" id="L182">		return mErrorBody;</span>
+<span class="fc bfc" id="L181" title="All 2 branches covered.">		if (mErrorBody == null) throw new UnsupportedOperationException(&quot;Not an error but a failure!&quot;);</span>
+<span class="fc" id="L182">		return mErrorBody;</span>
 	}
 
 	/**
@@ -190,8 +190,8 @@ public class ServiceError extends BaseServiceObject {
 	 *                  the current one.
 	 */
 	public void setErrorBodyConverter(@Nullable final Converter&lt;ResponseBody, ?&gt; converter) {
-<span class="nc" id="L193">		this.mErrorBodyConverter = converter;</span>
-<span class="nc" id="L194">	}</span>
+<span class="fc" id="L193">		this.mErrorBodyConverter = converter;</span>
+<span class="fc" id="L194">	}</span>
 
 	/**
 	 * Returns the error body of this service error as the desired type.
@@ -199,24 +199,24 @@ public class ServiceError extends BaseServiceObject {
 	 * @param classOfT Class ot the type to which to convert the error body.
 	 * @param &lt;T&gt;      The desired type as which to return error body or {@code null} if conversion fails.
 	 * @return Error body converted to the requested type.
-	 * @throws IllegalStateException If this error is not an error response but a failure.
+	 * @throws UnsupportedOperationException If this error is not an error response but a failure.
 	 * @throws IllegalStateException If no converter has been specified.
 	 */
 	@Nullable
 	public &lt;T&gt; T getErrorBodyAs(@NonNull final Class&lt;T&gt; classOfT) {
-<span class="nc bnc" id="L207" title="All 2 branches missed.">		if (mErrorBody == null) throw new IllegalStateException(&quot;Not an error but a failure!&quot;);</span>
-<span class="nc bnc" id="L208" title="All 2 branches missed.">		if (mErrorBodyConverter == null) throw new IllegalStateException(&quot;No error body converter specified!&quot;);</span>
-<span class="nc" id="L209">		T errorBody = null;</span>
+<span class="fc bfc" id="L207" title="All 2 branches covered.">		if (mErrorBody == null) throw new UnsupportedOperationException(&quot;Not an error but a failure!&quot;);</span>
+<span class="fc bfc" id="L208" title="All 2 branches covered.">		if (mErrorBodyConverter == null) throw new IllegalStateException(&quot;No error body converter specified!&quot;);</span>
+<span class="fc" id="L209">		T errorBody = null;</span>
 		try {
-<span class="nc" id="L211">			errorBody = (T) mErrorBodyConverter.convert(mErrorBody);</span>
-<span class="nc" id="L212">		} catch (IOException e) {</span>
-<span class="nc" id="L213">			e.printStackTrace();</span>
+<span class="fc" id="L211">			errorBody = (T) mErrorBodyConverter.convert(mErrorBody);</span>
+<span class="fc" id="L212">		} catch (IOException e) {</span>
+<span class="fc" id="L213">			e.printStackTrace();</span>
 <span class="nc" id="L214">		} catch (ClassCastException e) {</span>
 <span class="nc" id="L215">			throw new IllegalArgumentException(&quot;Specified class(&quot; + classOfT + &quot;) does not match that specified for converter!&quot;, e);</span>
 		} finally {
-<span class="nc" id="L217">			mErrorBody.close();</span>
-<span class="nc" id="L218">		}</span>
-<span class="nc" id="L219">		return errorBody;</span>
+<span class="pc" id="L217">			mErrorBody.close();</span>
+<span class="fc" id="L218">		}</span>
+<span class="fc" id="L219">		return errorBody;</span>
 	}
 
 	/**
@@ -228,19 +228,19 @@ public class ServiceError extends BaseServiceObject {
 	 * @see #isError()
 	 */
 	public final boolean isFailure() {
-<span class="nc bnc" id="L231" title="All 2 branches missed.">		return mFailure != null;</span>
+<span class="fc bfc" id="L231" title="All 2 branches covered.">		return mFailure != null;</span>
 	}
 
 	/**
 	 * Returns the failure that has caused the associated service and request to fail.
 	 *
 	 * @return Throwable failure specified for this service error.
-	 * @throws IllegalStateException If this error is not a failure but an error response.
+	 * @throws UnsupportedOperationException If this error is not a failure but an error response.
 	 */
 	@NonNull
 	public Throwable getFailure() {
-<span class="nc bnc" id="L242" title="All 2 branches missed.">		if (mFailure == null) throw new IllegalStateException(&quot;Not a failure but an error!&quot;);</span>
-<span class="nc" id="L243">		return mFailure;</span>
+<span class="fc bfc" id="L242" title="All 2 branches covered.">		if (mFailure == null) throw new UnsupportedOperationException(&quot;Not a failure but an error!&quot;);</span>
+<span class="fc" id="L243">		return mFailure;</span>
 	}
 
 	/**
@@ -248,22 +248,22 @@ public class ServiceError extends BaseServiceObject {
 	@Override
 	@SuppressWarnings(&quot;StringBufferReplaceableByString&quot;)
 	public String toString() {
-<span class="nc" id="L251">		final boolean isFailure = isFailure();</span>
-<span class="nc" id="L252">		final StringBuilder builder = new StringBuilder(64);</span>
-<span class="nc" id="L253">		builder.append(getClass().getSimpleName());</span>
-<span class="nc" id="L254">		builder.append(&quot;{isFailure: &quot;);</span>
-<span class="nc" id="L255">		builder.append(isFailure);</span>
-<span class="nc" id="L256">		builder.append(&quot;, errorCode: &quot;);</span>
-<span class="nc bnc" id="L257" title="All 2 branches missed.">		builder.append(isFailure ? &quot;NONE&quot; : mErrorCode);</span>
-<span class="nc" id="L258">		builder.append(&quot;, errorBody: &quot;);</span>
-<span class="nc bnc" id="L259" title="All 2 branches missed.">		builder.append(isFailure ? &quot;NONE&quot; : mErrorBody);</span>
-<span class="nc" id="L260">		builder.append(&quot;, failure: &quot;);</span>
-<span class="nc bnc" id="L261" title="All 2 branches missed.">		builder.append(isFailure ? mFailure : &quot;NONE&quot;);</span>
-<span class="nc" id="L262">		return builder.append(&quot;}&quot;).toString();</span>
+<span class="fc" id="L251">		final boolean isFailure = isFailure();</span>
+<span class="fc" id="L252">		final StringBuilder builder = new StringBuilder(64);</span>
+<span class="fc" id="L253">		builder.append(getClass().getSimpleName());</span>
+<span class="fc" id="L254">		builder.append(&quot;{isFailure: &quot;);</span>
+<span class="fc" id="L255">		builder.append(isFailure);</span>
+<span class="fc" id="L256">		builder.append(&quot;, errorCode: &quot;);</span>
+<span class="fc bfc" id="L257" title="All 2 branches covered.">		builder.append(isFailure ? &quot;NONE&quot; : mErrorCode);</span>
+<span class="fc" id="L258">		builder.append(&quot;, errorBody: &quot;);</span>
+<span class="fc bfc" id="L259" title="All 2 branches covered.">		builder.append(isFailure ? &quot;NONE&quot; : mErrorBody);</span>
+<span class="fc" id="L260">		builder.append(&quot;, failure: &quot;);</span>
+<span class="fc bfc" id="L261" title="All 2 branches covered.">		builder.append(isFailure ? mFailure : &quot;NONE&quot;);</span>
+<span class="fc" id="L262">		return builder.append(&quot;}&quot;).toString();</span>
 	}
 
 	/*
 	 * Inner classes ===============================================================================
 	 */
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span>Generated by the Android Gradle plugin 2.3.1</div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span>Generated by the Android Gradle plugin 2.3.3</div></body></html>

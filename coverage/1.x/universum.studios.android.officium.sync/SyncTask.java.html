@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
@@ -110,8 +111,9 @@ public class SyncTask&lt;R extends SyncTask.Request&gt; implements Cloneable {
 	public static final int CANCELED = 0x05;
 
 	/**
-	 * Defines an annotation for determining set of available states for {@link SyncTask}.
-	 * &lt;h3&gt;Available states&lt;/h3&gt;
+	 * Defines an annotation for determining set of possible states for {@link SyncTask}.
+	 *
+	 * &lt;h3&gt;Possible states&lt;/h3&gt;
 	 * &lt;ul&gt;
 	 * &lt;li&gt;{@link #IDLE}&lt;/li&gt;
 	 * &lt;li&gt;{@link #PENDING}&lt;/li&gt;
@@ -162,9 +164,9 @@ public class SyncTask&lt;R extends SyncTask.Request&gt; implements Cloneable {
 
 		/**
 		 */
-<span class="nc" id="L165">		private EmptyRequest() {</span>
+<span class="fc" id="L167">		private EmptyRequest() {</span>
 			// Not allowed to be instantiated publicly.
-<span class="nc" id="L167">			throw new UnsupportedOperationException();</span>
+<span class="fc" id="L169">			throw new UnsupportedOperationException();</span>
 		}
 	}
 
@@ -176,14 +178,13 @@ public class SyncTask&lt;R extends SyncTask.Request&gt; implements Cloneable {
 	 * Empty instance of {@link SyncTask} that may be used in order to pass a sync task to a sync
 	 * handler that does not require any data from a caller to perform synchronization logic.
 	 */
-	@SuppressWarnings(&quot;unused&quot;)
-<span class="nc" id="L180">	public static final SyncTask&lt;EmptyRequest&gt; EMPTY = new SyncTask&lt;&gt;();</span>
+<span class="fc" id="L181">	public static final SyncTask&lt;EmptyRequest&gt; EMPTY = new SyncTask&lt;&gt;();</span>
 
 	/**
 	 * Instance of Gson used to parse {@link #mRequestBody} into {@link #mRequest} instance and
 	 * vice versa.
 	 */
-<span class="nc" id="L186">	private static final Gson GSON = new Gson();</span>
+<span class="fc" id="L187">	private static final Gson GSON = new Gson();</span>
 
 	/*
 	 * Members =====================================================================================
@@ -212,7 +213,7 @@ public class SyncTask&lt;R extends SyncTask.Request&gt; implements Cloneable {
 	 * Current state of this synchronization task. May be one of states defined by {@link State @State}
 	 * annotation.
 	 */
-<span class="nc" id="L215">	private int mState = IDLE;</span>
+<span class="fc" id="L216">	private int mState = IDLE;</span>
 
 	/*
 	 * Constructors ================================================================================
@@ -221,32 +222,21 @@ public class SyncTask&lt;R extends SyncTask.Request&gt; implements Cloneable {
 	/**
 	 * Creates an empty instance of SyncTask.
 	 */
-<span class="nc" id="L224">	private SyncTask() {</span>
-<span class="nc" id="L225">		this.mId = -1;</span>
-<span class="nc" id="L226">		this.mRequestBody = null;</span>
-<span class="nc" id="L227">	}</span>
-
-	/**
-	 * Creates a new instance of SyncTask with data of the given one.
-	 *
-	 * @param other The other sync task of which data to copy to the new one.
-	 */
-<span class="nc" id="L234">	protected SyncTask(@NonNull final SyncTask other) {</span>
-<span class="nc" id="L235">		this.mId = other.mId;</span>
-<span class="nc" id="L236">		this.mRequestBody = other.mRequestBody;</span>
-<span class="nc" id="L237">		this.mState = other.mState;</span>
-<span class="nc" id="L238">	}</span>
+<span class="fc" id="L225">	private SyncTask() {</span>
+<span class="fc" id="L226">		this.mId = -1;</span>
+<span class="fc" id="L227">		this.mRequestBody = null;</span>
+<span class="fc" id="L228">	}</span>
 
 	/**
 	 * Creates a new instance of SyncTask with data specified within the given &lt;var&gt;builder&lt;/var&gt;.
 	 *
 	 * @param builder The builder containing data for the new SyncTask instance.
 	 */
-<span class="nc" id="L245">	protected SyncTask(@NonNull final Builder&lt;R&gt; builder) {</span>
-<span class="nc" id="L246">		this.mId = builder.id;</span>
-<span class="nc" id="L247">		this.mRequest = builder.request;</span>
-<span class="nc bnc" id="L248" title="All 2 branches missed.">		this.mRequestBody = mRequest == null ? null : GSON.toJson(mRequest);</span>
-<span class="nc" id="L249">	}</span>
+<span class="fc" id="L235">	protected SyncTask(@NonNull final Builder&lt;R&gt; builder) {</span>
+<span class="fc" id="L236">		this.mId = builder.id;</span>
+<span class="fc" id="L237">		this.mRequest = builder.request;</span>
+<span class="fc bfc" id="L238" title="All 2 branches covered.">		this.mRequestBody = mRequest == null ? null : GSON.toJson(mRequest);</span>
+<span class="fc" id="L239">	}</span>
 
 	/**
 	 * Creates a new instance of SyncTask with data specified within the given &lt;var&gt;extras&lt;/var&gt;
@@ -259,11 +249,22 @@ public class SyncTask&lt;R extends SyncTask.Request&gt; implements Cloneable {
 	 * @param extras The synchronization extras Bundle containing data for the new SyncTask instance.
 	 * @see #intoExtras(Bundle)
 	 */
-<span class="nc" id="L262">	protected SyncTask(@NonNull final Bundle extras) {</span>
-<span class="nc" id="L263">		this.mId = extras.getInt(SyncExtras.EXTRA_TASK_ID, DEFAULT_ID);</span>
-<span class="nc" id="L264">		this.mRequestBody = extras.getString(SyncExtras.EXTRA_TASK_REQUEST_BODY);</span>
-<span class="nc" id="L265">		this.mState = extras.getInt(SyncExtras.EXTRA_TASK_STATE, mState);</span>
-<span class="nc" id="L266">	}</span>
+<span class="fc" id="L252">	protected SyncTask(@NonNull final Bundle extras) {</span>
+<span class="fc" id="L253">		this.mId = extras.getInt(SyncExtras.EXTRA_TASK_ID, DEFAULT_ID);</span>
+<span class="fc" id="L254">		this.mRequestBody = extras.getString(SyncExtras.EXTRA_TASK_REQUEST_BODY);</span>
+<span class="fc" id="L255">		this.mState = extras.getInt(SyncExtras.EXTRA_TASK_STATE, mState);</span>
+<span class="fc" id="L256">	}</span>
+
+	/**
+	 * Creates a new instance of SyncTask with data of the given one.
+	 *
+	 * @param other The other sync task of which data to copy to the new one.
+	 */
+<span class="fc" id="L263">	protected SyncTask(@NonNull final SyncTask other) {</span>
+<span class="fc" id="L264">		this.mId = other.mId;</span>
+<span class="fc" id="L265">		this.mRequestBody = other.mRequestBody;</span>
+<span class="fc" id="L266">		this.mState = other.mState;</span>
+<span class="fc" id="L267">	}</span>
 
 	/*
 	 * Methods =====================================================================================
@@ -275,7 +276,7 @@ public class SyncTask&lt;R extends SyncTask.Request&gt; implements Cloneable {
 	 * @return Id specified for this task.
 	 */
 	public final int getId() {
-<span class="nc" id="L278">		return mId;</span>
+<span class="fc" id="L279">		return mId;</span>
 	}
 
 	/**
@@ -286,8 +287,8 @@ public class SyncTask&lt;R extends SyncTask.Request&gt; implements Cloneable {
 	 * @see #getState()
 	 */
 	final void setState(@State final int state) {
-<span class="nc" id="L289">		this.mState = state;</span>
-<span class="nc" id="L290">	}</span>
+<span class="fc" id="L290">		this.mState = state;</span>
+<span class="fc" id="L291">	}</span>
 
 	/**
 	 * Returns the current state of this task.
@@ -296,7 +297,7 @@ public class SyncTask&lt;R extends SyncTask.Request&gt; implements Cloneable {
 	 */
 	@State
 	public final int getState() {
-<span class="nc" id="L299">		return mState;</span>
+<span class="fc" id="L300">		return mState;</span>
 	}
 
 	/**
@@ -310,10 +311,10 @@ public class SyncTask&lt;R extends SyncTask.Request&gt; implements Cloneable {
 	 */
 	@Nullable
 	public final R getRequest(@NonNull final Class&lt;R&gt; classOfRequest) {
-<span class="nc bnc" id="L313" title="All 2 branches missed.">		if (mRequest == null) {</span>
-<span class="nc bnc" id="L314" title="All 2 branches missed.">			this.mRequest = TextUtils.isEmpty(mRequestBody) ? null : GSON.fromJson(mRequestBody, classOfRequest);</span>
+<span class="fc bfc" id="L314" title="All 2 branches covered.">		if (mRequest == null) {</span>
+<span class="fc bfc" id="L315" title="All 2 branches covered.">			this.mRequest = TextUtils.isEmpty(mRequestBody) ? null : GSON.fromJson(mRequestBody, classOfRequest);</span>
 		}
-<span class="nc" id="L316">		return mRequest;</span>
+<span class="fc" id="L317">		return mRequest;</span>
 	}
 
 	/**
@@ -323,7 +324,7 @@ public class SyncTask&lt;R extends SyncTask.Request&gt; implements Cloneable {
 	 */
 	@Nullable
 	public final String getRequestBody() {
-<span class="nc" id="L326">		return mRequestBody;</span>
+<span class="fc" id="L327">		return mRequestBody;</span>
 	}
 
 	/**
@@ -335,36 +336,36 @@ public class SyncTask&lt;R extends SyncTask.Request&gt; implements Cloneable {
 	 */
 	@NonNull
 	public Bundle intoExtras(@NonNull final Bundle extras) {
-<span class="nc" id="L338">		extras.putInt(SyncExtras.EXTRA_TASK_ID, mId);</span>
-<span class="nc" id="L339">		extras.putString(SyncExtras.EXTRA_TASK_REQUEST_BODY, mRequestBody);</span>
-<span class="nc" id="L340">		extras.putInt(SyncExtras.EXTRA_TASK_STATE, mState);</span>
-<span class="nc" id="L341">		return extras;</span>
+<span class="fc" id="L339">		extras.putInt(SyncExtras.EXTRA_TASK_ID, mId);</span>
+<span class="fc" id="L340">		extras.putString(SyncExtras.EXTRA_TASK_REQUEST_BODY, mRequestBody);</span>
+<span class="fc" id="L341">		extras.putInt(SyncExtras.EXTRA_TASK_STATE, mState);</span>
+<span class="fc" id="L342">		return extras;</span>
 	}
 
 	/**
 	 */
 	@Override
 	public int hashCode() {
-<span class="nc" id="L348">		int hash = mId;</span>
-<span class="nc bnc" id="L349" title="All 2 branches missed.">		if (!TextUtils.isEmpty(mRequestBody)) {</span>
-<span class="nc" id="L350">			hash = 31 * hash + mRequestBody.hashCode();</span>
+<span class="fc" id="L349">		int hash = mId;</span>
+<span class="fc bfc" id="L350" title="All 2 branches covered.">		if (!TextUtils.isEmpty(mRequestBody)) {</span>
+<span class="fc" id="L351">			hash = 31 * hash + mRequestBody.hashCode();</span>
 		}
-<span class="nc" id="L352">		return hash;</span>
+<span class="fc" id="L353">		return hash;</span>
 	}
 
 	/**
 	 */
 	@Override
 	public boolean equals(@Nullable final Object other) {
-<span class="nc bnc" id="L359" title="All 2 branches missed.">		if (other == this) return true;</span>
-<span class="nc bnc" id="L360" title="All 2 branches missed.">		if (!(other instanceof SyncTask)) return false;</span>
-<span class="nc" id="L361">		final SyncTask task = (SyncTask) other;</span>
-<span class="nc bnc" id="L362" title="All 2 branches missed.">		if (task.mId != mId) {</span>
-<span class="nc" id="L363">			return false;</span>
+<span class="fc bfc" id="L360" title="All 2 branches covered.">		if (other == this) return true;</span>
+<span class="fc bfc" id="L361" title="All 2 branches covered.">		if (!(other instanceof SyncTask)) return false;</span>
+<span class="fc" id="L362">		final SyncTask task = (SyncTask) other;</span>
+<span class="fc bfc" id="L363" title="All 2 branches covered.">		if (task.mId != mId) {</span>
+<span class="fc" id="L364">			return false;</span>
 		}
-<span class="nc bnc" id="L365" title="All 2 branches missed.">		final int requestHash = mRequestBody == null ? 0 : mRequestBody.hashCode();</span>
-<span class="nc bnc" id="L366" title="All 2 branches missed.">		final int otherRequestHash = task.mRequestBody == null ? 0 : task.mRequestBody.hashCode();</span>
-<span class="nc bnc" id="L367" title="All 2 branches missed.">		return requestHash == otherRequestHash;</span>
+<span class="fc bfc" id="L366" title="All 2 branches covered.">		final int requestHash = mRequestBody == null ? 0 : mRequestBody.hashCode();</span>
+<span class="fc bfc" id="L367" title="All 2 branches covered.">		final int otherRequestHash = task.mRequestBody == null ? 0 : task.mRequestBody.hashCode();</span>
+<span class="fc bfc" id="L368" title="All 2 branches covered.">		return requestHash == otherRequestHash;</span>
 	}
 
 	/**
@@ -372,15 +373,15 @@ public class SyncTask&lt;R extends SyncTask.Request&gt; implements Cloneable {
 	@Override
 	@SuppressWarnings(&quot;StringBufferReplaceableByString&quot;)
 	public String toString() {
-<span class="nc" id="L375">		final StringBuilder builder = new StringBuilder(64);</span>
-<span class="nc" id="L376">		builder.append(getClass().getSimpleName());</span>
-<span class="nc" id="L377">		builder.append(&quot;{id: &quot;);</span>
-<span class="nc" id="L378">		builder.append(mId);</span>
-<span class="nc" id="L379">		builder.append(&quot;, request: &quot;);</span>
-<span class="nc bnc" id="L380" title="All 2 branches missed.">		builder.append(mRequest == null ? mRequestBody : mRequest);</span>
-<span class="nc" id="L381">		builder.append(&quot;, state: &quot;);</span>
-<span class="nc" id="L382">		builder.append(stateName(mState));</span>
-<span class="nc" id="L383">		return builder.append(&quot;}&quot;).toString();</span>
+<span class="fc" id="L376">		final StringBuilder builder = new StringBuilder(64);</span>
+<span class="fc" id="L377">		builder.append(getClass().getSimpleName());</span>
+<span class="fc" id="L378">		builder.append(&quot;{id: &quot;);</span>
+<span class="fc" id="L379">		builder.append(mId);</span>
+<span class="fc" id="L380">		builder.append(&quot;, state: &quot;);</span>
+<span class="fc" id="L381">		builder.append(getStateName(mState));</span>
+<span class="fc" id="L382">		builder.append(&quot;, request: &quot;);</span>
+<span class="fc bfc" id="L383" title="All 2 branches covered.">		builder.append(mRequest == null ? mRequestBody : GSON.toJson(mRequest));</span>
+<span class="fc" id="L384">		return builder.append(&quot;}&quot;).toString();</span>
 	}
 
 	/**
@@ -389,20 +390,15 @@ public class SyncTask&lt;R extends SyncTask.Request&gt; implements Cloneable {
 	 * @param state The desired state of which name to return.
 	 * @return The state's name.
 	 */
-	private static String stateName(final int state) {
-<span class="nc bnc" id="L393" title="All 6 branches missed.">		switch (state) {</span>
-			case IDLE:
-<span class="nc" id="L395">				return &quot;IDLE&quot;;</span>
-			case PENDING:
-<span class="nc" id="L397">				return &quot;PENDING&quot;;</span>
-			case RUNNING:
-<span class="nc" id="L399">				return &quot;RUNNING&quot;;</span>
-			case FINISHED:
-<span class="nc" id="L401">				return &quot;FINISHED&quot;;</span>
-			case FAILED:
-<span class="nc" id="L403">				return &quot;FAILED&quot;;</span>
-			default:
-<span class="nc" id="L405">				return &quot;UNKNOWN&quot;;</span>
+	@VisibleForTesting static String getStateName(final int state) {
+<span class="fc bfc" id="L394" title="All 7 branches covered.">		switch (state) {</span>
+<span class="fc" id="L395">			case IDLE: return &quot;IDLE&quot;;</span>
+<span class="fc" id="L396">			case PENDING: return &quot;PENDING&quot;;</span>
+<span class="fc" id="L397">			case RUNNING: return &quot;RUNNING&quot;;</span>
+<span class="fc" id="L398">			case FINISHED: return &quot;FINISHED&quot;;</span>
+<span class="fc" id="L399">			case FAILED: return &quot;FAILED&quot;;</span>
+<span class="fc" id="L400">			case CANCELED: return &quot;CANCELED&quot;;</span>
+<span class="fc" id="L401">			default: return &quot;UNKNOWN&quot;;</span>
 		}
 	}
 
@@ -412,10 +408,10 @@ public class SyncTask&lt;R extends SyncTask.Request&gt; implements Cloneable {
 	 */
 	@Override
 	@SuppressWarnings({&quot;CloneDoesntDeclareCloneNotSupportedException&quot;, &quot;CloneDoesntCallSuperClone&quot;})
-	protected SyncTask clone() {
-<span class="nc" id="L416">		final SyncTask clone = new SyncTask(this);</span>
-<span class="nc" id="L417">		clone.mState = IDLE;</span>
-<span class="nc" id="L418">		return clone;</span>
+	public SyncTask&lt;R&gt; clone() {
+<span class="fc" id="L412">		final SyncTask&lt;R&gt; clone = new SyncTask&lt;&gt;(this);</span>
+<span class="fc" id="L413">		clone.mState = IDLE;</span>
+<span class="fc" id="L414">		return clone;</span>
 	}
 
 	/*
@@ -444,9 +440,9 @@ public class SyncTask&lt;R extends SyncTask.Request&gt; implements Cloneable {
 		 *
 		 * @param taskId Id of the synchronization task to build.
 		 */
-<span class="nc" id="L447">		public Builder(final int taskId) {</span>
-<span class="nc" id="L448">			this.id = taskId;</span>
-<span class="nc" id="L449">		}</span>
+<span class="fc" id="L443">		public Builder(final int taskId) {</span>
+<span class="fc" id="L444">			this.id = taskId;</span>
+<span class="fc" id="L445">		}</span>
 
 		/**
 		 * Specifies a request for the synchronization task to build.
@@ -456,9 +452,9 @@ public class SyncTask&lt;R extends SyncTask.Request&gt; implements Cloneable {
 		 *                sync task.
 		 * @return This builder to allow methods chaining.
 		 */
-		public Builder request(@Nullable final R request) {
-<span class="nc" id="L460">			this.request = request;</span>
-<span class="nc" id="L461">			return this;</span>
+		public Builder&lt;R&gt; request(@Nullable final R request) {
+<span class="fc" id="L456">			this.request = request;</span>
+<span class="fc" id="L457">			return this;</span>
 		}
 
 		/**
@@ -468,8 +464,8 @@ public class SyncTask&lt;R extends SyncTask.Request&gt; implements Cloneable {
 		 */
 		@NonNull
 		public SyncTask&lt;R&gt; build() {
-<span class="nc" id="L471">			return new SyncTask&lt;&gt;(this);</span>
+<span class="fc" id="L467">			return new SyncTask&lt;&gt;(this);</span>
 		}
 	}
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span>Generated by the Android Gradle plugin 2.3.1</div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span>Generated by the Android Gradle plugin 2.3.3</div></body></html>

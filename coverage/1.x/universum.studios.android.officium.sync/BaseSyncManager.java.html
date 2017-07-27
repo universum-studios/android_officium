@@ -18,6 +18,7 @@
  */
 package universum.studios.android.officium.sync;
 
+import android.Manifest;
 import android.accounts.Account;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -25,6 +26,7 @@ import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresPermission;
 
 import universum.studios.android.officium.OfficiumLogging;
 
@@ -57,6 +59,21 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	 */
 	private static final String TAG = &quot;BaseSyncManager&quot;;
 
+	/**
+	 * Value for Android permission that allows to &lt;b&gt;WRITE&lt;/b&gt; synchronization settings.
+	 */
+	public static final String PERMISSION_WRITE_SYNC_SETTINGS = Manifest.permission.WRITE_SYNC_SETTINGS;
+
+	/**
+	 * Value for Android permission that allows to &lt;b&gt;READ&lt;/b&gt; synchronization settings.
+	 */
+	public static final String PERMISSION_READ_SYNC_SETTINGS = Manifest.permission.READ_SYNC_SETTINGS;
+
+	/**
+	 * Value for Android permission that allows to &lt;b&gt;READ&lt;/b&gt; synchronization statistics.
+	 */
+	public static final String PERMISSION_READ_SYNC_STATS = Manifest.permission.READ_SYNC_STATS;
+
 	/*
 	 * Interface ===================================================================================
 	 */
@@ -71,20 +88,14 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 
 	/**
 	 * Context with which has been this manager created.
-	 *
-	 * @deprecated Use {@link #getContext()} instead.
 	 */
-	@Deprecated
-	protected final Context mContext;
+	private final Context mContext;
 
 	/**
 	 * Content authority with which has been this manager created. This authority is used to set up
 	 * all synchronization requests via {@link ContentResolver}.
-	 *
-	 * @deprecated Use {@link #getAuthority()} instead.
 	 */
-	@Deprecated
-	protected final String mAuthority;
+	private final String mAuthority;
 
 	/*
 	 * Constructors ================================================================================
@@ -100,10 +111,10 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	 * @see #getContext()
 	 * @see #getAuthority()
 	 */
-<span class="nc" id="L103">	public BaseSyncManager(@NonNull final Context context, @NonNull final String authority) {</span>
-<span class="nc" id="L104">		this.mContext = context;</span>
-<span class="nc" id="L105">		this.mAuthority = authority;</span>
-<span class="nc" id="L106">	}</span>
+<span class="fc" id="L114">	public BaseSyncManager(@NonNull final Context context, @NonNull final String authority) {</span>
+<span class="fc" id="L115">		this.mContext = context;</span>
+<span class="fc" id="L116">		this.mAuthority = authority;</span>
+<span class="fc" id="L117">	}</span>
 
 	/*
 	 * Methods =====================================================================================
@@ -117,7 +128,7 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	 */
 	@NonNull
 	public final Context getContext() {
-<span class="nc" id="L120">		return mContext;</span>
+<span class="fc" id="L131">		return mContext;</span>
 	}
 
 	/**
@@ -129,30 +140,52 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	 */
 	@NonNull
 	public final String getAuthority() {
-<span class="nc" id="L132">		return mAuthority;</span>
+<span class="fc" id="L143">		return mAuthority;</span>
 	}
 
 	/**
 	 * Starts automatic synchronization for the content authority specified for this manager and
 	 * account picked for synchronization by this manager implementation.
+	 * &lt;p&gt;
+	 * This method requires the caller to hold &lt;b&gt;{@link #PERMISSION_WRITE_SYNC_SETTINGS}&lt;/b&gt; permission.
 	 *
 	 * @see #stopAutomaticSync()
 	 * @see ContentResolver#setSyncAutomatically(Account, String, boolean)
 	 */
+	@RequiresPermission(PERMISSION_WRITE_SYNC_SETTINGS)
 	public void startAutomaticSync() {
-<span class="nc" id="L143">		setAutomaticSyncEnabled(true);</span>
-<span class="nc" id="L144">	}</span>
+<span class="fc" id="L157">		setAutomaticSyncEnabled(true);</span>
+<span class="fc" id="L158">	}</span>
+
+	/**
+	 * Checks whether the automatic synchronization is running (enabled).
+	 * &lt;p&gt;
+	 * This method requires the caller to hold &lt;b&gt;{@link #PERMISSION_READ_SYNC_SETTINGS}&lt;/b&gt; permission.
+	 *
+	 * @return {@code True} if the automatic synchronization is running at this time, {@code false}
+	 * otherwise.
+	 * @see #startAutomaticSync()
+	 * @see #stopAutomaticSync()
+	 */
+	@RequiresPermission(PERMISSION_READ_SYNC_SETTINGS)
+	public boolean isAutomaticSyncRunning() {
+<span class="fc" id="L172">		final Account account = pickAccountForSync();</span>
+<span class="fc bfc" id="L173" title="All 4 branches covered.">		return account != null &amp;&amp; ContentResolver.getSyncAutomatically(account, mAuthority);</span>
+	}
 
 	/**
 	 * Stops automatic synchronization for the content authority specified for this manager and
 	 * account picked for synchronization by this manager implementation.
+	 * &lt;p&gt;
+	 * This method requires the caller to hold &lt;b&gt;{@link #PERMISSION_WRITE_SYNC_SETTINGS}&lt;/b&gt; permission.
 	 *
 	 * @see #startAutomaticSync()
 	 * @see ContentResolver#setSyncAutomatically(Account, String, boolean)
 	 */
+	@RequiresPermission(PERMISSION_WRITE_SYNC_SETTINGS)
 	public void stopAutomaticSync() {
-<span class="nc" id="L154">		setAutomaticSyncEnabled(false);</span>
-<span class="nc" id="L155">	}</span>
+<span class="fc" id="L187">		setAutomaticSyncEnabled(false);</span>
+<span class="fc" id="L188">	}</span>
 
 	/**
 	 * Enables/disables automatic synchronization via {@link ContentResolver#setSyncAutomatically(Account, String, boolean)}.
@@ -160,16 +193,16 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	 * @param enabled {@code True} to enable automatic synchronization, {@code false} to disable it.
 	 */
 	private void setAutomaticSyncEnabled(final boolean enabled) {
-<span class="nc" id="L163">		final Account account = pickAccountForSync();</span>
-<span class="nc bnc" id="L164" title="All 2 branches missed.">		if (account != null) ContentResolver.setSyncAutomatically(account, mAuthority, enabled);</span>
-<span class="nc" id="L165">	}</span>
+<span class="fc" id="L196">		final Account account = pickAccountForSync();</span>
+<span class="fc bfc" id="L197" title="All 2 branches covered.">		if (account != null) ContentResolver.setSyncAutomatically(account, mAuthority, enabled);</span>
+<span class="fc" id="L198">	}</span>
 
 	/**
 	 * Same as {@link #requestSync(SyncTask)} with sync task with {@link SyncTask#DEFAULT_ID} id.
 	 */
 	public void requestGlobalSync() {
-<span class="nc" id="L171">		requestSync(new SyncTask.Builder&lt;&gt;(SyncTask.DEFAULT_ID).build());</span>
-<span class="nc" id="L172">	}</span>
+<span class="fc" id="L204">		requestSync(new SyncTask.Builder&lt;&gt;(SyncTask.DEFAULT_ID).build());</span>
+<span class="fc" id="L205">	}</span>
 
 	/**
 	 * Requests synchronization operation to be performed for the specified &lt;var&gt;syncTask&lt;/var&gt;.
@@ -191,19 +224,19 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	 * @see ContentResolver#requestSync(Account, String, Bundle)
 	 */
 	public void requestSync(@NonNull final SyncTask syncTask) {
-<span class="nc" id="L194">		final Account account = pickAccountForSync();</span>
-<span class="nc bnc" id="L195" title="All 2 branches missed.">		if (account == null) {</span>
-<span class="nc" id="L196">			OfficiumLogging.w(TAG, &quot;Cannot perform synchronization for task(&quot; + syncTask + &quot;). No account picked for synchronization.&quot;);</span>
-<span class="nc bnc" id="L197" title="All 2 branches missed.">		} else if (shouldRequestSync(syncTask, account)) {</span>
-<span class="nc" id="L198">			syncTask.setState(SyncTask.PENDING);</span>
-<span class="nc" id="L199">			onSyncTaskStateChanged(syncTask, account);</span>
-<span class="nc" id="L200">			final Bundle extras = syncTask.intoExtras(new Bundle());</span>
-<span class="nc" id="L201">			extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);</span>
-<span class="nc" id="L202">			extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);</span>
-<span class="nc" id="L203">			OfficiumLogging.i(TAG, &quot;Requesting synchronization for task(&quot; + syncTask + &quot;).&quot;);</span>
-<span class="nc" id="L204">			ContentResolver.requestSync(account, mAuthority, extras);</span>
+<span class="fc" id="L227">		final Account account = pickAccountForSync();</span>
+<span class="fc bfc" id="L228" title="All 2 branches covered.">		if (account == null) {</span>
+<span class="fc" id="L229">			OfficiumLogging.w(TAG, &quot;Cannot perform synchronization for task(&quot; + syncTask + &quot;). No account picked for synchronization.&quot;);</span>
+<span class="fc bfc" id="L230" title="All 2 branches covered.">		} else if (shouldRequestSync(syncTask, account)) {</span>
+<span class="fc" id="L231">			syncTask.setState(SyncTask.PENDING);</span>
+<span class="fc" id="L232">			onSyncTaskStateChanged(syncTask, account);</span>
+<span class="fc" id="L233">			final Bundle extras = syncTask.intoExtras(new Bundle());</span>
+<span class="fc" id="L234">			extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);</span>
+<span class="fc" id="L235">			extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);</span>
+<span class="fc" id="L236">			OfficiumLogging.i(TAG, &quot;Requesting synchronization for task(&quot; + syncTask + &quot;).&quot;);</span>
+<span class="fc" id="L237">			ContentResolver.requestSync(account, mAuthority, extras);</span>
 		}
-<span class="nc" id="L206">	}</span>
+<span class="fc" id="L239">	}</span>
 
 	/**
 	 * Called from {@link #requestSync(SyncTask)} to check whether a synchronization should be requested
@@ -219,7 +252,7 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	 * @see #pickAccountForSync()
 	 */
 	protected boolean shouldRequestSync(@NonNull final SyncTask syncTask, @NonNull final Account account) {
-<span class="nc" id="L222">		return true;</span>
+<span class="fc" id="L255">		return true;</span>
 	}
 
 	/**
@@ -228,34 +261,40 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	@CallSuper
 	public void onSyncTaskStateChanged(@NonNull final SyncTask syncTask, @NonNull final Account account) {
 		// May be implemented by the inheritance hierarchies.
-<span class="nc" id="L231">	}</span>
-
-	/**
-	 * Checks whether there is currently a synchronization being processed for the content authority
-	 * specified for this manager and account picked for synchronization by this manager implementation.
-	 *
-	 * @return {@code True} if synchronization is active at this time, {@code false} otherwise.
-	 * @see ContentResolver#isSyncActive(Account, String)
-	 * @see #isSyncPedning()
-	 * @see #cancelSync()
-	 */
-	public boolean isSyncActive() {
-<span class="nc" id="L243">		final Account account = pickAccountForSync();</span>
-<span class="nc bnc" id="L244" title="All 4 branches missed.">		return account != null &amp;&amp; ContentResolver.isSyncActive(account, mAuthority);</span>
-	}
+<span class="fc" id="L264">	}</span>
 
 	/**
 	 * Checks whether there are any pending synchronizations for the content authority specified for
 	 * this manager and account picked for synchronization by this manager implementation.
+	 * &lt;p&gt;
+	 * This method requires the caller to hold &lt;b&gt;{@link #PERMISSION_READ_SYNC_STATS}&lt;/b&gt; permission.
 	 *
 	 * @return {@code True} if there are some synchronizations pending, {@code false} otherwise.
 	 * @see ContentResolver#isSyncPending(Account, String)
 	 * @see #isSyncActive()
 	 * @see #cancelSync()
 	 */
+	@RequiresPermission(PERMISSION_READ_SYNC_STATS)
 	public boolean isSyncPedning() {
-<span class="nc" id="L257">		final Account account = pickAccountForSync();</span>
-<span class="nc bnc" id="L258" title="All 4 branches missed.">		return account != null &amp;&amp; ContentResolver.isSyncPending(account, mAuthority);</span>
+<span class="fc" id="L279">		final Account account = pickAccountForSync();</span>
+<span class="pc bpc" id="L280" title="1 of 4 branches missed.">		return account != null &amp;&amp; ContentResolver.isSyncPending(account, mAuthority);</span>
+	}
+
+	/**
+	 * Checks whether there is currently a synchronization being processed for the content authority
+	 * specified for this manager and account picked for synchronization by this manager implementation.
+	 * &lt;p&gt;
+	 * This method requires the caller to hold &lt;b&gt;{@link #PERMISSION_READ_SYNC_STATS}&lt;/b&gt; permission.
+	 *
+	 * @return {@code True} if synchronization is active at this time, {@code false} otherwise.
+	 * @see ContentResolver#isSyncActive(Account, String)
+	 * @see #isSyncPedning()
+	 * @see #cancelSync()
+	 */
+	@RequiresPermission(PERMISSION_READ_SYNC_STATS)
+	public boolean isSyncActive() {
+<span class="fc" id="L296">		final Account account = pickAccountForSync();</span>
+<span class="pc bpc" id="L297" title="1 of 4 branches missed.">		return account != null &amp;&amp; ContentResolver.isSyncActive(account, mAuthority);</span>
 	}
 
 	/**
@@ -267,9 +306,9 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	 * @see #isSyncPedning()
 	 */
 	public void cancelSync() {
-<span class="nc" id="L270">		final Account account = pickAccountForSync();</span>
-<span class="nc bnc" id="L271" title="All 2 branches missed.">		if (account != null) onCancelSync(account);</span>
-<span class="nc" id="L272">	}</span>
+<span class="fc" id="L309">		final Account account = pickAccountForSync();</span>
+<span class="fc bfc" id="L310" title="All 2 branches covered.">		if (account != null) onCancelSync(account);</span>
+<span class="fc" id="L311">	}</span>
 
 	/**
 	 * Invoked whenever {@link #cancelSync()} is called.
@@ -280,8 +319,8 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	 * @param account The account picked via {@link #pickAccountForSync()}.
 	 */
 	protected void onCancelSync(@NonNull final Account account) {
-<span class="nc" id="L283">		ContentResolver.cancelSync(account, mAuthority);</span>
-<span class="nc" id="L284">	}</span>
+<span class="fc" id="L322">		ContentResolver.cancelSync(account, mAuthority);</span>
+<span class="fc" id="L323">	}</span>
 
 	/**
 	 * Called to pick account for the current synchronization related request dispatched to this
@@ -298,4 +337,4 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	 * Inner classes ===============================================================================
 	 */
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span>Generated by the Android Gradle plugin 2.3.1</div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span>Generated by the Android Gradle plugin 2.3.3</div></body></html>

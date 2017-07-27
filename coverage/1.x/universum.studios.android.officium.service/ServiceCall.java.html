@@ -19,6 +19,7 @@
 package universum.studios.android.officium.service;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 
 import java.io.IOException;
 
@@ -34,7 +35,7 @@ import retrofit2.Response;
  * Each instance of service call need to be created with the original call via {@link #ServiceCall(Call)}
  * constructor along with id of the corresponding service via {@link #withServiceId(int)}. The provided
  * service id is than attached to the callback when {@link #enqueue(ServiceCallback)} is called
- * along with the request id which this method returns. Subclasses may implement {@link #requestId()}
+ * along with the request id which this method returns. Subclasses may implement {@link #nextRequestId()}
  * to generate custom unique id for a specific request. In such case, do not forget to properly override
  * also {@link #clone()} method.
  *
@@ -66,12 +67,12 @@ public class ServiceCall&lt;T&gt; implements Call&lt;T&gt; {
 	/**
 	 * Original Retrofit call to which this service call delegates all its methods.
 	 */
-	private final Call&lt;T&gt; mCall;
+	@VisibleForTesting final Call&lt;T&gt; mCall;
 
 	/**
 	 * Id of the service with which is this call associated.
 	 */
-	private Integer mServiceId;
+	@VisibleForTesting Integer mServiceId;
 
 	/*
 	 * Constructors ================================================================================
@@ -82,9 +83,9 @@ public class ServiceCall&lt;T&gt; implements Call&lt;T&gt; {
 	 *
 	 * @param call The Retrofit call to which will be this service call delegating its methods.
 	 */
-<span class="nc" id="L85">	public ServiceCall(@NonNull final Call&lt;T&gt; call) {</span>
-<span class="nc" id="L86">		this.mCall = call;</span>
-<span class="nc" id="L87">	}</span>
+<span class="fc" id="L86">	public ServiceCall(@NonNull final Call&lt;T&gt; call) {</span>
+<span class="fc" id="L87">		this.mCall = call;</span>
+<span class="fc" id="L88">	}</span>
 
 	/*
 	 * Methods =====================================================================================
@@ -100,18 +101,18 @@ public class ServiceCall&lt;T&gt; implements Call&lt;T&gt; {
 	 * @throws UnsupportedOperationException If service id for this call has been already specified.
 	 */
 	public ServiceCall&lt;T&gt; withServiceId(final int serviceId) {
-<span class="nc bnc" id="L103" title="All 2 branches missed.">		if (mServiceId == null) {</span>
-<span class="nc" id="L104">			this.mServiceId = serviceId;</span>
-<span class="nc" id="L105">			return this;</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">		if (mServiceId == null) {</span>
+<span class="fc" id="L105">			this.mServiceId = serviceId;</span>
+<span class="fc" id="L106">			return this;</span>
 		}
-<span class="nc" id="L107">		throw new UnsupportedOperationException(&quot;Service id is already specified!&quot;);</span>
+<span class="fc" id="L108">		throw new UnsupportedOperationException(&quot;Service id is already specified!&quot;);</span>
 	}
 
 	/**
 	 */
 	@Override
 	public Response&lt;T&gt; execute() throws IOException {
-<span class="nc" id="L114">		return mCall.execute();</span>
+<span class="fc" id="L115">		return mCall.execute();</span>
 	}
 
 	/**
@@ -130,10 +131,10 @@ public class ServiceCall&lt;T&gt; implements Call&lt;T&gt; {
 	 */
 	@NonNull
 	public String enqueue(@NonNull final ServiceCallback&lt;T&gt; callback) {
-<span class="nc" id="L133">		final String requestId = nextRequestId();</span>
-<span class="nc" id="L134">		ServiceCallback.associateWith(callback, mServiceId, requestId);</span>
-<span class="nc" id="L135">		enqueue((Callback&lt;T&gt;) callback);</span>
-<span class="nc" id="L136">		return requestId;</span>
+<span class="fc" id="L134">		final String requestId = nextRequestId();</span>
+<span class="fc" id="L135">		ServiceCallback.associateWith(callback, mServiceId, requestId);</span>
+<span class="fc" id="L136">		enqueue((Callback&lt;T&gt;) callback);</span>
+<span class="fc" id="L137">		return requestId;</span>
 	}
 
 	/**
@@ -147,53 +148,42 @@ public class ServiceCall&lt;T&gt; implements Call&lt;T&gt; {
 	 */
 	@NonNull
 	protected String nextRequestId() {
-<span class="nc" id="L150">		return Long.toString(System.currentTimeMillis());</span>
-	}
-
-	/**
-	 * &lt;b&gt;This method has been deprecated and will be removed in the next release.&lt;/b&gt;
-	 *
-	 * @deprecated Use {@link #nextRequestId()} instead.
-	 */
-	@NonNull
-	@Deprecated
-	protected String requestId() {
-<span class="nc" id="L161">		return Long.toString(System.currentTimeMillis());</span>
+<span class="fc" id="L151">		return Long.toString(System.currentTimeMillis());</span>
 	}
 
 	/**
 	 */
 	@Override
 	public void enqueue(@NonNull final Callback&lt;T&gt; callback) {
-<span class="nc" id="L168">		mCall.enqueue(callback);</span>
-<span class="nc" id="L169">	}</span>
+<span class="fc" id="L158">		mCall.enqueue(callback);</span>
+<span class="fc" id="L159">	}</span>
 
 	/**
 	 */
 	@Override
 	public boolean isExecuted() {
-<span class="nc" id="L175">		return mCall.isExecuted();</span>
+<span class="fc" id="L165">		return mCall.isExecuted();</span>
 	}
 
 	/**
 	 */
 	@Override
 	public void cancel() {
-<span class="nc" id="L182">		mCall.cancel();</span>
-<span class="nc" id="L183">	}</span>
+<span class="fc" id="L172">		mCall.cancel();</span>
+<span class="fc" id="L173">	}</span>
 
 	/**
 	 */
 	@Override
 	public boolean isCanceled() {
-<span class="nc" id="L189">		return mCall.isCanceled();</span>
+<span class="fc" id="L179">		return mCall.isCanceled();</span>
 	}
 
 	/**
 	 */
 	@Override
 	public Request request() {
-<span class="nc" id="L196">		return mCall.request();</span>
+<span class="fc" id="L186">		return mCall.request();</span>
 	}
 
 	/**
@@ -202,14 +192,14 @@ public class ServiceCall&lt;T&gt; implements Call&lt;T&gt; {
 	 */
 	@Override
 	@SuppressWarnings(&quot;CloneDoesntCallSuperClone&quot;)
-	public Call&lt;T&gt; clone() {
-<span class="nc" id="L206">		final ServiceCall&lt;T&gt; serviceCall = new ServiceCall&lt;&gt;(mCall.clone());</span>
-<span class="nc" id="L207">		serviceCall.mServiceId = mServiceId;</span>
-<span class="nc" id="L208">		return serviceCall;</span>
+	public ServiceCall&lt;T&gt; clone() {
+<span class="fc" id="L196">		final ServiceCall&lt;T&gt; serviceCall = new ServiceCall&lt;&gt;(mCall.clone());</span>
+<span class="fc" id="L197">		serviceCall.mServiceId = mServiceId;</span>
+<span class="fc" id="L198">		return serviceCall;</span>
 	}
 
 	/*
 	 * Inner classes ===============================================================================
 	 */
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span>Generated by the Android Gradle plugin 2.3.1</div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span>Generated by the Android Gradle plugin 2.3.3</div></body></html>

@@ -26,6 +26,7 @@ import android.content.SyncResult;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 import android.util.SparseArray;
 
 import universum.studios.android.officium.OfficiumLogging;
@@ -82,7 +83,7 @@ import universum.studios.android.officium.OfficiumLogging;
  * &lt;li&gt;
  * {@link #onGlobalSyncFailed(SyncOperation, Exception)}
  * &lt;p&gt;
- * - dispatches {@link SyncEvent} type of {@link SyncEvent#ERROR} with default task id
+ * - dispatches {@link SyncEvent} type of {@link SyncEvent#FAILURE} with default task id
  * {@link SyncTask#DEFAULT_ID} along with occurred &lt;var&gt;error&lt;/var&gt; and &lt;var&gt;account&lt;/var&gt;
  * &lt;/li&gt;
  * &lt;li&gt;
@@ -100,7 +101,7 @@ import universum.studios.android.officium.OfficiumLogging;
  * &lt;li&gt;
  * {@link #onSyncFailed(SyncOperation, Exception)}
  * &lt;p&gt;
- * - dispatches {@link SyncEvent} type of {@link SyncEvent#ERROR} with id of the specified task
+ * - dispatches {@link SyncEvent} type of {@link SyncEvent#FAILURE} with id of the specified task
  * along with occurred &lt;var&gt;error&lt;/var&gt; and &lt;var&gt;account&lt;/var&gt;
  * &lt;/li&gt;
  * &lt;/ul&gt;
@@ -190,8 +191,8 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * parameter set to {@code false}.
 	 */
 	public BaseSyncAdapter(@NonNull final Context context, final boolean autoInitialize) {
-<span class="nc" id="L193">		this(context, autoInitialize, false);</span>
-<span class="nc" id="L194">	}</span>
+<span class="fc" id="L194">		this(context, autoInitialize, false);</span>
+<span class="fc" id="L195">	}</span>
 
 	/**
 	 * Creates a new instance of BaseSyncAdapter with the specified &lt;var&gt;context&lt;/var&gt; and configuration
@@ -201,8 +202,8 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * for more information.
 	 */
 	public BaseSyncAdapter(@NonNull final Context context, final boolean autoInitialize, final boolean allowParallelSyncs) {
-<span class="nc" id="L204">		super(context, autoInitialize, allowParallelSyncs);</span>
-<span class="nc" id="L205">	}</span>
+<span class="fc" id="L205">		super(context, autoInitialize, allowParallelSyncs);</span>
+<span class="fc" id="L206">	}</span>
 
 	/*
 	 * Methods =====================================================================================
@@ -217,8 +218,8 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * @see SyncTask#getState()
 	 */
 	protected final void setOnTaskStateChangeListener(@Nullable final OnSyncTaskStateChangeListener listener) {
-<span class="nc" id="L220">		this.mTaskStateChangeListener = listener;</span>
-<span class="nc" id="L221">	}</span>
+<span class="fc" id="L221">		this.mTaskStateChangeListener = listener;</span>
+<span class="fc" id="L222">	}</span>
 
 	/**
 	 * Sets an dispatcher that is used by this sync adapter to dispatch synchronization events.
@@ -230,8 +231,8 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * @see #dispatchSyncEvent(Object)
 	 */
 	protected final void setEventDispatcher(@Nullable final EventDispatcher dispatcher) {
-<span class="nc" id="L233">		this.mEventDispatcher = dispatcher;</span>
-<span class="nc" id="L234">	}</span>
+<span class="fc" id="L234">		this.mEventDispatcher = dispatcher;</span>
+<span class="fc" id="L235">	}</span>
 
 	/**
 	 * Returns the event dispatcher specified for this sync adapter.
@@ -241,7 +242,30 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 */
 	@Nullable
 	protected final EventDispatcher getEventDispatcher() {
-<span class="nc" id="L244">		return mEventDispatcher;</span>
+<span class="fc" id="L245">		return mEventDispatcher;</span>
+	}
+
+	/**
+	 * Sets a sync handler that is responsible for global synchronization handling.
+	 *
+	 * @param handler The desired sync handler. May be {@code null} if handling of global synchronization
+	 *                is not desired.
+	 * @see #onPerformGlobalSync(SyncOperation)
+	 * @see #getGlobalSyncHandler()
+	 */
+	protected void setGlobalSyncHandler(@Nullable final SyncHandler handler) {
+<span class="fc" id="L257">		this.mGlobalSyncHandler = handler;</span>
+<span class="fc" id="L258">	}</span>
+
+	/**
+	 * Returns the sync handler that is responsible for global synchronization handling.
+	 *
+	 * @return This adapter's global sync handler.
+	 * @see #setGlobalSyncHandler(SyncHandler)
+	 */
+	@Nullable
+	protected SyncHandler getGlobalSyncHandler() {
+<span class="fc" id="L268">		return mGlobalSyncHandler;</span>
 	}
 
 	/**
@@ -262,11 +286,11 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * @see #unregisterTaskHandler(SyncHandler)
 	 */
 	protected void registerTaskHandler(@NonNull final SyncHandler handler) {
-<span class="nc bnc" id="L265" title="All 2 branches missed.">		if (mTaskHandlers == null) {</span>
-<span class="nc" id="L266">			this.mTaskHandlers = new SparseArray&lt;&gt;();</span>
+<span class="fc bfc" id="L289" title="All 2 branches covered.">		if (mTaskHandlers == null) {</span>
+<span class="fc" id="L290">			this.mTaskHandlers = new SparseArray&lt;&gt;();</span>
 		}
-<span class="nc" id="L268">		mTaskHandlers.append(handler.getTaskId(), handler);</span>
-<span class="nc" id="L269">	}</span>
+<span class="fc" id="L292">		mTaskHandlers.append(handler.getTaskId(), handler);</span>
+<span class="fc" id="L293">	}</span>
 
 	/**
 	 * Un-registers previously registered sync handler.
@@ -277,32 +301,8 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * @see #onPerformSync(SyncOperation)
 	 */
 	protected void unregisterTaskHandler(@NonNull final SyncHandler handler) {
-<span class="nc bnc" id="L280" title="All 4 branches missed.">		if (mTaskHandlers != null &amp;&amp; mTaskHandlers.size() &gt; 0)</span>
-<span class="nc" id="L281">			mTaskHandlers.remove(handler.getTaskId());</span>
-<span class="nc" id="L282">	}</span>
-
-	/**
-	 * Sets a sync handler that is responsible for global synchronization handling.
-	 *
-	 * @param handler The desired sync handler. May be {@code null} if handling of global synchronization
-	 *                is not desired.
-	 * @see #onPerformGlobalSync(SyncOperation)
-	 * @see #getGlobalSyncHandler()
-	 */
-	protected void setGlobalSyncHandler(@Nullable final SyncHandler handler) {
-<span class="nc" id="L293">		this.mGlobalSyncHandler = handler;</span>
-<span class="nc" id="L294">	}</span>
-
-	/**
-	 * Returns the sync handler that is responsible for global synchronization handling.
-	 *
-	 * @return This adapter's global sync handler.
-	 * @see #setGlobalSyncHandler(SyncHandler)
-	 */
-	@Nullable
-	protected SyncHandler getGlobalSyncHandler() {
-<span class="nc" id="L304">		return mGlobalSyncHandler;</span>
-	}
+<span class="fc bfc" id="L304" title="All 4 branches covered.">		if (mTaskHandlers != null &amp;&amp; mTaskHandlers.size() &gt; 0) mTaskHandlers.remove(handler.getTaskId());</span>
+<span class="fc" id="L305">	}</span>
 
 	/**
 	 * @see #createTaskFromExtras(Bundle)
@@ -315,21 +315,21 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 			@NonNull final Account account,
 			@NonNull final Bundle extras,
 			@NonNull final String authority,
-			@NonNull final ContentProviderClient provider,
+			@NonNull final ContentProviderClient providerClient,
 			@NonNull final SyncResult syncResult
 	) {
-<span class="nc" id="L321">		final SyncOperation syncOperation = new SyncOperation.Builder()</span>
-<span class="nc" id="L322">				.account(account)</span>
-<span class="nc" id="L323">				.authority(authority)</span>
-<span class="nc" id="L324">				.task(createTaskFromExtras(extras))</span>
-<span class="nc" id="L325">				.build();</span>
-<span class="nc" id="L326">		changeTaskStateToAndNotify(syncOperation, SyncTask.RUNNING);</span>
-<span class="nc bnc" id="L327" title="All 2 branches missed.">		if (syncOperation.task.getId() == SyncTask.DEFAULT_ID) {</span>
-<span class="nc" id="L328">			onPerformGlobalSync(syncOperation);</span>
+<span class="fc" id="L321">		final SyncOperation syncOperation = new SyncOperation.Builder()</span>
+<span class="fc" id="L322">				.account(account)</span>
+<span class="fc" id="L323">				.authority(authority)</span>
+<span class="fc" id="L324">				.task(createTaskFromExtras(extras))</span>
+<span class="fc" id="L325">				.build();</span>
+<span class="fc" id="L326">		changeTaskStateToAndNotify(syncOperation, SyncTask.RUNNING);</span>
+<span class="fc bfc" id="L327" title="All 2 branches covered.">		if (syncOperation.task.getId() == SyncTask.DEFAULT_ID) {</span>
+<span class="fc" id="L328">			onPerformGlobalSync(syncOperation);</span>
 		} else {
-<span class="nc" id="L330">			onPerformSync(syncOperation);</span>
+<span class="fc" id="L330">			onPerformSync(syncOperation);</span>
 		}
-<span class="nc" id="L332">	}</span>
+<span class="fc" id="L332">	}</span>
 
 	/**
 	 * Called to create instance of SyncTask from the given &lt;var&gt;extras&lt;/var&gt; whenever
@@ -343,7 +343,7 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 */
 	@NonNull
 	protected SyncTask createTaskFromExtras(@NonNull final Bundle extras) {
-<span class="nc" id="L346">		return new SyncTask(extras);</span>
+<span class="fc" id="L346">		return new SyncTask(extras);</span>
 	}
 
 	/**
@@ -359,22 +359,25 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 */
 	@SuppressWarnings(&quot;unchecked&quot;)
 	protected void onPerformGlobalSync(@NonNull final SyncOperation syncOperation) {
-<span class="nc bnc" id="L362" title="All 2 branches missed.">		if (mGlobalSyncHandler == null) return;</span>
-<span class="nc" id="L363">		dispatchSyncEvent(</span>
-<span class="nc" id="L364">				new SyncEvent.Builder(syncOperation.task.getId())</span>
-<span class="nc" id="L365">						.type(SyncEvent.START)</span>
-<span class="nc" id="L366">						.account(syncOperation.account)</span>
-<span class="nc" id="L367">						.build()</span>
+<span class="fc bfc" id="L362" title="All 2 branches covered.">		if (mGlobalSyncHandler == null) {</span>
+<span class="fc" id="L363">			OfficiumLogging.w(TAG, &quot;No global synchronization handler found. Skipping synchronization.&quot;);</span>
+<span class="fc" id="L364">			return;</span>
+		}
+<span class="fc" id="L366">		dispatchSyncEvent(</span>
+<span class="fc" id="L367">				new SyncEvent.Builder(syncOperation.task.getId())</span>
+<span class="fc" id="L368">						.type(SyncEvent.START)</span>
+<span class="fc" id="L369">						.account(syncOperation.account)</span>
+<span class="fc" id="L370">						.build()</span>
 		);
 		try {
-<span class="nc" id="L370">			mGlobalSyncHandler.handleSync(getContext(), syncOperation);</span>
-<span class="nc" id="L371">			changeTaskStateToAndNotify(syncOperation, SyncTask.FINISHED);</span>
-<span class="nc" id="L372">			onGlobalSyncFinished(syncOperation);</span>
-<span class="nc" id="L373">		} catch (Exception error) {</span>
-<span class="nc" id="L374">			changeTaskStateToAndNotify(syncOperation, SyncTask.FAILED);</span>
-<span class="nc" id="L375">			onGlobalSyncFailed(syncOperation, error);</span>
-<span class="nc" id="L376">		}</span>
-<span class="nc" id="L377">	}</span>
+<span class="fc" id="L373">			mGlobalSyncHandler.handleSync(getContext(), syncOperation);</span>
+<span class="fc" id="L374">			changeTaskStateToAndNotify(syncOperation, SyncTask.FINISHED);</span>
+<span class="fc" id="L375">			onGlobalSyncFinished(syncOperation);</span>
+<span class="fc" id="L376">		} catch (Exception error) {</span>
+<span class="fc" id="L377">			changeTaskStateToAndNotify(syncOperation, SyncTask.FAILED);</span>
+<span class="fc" id="L378">			onGlobalSyncFailed(syncOperation, error);</span>
+<span class="fc" id="L379">		}</span>
+<span class="fc" id="L380">	}</span>
 
 	/**
 	 * Invoked whenever {@link #onPerformGlobalSync(SyncOperation)} finishes without any error.
@@ -383,13 +386,13 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * @see #onGlobalSyncFailed(SyncOperation, Exception)
 	 */
 	protected void onGlobalSyncFinished(@NonNull final SyncOperation syncOperation) {
-<span class="nc" id="L386">		dispatchSyncEvent(</span>
-<span class="nc" id="L387">				new SyncEvent.Builder(syncOperation.task.getId())</span>
-<span class="nc" id="L388">						.type(SyncEvent.FINISH)</span>
-<span class="nc" id="L389">						.account(syncOperation.account)</span>
-<span class="nc" id="L390">						.build()</span>
+<span class="fc" id="L389">		dispatchSyncEvent(</span>
+<span class="fc" id="L390">				new SyncEvent.Builder(syncOperation.task.getId())</span>
+<span class="fc" id="L391">						.type(SyncEvent.FINISH)</span>
+<span class="fc" id="L392">						.account(syncOperation.account)</span>
+<span class="fc" id="L393">						.build()</span>
 		);
-<span class="nc" id="L392">	}</span>
+<span class="fc" id="L395">	}</span>
 
 	/**
 	 * Invoked whenever {@link #onPerformGlobalSync(SyncOperation)} is invoked and there is thrown
@@ -400,14 +403,14 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * @see #onSyncFinished(SyncOperation)
 	 */
 	protected void onGlobalSyncFailed(@NonNull final SyncOperation syncOperation, @NonNull final Exception error) {
-<span class="nc" id="L403">		dispatchSyncEvent(</span>
-<span class="nc" id="L404">				new SyncEvent.Builder(syncOperation.task.getId())</span>
-<span class="nc" id="L405">						.type(SyncEvent.ERROR)</span>
-<span class="nc" id="L406">						.account(syncOperation.account)</span>
-<span class="nc" id="L407">						.error(error)</span>
-<span class="nc" id="L408">						.build()</span>
+<span class="fc" id="L406">		dispatchSyncEvent(</span>
+<span class="fc" id="L407">				new SyncEvent.Builder(syncOperation.task.getId())</span>
+<span class="fc" id="L408">						.type(SyncEvent.FAILURE)</span>
+<span class="fc" id="L409">						.account(syncOperation.account)</span>
+<span class="fc" id="L410">						.error(error)</span>
+<span class="fc" id="L411">						.build()</span>
 		);
-<span class="nc" id="L410">	}</span>
+<span class="fc" id="L413">	}</span>
 
 	/**
 	 * Invoked whenever {@link #onPerformSync(Account, Bundle, String, ContentProviderClient, SyncResult)}
@@ -420,26 +423,26 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 */
 	@SuppressWarnings(&quot;unchecked&quot;)
 	protected void onPerformSync(@NonNull final SyncOperation syncOperation) {
-<span class="nc bnc" id="L423" title="All 2 branches missed.">		final SyncHandler taskHandler = mTaskHandlers == null ? null : mTaskHandlers.get(syncOperation.task.getId());</span>
-<span class="nc bnc" id="L424" title="All 2 branches missed.">		if (taskHandler == null) {</span>
-<span class="nc" id="L425">			OfficiumLogging.e(TAG, &quot;No synchronization handler found for task with id(&quot; + syncOperation.task.getId() + &quot;).&quot;);</span>
-<span class="nc" id="L426">			return;</span>
+<span class="fc bfc" id="L426" title="All 2 branches covered.">		final SyncHandler taskHandler = mTaskHandlers == null ? null : mTaskHandlers.get(syncOperation.task.getId());</span>
+<span class="fc bfc" id="L427" title="All 2 branches covered.">		if (taskHandler == null) {</span>
+<span class="fc" id="L428">			OfficiumLogging.e(TAG, &quot;No synchronization handler found for task with id(&quot; + syncOperation.task.getId() + &quot;). Skipping synchronization.&quot;);</span>
+<span class="fc" id="L429">			return;</span>
 		}
-<span class="nc" id="L428">		dispatchSyncEvent(</span>
-<span class="nc" id="L429">				new SyncEvent.Builder(syncOperation.task.getId())</span>
-<span class="nc" id="L430">						.type(SyncEvent.START)</span>
-<span class="nc" id="L431">						.account(syncOperation.account)</span>
-<span class="nc" id="L432">						.build()</span>
+<span class="fc" id="L431">		dispatchSyncEvent(</span>
+<span class="fc" id="L432">				new SyncEvent.Builder(syncOperation.task.getId())</span>
+<span class="fc" id="L433">						.type(SyncEvent.START)</span>
+<span class="fc" id="L434">						.account(syncOperation.account)</span>
+<span class="fc" id="L435">						.build()</span>
 		);
 		try {
-<span class="nc" id="L435">			taskHandler.handleSync(getContext(), syncOperation);</span>
-<span class="nc" id="L436">			changeTaskStateToAndNotify(syncOperation, SyncTask.FINISHED);</span>
-<span class="nc" id="L437">			onSyncFinished(syncOperation);</span>
-<span class="nc" id="L438">		} catch (Exception error) {</span>
-<span class="nc" id="L439">			changeTaskStateToAndNotify(syncOperation, SyncTask.FAILED);</span>
-<span class="nc" id="L440">			onSyncFailed(syncOperation, error);</span>
-<span class="nc" id="L441">		}</span>
-<span class="nc" id="L442">	}</span>
+<span class="fc" id="L438">			taskHandler.handleSync(getContext(), syncOperation);</span>
+<span class="fc" id="L439">			changeTaskStateToAndNotify(syncOperation, SyncTask.FINISHED);</span>
+<span class="fc" id="L440">			onSyncFinished(syncOperation);</span>
+<span class="fc" id="L441">		} catch (Exception error) {</span>
+<span class="fc" id="L442">			changeTaskStateToAndNotify(syncOperation, SyncTask.FAILED);</span>
+<span class="fc" id="L443">			onSyncFailed(syncOperation, error);</span>
+<span class="fc" id="L444">		}</span>
+<span class="fc" id="L445">	}</span>
 
 	/**
 	 * Invoked whenever {@link #onPerformSync(SyncOperation)} finishes without any error.
@@ -448,13 +451,13 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * @see #onSyncFailed(SyncOperation, Exception)
 	 */
 	protected void onSyncFinished(@NonNull final SyncOperation syncOperation) {
-<span class="nc" id="L451">		dispatchSyncEvent(</span>
-<span class="nc" id="L452">				new SyncEvent.Builder(syncOperation.task.getId())</span>
-<span class="nc" id="L453">						.type(SyncEvent.FINISH)</span>
-<span class="nc" id="L454">						.account(syncOperation.account)</span>
-<span class="nc" id="L455">						.build()</span>
+<span class="fc" id="L454">		dispatchSyncEvent(</span>
+<span class="fc" id="L455">				new SyncEvent.Builder(syncOperation.task.getId())</span>
+<span class="fc" id="L456">						.type(SyncEvent.FINISH)</span>
+<span class="fc" id="L457">						.account(syncOperation.account)</span>
+<span class="fc" id="L458">						.build()</span>
 		);
-<span class="nc" id="L457">	}</span>
+<span class="fc" id="L460">	}</span>
 
 	/**
 	 * Invoked whenever {@link #onPerformSync(SyncOperation)} is invoked and there is thrown the
@@ -465,14 +468,14 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * @see #onSyncFinished(SyncOperation)
 	 */
 	protected void onSyncFailed(@NonNull final SyncOperation syncOperation, @NonNull final Exception error) {
-<span class="nc" id="L468">		dispatchSyncEvent(</span>
-<span class="nc" id="L469">				new SyncEvent.Builder(syncOperation.task.getId())</span>
-<span class="nc" id="L470">						.type(SyncEvent.ERROR)</span>
-<span class="nc" id="L471">						.account(syncOperation.account)</span>
-<span class="nc" id="L472">						.error(error)</span>
-<span class="nc" id="L473">						.build()</span>
+<span class="fc" id="L471">		dispatchSyncEvent(</span>
+<span class="fc" id="L472">				new SyncEvent.Builder(syncOperation.task.getId())</span>
+<span class="fc" id="L473">						.type(SyncEvent.FAILURE)</span>
+<span class="fc" id="L474">						.account(syncOperation.account)</span>
+<span class="fc" id="L475">						.error(error)</span>
+<span class="fc" id="L476">						.build()</span>
 		);
-<span class="nc" id="L475">	}</span>
+<span class="fc" id="L478">	}</span>
 
 	/**
 	 * Changes current state of {@link SyncTask} associated with the given &lt;var&gt;syncOperation&lt;/var&gt;
@@ -484,14 +487,15 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * @param state         The new state for the task. Should be one of states defined by {@link SyncTask.State @State}
 	 *                      annotation.
 	 */
-	private void changeTaskStateToAndNotify(final SyncOperation syncOperation, @SyncTask.State final int state) {
-<span class="nc bnc" id="L488" title="All 2 branches missed.">		if (syncOperation.task.getState() != state) {</span>
-<span class="nc" id="L489">			syncOperation.task.setState(state);</span>
-<span class="nc bnc" id="L490" title="All 2 branches missed.">			if (mTaskStateChangeListener != null) {</span>
-<span class="nc" id="L491">				mTaskStateChangeListener.onSyncTaskStateChanged(syncOperation.task, syncOperation.account);</span>
+	@VisibleForTesting
+	void changeTaskStateToAndNotify(final SyncOperation syncOperation, @SyncTask.State final int state) {
+<span class="fc bfc" id="L492" title="All 2 branches covered.">		if (syncOperation.task.getState() != state) {</span>
+<span class="fc" id="L493">			syncOperation.task.setState(state);</span>
+<span class="fc bfc" id="L494" title="All 2 branches covered.">			if (mTaskStateChangeListener != null) {</span>
+<span class="fc" id="L495">				mTaskStateChangeListener.onSyncTaskStateChanged(syncOperation.task, syncOperation.account);</span>
 			}
 		}
-<span class="nc" id="L494">	}</span>
+<span class="fc" id="L498">	}</span>
 
 	/**
 	 * Invoked whenever this sync adapter wants to dispatch the given synchronization &lt;var&gt;event&lt;/var&gt;
@@ -505,12 +509,12 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * @param event The synchronization event to be dispatched.
 	 */
 	protected void dispatchSyncEvent(@NonNull final Object event) {
-<span class="nc bnc" id="L508" title="All 2 branches missed.">		if (mEventDispatcher != null) mEventDispatcher.dispatch(event);</span>
-<span class="nc" id="L509">	}</span>
+<span class="fc bfc" id="L512" title="All 2 branches covered.">		if (mEventDispatcher != null) mEventDispatcher.dispatch(event);</span>
+<span class="fc" id="L513">	}</span>
 
 	/*
 	 * Inner classes ===============================================================================
 	 */
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span>Generated by the Android Gradle plugin 2.3.1</div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span>Generated by the Android Gradle plugin 2.3.3</div></body></html>
