@@ -43,8 +43,7 @@ def bintrayConfig = [
 ]
 
 def codacyConfig = [
-        // This path must be relative to the codacy.gradle file placed in the /library directory.
-        tokensPath : '../../codacy.tokens',
+        tokensPath : System.getenv('CODACY_PROJECT_TOKENS'),
         projectName: "${githubConfig.repository}"
 ]
 

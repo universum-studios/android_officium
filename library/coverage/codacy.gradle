@@ -24,7 +24,7 @@ repositories {
 configurations { codacy }
 
 dependencies {
-    codacy 'com.github.codacy:codacy-coverage-reporter:-SNAPSHOT'
+    codacy 'com.github.codacy:codacy-coverage-reporter:2.0.0'
 }
 
 /**
@@ -32,9 +32,9 @@ dependencies {
  */
 task uploadCoverageToCodacy(type: JavaExec) {
     final String token
-    final File tokensFile = file(config.codacy.tokensPath)
+    final File tokensFile = file(config.codacy.tokensPath == null ? "none" : config.codacy.tokensPath)
     if (tokensFile.exists()) {
-        Properties tokens = new Properties()
+        final Properties tokens = new Properties()
         tokens.load(new FileInputStream(tokensFile))
         token = tokens[config.codacy.projectName]
     } else {
