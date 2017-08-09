@@ -32,11 +32,12 @@ task classesJar(type: Jar) {
 task generateJavadoc(type: Javadoc) {
     source isModule ? android.sourceSets.main.java.sourceFiles : android.sourceSets.release.java.sourceFiles
     options {
-        author = true
-        memberLevel = JavadocMemberLevel.PROTECTED
-        header = "${config.maven.projectName} ${config.maven.version} Documentation"
+        title = "${config.maven.projectName} API"
+        header = "Version ${config.maven.version} Documentation"
         links "http://docs.oracle.com/javase/8/docs/api/"
         linksOffline "http://developer.android.com/reference", "${android.sdkDirectory}\\docs\\reference"
+        author = true
+        memberLevel = JavadocMemberLevel.PROTECTED
     }
     if (JavaVersion.current().isJava8Compatible()) {
         // Uncomment this when Javadoc tool outputs some (not resolvable) errors like 'reference not found for R.attr#...'.
