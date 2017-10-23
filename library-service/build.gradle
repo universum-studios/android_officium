@@ -80,7 +80,7 @@ dependencies {
     /*
      * TEST DEPENDENCIES ---------------------------------------------------------------------------
      */
-    androidTestCompile project(':test-core')
+    androidTestCompile project(':test-instrumented')
     androidTestCompile deps.other.googleGson
 }
 

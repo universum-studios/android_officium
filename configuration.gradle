@@ -3,7 +3,7 @@ def buildConfig = [
         compileSdkVersion: 26,
         minSdkVersion    : 14,
         targetSdkVersion : 26,
-        buildToolsVersion: '25.0.3'
+        buildToolsVersion: '26.0.0'
 ]
 
 def testConfig = [
@@ -39,16 +39,12 @@ def bintrayConfig = [
         packageLabels            : ['android', 'account', 'synchronization', 'service', 'event'],
         packageVersionName       : mavenConfig.version,
         packageVersionDescription: 'Release patch.',
-        packageVersionTag        : mavenConfig.version
+        packageVersionTag        : "v${mavenConfig.version}"
 ]
 
 def codacyConfig = [
         tokensPath : System.getenv('CODACY_PROJECT_TOKENS'),
         projectName: "${githubConfig.repository}"
-]
-
-def ciConfig = [
-        travis: Boolean.parseBoolean(System.getenv('TRAVIS'))
 ]
 
 ext.config = [
@@ -58,6 +54,5 @@ ext.config = [
         "github" : githubConfig,
         "maven"  : mavenConfig,
         "bintray": bintrayConfig,
-        "codacy" : codacyConfig,
-        "ci"     : ciConfig
+        "codacy" : codacyConfig
 ]

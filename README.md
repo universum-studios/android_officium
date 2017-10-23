@@ -1,9 +1,9 @@
 Officium
 ===============
 
-[![Build Status](https://travis-ci.org/universum-studios/android_officium.svg?branch=master)](https://travis-ci.org/universum-studios/android_officium)
+[![CircleCI](https://circleci.com/gh/universum-studios/android_officium.svg?style=svg)](https://circleci.com/gh/universum-studios/android_officium)
+[![Codecov](https://codecov.io/gh/universum-studios/android_officium/branch/master/graph/badge.svg)](https://codecov.io/gh/universum-studios/android_officium)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/b46e219849d04733ab3cb29beeb0cfaf)](https://www.codacy.com/app/universum-studios/android_officium?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=universum-studios/android_officium&amp;utm_campaign=Badge_Grade)
-[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/b46e219849d04733ab3cb29beeb0cfaf)](https://www.codacy.com/app/universum-studios/android_officium?utm_source=github.com&utm_medium=referral&utm_content=universum-studios/android_officium&utm_campaign=Badge_Coverage)
 
 Account, synchronization, services and events management for the Android platform.
 

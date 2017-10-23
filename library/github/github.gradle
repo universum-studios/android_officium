@@ -43,7 +43,7 @@ github {
 
         types {
             production {
-                tagName config.maven.version
+                tagName "v${config.maven.version}"
                 releaseName config.maven.version
                 releaseBody file("${projectDir}/github/release-body-production.md").text
                 draft true

@@ -22,7 +22,7 @@ import android.support.test.runner.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import universum.studios.android.test.BaseInstrumentedTest;
+import universum.studios.android.test.instrumented.InstrumentedTestCase;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -33,7 +33,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
  * @author Martin Albedinsky
  */
 @RunWith(AndroidJUnit4.class)
-public final class ServiceApiTest extends BaseInstrumentedTest {
+public final class ServiceApiTest extends InstrumentedTestCase {
     
 	@SuppressWarnings("unused")
 	private static final String TAG = "ServiceApiTest";

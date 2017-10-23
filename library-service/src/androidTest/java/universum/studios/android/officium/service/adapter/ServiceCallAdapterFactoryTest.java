@@ -31,7 +31,7 @@ import retrofit2.Call;
 import retrofit2.CallAdapter;
 import retrofit2.Retrofit;
 import universum.studios.android.officium.service.ServiceCall;
-import universum.studios.android.test.BaseInstrumentedTest;
+import universum.studios.android.test.instrumented.InstrumentedTestCase;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -44,7 +44,7 @@ import static org.junit.Assert.assertEquals;
  * @author Martin Albedinsky
  */
 @RunWith(AndroidJUnit4.class)
-public final class ServiceCallAdapterFactoryTest extends BaseInstrumentedTest {
+public final class ServiceCallAdapterFactoryTest extends InstrumentedTestCase {
 
 	@SuppressWarnings("unused")
 	private static final String TAG = "ServiceCallAdapterFactoryTest";

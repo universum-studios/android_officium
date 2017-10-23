@@ -1,0 +1,97 @@
+version: 2
+
+### CONFIGURATION ==================================================================================
+
+machine:
+  environment:
+    QEMU_AUDIO_DRV: none
+
+### JOBS ===========================================================================================
+
+jobs:
+  build:
+    working_directory: ~/repo
+    docker:
+      - image: universumstudios/android:api-26
+    environment:
+      JVM_OPTS: -Xmx3200m
+    steps:
+      - checkout
+      - run:
+          name: Grant Permissions
+          command: ./ci/permissions.sh
+      - run:
+          name: Download Dependencies
+          command: ./gradlew dependencies
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: gradle-cache-${CIRCLE_BUILD_NUM}
+      - run:
+          name: Build Project
+          command: ./ci/build.sh
+  test:
+    working_directory: ~/repo
+    docker:
+      - image: universumstudios/android:api-26
+    environment:
+      JVM_OPTS: -Xmx3200m
+    steps:
+      - checkout
+      - run:
+          name: Grant Permissions
+          command: ./ci/permissions.sh
+      - restore_cache:
+          key: gradle-cache-${CIRCLE_BUILD_NUM}
+      - run:
+          name: Execute Tests
+          command: ./ci/test.sh
+      - run:
+          name: Upload Coverage
+          command: ./ci/coverage.sh
+  deploy:
+    working_directory: ~/repo
+    docker:
+      - image: universumstudios/android:api-26
+    environment:
+      JVM_OPTS: -Xmx3200m
+    steps:
+      - checkout
+      - run:
+          name: Grant Permissions
+          command: ./ci/permissions.sh
+      - restore_cache:
+          key: gradle-cache-${CIRCLE_BUILD_NUM}
+      - run:
+          name: Deploy Artifacts
+          command: ./ci/deploy.sh
+
+### WORK-FLOWS =====================================================================================
+
+workflows:
+  version: 2
+  assemble:
+    jobs:
+      - build:
+          context: org-global
+          filters:
+            branches:
+              ignore:
+                - gh-pages
+      - test:
+          context: org-global
+          requires:
+            - build
+      - approve-deploy:
+          type: approval
+          requires:
+            - test
+          filters:
+            branches:
+              only:
+                - /^release.*$/
+                - /^support-release.*$/
+      - deploy:
+          context: org-global
+          requires:
+            - approve-deploy
