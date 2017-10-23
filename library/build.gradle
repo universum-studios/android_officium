@@ -52,6 +52,15 @@ android {
                 "${rootProject.rootDir}/library-sync/src/main/java"
         ]
         debug.java.srcDirs = release.java.srcDirs
+        test.java.srcDirs = [
+                "${rootProject.rootDir}/library/src/test/java",
+                "${rootProject.rootDir}/library-core/src/test/java",
+                "${rootProject.rootDir}/library-account/src/test/java",
+                "${rootProject.rootDir}/library-event-core/src/test/java",
+                "${rootProject.rootDir}/library-event-common/src/test/java",
+                "${rootProject.rootDir}/library-service/src/test/java",
+                "${rootProject.rootDir}/library-sync/src/test/java"
+        ]
         androidTest.java.srcDirs = [
                 "${rootProject.rootDir}/library/src/androidTest/java",
                 "${rootProject.rootDir}/library-core/src/androidTest/java",
@@ -103,13 +112,15 @@ dependencies {
     /*
      * TEST DEPENDENCIES ---------------------------------------------------------------------------
      */
-    androidTestCompile project(':test-core')
+    testCompile project(':test-local')
+    androidTestCompile project(':test-instrumented')
 }
 
 /**
  * Additional configuration ========================================================================
  */
 apply from: 'analysis/analysis.gradle'
+apply from: 'coverage/jacoco.gradle'
 apply from: 'coverage/codacy.gradle'
 apply from: "${rootProject.rootDir}/deploy/deploy.gradle"
 apply from: 'github/github.gradle'

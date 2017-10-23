@@ -22,19 +22,19 @@ import android.support.test.runner.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import universum.studios.android.test.BaseInstrumentedTest;
+import universum.studios.android.test.instrumented.InstrumentedTestCase;
 
 /**
  * @author Martin Albedinsky
  */
 @RunWith(AndroidJUnit4.class)
-public final class UserAccountManagerTest extends BaseInstrumentedTest {
+public final class UserAccountManagerTest extends InstrumentedTestCase {
     
 	@SuppressWarnings("unused")
 	private static final String TAG = "UserAccountManagerTest";
 
     @Test
 	public void test() {
-		// todo:: implement test
+		// todo: implement test
 	}
 }

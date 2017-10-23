@@ -45,21 +45,10 @@ android {
  * Library dependencies ============================================================================
  */
 dependencies {
-    // Android Instrumentation test dependencies.
-    compile deps.test.androidSupportAnnotations
-    compile deps.test.androidRunner
-    compile deps.test.androidRules
-    compile deps.test.androidEspressoCore
-    compile deps.test.androidEspressoIntents
-    compile(deps.test.androidEspressoContrib) {
-        exclude group: 'com.android.support', module: 'support-annotations'
-        exclude group: 'com.android.support', module: 'support-v4'
-        exclude group: 'com.android.support', module: 'appcompat-v7'
-        exclude group: 'com.android.support', module: 'design'
-        exclude group: 'com.android.support', module: 'recyclerview-v7'
-    }
     // Local JUnit test dependencies.
     compile deps.test.junit
     compile deps.test.mockitoCore
-    compile deps.test.mockitoAndroid
+    compile deps.test.robolectric
+    compile deps.test.robolectricShadowsSupportV4
+    compile deps.test.androidSupportAnnotations
 }

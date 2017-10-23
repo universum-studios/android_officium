@@ -6,7 +6,6 @@ def bintrayRepos = [
 ]
 
 def projectRepos = [
-        // This path must be relative to the project modules.
         artifacts: "${rootProject.rootDir}/artifacts/"
 ]
 

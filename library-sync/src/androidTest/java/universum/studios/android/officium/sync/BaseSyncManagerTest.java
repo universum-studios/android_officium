@@ -26,9 +26,9 @@ import android.support.test.runner.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import universum.studios.android.test.BaseInstrumentedTest;
-import universum.studios.android.test.TestResources;
-import universum.studios.android.test.TestUtils;
+import universum.studios.android.test.instrumented.InstrumentedTestCase;
+import universum.studios.android.test.instrumented.TestResources;
+import universum.studios.android.test.instrumented.TestUtils;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -38,7 +38,7 @@ import static org.hamcrest.core.Is.is;
  */
 @RunWith(AndroidJUnit4.class)
 @SuppressWarnings("MissingPermission")
-public final class BaseSyncManagerTest extends BaseInstrumentedTest {
+public final class BaseSyncManagerTest extends InstrumentedTestCase {
     
 	@SuppressWarnings("unused")
 	private static final String TAG = "BaseSyncManagerTest";

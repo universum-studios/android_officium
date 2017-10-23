@@ -15,6 +15,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.3'
+        classpath 'com.vanniktech:gradle-android-junit-jacoco-plugin:0.10.0'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
         classpath 'universum.studios.gradle:github-plugin:1.1.2'
     }

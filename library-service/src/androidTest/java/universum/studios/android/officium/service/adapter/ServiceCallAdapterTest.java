@@ -25,7 +25,7 @@ import org.junit.runner.RunWith;
 
 import retrofit2.Call;
 import universum.studios.android.officium.service.ServiceCall;
-import universum.studios.android.test.BaseInstrumentedTest;
+import universum.studios.android.test.instrumented.InstrumentedTestCase;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -37,7 +37,7 @@ import static org.mockito.Mockito.mock;
  * @author Martin Albedinsky
  */
 @RunWith(AndroidJUnit4.class)
-public final class ServiceCallAdapterTest extends BaseInstrumentedTest {
+public final class ServiceCallAdapterTest extends InstrumentedTestCase {
 
 	@SuppressWarnings("unused")
 	private static final String TAG = "ServiceCallAdapterTest";
