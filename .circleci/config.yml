@@ -1,0 +1,12 @@
+version: 2
+
+# Necessary configuration which ensures that building of content for gh-pages branch is alwasy skipped. 
+jobs:
+  build:
+    docker:
+      - image: openjdk:8-jdk
+    steps:
+      - run:
+          command: echo "GitHub pages updated."
+    branches:
+      ignore: gh-pages
