@@ -6,11 +6,10 @@ def bintrayRepos = [
 ]
 
 def projectRepos = [
-        artifacts: "${rootProject.rootDir}/artifacts/"
+        artifacts: "${rootProject.rootDir}/artifacts"
 ]
 
 ext.repos = [
-        "google" : 'https://maven.google.com',
         "jitpack": 'https://jitpack.io',
         "bintray": bintrayRepos,
         "project": projectRepos

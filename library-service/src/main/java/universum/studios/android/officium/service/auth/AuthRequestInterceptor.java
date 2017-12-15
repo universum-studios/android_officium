@@ -19,7 +19,6 @@
 package universum.studios.android.officium.service.auth;
 
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 
 import java.io.IOException;
 
@@ -97,10 +96,12 @@ public final class AuthRequestInterceptor implements Interceptor {
 	public Response intercept(@NonNull final Chain chain) throws IOException {
 		final String authToken = tokenProvider.peekToken();
 		final Request request = chain.request();
-		return TextUtils.isEmpty(authToken) ? chain.proceed(request) : chain.proceed(request.newBuilder()
-				.header(HEADER_NAME, "Bearer " + authToken)
-				.build()
-		);
+		return (authToken == null || authToken.length() == 0) ?
+				chain.proceed(request) :
+				chain.proceed(request.newBuilder()
+						.header(HEADER_NAME, "Bearer " + authToken)
+						.build()
+				);
 	}
 
 	/*

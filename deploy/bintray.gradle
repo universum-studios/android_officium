@@ -17,83 +17,11 @@
  * =================================================================================================
  */
 apply plugin: 'com.jfrog.bintray'
-apply plugin: 'maven-publish'
-
-def pomConfig = {
-    name config.maven.projectName
-    description config.maven.projectDescription
-    url config.maven.projectUrl
-    inceptionYear config.maven.projectInceptionYear
-    issueManagement {
-        system 'GitHub Issues'
-        url config.maven.projectIssueManagementUrl
-    }
-    licenses {
-        license {
-            name 'The Apache Software License, Version 2.0'
-            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-            distribution 'repo'
-        }
-    }
-    organization {
-        name 'Universum Studios'
-        url 'https://universum-studios.github.io'
-    }
-    developers {
-        developer {
-            id 'albedinsky'
-            name 'Martin Albedinsky'
-            email 'martin.albedinsky@gmail.com'
-            roles {
-                role 'Android Software Engineer'
-            }
-        }
-    }
-}
-
-publishing {
-    publications {
-        LibraryPublication(MavenPublication) {
-            groupId config.maven.groupId
-            artifactId project.property('maven.pom.artifactId')
-            version config.maven.version
-            artifact bundleRelease
-            artifact classesJar
-            artifact javadocJar
-            artifact sourcesJar
-            pom.withXml {
-                def projectNode = asNode()
-                // Append POM configuration.
-                projectNode.children().last() + pomConfig
-                // Append dependencies.
-                def dependenciesNode = projectNode.appendNode('dependencies')
-                // Iterate over the dependencies (except the test ones),
-                // adding a <dependency></dependency> node for each.
-                configurations.compile.allDependencies.each {
-                    if(it.group != null && (it.name != null || it.name != "unspecified") && it.version != null) {
-                        def dependencyNode = dependenciesNode.appendNode('dependency')
-                        dependencyNode.appendNode('groupId', it.group)
-                        dependencyNode.appendNode('artifactId', it.name)
-                        dependencyNode.appendNode('version', it.version)
-                    }
-                }
-                configurations.releaseCompile.allDependencies.each {
-                    if(it.group != null && (it.name != null || it.name != "unspecified") && it.version != null) {
-                        def dependencyNode = dependenciesNode.appendNode('dependency')
-                        dependencyNode.appendNode('groupId', it.group)
-                        dependencyNode.appendNode('artifactId', it.name)
-                        dependencyNode.appendNode('version', it.version)
-                    }
-                }
-            }
-        }
-    }
-}
 
 bintray {
     user = System.getenv('BINTRAY_USER')
     key = System.getenv('BINTRAY_API_KEY')
-    publications = ['LibraryPublication']
+    publications = ['library']
     override = true
     publish = config.bintray.publish
     pkg {

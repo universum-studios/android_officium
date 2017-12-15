@@ -29,17 +29,7 @@ android {
         minSdkVersion config.build.minSdkVersion
         targetSdkVersion config.build.targetSdkVersion
         consumerProguardFiles 'proguard-rules.pro'
-        testInstrumentationRunner config.test.instrumentationRunner
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-        }
-        debug {
-            minifyEnabled false
-            testCoverageEnabled true
-        }
+        testInstrumentationRunner config.test.instrumentationRunner.androidJUnit
     }
 
     sourceSets {
@@ -94,26 +84,25 @@ repositories {
 }
 
 dependencies {
-    /*
-     * RELEASE DEPENDENCIES ------------------------------------------------------------------------
-     */
-    compile deps.androidSupport.annotations
-    compile deps.universumStudios.logger
-    compile deps.universumStudios.utils
-    compile deps.universumStudios.crypto
-    compile deps.other.squareupOtto
-    compile deps.other.squareupOkio
-    compile deps.other.squareupOkhttp
-    compile (deps.other.squareupRetrofit) {
+    // PRODUCTION ----------------------------------------------------------------------------------
+    implementation deps.androidSupport.annotations
+    implementation deps.universumStudios.logger
+    implementation deps.universumStudios.utils
+    implementation deps.universumStudios.crypto
+    implementation deps.other.squareupOtto
+    implementation deps.other.squareupOkio
+    implementation deps.other.squareupOkhttp
+    implementation(deps.other.squareupRetrofit) {
         exclude module: 'okhttp'
     }
-    compile deps.other.googleGson
+    implementation deps.other.googleGson
 
-    /*
-     * TEST DEPENDENCIES ---------------------------------------------------------------------------
-     */
-    testCompile project(':test-local')
-    androidTestCompile project(':test-instrumented')
+    // DEVELOPMENT ---------------------------------------------------------------------------------
+    // None.
+
+    // TEST ----------------------------------------------------------------------------------------
+    testImplementation project(':test-local')
+    androidTestImplementation project(':test-instrumented')
 }
 
 /**

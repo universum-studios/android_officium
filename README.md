@@ -3,20 +3,20 @@ Officium
 
 [![CircleCI](https://circleci.com/gh/universum-studios/android_officium.svg?style=svg)](https://circleci.com/gh/universum-studios/android_officium)
 [![Codecov](https://codecov.io/gh/universum-studios/android_officium/branch/master/graph/badge.svg)](https://codecov.io/gh/universum-studios/android_officium)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/b46e219849d04733ab3cb29beeb0cfaf)](https://www.codacy.com/app/universum-studios/android_officium?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=universum-studios/android_officium&amp;utm_campaign=Badge_Grade)
+[![Codacy](https://api.codacy.com/project/badge/Grade/b46e219849d04733ab3cb29beeb0cfaf)](https://www.codacy.com/app/universum-studios/android_officium?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=universum-studios/android_officium&amp;utm_campaign=Badge_Grade)
 
 Account, synchronization, services and events management for the Android platform.
 
 For more information please visit the **[Wiki](https://github.com/universum-studios/android_officium/wiki)**.
 
 ## Download ##
-[![Download](https://api.bintray.com/packages/universum-studios/android/universum.studios.android%3Aofficium/images/download.svg)](https://bintray.com/universum-studios/android/universum.studios.android%3Aofficium/_latestVersion)
+[![Bintray](https://api.bintray.com/packages/universum-studios/android/universum.studios.android%3Aofficium/images/download.svg)](https://bintray.com/universum-studios/android/universum.studios.android%3Aofficium/_latestVersion)
 
 Download the latest **[release](https://github.com/universum-studios/android_officium/releases "Latest Releases page")** or **add as dependency** in your project via:
 
 ### Gradle ###
 
-    compile "universum.studios.android:officium:${DESIRED_VERSION}@aar"
+    implementation "universum.studios.android:officium:${DESIRED_VERSION}@aar"
 
 ## Modules ##
 

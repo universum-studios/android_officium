@@ -28,17 +28,7 @@ android {
     defaultConfig {
         minSdkVersion config.build.minSdkVersion
         targetSdkVersion config.build.targetSdkVersion
-        testInstrumentationRunner config.test.instrumentationRunner
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-        }
-        debug {
-            minifyEnabled false
-            testCoverageEnabled true
-        }
+        testInstrumentationRunner config.test.instrumentationRunner.androidJUnit
     }
 
     compileOptions {
@@ -60,28 +50,22 @@ repositories {
 }
 
 dependencies {
-    /*
-     * RELEASE DEPENDENCIES ------------------------------------------------------------------------
-     */
-    compile deps.androidSupport.annotations
-    compile deps.other.squareupOtto
-    compile deps.other.squareupOkio
-    compile deps.other.squareupOkhttp
-    compile (deps.other.squareupRetrofit) {
+    // PRODUCTION ----------------------------------------------------------------------------------
+    implementation deps.androidSupport.annotations
+    implementation deps.other.squareupOtto
+    implementation deps.other.squareupOkio
+    implementation deps.other.squareupOkhttp
+    implementation(deps.other.squareupRetrofit) {
         exclude module: 'okhttp'
     }
-    releaseCompile "universum.studios.android:officium-core:${config.library.version}@aar"
+    releaseImplementation "universum.studios.android:officium-core:${config.library.version}@aar"
 
-    /*
-     * DEBUG DEPENDENCIES --------------------------------------------------------------------------
-     */
-    debugCompile project(':library-core')
+    // DEVELOPMENT ---------------------------------------------------------------------------------
+    debugApi project(':library-core')
 
-    /*
-     * TEST DEPENDENCIES ---------------------------------------------------------------------------
-     */
-    androidTestCompile project(':test-instrumented')
-    androidTestCompile deps.other.googleGson
+    // TEST ----------------------------------------------------------------------------------------
+    testImplementation project(':test-local')
+    testImplementation deps.other.googleGson
 }
 
 apply from: "${rootProject.rootDir}/deploy/deploy.gradle"

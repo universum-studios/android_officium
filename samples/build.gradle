@@ -1,6 +1,6 @@
 /*
  * =================================================================================================
- *                             Copyright (C) 2016 Universum Studios
+ *                             Copyright (C) 2017 Universum Studios
  * =================================================================================================
  *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
  * -------------------------------------------------------------------------------------------------
@@ -27,37 +27,51 @@ android {
 
     defaultConfig {
         applicationId project.property('samples.applicationId')
+        versionName project.property('samples.versionName')
+        versionCode Integer.valueOf((String) project.property('samples.versionCode'))
         minSdkVersion config.build.minSdkVersion
         targetSdkVersion config.build.targetSdkVersion
-        versionCode Integer.valueOf((String) project.property('samples.versionCode'))
-        versionName project.property('samples.versionName')
     }
 
-    if (project.hasProperty('signing.properties') && new File((String) project.property('signing.properties')).exists()) {
-        Properties properties = new Properties()
-        properties.load(new FileInputStream(file(project.property('signing.properties'))))
-
+    final String keyDirPath = "${System.getenv('ANDROID_UNIVERSUM_KEYSTORE')}/samples"
+    final File keyFile = file("${keyDirPath}/release.jks")
+    final File keyPropertiesFile = file("${keyDirPath}/key.properties")
+    if (keyFile.exists() && keyPropertiesFile.exists()) {
+        final Properties signingProperties = new Properties()
+        signingProperties.load(new FileInputStream(keyPropertiesFile))
+        //
+        // The key.properties file should contain following data (each property at a single line):
+        // <pre>
+        // store.password=STORE_PASSWORD
+        // key.alias=ALIAS_OF_THE_KEY
+        // key.password=KEY_PASSWORD
+        // </pre>
+        //
         signingConfigs {
             release {
-                storeFile file(properties['store.file'])
-                storePassword properties['store.password']
-                keyAlias properties['key.alias']
-                keyPassword properties['key.password']
+                storeFile keyFile
+                storePassword signingProperties['store.password']
+                keyAlias signingProperties['key.alias']
+                keyPassword signingProperties['key.password']
             }
         }
 
         buildTypes {
             release {
                 signingConfig signingConfigs.release
-                minifyEnabled false
+                minifyEnabled true
                 proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             }
         }
     }
 
+    dataBinding {
+        enabled = true
+    }
+
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
@@ -70,11 +84,21 @@ repositories {
 }
 
 dependencies {
-    compile project(':library')
-    compile deps.androidSupport.design
-    compile deps.androidSupport.vectorDrawable
-    compile deps.androidSupport.recyclerView
-    compile deps.other.butterknife
+    implementation project(':library')
+    implementation deps.androidSupport.design
+    implementation deps.androidSupport.vectorDrawable
+    implementation deps.androidSupport.recyclerView
+    implementation deps.other.butterknife
     annotationProcessor deps.other.butterknifeProcessor
-    compile deps.universumStudios.supportSamples
+    implementation deps.universumStudios.supportSamples
+    implementation deps.universumStudios.logger
+    implementation deps.universumStudios.utils
+    implementation deps.universumStudios.crypto
+    implementation deps.other.squareupOtto
+    implementation deps.other.squareupOkio
+    implementation deps.other.squareupOkhttp
+    implementation(deps.other.squareupRetrofit) {
+        exclude module: 'okhttp'
+    }
+    implementation deps.other.googleGson
 }

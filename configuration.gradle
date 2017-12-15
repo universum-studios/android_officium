@@ -1,29 +1,34 @@
 // Defines configuration used across the library project.
+def libraryConfig = [
+        name   : 'officium',
+        version: '1.2.1'
+]
+
 def buildConfig = [
-        compileSdkVersion: 26,
+        compileSdkVersion: 27,
         minSdkVersion    : 14,
-        targetSdkVersion : 26,
-        buildToolsVersion: '26.0.0'
+        targetSdkVersion : 27,
+        buildToolsVersion: '27.0.0'
 ]
 
 def testConfig = [
-        instrumentationRunner: 'android.support.test.runner.AndroidJUnitRunner'
+        instrumentationRunner: [androidJUnit: 'android.support.test.runner.AndroidJUnitRunner']
 ]
 
-def libraryConfig = [
-        version: '1.2.0'
+def javadocConfig = [
+        reference: [online: "https://universum-studios.github.io/android_${libraryConfig.name}/reference/0.x"]
 ]
 
 def githubConfig = [
         owner      : 'universum-studios',
-        repository : 'android_officium',
+        repository : "android_${libraryConfig.name}",
         accessToken: System.getenv('GITHUB_API_TOKEN')
 ]
 
 def mavenConfig = [
         localUrl                 : System.getenv('MAVEN_URL_LOCAL'),
         groupId                  : 'universum.studios.android',
-        artifactId               : 'officium',
+        artifactId               : libraryConfig.name,
         version                  : libraryConfig.version,
         packaging                : 'pom',
         projectName              : 'Android Officium',
@@ -48,9 +53,10 @@ def codacyConfig = [
 ]
 
 ext.config = [
+        "library": libraryConfig,
         "build"  : buildConfig,
         "test"   : testConfig,
-        "library": libraryConfig,
+        "javadoc": javadocConfig,
         "github" : githubConfig,
         "maven"  : mavenConfig,
         "bintray": bintrayConfig,

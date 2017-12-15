@@ -60,3 +60,7 @@ github {
         }
     }
 }
+
+project.afterEvaluate {
+    tasks.findAll { if (it.name.startsWith("githubUpload")) it.dependsOn "publishLibraryPublicationToMavenLocal" }
+}

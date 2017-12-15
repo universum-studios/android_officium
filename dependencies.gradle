@@ -1,12 +1,12 @@
 // Defines dependencies used across the library project.
 def versions = [
-        androidSupport            : '26.0.0',
-        androidSupportTest        : '1.0',
-        androidSupportTestEspresso: '3.0.0',
-        butterknife               : '8.5.1',
+        androidSupport            : '27.0.0',
+        androidSupportTest        : '1.0.1',
+        androidSupportTestEspresso: '3.0.1',
+        butterknife               : '8.8.1',
         junit                     : '4.12',
-        mockito                   : '2.7.20',
-        robolectric               : '3.3.2'
+        mockito                   : '2.11.0',
+        robolectric               : '3.5.1'
 ]
 
 ext.versions = versions
@@ -26,7 +26,7 @@ def test = [
         mockitoAndroid             : "org.mockito:mockito-android:${versions.mockito}",
         robolectric                : "org.robolectric:robolectric:${versions.robolectric}",
         robolectricMultidex        : "org.robolectric:shadows-multidex:${versions.robolectric}",
-        robolectricShadowsSupportV4: "org.robolectric:shadows-support-v4:${versions.robolectric}",
+        robolectricShadowsSupportV4: "org.robolectric:shadows-supportv4:${versions.robolectric}",
         androidRunner              : "com.android.support.test:runner:${versions.androidSupportTest}",
         androidRules               : "com.android.support.test:rules:${versions.androidSupportTest}",
         androidEspressoCore        : "com.android.support.test.espresso:espresso-core:${versions.androidSupportTestEspresso}",
@@ -37,18 +37,18 @@ def test = [
 ]
 
 def universumStudios = [
-        logger        : 'universum.studios.android:logger:1.0.0@aar',
-        utils         : 'universum.studios.android:utils:2.0.0@aar',
+        logger        : 'universum.studios.android:logger:1.0.1@aar',
+        utils         : 'universum.studios.android:utils:2.0.5@aar',
         crypto        : 'universum.studios.android:crypto:0.1.2@aar',
-        supportSamples: 'universum.studios.android.support:support-samples:0.1.3@aar'
+        supportSamples: 'universum.studios.android.support:support-samples:0.1.4@aar'
 ]
 
 def other = [
         squareupOtto        : 'com.squareup:otto:1.3.8',
         squareupOkio        : 'com.squareup.okio:okio:1.11.0',
-        squareupOkhttp      : 'com.squareup.okhttp3:okhttp:3.5.0',
+        squareupOkhttp      : 'com.squareup.okhttp3:okhttp:3.9.1',
         squareupRetrofit    : 'com.squareup.retrofit2:retrofit:2.3.0',
-        googleGson          : 'com.google.code.gson:gson:2.7',
+        googleGson          : 'com.google.code.gson:gson:2.8.2',
         butterknife         : "com.jakewharton:butterknife:${versions.butterknife}",
         butterknifeProcessor: "com.jakewharton:butterknife-compiler:${versions.butterknife}"
 ]

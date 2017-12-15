@@ -12,28 +12,7 @@ jobs:
   build:
     working_directory: ~/repo
     docker:
-      - image: universumstudios/android:api-26
-    environment:
-      JVM_OPTS: -Xmx3200m
-    steps:
-      - checkout
-      - run:
-          name: Grant Permissions
-          command: ./ci/permissions.sh
-      - run:
-          name: Download Dependencies
-          command: ./gradlew dependencies
-      - save_cache:
-          paths:
-            - ~/.gradle
-          key: gradle-cache-${CIRCLE_BUILD_NUM}
-      - run:
-          name: Build Project
-          command: ./ci/build.sh
-  test:
-    working_directory: ~/repo
-    docker:
-      - image: universumstudios/android:api-26
+      - image: universumstudios/android:api-27
     environment:
       JVM_OPTS: -Xmx3200m
     steps:
@@ -42,7 +21,31 @@ jobs:
           name: Grant Permissions
           command: ./ci/permissions.sh
       - restore_cache:
-          key: gradle-cache-${CIRCLE_BUILD_NUM}
+          key: gradle-{{ checksum "dependencies.gradle" }}-{{ checksum "library/build.gradle" }}
+      - run:
+          name: Download Dependencies
+          command: ./gradlew dependencies
+      - run:
+          name: Build Project
+          command: ./ci/build.sh
+      - save_cache:
+          key: gradle-{{ checksum "dependencies.gradle" }}-{{ checksum "library/build.gradle" }}
+          paths:
+            - "~/.gradle"
+            - "~/.m2"
+  test:
+    working_directory: ~/repo
+    docker:
+      - image: universumstudios/android:api-27
+    environment:
+      JVM_OPTS: -Xmx3200m
+    steps:
+      - checkout
+      - run:
+          name: Grant Permissions
+          command: ./ci/permissions.sh
+      - restore_cache:
+          key: gradle-{{ checksum "dependencies.gradle" }}-{{ checksum "library/build.gradle" }}
       - run:
           name: Execute Tests
           command: ./ci/test.sh
@@ -52,7 +55,7 @@ jobs:
   deploy:
     working_directory: ~/repo
     docker:
-      - image: universumstudios/android:api-26
+      - image: universumstudios/android:api-27
     environment:
       JVM_OPTS: -Xmx3200m
     steps:
@@ -61,7 +64,7 @@ jobs:
           name: Grant Permissions
           command: ./ci/permissions.sh
       - restore_cache:
-          key: gradle-cache-${CIRCLE_BUILD_NUM}
+          key: gradle-{{ checksum "dependencies.gradle" }}-{{ checksum "library/build.gradle" }}
       - run:
           name: Deploy Artifacts
           command: ./ci/deploy.sh
@@ -76,8 +79,7 @@ workflows:
           context: org-global
           filters:
             branches:
-              ignore:
-                - gh-pages
+              ignore: gh-pages
       - test:
           context: org-global
           requires:
@@ -90,7 +92,6 @@ workflows:
             branches:
               only:
                 - /^release.*$/
-                - /^support-release.*$/
       - deploy:
           context: org-global
           requires:

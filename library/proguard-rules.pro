@@ -16,6 +16,7 @@
 # See the License for the specific language governing permissions and limitations under the License.
 # ==================================================================================================
 ##
+
 # Keep names of ErrorResponse along with its Error object that are parsed from JSON data.
 -keepnames class universum.studios.android.officium.service.ErrorResponse { *; }
 -keepnames class universum.studios.android.officium.service.ErrorResponse$Error { *; }

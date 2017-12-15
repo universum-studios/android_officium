@@ -17,5 +17,6 @@
  * =================================================================================================
  */
 apply from: "${rootProject.rootDir}/deploy/artifacts.gradle"
+apply from: "${rootProject.rootDir}/deploy/publications.gradle"
 apply from: "${rootProject.rootDir}/deploy/maven.gradle"
 apply from: "${rootProject.rootDir}/deploy/bintray.gradle"

@@ -19,7 +19,6 @@
 package universum.studios.android.test.local;
 
 import android.app.Application;
-import android.os.Build;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 
@@ -34,8 +33,7 @@ import org.robolectric.annotation.Config;
  *
  * @author Martin Albedinsky
  */
-@Config(constants = BuildConfig.class,
-		sdk = Build.VERSION_CODES.N_MR1)
+@Config(manifest = Config.NONE)
 @RunWith(RobolectricTestRunner.class)
 @SuppressWarnings({"NullableProblems", "ConstantConditions"})
 public abstract class RobolectricTestCase extends LocalTestCase {
