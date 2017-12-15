@@ -5,10 +5,11 @@ More **detailed changelog** for each respective version may be viewed by pressin
 
 ## Version 1.x ##
 
-### 1.2.1 ###
-> upcoming
+### [1.2.1](https://github.com/universum-studios/android_officium/releases/tag/v1.2.1) ###
+> 15.12.2017
 
 - Removed deprecated `UiEventBus` class.
+- Updated **dependencies** versions and _Gradle_ configuration.
 
 ### [1.2.0](https://github.com/universum-studios/android_officium/releases/tag/v1.2.0) ###
 > 26.07.2017
