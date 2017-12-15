@@ -1,7 +1,8 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
 <title>Test results - Test Summary</title>
 <link href="css/base-style.css" rel="stylesheet" type="text/css"/>
 <link href="css/style.css" rel="stylesheet" type="text/css"/>
@@ -19,7 +20,7 @@
 <tr>
 <td>
 <div class="infoBox" id="tests">
-<div class="counter">176</div>
+<div class="counter">169</div>
 <p>tests</p>
 </div>
 </td>
@@ -30,8 +31,14 @@
 </div>
 </td>
 <td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
 <div class="infoBox" id="duration">
-<div class="counter">6.452s</div>
+<div class="counter">13.794s</div>
 <p>duration</p>
 </div>
 </td>
@@ -65,6 +72,7 @@
 <th>Package</th>
 <th>Tests</th>
 <th>Failures</th>
+<th>Ignored</th>
 <th>Duration</th>
 <th>Success rate</th>
 </tr>
@@ -72,65 +80,62 @@
 <tbody>
 <tr>
 <td class="success">
-<a href="universum.studios.android.officium.html">universum.studios.android.officium</a>
+<a href="packages/universum.studios.android.officium.html">universum.studios.android.officium</a>
 </td>
 <td>10</td>
 <td>0</td>
-<td>1.237s</td>
-<td class="success">100%</td>
-</tr>
-<tr>
-<td class="success">
-<a href="universum.studios.android.officium.account.html">universum.studios.android.officium.account</a>
-</td>
-<td>4</td>
 <td>0</td>
-<td>0.026s</td>
+<td>0.316s</td>
 <td class="success">100%</td>
 </tr>
 <tr>
 <td class="success">
-<a href="universum.studios.android.officium.event.html">universum.studios.android.officium.event</a>
+<a href="packages/universum.studios.android.officium.event.html">universum.studios.android.officium.event</a>
 </td>
-<td>11</td>
+<td>9</td>
 <td>0</td>
-<td>1.137s</td>
+<td>0</td>
+<td>10.002s</td>
 <td class="success">100%</td>
 </tr>
 <tr>
 <td class="success">
-<a href="universum.studios.android.officium.service.html">universum.studios.android.officium.service</a>
+<a href="packages/universum.studios.android.officium.service.html">universum.studios.android.officium.service</a>
 </td>
 <td>60</td>
 <td>0</td>
-<td>2.381s</td>
+<td>0</td>
+<td>2.021s</td>
 <td class="success">100%</td>
 </tr>
 <tr>
 <td class="success">
-<a href="universum.studios.android.officium.service.adapter.html">universum.studios.android.officium.service.adapter</a>
+<a href="packages/universum.studios.android.officium.service.adapter.html">universum.studios.android.officium.service.adapter</a>
 </td>
 <td>6</td>
 <td>0</td>
-<td>0.329s</td>
+<td>0</td>
+<td>0.272s</td>
 <td class="success">100%</td>
 </tr>
 <tr>
 <td class="success">
-<a href="universum.studios.android.officium.service.auth.html">universum.studios.android.officium.service.auth</a>
+<a href="packages/universum.studios.android.officium.service.auth.html">universum.studios.android.officium.service.auth</a>
 </td>
 <td>4</td>
 <td>0</td>
-<td>0.227s</td>
+<td>0</td>
+<td>0.119s</td>
 <td class="success">100%</td>
 </tr>
 <tr>
 <td class="success">
-<a href="universum.studios.android.officium.sync.html">universum.studios.android.officium.sync</a>
+<a href="packages/universum.studios.android.officium.sync.html">universum.studios.android.officium.sync</a>
 </td>
-<td>81</td>
+<td>80</td>
 <td>0</td>
-<td>1.115s</td>
+<td>0</td>
+<td>1.064s</td>
 <td class="success">100%</td>
 </tr>
 </tbody>
@@ -144,6 +149,7 @@
 <th>Class</th>
 <th>Tests</th>
 <th>Failures</th>
+<th>Ignored</th>
 <th>Duration</th>
 <th>Success rate</th>
 </tr>
@@ -151,250 +157,236 @@
 <tbody>
 <tr>
 <td class="success"/>
-<a href="universum.studios.android.officium.OfficiumLoggingTest.html">universum.studios.android.officium.OfficiumLoggingTest</a>
+<a href="classes/universum.studios.android.officium.OfficiumLoggingTest.html">universum.studios.android.officium.OfficiumLoggingTest</a>
 <td>10</td>
 <td>0</td>
-<td>1.237s</td>
+<td>0</td>
+<td>0.316s</td>
 <td class="success">100%</td>
 </tr>
 <tr>
 <td class="success"/>
-<a href="universum.studios.android.officium.account.BaseAccountAuthenticatorTest.html">universum.studios.android.officium.account.BaseAccountAuthenticatorTest</a>
+<a href="classes/universum.studios.android.officium.event.MainEventBusTest.html">universum.studios.android.officium.event.MainEventBusTest</a>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+<td>8.962s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="success"/>
+<a href="classes/universum.studios.android.officium.event.SimpleEventBusTest.html">universum.studios.android.officium.event.SimpleEventBusTest</a>
+<td>5</td>
+<td>0</td>
+<td>0</td>
+<td>1.040s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="success"/>
+<a href="classes/universum.studios.android.officium.service.BaseServiceObjectTest.html">universum.studios.android.officium.service.BaseServiceObjectTest</a>
+<td>7</td>
+<td>0</td>
+<td>0</td>
+<td>0.001s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="success"/>
+<a href="classes/universum.studios.android.officium.service.ErrorResponseTest.html">universum.studios.android.officium.service.ErrorResponseTest</a>
+<td>5</td>
+<td>0</td>
+<td>0</td>
+<td>0.004s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="success"/>
+<a href="classes/universum.studios.android.officium.service.ServiceApiProviderTest.html">universum.studios.android.officium.service.ServiceApiProviderTest</a>
+<td>3</td>
+<td>0</td>
+<td>0</td>
+<td>0.006s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="success"/>
+<a href="classes/universum.studios.android.officium.service.ServiceApiTest.html">universum.studios.android.officium.service.ServiceApiTest</a>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0.124s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="success"/>
+<a href="classes/universum.studios.android.officium.service.ServiceCallTest.html">universum.studios.android.officium.service.ServiceCallTest</a>
+<td>11</td>
+<td>0</td>
+<td>0</td>
+<td>0.159s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="success"/>
+<a href="classes/universum.studios.android.officium.service.ServiceCallbackTest.html">universum.studios.android.officium.service.ServiceCallbackTest</a>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+<td>0.460s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="success"/>
+<a href="classes/universum.studios.android.officium.service.ServiceErrorTest.html">universum.studios.android.officium.service.ServiceErrorTest</a>
+<td>13</td>
+<td>0</td>
+<td>0</td>
+<td>0.170s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="success"/>
+<a href="classes/universum.studios.android.officium.service.ServiceManagerServicesConfigurationTest.html">universum.studios.android.officium.service.ServiceManagerServicesConfigurationTest</a>
+<td>5</td>
+<td>0</td>
+<td>0</td>
+<td>0.884s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="success"/>
+<a href="classes/universum.studios.android.officium.service.ServiceManagerTest.html">universum.studios.android.officium.service.ServiceManagerTest</a>
+<td>7</td>
+<td>0</td>
+<td>0</td>
+<td>0.207s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="success"/>
+<a href="classes/universum.studios.android.officium.service.ServiceObjectTest.html">universum.studios.android.officium.service.ServiceObjectTest</a>
 <td>1</td>
+<td>0</td>
 <td>0</td>
 <td>0s</td>
 <td class="success">100%</td>
 </tr>
 <tr>
 <td class="success"/>
-<a href="universum.studios.android.officium.account.SingleUserAccountManagerTest.html">universum.studios.android.officium.account.SingleUserAccountManagerTest</a>
+<a href="classes/universum.studios.android.officium.service.ServiceResponseTest.html">universum.studios.android.officium.service.ServiceResponseTest</a>
 <td>1</td>
+<td>0</td>
 <td>0</td>
 <td>0s</td>
 <td class="success">100%</td>
 </tr>
 <tr>
 <td class="success"/>
-<a href="universum.studios.android.officium.account.UserAccountManagerTest.html">universum.studios.android.officium.account.UserAccountManagerTest</a>
+<a href="classes/universum.studios.android.officium.service.SimpleEndPointTest.html">universum.studios.android.officium.service.SimpleEndPointTest</a>
 <td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0.006s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="success"/>
+<a href="classes/universum.studios.android.officium.service.adapter.ServiceCallAdapterFactoryTest.html">universum.studios.android.officium.service.adapter.ServiceCallAdapterFactoryTest</a>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+<td>0.158s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="success"/>
+<a href="classes/universum.studios.android.officium.service.adapter.ServiceCallAdapterTest.html">universum.studios.android.officium.service.adapter.ServiceCallAdapterTest</a>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0.114s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="success"/>
+<a href="classes/universum.studios.android.officium.service.auth.AuthRequestInterceptorTest.html">universum.studios.android.officium.service.auth.AuthRequestInterceptorTest</a>
+<td>3</td>
+<td>0</td>
+<td>0</td>
+<td>0.118s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="success"/>
+<a href="classes/universum.studios.android.officium.service.auth.AuthTokenProviderTest.html">universum.studios.android.officium.service.auth.AuthTokenProviderTest</a>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0.001s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="success"/>
+<a href="classes/universum.studios.android.officium.sync.BaseSyncAdapterTest.html">universum.studios.android.officium.sync.BaseSyncAdapterTest</a>
+<td>24</td>
+<td>0</td>
+<td>0</td>
+<td>0.741s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="success"/>
+<a href="classes/universum.studios.android.officium.sync.BaseSyncManagerTest.html">universum.studios.android.officium.sync.BaseSyncManagerTest</a>
+<td>15</td>
+<td>0</td>
+<td>0</td>
+<td>0.113s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="success"/>
+<a href="classes/universum.studios.android.officium.sync.SyncEventTest.html">universum.studios.android.officium.sync.SyncEventTest</a>
+<td>6</td>
+<td>0</td>
+<td>0</td>
+<td>0.027s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="success"/>
+<a href="classes/universum.studios.android.officium.sync.SyncExtrasTest.html">universum.studios.android.officium.sync.SyncExtrasTest</a>
+<td>3</td>
+<td>0</td>
+<td>0</td>
+<td>0.001s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="success"/>
+<a href="classes/universum.studios.android.officium.sync.SyncHandlerTest.html">universum.studios.android.officium.sync.SyncHandlerTest</a>
+<td>5</td>
+<td>0</td>
+<td>0</td>
+<td>0.033s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="success"/>
+<a href="classes/universum.studios.android.officium.sync.SyncOperationTest.html">universum.studios.android.officium.sync.SyncOperationTest</a>
+<td>5</td>
+<td>0</td>
 <td>0</td>
 <td>0.026s</td>
 <td class="success">100%</td>
 </tr>
 <tr>
 <td class="success"/>
-<a href="universum.studios.android.officium.account.UserAccountTest.html">universum.studios.android.officium.account.UserAccountTest</a>
-<td>1</td>
-<td>0</td>
-<td>0s</td>
-<td class="success">100%</td>
-</tr>
-<tr>
-<td class="success"/>
-<a href="universum.studios.android.officium.event.MainEventBusTest.html">universum.studios.android.officium.event.MainEventBusTest</a>
-<td>4</td>
-<td>0</td>
-<td>1.112s</td>
-<td class="success">100%</td>
-</tr>
-<tr>
-<td class="success"/>
-<a href="universum.studios.android.officium.event.SimpleEventBusTest.html">universum.studios.android.officium.event.SimpleEventBusTest</a>
-<td>5</td>
-<td>0</td>
-<td>0s</td>
-<td class="success">100%</td>
-</tr>
-<tr>
-<td class="success"/>
-<a href="universum.studios.android.officium.event.UiEventBusTest.html">universum.studios.android.officium.event.UiEventBusTest</a>
-<td>2</td>
-<td>0</td>
-<td>0.025s</td>
-<td class="success">100%</td>
-</tr>
-<tr>
-<td class="success"/>
-<a href="universum.studios.android.officium.service.BaseServiceObjectTest.html">universum.studios.android.officium.service.BaseServiceObjectTest</a>
-<td>7</td>
-<td>0</td>
-<td>0s</td>
-<td class="success">100%</td>
-</tr>
-<tr>
-<td class="success"/>
-<a href="universum.studios.android.officium.service.ErrorResponseTest.html">universum.studios.android.officium.service.ErrorResponseTest</a>
-<td>5</td>
-<td>0</td>
-<td>0s</td>
-<td class="success">100%</td>
-</tr>
-<tr>
-<td class="success"/>
-<a href="universum.studios.android.officium.service.ServiceApiProviderTest.html">universum.studios.android.officium.service.ServiceApiProviderTest</a>
-<td>3</td>
-<td>0</td>
-<td>0.025s</td>
-<td class="success">100%</td>
-</tr>
-<tr>
-<td class="success"/>
-<a href="universum.studios.android.officium.service.ServiceApiTest.html">universum.studios.android.officium.service.ServiceApiTest</a>
-<td>2</td>
-<td>0</td>
-<td>0.405s</td>
-<td class="success">100%</td>
-</tr>
-<tr>
-<td class="success"/>
-<a href="universum.studios.android.officium.service.ServiceCallTest.html">universum.studios.android.officium.service.ServiceCallTest</a>
-<td>11</td>
-<td>0</td>
-<td>0.659s</td>
-<td class="success">100%</td>
-</tr>
-<tr>
-<td class="success"/>
-<a href="universum.studios.android.officium.service.ServiceCallbackTest.html">universum.studios.android.officium.service.ServiceCallbackTest</a>
-<td>4</td>
-<td>0</td>
-<td>1.216s</td>
-<td class="success">100%</td>
-</tr>
-<tr>
-<td class="success"/>
-<a href="universum.studios.android.officium.service.ServiceErrorTest.html">universum.studios.android.officium.service.ServiceErrorTest</a>
-<td>13</td>
-<td>0</td>
-<td>0.051s</td>
-<td class="success">100%</td>
-</tr>
-<tr>
-<td class="success"/>
-<a href="universum.studios.android.officium.service.ServiceManagerServicesConfigurationTest.html">universum.studios.android.officium.service.ServiceManagerServicesConfigurationTest</a>
-<td>5</td>
-<td>0</td>
-<td>0.025s</td>
-<td class="success">100%</td>
-</tr>
-<tr>
-<td class="success"/>
-<a href="universum.studios.android.officium.service.ServiceManagerTest.html">universum.studios.android.officium.service.ServiceManagerTest</a>
-<td>7</td>
-<td>0</td>
-<td>0s</td>
-<td class="success">100%</td>
-</tr>
-<tr>
-<td class="success"/>
-<a href="universum.studios.android.officium.service.ServiceObjectTest.html">universum.studios.android.officium.service.ServiceObjectTest</a>
-<td>1</td>
-<td>0</td>
-<td>0s</td>
-<td class="success">100%</td>
-</tr>
-<tr>
-<td class="success"/>
-<a href="universum.studios.android.officium.service.ServiceResponseTest.html">universum.studios.android.officium.service.ServiceResponseTest</a>
-<td>1</td>
-<td>0</td>
-<td>0s</td>
-<td class="success">100%</td>
-</tr>
-<tr>
-<td class="success"/>
-<a href="universum.studios.android.officium.service.SimpleEndPointTest.html">universum.studios.android.officium.service.SimpleEndPointTest</a>
-<td>1</td>
-<td>0</td>
-<td>0s</td>
-<td class="success">100%</td>
-</tr>
-<tr>
-<td class="success"/>
-<a href="universum.studios.android.officium.service.adapter.ServiceCallAdapterFactoryTest.html">universum.studios.android.officium.service.adapter.ServiceCallAdapterFactoryTest</a>
-<td>4</td>
-<td>0</td>
-<td>0.025s</td>
-<td class="success">100%</td>
-</tr>
-<tr>
-<td class="success"/>
-<a href="universum.studios.android.officium.service.adapter.ServiceCallAdapterTest.html">universum.studios.android.officium.service.adapter.ServiceCallAdapterTest</a>
-<td>2</td>
-<td>0</td>
-<td>0.304s</td>
-<td class="success">100%</td>
-</tr>
-<tr>
-<td class="success"/>
-<a href="universum.studios.android.officium.service.auth.AuthRequestInterceptorTest.html">universum.studios.android.officium.service.auth.AuthRequestInterceptorTest</a>
-<td>3</td>
-<td>0</td>
-<td>0.227s</td>
-<td class="success">100%</td>
-</tr>
-<tr>
-<td class="success"/>
-<a href="universum.studios.android.officium.service.auth.AuthTokenProviderTest.html">universum.studios.android.officium.service.auth.AuthTokenProviderTest</a>
-<td>1</td>
-<td>0</td>
-<td>0s</td>
-<td class="success">100%</td>
-</tr>
-<tr>
-<td class="success"/>
-<a href="universum.studios.android.officium.sync.BaseSyncAdapterTest.html">universum.studios.android.officium.sync.BaseSyncAdapterTest</a>
-<td>24</td>
-<td>0</td>
-<td>0.859s</td>
-<td class="success">100%</td>
-</tr>
-<tr>
-<td class="success"/>
-<a href="universum.studios.android.officium.sync.BaseSyncManagerTest.html">universum.studios.android.officium.sync.BaseSyncManagerTest</a>
-<td>16</td>
-<td>0</td>
-<td>0.078s</td>
-<td class="success">100%</td>
-</tr>
-<tr>
-<td class="success"/>
-<a href="universum.studios.android.officium.sync.SyncEventTest.html">universum.studios.android.officium.sync.SyncEventTest</a>
-<td>6</td>
-<td>0</td>
-<td>0.051s</td>
-<td class="success">100%</td>
-</tr>
-<tr>
-<td class="success"/>
-<a href="universum.studios.android.officium.sync.SyncExtrasTest.html">universum.studios.android.officium.sync.SyncExtrasTest</a>
-<td>3</td>
-<td>0</td>
-<td>0s</td>
-<td class="success">100%</td>
-</tr>
-<tr>
-<td class="success"/>
-<a href="universum.studios.android.officium.sync.SyncHandlerTest.html">universum.studios.android.officium.sync.SyncHandlerTest</a>
-<td>5</td>
-<td>0</td>
-<td>0s</td>
-<td class="success">100%</td>
-</tr>
-<tr>
-<td class="success"/>
-<a href="universum.studios.android.officium.sync.SyncOperationTest.html">universum.studios.android.officium.sync.SyncOperationTest</a>
-<td>5</td>
-<td>0</td>
-<td>0.025s</td>
-<td class="success">100%</td>
-</tr>
-<tr>
-<td class="success"/>
-<a href="universum.studios.android.officium.sync.SyncTaskTest.html">universum.studios.android.officium.sync.SyncTaskTest</a>
+<a href="classes/universum.studios.android.officium.sync.SyncTaskTest.html">universum.studios.android.officium.sync.SyncTaskTest</a>
 <td>22</td>
 <td>0</td>
-<td>0.102s</td>
+<td>0</td>
+<td>0.123s</td>
 <td class="success">100%</td>
 </tr>
 </tbody>
@@ -402,8 +394,14 @@
 </div>
 </div>
 <div id="footer">
-<p>Generated by 
-<a href="http://www.gradle.org">Gradle 3.5</a> at Jul 27, 2017 9:22:18 AM</p>
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="http://www.gradle.org">Gradle 4.3.1</a> at Dec 15, 2017 11:50:38 AM</p>
 </div>
 </div>
 </body>
+</html>
