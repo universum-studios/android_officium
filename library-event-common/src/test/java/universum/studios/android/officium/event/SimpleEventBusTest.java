@@ -16,12 +16,13 @@
  * See the License for the specific language governing permissions and limitations under the License.
  * =================================================================================================
  */
-package universum.studios.android.officium.event; 
+package universum.studios.android.officium.event;
+
 import com.squareup.otto.Bus;
 
 import org.junit.Test;
 
-import universum.studios.android.test.local.RobolectricTestCase;
+import universum.studios.android.test.local.LocalTestCase;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -34,22 +35,19 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 /**
  * @author Martin Albedinsky
  */
-public final class SimpleEventBusTest extends RobolectricTestCase {
-    
-	@SuppressWarnings("unused")
-	private static final String TAG = "SimpleEventBusTest";
+public final class SimpleEventBusTest extends LocalTestCase {
 
-    @Test
+	@Test
 	public void testInstantiationWithDefaultBus() {
 		final SimpleEventBus eventBus = new SimpleEventBus();
-	    assertThat(eventBus.getBus(), is(notNullValue()));
+		assertThat(eventBus.getBus(), is(notNullValue()));
 	}
 
-    @Test
+	@Test
 	public void testInstantiationWithBus() {
-	    final Bus bus = new Bus();
-	    final SimpleEventBus eventBus = new SimpleEventBus(bus);
-	    assertThat(eventBus.getBus(), is(bus));
+		final Bus bus = new Bus();
+		final SimpleEventBus eventBus = new SimpleEventBus(bus);
+		assertThat(eventBus.getBus(), is(bus));
 	}
 
 	@Test

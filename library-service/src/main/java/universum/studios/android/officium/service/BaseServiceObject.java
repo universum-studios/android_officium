@@ -20,7 +20,6 @@ package universum.studios.android.officium.service;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 
 /**
  * Base implementation of {@link ServiceObject} for objects associated to services.
@@ -80,7 +79,7 @@ public abstract class BaseServiceObject implements ServiceObject {
 	 */
 	static void associateWith(@NonNull final ServiceObject serviceObject, @Nullable final Integer serviceId, @Nullable final String requestId) {
 		if (serviceId != null && serviceObject.getServiceId() == NO_SERVICE) serviceObject.setServiceId(serviceId);
-		if (requestId != null && TextUtils.isEmpty(serviceObject.getRequestId())) serviceObject.setRequestId(requestId);
+		if (requestId != null && NO_REQUEST.equals(serviceObject.getRequestId())) serviceObject.setRequestId(requestId);
 	}
 
 	/**

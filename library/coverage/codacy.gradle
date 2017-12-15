@@ -31,6 +31,8 @@ dependencies {
  * Task that uploads code coverage up to the Codacy cloud.
  */
 task uploadCoverageToCodacy(type: JavaExec) {
+    group 'upload'
+    description 'Uploads coverage report up to the Codacy cloud.'
     final String token
     final File tokensFile = file(config.codacy.tokensPath == null ? "none" : config.codacy.tokensPath)
     if (tokensFile.exists()) {
@@ -46,7 +48,7 @@ task uploadCoverageToCodacy(type: JavaExec) {
             "-l",
             "Java",
             "-r",
-            "${buildDir}/reports/coverage/debug/report.xml",
+            "${buildDir}/reports/jacoco/debug/jacoco.xml",
             "--projectToken",
             token == null ? "NO_TOKEN" : token
     ]

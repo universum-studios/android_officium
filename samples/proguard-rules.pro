@@ -16,6 +16,7 @@
 # See the License for the specific language governing permissions and limitations under the License.
 # ==================================================================================================
 ##
+
 # Rules only for PROGUARD set up. These should be removed for the release version.
 #-renamesourcefileattribute SourceFile
 # Keep source file attributes and line numbers. Can be useful when examining thrown exceptions.

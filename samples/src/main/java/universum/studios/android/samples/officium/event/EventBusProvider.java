@@ -26,8 +26,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 import universum.studios.android.officium.event.EventBus;
+import universum.studios.android.officium.event.MainEventBus;
 import universum.studios.android.officium.event.SimpleEventBus;
-import universum.studios.android.officium.event.UiEventBus;
 
 /**
  * @author Martin Albedinsky
@@ -54,7 +54,7 @@ public final class EventBusProvider {
 			if (bus == null) {
 				switch (busContext) {
 					case UI:
-						bus = new UiEventBus();
+						bus = new MainEventBus();
 						break;
 					default:
 						bus = new SimpleEventBus();

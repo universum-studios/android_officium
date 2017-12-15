@@ -22,7 +22,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 /**
- * Utility class for tests.
+ * Utility class for instrumented tests.
  *
  * @author Martin Albedinsky
  */
@@ -31,7 +31,7 @@ public final class TestUtils {
 	/**
 	 * Name of the library's root package.
 	 */
-	private static final String LIBRARY_ROOT_PACKAGE_NAME = "universum.studios.android.officium.test";
+	private static final String LIBRARY_ROOT_PACKAGE_NAME = "universum.studios.android.crypto.test";
 
 	/**
 	 */

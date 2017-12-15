@@ -58,6 +58,6 @@ public final class SyncManager extends BaseSyncManager {
 	@Override
 	@SuppressWarnings("MissingPermission")
 	protected Account pickAccountForSync() {
-		return MobileAccountManager.getInstance(mContext).getAccount();
+		return MobileAccountManager.getInstance(getContext()).getAccount();
 	}
 }

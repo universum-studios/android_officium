@@ -7,14 +7,12 @@ apply from: './dependencies.gradle'
  * Global build script configuration ===============================================================
  */
 buildscript {
-    apply from: './repositories.gradle'
-
     repositories {
+        google()
         jcenter()
-        maven { url repos.google }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.3'
+        classpath 'com.android.tools.build:gradle:3.0.0'
         classpath 'com.vanniktech:gradle-android-junit-jacoco-plugin:0.10.0'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
         classpath 'universum.studios.gradle:github-plugin:1.1.2'
@@ -26,8 +24,8 @@ buildscript {
  */
 allprojects {
     repositories {
+        google()
         jcenter()
-        maven { url repos.google }
     }
 }
 
@@ -47,10 +45,9 @@ task clean(type: Delete) {
 task updateArtifacts() {
     subprojects.findAll { if (it.name.startsWith("library")) dependsOn ":${it.name}:updateArtifacts" }
     doLast {
-        final String artifactsDir = "${rootProject.rootDir}\\artifacts"
-        if (file(artifactsDir).exists()) {
+        if (file(repos.project.artifacts).exists()) {
             exec {
-                commandLine 'git', 'add', artifactsDir, '-A'
+                commandLine 'git', 'add', repos.project.artifacts, '-A'
             }
         }
     }
@@ -60,6 +57,8 @@ task updateArtifacts() {
  * Task that deploys (uploads) all library modules into Maven local repository.
  */
 task deployToMavenLocal() {
+    group 'deploy'
+    description 'Deploys artifacts for all library modules to the local Maven repository.'
     subprojects.findAll { if (it.name.startsWith("library")) dependsOn ":${it.name}:uploadArchives" }
 }
 
@@ -67,10 +66,15 @@ task deployToMavenLocal() {
  * Task that deploys (uploads) all library modules up to the Bintray repository.
  */
 task deployToBintray() {
+    group 'deploy'
+    description 'Deploys artifacts for all library modules up to the Bintray repository.'
     subprojects.findAll { if (it.name.startsWith("library")) dependsOn ":${it.name}:bintrayUpload" }
 }
 
 /**
  * Task that deploys (uploads) the primary library module up to the GitHub repository.
  */
-task deployToGitHub(dependsOn: ':library:githubUploadProductionRelease')
+task deployToGitHub(dependsOn: ':library:githubUploadProductionRelease') {
+    group 'deploy'
+    description 'Deploys primary artifact of the library up to the GitHub repository.'
+}

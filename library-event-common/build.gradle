@@ -28,17 +28,7 @@ android {
     defaultConfig {
         minSdkVersion config.build.minSdkVersion
         targetSdkVersion config.build.targetSdkVersion
-        testInstrumentationRunner config.test.instrumentationRunner
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-        }
-        debug {
-            minifyEnabled false
-            testCoverageEnabled true
-        }
+        testInstrumentationRunner config.test.instrumentationRunner.androidJUnit
     }
 
     compileOptions {
@@ -60,22 +50,16 @@ repositories {
 }
 
 dependencies {
-    /*
-     * RELEASE DEPENDENCIES ------------------------------------------------------------------------
-     */
-    compile deps.androidSupport.annotations
-    compile deps.other.squareupOtto
-    releaseCompile "universum.studios.android:officium-event-core:${config.library.version}@aar"
+    // PRODUCTION ----------------------------------------------------------------------------------
+    implementation deps.androidSupport.annotations
+    implementation deps.other.squareupOtto
+    releaseImplementation "universum.studios.android:officium-event-core:${config.library.version}@aar"
 
-    /*
-     * DEBUG DEPENDENCIES --------------------------------------------------------------------------
-     */
-    debugCompile project(':library-event-core')
+    // DEVELOPMENT ---------------------------------------------------------------------------------
+    debugApi project(':library-event-core')
 
-    /*
-     * TEST DEPENDENCIES ---------------------------------------------------------------------------
-     */
-    androidTestCompile project(':test-instrumented')
+    // TEST ----------------------------------------------------------------------------------------
+    testImplementation project(':test-local')
 }
 
 apply from: "${rootProject.rootDir}/deploy/deploy.gradle"

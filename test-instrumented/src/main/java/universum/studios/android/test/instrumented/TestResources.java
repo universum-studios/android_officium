@@ -27,74 +27,80 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Utility class for tests that provides methods for accessing test resources.
+ * Utility class for instrumented tests which provides methods that may be used to access test resources.
  *
  * @author Martin Albedinsky
  */
+@SuppressWarnings("unused")
 public final class TestResources {
 
 	/**
-	 * Resource type indicating <b>animation</b> resource which may be accessed as {@code R.anim.RESOURCE_NAME}.
+	 * Constant that identifies no resource identifier.
+	 */
+	public static final int NO_RESOURCE = 0;
+
+	/**
+	 * Type identifying <b>animation</b> resource which may be accessed as {@code R.anim.RESOURCE_NAME}.
 	 */
 	public static final String ANIMATION = "anim";
 
 	/**
-	 * Resource type indicating <b>animator</b> resource which may be accessed as {@code R.animator.RESOURCE_NAME}.
+	 * Type identifying <b>animator</b> resource which may be accessed as {@code R.animator.RESOURCE_NAME}.
 	 */
 	public static final String ANIMATOR = "animator";
 
 	/**
-	 * Resource type indicating <b>attribute</b> resource which may be accessed as {@code R.attr.RESOURCE_NAME}.
+	 * Type identifying <b>attribute</b> resource which may be accessed as {@code R.attr.RESOURCE_NAME}.
 	 */
 	public static final String ATTRIBUTE = "attr";
 
 	/**
-	 * Resource type indicating <b>boolean</b> resource which may be accessed as {@code R.bool.RESOURCE_NAME}.
+	 * Type identifying <b>boolean</b> resource which may be accessed as {@code R.bool.RESOURCE_NAME}.
 	 */
 	public static final String BOOL = "bool";
 
 	/**
-	 * Resource type indicating <b>color</b> resource which may be accessed via {@code R.color.RESOURCE_NAME}.
+	 * Type identifying <b>color</b> resource which may be accessed as {@code R.color.RESOURCE_NAME}.
 	 */
 	public static final String COLOR = "color";
 
 	/**
-	 * Resource type indicating <b>dimension</b> resource which may be accessed via {@code R.dimen.RESOURCE_NAME}.
+	 * Type identifying <b>dimension</b> resource which may be accessed as {@code R.dimen.RESOURCE_NAME}.
 	 */
 	public static final String DIMENSION = "dimen";
 
 	/**
-	 * Resource type indicating <b>drawable</b> resource which may be accessed via {@code R.drawable.RESOURCE_NAME}.
+	 * Type identifying <b>drawable</b> resource which may be accessed as {@code R.drawable.RESOURCE_NAME}.
 	 */
 	public static final String DRAWABLE = "drawable";
 
 	/**
-	 * Resource type indicating <b>integer</b> resource which may be accessed via {@code R.integer.RESOURCE_NAME}.
+	 * Type identifying <b>integer</b> resource which may be accessed as {@code R.integer.RESOURCE_NAME}.
 	 */
 	public static final String INTEGER = "integer";
 
 	/**
-	 * Resource type indicating <b>layout</b> resource which may be accessed via {@code R.layout.RESOURCE_NAME}.
+	 * Type identifying <b>layout</b> resource which may be accessed as {@code R.layout.RESOURCE_NAME}.
 	 */
 	public static final String LAYOUT = "layout";
 
 	/**
-	 * Resource type indicating <b>menu</b> resource which may be accessed via {@code R.menu.RESOURCE_NAME}.
+	 * Type identifying <b>menu</b> resource which may be accessed as {@code R.menu.RESOURCE_NAME}.
 	 */
 	public static final String MENU = "menu";
 
 	/**
-	 * Resource type indicating <b>string</b> resource which may be accessed as {@code R.string.RESOURCE_NAME}.
+	 * Type identifying <b>string</b> resource which may be accessed as {@code R.string.RESOURCE_NAME}.
 	 */
 	public static final String STRING = "string";
 
 	/**
-	 * Resource type indicating <b>style</b> resource which may be accessed via {@code R.style.RESOURCE_NAME}.
+	 * Type identifying <b>style</b> resource which may be accessed as {@code R.style.RESOURCE_NAME}.
 	 */
 	public static final String STYLE = "style";
 
 	/**
-	 * Resource type indicating <b>transition</b> resource which may be accessed via {@code R.transition.RESOURCE_NAME}.
+	 * Type identifying <b>transition</b> resource which may be accessed as {@code R.transition.RESOURCE_NAME}.
 	 */
 	public static final String TRANSITION = "transition";
 
@@ -117,7 +123,7 @@ public final class TestResources {
 			TRANSITION
 	})
 	@Retention(RetentionPolicy.SOURCE)
-	public @interface ResourceType {
+	@interface ResourceType {
 	}
 
 	/**
@@ -130,12 +136,11 @@ public final class TestResources {
 	 * Resolves identifier for the resource with the specified <var>resourceName</var> and of the
 	 * specified <var>resourceType</var>.
 	 *
-	 * @param context      Context used to access resources that are used to resolver the requested
-	 *                     identifier.
-	 * @param resourceType Type of the resource to resolve its identifier for.
-	 * @param resourceName Name of the resource to resolve its identifier for.
+	 * @param context      Context used to access resources that are used to resolve the requested identifier.
+	 * @param resourceType Type of the resource for which to resolve its identifier.
+	 * @param resourceName Name of the resource for which to resolve its identifier.
 	 * @return Resolved identifier which may be used to obtain value of the desired resource from
-	 * resources or {@code 0} if no such resource was found.
+	 * resources or {@link #NO_RESOURCE} if no such resource was found.
 	 * @see Resources#getIdentifier(String, String, String)
 	 */
 	public static int resourceIdentifier(@NonNull Context context, @ResourceType String resourceType, @NonNull String resourceName) {

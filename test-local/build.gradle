@@ -28,7 +28,6 @@ android {
     defaultConfig {
         minSdkVersion config.build.minSdkVersion
         targetSdkVersion config.build.targetSdkVersion
-        testInstrumentationRunner config.test.instrumentationRunner
     }
 
     compileOptions {
@@ -45,10 +44,9 @@ android {
  * Library dependencies ============================================================================
  */
 dependencies {
-    // Local JUnit test dependencies.
-    compile deps.test.junit
-    compile deps.test.mockitoCore
-    compile deps.test.robolectric
-    compile deps.test.robolectricShadowsSupportV4
-    compile deps.test.androidSupportAnnotations
+    api deps.test.junit
+    api deps.test.mockitoCore
+    api deps.test.robolectric
+    api deps.test.robolectricShadowsSupportV4
+    api deps.test.androidSupportAnnotations
 }

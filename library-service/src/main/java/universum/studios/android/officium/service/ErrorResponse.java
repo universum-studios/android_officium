@@ -128,7 +128,8 @@ public class ErrorResponse extends ServiceResponse {
 	 */
 
 	/**
-	 * Simple error object that can hold two attributes: {@link Error#code} and {@link Error#message}.
+	 * Simple error object that can hold two attributes:
+	 * {@link ErrorResponse.Error#code} and {@link ErrorResponse.Error#message}.
 	 *
 	 * @author Martin Albedinsky
 	 */

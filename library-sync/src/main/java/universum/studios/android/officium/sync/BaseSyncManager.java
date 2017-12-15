@@ -264,6 +264,26 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	}
 
 	/**
+	 * <b>This method has been deprecated and will be removed in the next release.</b>
+	 * <p>
+	 * Checks whether there are any pending synchronizations for the content authority specified for
+	 * this manager and account picked for synchronization by this manager implementation.
+	 * <p>
+	 * This method requires the caller to hold <b>{@link #PERMISSION_READ_SYNC_STATS}</b> permission.
+	 *
+	 * @return {@code True} if there are some synchronizations pending, {@code false} otherwise.
+	 * @see ContentResolver#isSyncPending(Account, String)
+	 * @see #isSyncActive()
+	 * @see #cancelSync()
+	 * @deprecated Use {@link #isSyncPending()} instead.
+	 */
+	@Deprecated
+	@RequiresPermission(PERMISSION_READ_SYNC_STATS)
+	public boolean isSyncPedning() {
+		return isSyncPending();
+	}
+
+	/**
 	 * Checks whether there are any pending synchronizations for the content authority specified for
 	 * this manager and account picked for synchronization by this manager implementation.
 	 * <p>
@@ -275,7 +295,7 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	 * @see #cancelSync()
 	 */
 	@RequiresPermission(PERMISSION_READ_SYNC_STATS)
-	public boolean isSyncPedning() {
+	public boolean isSyncPending() {
 		final Account account = pickAccountForSync();
 		return account != null && ContentResolver.isSyncPending(account, mAuthority);
 	}

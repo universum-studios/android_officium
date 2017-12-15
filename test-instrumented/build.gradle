@@ -28,7 +28,6 @@ android {
     defaultConfig {
         minSdkVersion config.build.minSdkVersion
         targetSdkVersion config.build.targetSdkVersion
-        testInstrumentationRunner config.test.instrumentationRunner
     }
 
     compileOptions {
@@ -45,21 +44,20 @@ android {
  * Library dependencies ============================================================================
  */
 dependencies {
-    // Android Instrumentation test dependencies.
-    compile deps.test.junit
-    compile deps.test.mockitoCore
-    compile deps.test.mockitoAndroid
-    compile deps.test.androidRunner
-    compile deps.test.androidRules
-    compile deps.test.androidEspressoCore
-    compile deps.test.androidEspressoIntents
-    compile(deps.test.androidEspressoContrib) {
+    api deps.test.junit
+    api deps.test.mockitoCore
+    api deps.test.mockitoAndroid
+    api deps.test.androidRunner
+    api deps.test.androidRules
+    api deps.test.androidEspressoCore
+    api deps.test.androidEspressoIntents
+    api(deps.test.androidEspressoContrib) {
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'com.android.support', module: 'support-v4'
         exclude group: 'com.android.support', module: 'appcompat-v7'
         exclude group: 'com.android.support', module: 'design'
         exclude group: 'com.android.support', module: 'recyclerview-v7'
     }
-    compile deps.test.androidSupportAnnotations
-    compile deps.test.androidSupportV4
+    api deps.test.androidSupportAnnotations
+    api deps.test.androidSupportV4
 }
