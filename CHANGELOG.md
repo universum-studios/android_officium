@@ -3,6 +3,11 @@ Change-Log
 
 More **detailed changelog** for each respective version may be viewed by pressing on a desired _version's name_.
 
+## Version 2.x ##
+
+### 2.0.0 ###
+> upcoming
+
 ## Version 1.x ##
 
 ### [1.2.1](https://github.com/universum-studios/android_officium/releases/tag/v1.2.1) ###

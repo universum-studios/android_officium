@@ -390,7 +390,8 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	 * @param state The desired state of which name to return.
 	 * @return The state's name.
 	 */
-	@VisibleForTesting static String getStateName(final int state) {
+	@VisibleForTesting
+	static String getStateName(final int state) {
 		switch (state) {
 			case IDLE: return "IDLE";
 			case PENDING: return "PENDING";

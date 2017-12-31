@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>universum.studios.android</groupId>
+  <artifactId>officium-event-core</artifactId>
+  <version>2.0.0</version>
+  <name>Android Officium</name>
+  <description>Account, synchronization, services and events management for the Android platform.</description>
+  <url>https://github.com/universum-studios/android_officium</url>
+  <inceptionYear>2016</inceptionYear>
+  <organization>
+    <name>Universum Studios</name>
+    <url>https://universum-studios.github.io</url>
+  </organization>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <id>albedinsky</id>
+      <name>Martin Albedinsky</name>
+      <email>martin.albedinsky@gmail.com</email>
+      <roles>
+        <role>Software Engineer</role>
+      </roles>
+    </developer>
+  </developers>
+  <issueManagement>
+    <system>GitHub Issues</system>
+    <url>https://github.com/universum-studios/android_officium/issues</url>
+  </issueManagement>
+  <dependencies>
+    <dependency>
+      <groupId>com.android.support</groupId>
+      <artifactId>support-annotations</artifactId>
+      <version>27.0.0</version>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
+</project>
