@@ -84,13 +84,13 @@ public class UserAccount {
 	 * Name specified for this user account.
 	 */
 	@NonNull
-	protected final String mName;
+	private final String mName;
 
 	/**
 	 * Password specified for this user account.
 	 */
 	@Nullable
-	protected String mPassword;
+	private String mPassword;
 
 	/**
 	 * Map with authentication tokens for this user account mapped to theirs types.
