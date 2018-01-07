@@ -19,32 +19,32 @@
 apply plugin: 'maven-publish'
 
 def pomConfig = {
-    name config.maven.projectName
-    description config.maven.projectDescription
-    url config.maven.projectUrl
-    inceptionYear config.maven.projectInceptionYear
+    name config.pom.project.name
+    description config.pom.project.description
+    url config.pom.project.url
+    inceptionYear config.pom.project.inceptionYear
     issueManagement {
-        system 'GitHub Issues'
-        url config.maven.projectIssueManagementUrl
+        system config.pom.project.issueManagement.system
+        url config.pom.project.issueManagement.url
     }
     licenses {
         license {
-            name 'The Apache Software License, Version 2.0'
-            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-            distribution 'repo'
+            name config.pom.project.licenses.Apache20.name
+            url config.pom.project.licenses.Apache20.url
+            distribution config.pom.project.licenses.Apache20.distribution
         }
     }
     organization {
-        name 'Universum Studios'
-        url 'https://universum-studios.github.io'
+        name config.pom.project.organization.name
+        url config.pom.project.organization.url
     }
     developers {
         developer {
-            id 'albedinsky'
-            name 'Martin Albedinsky'
-            email 'martin.albedinsky@gmail.com'
+            id config.pom.project.developers.albedinsky.id
+            name config.pom.project.developers.albedinsky.name
+            email config.pom.project.developers.albedinsky.email
             roles {
-                role 'Software Engineer'
+                role config.pom.project.developers.albedinsky.role
             }
         }
     }
@@ -53,9 +53,9 @@ def pomConfig = {
 publishing {
     publications {
         library(MavenPublication) {
-            groupId config.maven.groupId
+            groupId config.pom.groupId
             artifactId project.property('maven.pom.artifactId')
-            version config.maven.version
+            version config.pom.version
             artifact bundleRelease
             artifact classesJar
             artifact javadocJar

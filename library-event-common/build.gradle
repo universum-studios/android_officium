@@ -53,7 +53,7 @@ dependencies {
     // PRODUCTION ----------------------------------------------------------------------------------
     implementation deps.androidSupport.annotations
     implementation deps.other.squareupOtto
-    releaseImplementation "universum.studios.android:officium-event-core:${config.library.version}@aar"
+    releaseImplementation deps.modules.libraryEventCore
 
     // DEVELOPMENT ---------------------------------------------------------------------------------
     debugApi project(':library-event-core')

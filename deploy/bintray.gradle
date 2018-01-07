@@ -25,20 +25,20 @@ bintray {
     override = true
     publish = config.bintray.publish
     pkg {
-        repo = 'android'
-        name = config.bintray.packageName
-        userOrg = 'universum-studios'
+        userOrg = config.bintray.package.organization
+        repo = config.bintray.package.repository
+        name = config.bintray.package.name
         licenses = ['Apache-2.0']
-        vcsUrl = "${config.maven.projectUrl}.git"
-        labels = config.bintray.packageLabels
+        vcsUrl = config.bintray.package.vcsUrl
+        labels = config.bintray.package.labels
         publicDownloadNumbers = true
         githubRepo = "${config.github.owner}/${config.github.repository}"
         githubReleaseNotesFile = 'CHANGELOG.md'
         version {
-            name = config.bintray.packageVersionName
-            desc = config.bintray.packageVersionDescription
+            name = config.bintray.package.versionName
+            desc = config.bintray.package.versionDescription
             released = new Date()
-            vcsTag = config.bintray.packageVersionTag
+            vcsTag = config.bintray.package.versionTag
         }
     }
 }
