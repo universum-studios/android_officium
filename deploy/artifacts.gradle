@@ -35,7 +35,7 @@ task generateJavadoc(type: Javadoc) {
     source isModule ? android.sourceSets.main.java.srcDirs : android.sourceSets.release.java.srcDirs
     options {
         title = createJavadocTitle()
-        header = "Version ${config.maven.version} Documentation"
+        header = config.javadoc.header
         author = true
         memberLevel = JavadocMemberLevel.PROTECTED
         if (!isPrimaryModule) {
@@ -68,8 +68,8 @@ task generateJavadoc(type: Javadoc) {
 def createJavadocTitle() {
     def moduleName = project.name
     if (moduleName.startsWith("library")) {
-        if (moduleName == 'library') return "${config.maven.projectName} API"
-        else return "${config.maven.projectName} (${moduleName.replace("library-", "").replace("_group", "")}) API"
+        if (moduleName == 'library') return config.javadoc.title
+        else return "${config.pom.project.name} (${moduleName.replace("library-", "").replace("_group", "")}) API"
     }
     return "Documentation"
 }

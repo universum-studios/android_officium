@@ -1,6 +1,6 @@
 /*
  * =================================================================================================
- *                             Copyright (C) 2016 Universum Studios
+ *                             Copyright (C) 2017 Universum Studios
  * =================================================================================================
  *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
  * -------------------------------------------------------------------------------------------------
@@ -33,40 +33,40 @@ afterEvaluate { project ->
             /**
              * Project artifact --------------------------------------------------------------------
              */
-            pom.groupId = config.maven.groupId
+            pom.groupId = config.pom.groupId
             pom.artifactId = project.property('maven.pom.artifactId')
-            pom.version = config.maven.version
-            pom.packaging = config.maven.packaging
+            pom.version = config.pom.version
+            pom.packaging = config.pom.packaging
             /**
              * Project description -----------------------------------------------------------------
              */
             pom.project {
-                name config.maven.projectName
-                description config.maven.projectDescription
-                url config.maven.projectUrl
-                inceptionYear config.maven.projectInceptionYear
+                name config.pom.project.name
+                description config.pom.project.description
+                url config.pom.project.url
+                inceptionYear config.pom.project.inceptionYear
                 issueManagement {
-                    system 'GitHub Issues'
-                    url config.maven.projectIssueManagementUrl
+                    system config.pom.project.issueManagement.system
+                    url config.pom.project.issueManagement.url
                 }
                 licenses {
                     license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                        distribution 'repo'
+                        name config.pom.project.licenses.Apache20.name
+                        url config.pom.project.licenses.Apache20.url
+                        distribution config.pom.project.licenses.Apache20.distribution
                     }
                 }
                 organization {
-                    name 'Universum Studios'
-                    url 'https://universum-studios.github.io'
+                    name config.pom.project.organization.name
+                    url config.pom.project.organization.url
                 }
                 developers {
                     developer {
-                        id 'albedinsky'
-                        name 'Martin Albedinsky'
-                        email 'martin.albedinsky@gmail.com'
+                        id config.pom.project.developers.albedinsky.id
+                        name config.pom.project.developers.albedinsky.name
+                        email config.pom.project.developers.albedinsky.email
                         roles {
-                            role 'Software Engineer'
+                            role config.pom.project.developers.albedinsky.role
                         }
                     }
                 }
@@ -82,8 +82,8 @@ task updateArtifacts() {
     doLast {
         if (config.maven.localUrl != null) {
             final String artifactId = String.valueOf(project.property('maven.pom.artifactId'))
-            final String artifactsSourceDir = "${config.maven.localUrl}/universum/studios/android/${artifactId}/${config.maven.version}"
-            final String artifactsDestinationDir = "${rootProject.rootDir}/artifacts/universum/studios/android/${artifactId}/${config.maven.version}"
+            final String artifactsSourceDir = "${config.maven.localUrl}/universum/studios/android/${artifactId}/${config.pom.version}"
+            final String artifactsDestinationDir = "${rootProject.rootDir}/artifacts/universum/studios/android/${artifactId}/${config.pom.version}"
             delete artifactsDestinationDir
             copy {
                 from artifactsSourceDir

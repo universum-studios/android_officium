@@ -9,7 +9,18 @@ def versions = [
         robolectric               : '3.5.1'
 ]
 
-ext.versions = versions
+def modulesPrimaryId = "${config.pom.groupId}:${config.pom.artifactId}"
+def modulesVersion = "${config.library.version.production}"
+def modules = [
+        library           : "${modulesPrimaryId}:${modulesVersion}@aar",
+        libraryCore       : "${modulesPrimaryId}-core:${modulesVersion}@aar",
+        libraryAccount    : "${modulesPrimaryId}-account:${modulesVersion}@aar",
+        libraryEvent      : "${modulesPrimaryId}-event:${modulesVersion}@aar",
+        libraryEventCommon: "${modulesPrimaryId}-event-common:${modulesVersion}@aar",
+        libraryEventCore  : "${modulesPrimaryId}-event-core:${modulesVersion}@aar",
+        libraryService    : "${modulesPrimaryId}-service:${modulesVersion}@aar",
+        librarySync       : "${modulesPrimaryId}-sync:${modulesVersion}@aar"
+]
 
 def androidSupport = [
         annotations   : "com.android.support:support-annotations:${versions.androidSupport}",
@@ -53,7 +64,9 @@ def other = [
         butterknifeProcessor: "com.jakewharton:butterknife-compiler:${versions.butterknife}"
 ]
 
+ext.versions = versions
 ext.deps = [
+        "modules"         : modules,
         "androidSupport"  : androidSupport,
         "test"            : test,
         "universumStudios": universumStudios,

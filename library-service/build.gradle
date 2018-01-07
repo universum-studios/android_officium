@@ -58,7 +58,7 @@ dependencies {
     implementation(deps.other.squareupRetrofit) {
         exclude module: 'okhttp'
     }
-    releaseImplementation "universum.studios.android:officium-core:${config.library.version}@aar"
+    releaseImplementation deps.modules.libraryCore
 
     // DEVELOPMENT ---------------------------------------------------------------------------------
     debugApi project(':library-core')

@@ -26,8 +26,8 @@ github {
     }
 
     defaultConfig {
-        artifactId config.maven.artifactId
-        artifactVersion config.maven.version
+        artifactId config.pom.artifactId
+        artifactVersion config.pom.version
     }
 
     releases {
@@ -43,15 +43,15 @@ github {
 
         types {
             production {
-                tagName "v${config.maven.version}"
-                releaseName config.maven.version
+                tagName "v${config.pom.version}"
+                releaseName config.pom.version
                 releaseBody file("${projectDir}/github/release-body-production.md").text
                 draft true
                 overwrite true
             }
             beta {
-                tagName "${config.maven.version}-beta1"
-                releaseName "${config.maven.version}-beta1"
+                tagName "${config.pom.version}-beta1"
+                releaseName "${config.pom.version}-beta1"
                 releaseBody file("${projectDir}/github/release-body-beta.md").text
                 draft true
                 preRelease true

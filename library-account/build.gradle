@@ -55,7 +55,7 @@ dependencies {
     implementation deps.androidSupport.annotations
     implementation deps.universumStudios.utils
     implementation deps.universumStudios.crypto
-    releaseImplementation "universum.studios.android:officium-core:${config.library.version}@aar"
+    releaseImplementation deps.modules.libraryCore
 
     // DEVELOPMENT ---------------------------------------------------------------------------------
     debugApi project(':library-core')

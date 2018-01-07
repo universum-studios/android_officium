@@ -1,7 +1,10 @@
 // Defines configuration used across the library project.
 def libraryConfig = [
         name   : 'officium',
-        version: '2.0.0'
+        version: [
+                production : '2.0.0',
+                development: '2.0.0'
+        ]
 ]
 
 def buildConfig = [
@@ -15,49 +18,84 @@ def testConfig = [
         instrumentationRunner: [androidJUnit: 'android.support.test.runner.AndroidJUnitRunner']
 ]
 
-def javadocConfig = [
-        reference: [online: "https://universum-studios.github.io/android_${libraryConfig.name}/reference/0.x"]
-]
-
 def githubConfig = [
         owner      : 'universum-studios',
         repository : "android_${libraryConfig.name}",
         accessToken: System.getenv('GITHUB_API_TOKEN')
 ]
 
+def pomConfig = [
+        groupId   : 'universum.studios.android',
+        artifactId: libraryConfig.name,
+        version   : libraryConfig.version.development,
+        packaging : 'pom',
+        project   : [
+                name           : 'Android Officium',
+                description    : 'Account, synchronization, services and events management for the Android platform.',
+                url            : "https://github.com/${githubConfig.owner}/${githubConfig.repository}",
+                inceptionYear  : '2016',
+                issueManagement: [
+                        system: 'Issue Tracker',
+                        url   : "https://github.com/${githubConfig.owner}/${githubConfig.repository}/issues"
+                ],
+                licenses       : [
+                        Apache20: [
+                                name        : 'The Apache Software License, Version 2.0',
+                                url         : 'http://www.apache.org/licenses/LICENSE-2.0.txt',
+                                distribution: 'repo'
+                        ]
+                ],
+                organization   : [
+                        name: 'Universum Studios',
+                        url : 'https://universum-studios.github.io'
+                ],
+                developers     : [
+                        albedinsky: [
+                                id   : 'albedinsky',
+                                name : 'Martin Albedinsky',
+                                email: 'martin.albedinsky@gmail.com',
+                                role : 'Software Engineer'
+                        ]
+                ]
+        ]
+]
+
+def javadocConfig = [
+        title    : "${pomConfig.project.name} API",
+        header   : "Version ${pomConfig.version} Documentation",
+        reference: [online: "https://universum-studios.github.io/android_${libraryConfig.name}/reference/1.x"]
+]
+
 def mavenConfig = [
-        localUrl                 : System.getenv('MAVEN_URL_LOCAL'),
-        groupId                  : 'universum.studios.android',
-        artifactId               : libraryConfig.name,
-        version                  : libraryConfig.version,
-        packaging                : 'pom',
-        projectName              : 'Android Officium',
-        projectDescription       : 'Account, synchronization, services and events management for the Android platform.',
-        projectUrl               : "https://github.com/${githubConfig.owner}/${githubConfig.repository}",
-        projectInceptionYear     : '2016',
-        projectIssueManagementUrl: "https://github.com/${githubConfig.owner}/${githubConfig.repository}/issues"
+        localUrl: System.getenv('MAVEN_URL_LOCAL')
 ]
 
 def bintrayConfig = [
-        publish                  : false,
-        packageName              : "${mavenConfig.groupId}:${mavenConfig.artifactId}",
-        packageLabels            : ['android', 'account', 'synchronization', 'service', 'event'],
-        packageVersionName       : mavenConfig.version,
-        packageVersionDescription: 'Release patch.',
-        packageVersionTag        : "v${mavenConfig.version}"
+        publish: false,
+        package: [
+                organization      : 'universum-studios',
+                repository        : 'android',
+                name              : "${pomConfig.groupId}:${pomConfig.artifactId}",
+                vcsUrl            : "${pomConfig.project.url}.git",
+                labels            : ['android', 'account', 'synchronization', 'service', 'event'],
+                versionName       : pomConfig.version,
+                versionDescription: 'Release patch.',
+                versionTag        : "v${pomConfig.version}"
+        ]
 ]
 
 def codacyConfig = [
         tokensPath : System.getenv('CODACY_PROJECT_TOKENS'),
-        projectName: "${githubConfig.repository}"
+        projectName: githubConfig.repository
 ]
 
 ext.config = [
         "library": libraryConfig,
         "build"  : buildConfig,
         "test"   : testConfig,
-        "javadoc": javadocConfig,
         "github" : githubConfig,
+        "pom"    : pomConfig,
+        "javadoc": javadocConfig,
         "maven"  : mavenConfig,
         "bintray": bintrayConfig,
         "codacy" : codacyConfig
