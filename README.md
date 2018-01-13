@@ -1,4 +1,4 @@
-Officium
+Android Officium
 ===============
 
 [![CircleCI](https://circleci.com/gh/universum-studios/android_officium.svg?style=svg)](https://circleci.com/gh/universum-studios/android_officium)
