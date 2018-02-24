@@ -7,7 +7,7 @@
 /.idea/misc.xml
 /.idea/modules.xml
 
-### ANDROID
+### GRADLE
 /local.properties
 /build
 /captures
