@@ -33,12 +33,12 @@ android {
         targetSdkVersion config.build.targetSdkVersion
     }
 
-    final String keyDirPath = "${System.getenv('ANDROID_UNIVERSUM_KEYSTORE')}/samples"
-    final File keyFile = file("${keyDirPath}/release.jks")
-    final File keyPropertiesFile = file("${keyDirPath}/key.properties")
-    if (keyFile.exists() && keyPropertiesFile.exists()) {
-        final Properties signingProperties = new Properties()
-        signingProperties.load(new FileInputStream(keyPropertiesFile))
+    final String keystoreDirPath = "${System.getenv('ANDROID_UNIVERSUM_KEYSTORE')}/samples"
+    final File keystoreFile = new File("${keystoreDirPath}/keystore.jks")
+    final File keyPropertiesFile = new File("${keystoreDirPath}/key.properties")
+    if (keystoreFile.exists() && keyPropertiesFile.exists()) {
+        final Properties keyProperties = new Properties()
+        keyProperties.load(new FileInputStream(keyPropertiesFile))
         //
         // The key.properties file should contain following data (each property at a single line):
         // <pre>
@@ -48,17 +48,17 @@ android {
         // </pre>
         //
         signingConfigs {
-            release {
-                storeFile keyFile
-                storePassword signingProperties['store.password']
-                keyAlias signingProperties['key.alias']
-                keyPassword signingProperties['key.password']
+            production {
+                storeFile keystoreFile
+                storePassword keyProperties['store.password']
+                keyAlias keyProperties['key.alias']
+                keyPassword keyProperties['key.password']
             }
         }
 
         buildTypes {
             release {
-                signingConfig signingConfigs.release
+                signingConfig signingConfigs.production
                 minifyEnabled true
                 proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             }
@@ -80,20 +80,20 @@ android {
  */
 repositories {
     mavenLocal()
-    maven { url repos.bintray.universumStudiosAndroid }
+    maven { url repos.bintray.universum.studios.android }
 }
 
 dependencies {
     implementation project(':library')
-    implementation deps.androidSupport.design
-    implementation deps.androidSupport.vectorDrawable
-    implementation deps.androidSupport.recyclerView
+    implementation deps.android.support.design
+    implementation deps.android.support.vectorDrawable
+    implementation deps.android.support.recyclerView
     implementation deps.other.butterknife
     annotationProcessor deps.other.butterknifeProcessor
-    implementation deps.universumStudios.supportSamples
-    implementation deps.universumStudios.logger
-    implementation deps.universumStudios.utils
-    implementation deps.universumStudios.crypto
+    implementation deps.universum.studios.support.samples
+    implementation deps.universum.studios.logger
+    implementation deps.universum.studios.utils
+    implementation deps.universum.studios.crypto
     implementation deps.other.squareupOtto
     implementation deps.other.squareupOkio
     implementation deps.other.squareupOkhttp
