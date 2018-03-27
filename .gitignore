@@ -1,18 +1,17 @@
 ### INTELLIJ
 *.iml
-/.idea/workspace.xml
+/.idea/caches
 /.idea/libraries
-/.idea/modules
 /.idea/gradle.xml
 /.idea/misc.xml
 /.idea/modules.xml
+/.idea/workspace.xml
 
 ### GRADLE
-/local.properties
-/build
-/captures
 .gradle
-.externalNativeBuild
+/build
+/local.properties
+/captures
 
 ### OTHER
 *.DS_Store
