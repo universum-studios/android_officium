@@ -21,7 +21,7 @@ as usually.
     }
 
 ## Available modules ##
-> Following modules are available in the [latest](https://github.com/universum-studios/android_officium/releases "Latest Releases page") stable release.
+> Following modules are available in the [latest](https://github.com/universum-studios/android_officium/releases "Releases page") stable release.
 
 - **[Core](https://github.com/universum-studios/android_officium/tree/master/library-core)**
 - **[Account](https://github.com/universum-studios/android_officium/tree/master/library-account)**

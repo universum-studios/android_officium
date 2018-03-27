@@ -2,5 +2,5 @@ apply plugin: 'jacoco'
 apply plugin: 'com.vanniktech.android.junit.jacoco'
 
 jacoco {
-    toolVersion = '0.7.9'
+    toolVersion = '0.8.0'
 }

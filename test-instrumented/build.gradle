@@ -47,17 +47,17 @@ dependencies {
     api deps.test.junit
     api deps.test.mockitoCore
     api deps.test.mockitoAndroid
-    api deps.test.androidRunner
-    api deps.test.androidRules
-    api deps.test.androidEspressoCore
-    api deps.test.androidEspressoIntents
-    api(deps.test.androidEspressoContrib) {
+    api deps.android.test.runner
+    api deps.android.test.rules
+    api deps.android.test.espressoCore
+    api deps.android.test.espressoIntents
+    api(deps.android.test.espressoContrib) {
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'com.android.support', module: 'support-v4'
         exclude group: 'com.android.support', module: 'appcompat-v7'
         exclude group: 'com.android.support', module: 'design'
         exclude group: 'com.android.support', module: 'recyclerview-v7'
     }
-    api deps.test.androidSupportAnnotations
-    api deps.test.androidSupportV4
+    api deps.android.support.annotations
+    api deps.android.support.v4
 }
