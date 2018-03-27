@@ -47,14 +47,14 @@ android {
 repositories {
     maven { url repos.project.artifacts }
     mavenLocal()
-    maven { url repos.bintray.universumStudiosAndroid }
+    maven { url repos.bintray.universum.studios.android }
 }
 
 dependencies {
     // PRODUCTION ----------------------------------------------------------------------------------
-    implementation deps.androidSupport.annotations
-    implementation deps.universumStudios.utils
-    implementation deps.universumStudios.crypto
+    implementation deps.android.support.annotations
+    implementation deps.universum.studios.utils
+    implementation deps.universum.studios.crypto
     releaseImplementation deps.modules.libraryCore
 
     // DEVELOPMENT ---------------------------------------------------------------------------------

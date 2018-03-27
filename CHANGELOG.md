@@ -1,5 +1,6 @@
 Change-Log
 ===============
+> Regular configuration update: _27.03.2018_
 
 More **detailed changelog** for each respective version may be viewed by pressing on a desired _version's name_.
 
@@ -14,7 +15,7 @@ More **detailed changelog** for each respective version may be viewed by pressin
 ### [1.2.0](https://github.com/universum-studios/android_officium/releases/tag/v1.2.0) ###
 > 26.07.2017
 
-- Removed components that has been **deprecated** in the previous version.
+- Removed elements that has been **deprecated** in the previous version.
 - Added `SimpleEndPoint` class that is implementation of `EndPoint` interface.
 - Added `ServiceCallAdapterFactory` implementation.
 - **Dropped support** for _Android_ versions **below** _API Level 14_.

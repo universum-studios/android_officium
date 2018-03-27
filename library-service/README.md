@@ -1,7 +1,7 @@
 Officium-Service
 ===============
 
-This module contains components that may be used to build a **service API layer** for an **Android**
+This module contains elements that may be used to build a **service API layer** for an **Android**
 application backed by **[Retrofit](http://square.github.io/retrofit/)** and **[OkHttp](http://square.github.io/okhttp/)**
 in a simple and consistent way.
 
@@ -18,9 +18,9 @@ _depends on:_
 [`com.squareup.okhttp3:okhttp`](http://square.github.io/okhttp/),
 [`com.squareup.retrofit2:retrofit`](http://square.github.io/retrofit/)
 
-## Components ##
+## Elements ##
 
-Below are listed some of **primary components** that are available in this module:
+Below are listed some of **primary elements** that are available in this module:
 
 - [ServiceManager](https://github.com/universum-studios/android_officium/blob/master/library-service/src/main/java/universum/studios/android/officium/service/ServiceManager.java)
 - [ServiceApi](https://github.com/universum-studios/android_officium/blob/master/library-service/src/main/java/universum/studios/android/officium/service/ServiceApi.java)

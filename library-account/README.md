@@ -1,7 +1,7 @@
 Officium-Account
 ===============
 
-This module contains components that may be used to manage, in a simple way, **single** or **multiple**
+This module contains elements that may be used to manage, in a simple way, **single** or **multiple**
 accounts in an **Android** application.
 
 ## Download ##
@@ -15,9 +15,9 @@ _depends on:_
 [officium-core](https://github.com/universum-studios/android_officium/tree/master/library-core),
 [`universum.studios.android:utils`](https://github.com/universum-studios/android_utils)
 
-## Components ##
+## Elements ##
 
-Below are listed some of **primary components** that are available in this module:
+Below are listed some of **primary elements** that are available in this module:
 
 - [UserAccount](https://github.com/universum-studios/android_officium/blob/master/library-account/src/main/java/universum/studios/android/officium/account/UserAccount.java)
 - [UserAccountManager](https://github.com/universum-studios/android_officium/blob/master/library-account/src/main/java/universum/studios/android/officium/account/UserAccountManager.java)
