@@ -1,7 +1,7 @@
 Officium-Sync
 ===============
 
-This module contains components that may be used to build a **synchronization layer** for an
+This module contains elements that may be used to build a **synchronization layer** for an
 **Android** application backed by `AbstractThreadedSyncAdapter` in a simple and consistent way.
 
 ## Download ##
@@ -15,9 +15,9 @@ _depends on:_
 [officium-core](https://github.com/universum-studios/android_officium/tree/master/library-core),
 [`com.google.code.gson:gson`](https://github.com/google/gson)
 
-## Components ##
+## Elements ##
 
-Below are listed some of **primary components** that are available in this module:
+Below are listed some of **primary elements** that are available in this module:
 
 - [BaseSyncManager](https://github.com/universum-studios/android_officium/blob/master/library-sync/src/main/java/universum/studios/android/officium/sync/BaseSyncManager.java)
 - [BaseSyncAdapter](https://github.com/universum-studios/android_officium/blob/master/library-sync/src/main/java/universum/studios/android/officium/sync/BaseSyncAdapter.java)

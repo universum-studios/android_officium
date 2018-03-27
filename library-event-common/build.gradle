@@ -51,7 +51,7 @@ repositories {
 
 dependencies {
     // PRODUCTION ----------------------------------------------------------------------------------
-    implementation deps.androidSupport.annotations
+    implementation deps.android.support.annotations
     implementation deps.other.squareupOtto
     releaseImplementation deps.modules.libraryEventCore
 
