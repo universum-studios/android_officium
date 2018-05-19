@@ -1,22 +1,23 @@
 /*
- * =================================================================================================
- *                             Copyright (C) 2017 Universum Studios
- * =================================================================================================
- *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
+ * *************************************************************************************************
+ *                                 Copyright 2017 Universum Studios
+ * *************************************************************************************************
+ *                  Licensed under the Apache License, Version 2.0 (the "License")
  * -------------------------------------------------------------------------------------------------
- * You may use this file only in compliance with the License. More details and copy of this License 
- * you may obtain at
- * 
- * 		http://www.apache.org/licenses/LICENSE-2.0
- * 
- * You can redistribute, modify or publish any part of the code written within this file but as it 
- * is described in the License, the software distributed under the License is distributed on an 
- * "AS IS" BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
- * 
+ * You may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied.
+ *
  * See the License for the specific language governing permissions and limitations under the License.
- * =================================================================================================
+ * *************************************************************************************************
  */
-package universum.studios.android.officium.sync; 
+package universum.studios.android.officium.sync;
+
 import android.accounts.Account;
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -35,26 +36,32 @@ import static org.hamcrest.core.IsNull.nullValue;
  * @author Martin Albedinsky
  */
 public final class SyncHandlerTest extends RobolectricTestCase {
-    
-    @Test
-	public void testInstantiationWithId() {
-		assertThat(new TestHandler(1).getTaskId(), is(1));
-    }
 
-    @Test
-	public void testInstantiationWithIdAndRequestClass() {
-	    assertThat(new TestHandler(1, TestRequest.class).getTaskId(), is(1));
-    }
+	@Test public void testInstantiationWithId() {
+		// Act:
+		final TestHandler handler = new TestHandler(1);
+		// Assert:
+		assertThat(handler.getTaskId(), is(1));
+	}
 
-	@Test
-	public void testHandleSync() {
+	@Test public void testInstantiationWithIdAndRequestClass() {
+		// Act:
 		final TestHandler handler = new TestHandler(1, TestRequest.class);
-		handler.handleSync(mApplication, new SyncOperation.Builder()
+		// Assert:
+		assertThat(handler.getTaskId(), is(1));
+	}
+
+	@Test public void testHandleSync() {
+		// Arrange:
+		final TestHandler handler = new TestHandler(1, TestRequest.class);
+		final SyncOperation operation = new SyncOperation.Builder()
 				.account(new Account("TestAccount", "TestType"))
 				.authority("test.authority")
 				.task(new SyncTask.Builder<TestRequest>(1).request(new TestRequest(12)).build())
-				.build()
-		);
+				.build();
+		// Act:
+		handler.handleSync(application, operation);
+		// Assert:
 		assertThat(handler.hasBeenOnHandleSyncInvoked(), is(true));
 		assertThat(handler.hasBeenOnSyncErrorInvoked(), is(false));
 		final TestRequest request = handler.getOnHandleSyncRequest();
@@ -62,46 +69,49 @@ public final class SyncHandlerTest extends RobolectricTestCase {
 		assertThat(request.count, is(12));
 	}
 
-	@Test
-	public void testHandleSyncWithoutRequest() {
+	@Test public void testHandleSyncWithoutRequest() {
+		// Arrange:
 		final TestHandler handler = new TestHandler(1);
-		handler.handleSync(mApplication, new SyncOperation.Builder()
+		final SyncOperation operation = new SyncOperation.Builder()
 				.account(new Account("TestAccount", "TestType"))
 				.authority("test.authority")
 				.task(SyncTask.EMPTY)
-				.build()
-		);
+				.build();
+		// Act:
+		handler.handleSync(application, operation);
+		// Assert:
 		assertThat(handler.hasBeenOnHandleSyncInvoked(), is(true));
 		assertThat(handler.hasBeenOnSyncErrorInvoked(), is(false));
 		assertThat(handler.getOnHandleSyncRequest(), is(nullValue()));
 	}
 
-	@Test
-	public void testHandleRequestWithOccurredError() {
+	@Test public void testHandleRequestWithOccurredError() {
+		// Arrange:
 		final TestHandler handler = new TestHandler(1, TestRequest.class);
 		handler.setExceptionToThrow(new IllegalStateException());
-		handler.handleSync(mApplication, new SyncOperation.Builder()
+		final SyncOperation operation = new SyncOperation.Builder()
 				.account(new Account("TestAccount", "TestType"))
 				.authority("test.authority")
 				.task(SyncTask.EMPTY)
-				.build()
-		);
+				.build();
+		// Act:
+		handler.handleSync(application, operation);
+		// Assert:
 		assertThat(handler.hasBeenOnHandleSyncInvoked(), is(true));
 		assertThat(handler.hasBeenOnSyncErrorInvoked(), is(true));
 		assertThat(handler.isOnSyncErrorEqualExceptionToThrow(), is(true));
 	}
 
-    private static final class TestRequest implements SyncTask.Request {
+	private static final class TestRequest implements SyncTask.Request {
 
-	    int count;
+		int count;
 
-	    TestRequest() {
-	    }
+		TestRequest() {}
 
-	    TestRequest(int count) {
-		    this.count = count;
-	    }
-    }
+		TestRequest(final int count) {
+			this.count = count;
+		}
+	}
 
 	private static final class TestHandler extends SyncHandler<TestRequest, Void> {
 
@@ -110,11 +120,11 @@ public final class SyncHandlerTest extends RobolectricTestCase {
 		private Exception exceptionToThrow;
 		private Exception onSyncError;
 
-		TestHandler(int taskId) {
+		TestHandler(final int taskId) {
 			super(taskId);
 		}
 
-		TestHandler(int taskId, @Nullable Class<TestRequest> classOfRequest) {
+		TestHandler(final int taskId, @Nullable final Class<TestRequest> classOfRequest) {
 			super(taskId, classOfRequest);
 		}
 
@@ -122,9 +132,11 @@ public final class SyncHandlerTest extends RobolectricTestCase {
 			this.exceptionToThrow = toThrow;
 		}
 
-		@Nullable
-		@Override
-		protected Void onHandleSync(@NonNull Context context, @NonNull SyncOperation syncOperation, @Nullable TestRequest syncRequest) throws Exception {
+		@Override @Nullable protected Void onHandleSync(
+				@NonNull final Context context,
+				@NonNull final SyncOperation syncOperation,
+				@Nullable final TestRequest syncRequest
+		) throws Exception {
 			this.onHandleSyncInvoked = true;
 			this.onHandleSyncRequest = syncRequest;
 			if (exceptionToThrow != null) {
@@ -141,8 +153,12 @@ public final class SyncHandlerTest extends RobolectricTestCase {
 			return onHandleSyncRequest;
 		}
 
-		@Override
-		protected void onSyncError(@NonNull Context context, @NonNull SyncOperation syncOperation, @Nullable TestRequest syncRequest, @NonNull Exception error) {
+		@Override protected void onSyncError(
+				@NonNull final Context context,
+				@NonNull final SyncOperation syncOperation,
+				@Nullable final TestRequest syncRequest,
+				@NonNull final Exception error
+		) {
 			super.onSyncError(context, syncOperation, syncRequest, error);
 			this.onSyncError = error;
 		}

@@ -1,20 +1,20 @@
 /*
- * =================================================================================================
- *                             Copyright (C) 2016 Universum Studios
- * =================================================================================================
- *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
+ * *************************************************************************************************
+ *                                 Copyright 2016 Universum Studios
+ * *************************************************************************************************
+ *                  Licensed under the Apache License, Version 2.0 (the "License")
  * -------------------------------------------------------------------------------------------------
- * You may use this file only in compliance with the License. More details and copy of this License
- * you may obtain at
+ * You may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
  *
- * 		http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- * You can redistribute, modify or publish any part of the code written within this file but as it
- * is described in the License, the software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied.
  *
  * See the License for the specific language governing permissions and limitations under the License.
- * =================================================================================================
+ * *************************************************************************************************
  */
 package universum.studios.android.officium.service;
 
@@ -52,12 +52,12 @@ public abstract class BaseServiceObject implements ServiceObject {
 	/**
 	 * Service id to which is this object associated.
 	 */
-	Integer mServiceId;
+	Integer serviceId;
 
 	/**
 	 * Request id to which is this object associated.
 	 */
-	String mRequestId;
+	String requestId;
 
 	/*
 	 * Constructors ================================================================================
@@ -78,49 +78,46 @@ public abstract class BaseServiceObject implements ServiceObject {
 	 *                      to not associate.
 	 */
 	static void associateWith(@NonNull final ServiceObject serviceObject, @Nullable final Integer serviceId, @Nullable final String requestId) {
-		if (serviceId != null && serviceObject.getServiceId() == NO_SERVICE) serviceObject.setServiceId(serviceId);
-		if (requestId != null && NO_REQUEST.equals(serviceObject.getRequestId())) serviceObject.setRequestId(requestId);
+		if (serviceId != null && serviceObject.getServiceId() == NO_SERVICE)
+			serviceObject.setServiceId(serviceId);
+		if (requestId != null && NO_REQUEST.equals(serviceObject.getRequestId()))
+			serviceObject.setRequestId(requestId);
 	}
 
 	/**
 	 * @throws UnsupportedOperationException If service id has been already specified for this
 	 *                                       service object.
 	 */
-	@Override
-	public final void setServiceId(final int serviceId) {
-		if (mServiceId == null) {
-			this.mServiceId = serviceId;
+	@Override public final void setServiceId(final int serviceId) {
+		if (this.serviceId == null) {
+			this.serviceId = serviceId;
 		} else {
-			throw new UnsupportedOperationException("Cannot change already specified service id(" + mServiceId + ")!");
+			throw new UnsupportedOperationException("Cannot change already specified service id(" + this.serviceId + ")!");
 		}
 	}
 
 	/**
 	 */
-	@Override
-	public final int getServiceId() {
-		return mServiceId == null ? NO_SERVICE : mServiceId;
+	@Override public final int getServiceId() {
+		return serviceId == null ? NO_SERVICE : serviceId;
 	}
 
 	/**
 	 * @throws UnsupportedOperationException If request id has been already specified for this
 	 *                                       service object.
 	 */
-	@Override
-	public final void setRequestId(@NonNull final String requestId) {
-		if (mRequestId == null) {
-			this.mRequestId = requestId;
+	@Override public final void setRequestId(@NonNull final String requestId) {
+		if (this.requestId == null) {
+			this.requestId = requestId;
 		} else {
-			throw new UnsupportedOperationException("Cannot change already specified request id(" + mRequestId + ")!");
+			throw new UnsupportedOperationException("Cannot change already specified request id(" + this.requestId + ")!");
 		}
 	}
 
 	/**
 	 */
-	@NonNull
-	@Override
-	public final String getRequestId() {
-		return mRequestId == null ? NO_REQUEST : mRequestId;
+	@Override @NonNull public final String getRequestId() {
+		return requestId == null ? NO_REQUEST : requestId;
 	}
 
 	/*

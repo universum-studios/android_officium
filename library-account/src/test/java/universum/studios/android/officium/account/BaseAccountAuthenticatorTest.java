@@ -1,20 +1,20 @@
 /*
- * =================================================================================================
- *                             Copyright (C) 2017 Universum Studios
- * =================================================================================================
- *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
+ * *************************************************************************************************
+ *                                 Copyright 2017 Universum Studios
+ * *************************************************************************************************
+ *                  Licensed under the Apache License, Version 2.0 (the "License")
  * -------------------------------------------------------------------------------------------------
- * You may use this file only in compliance with the License. More details and copy of this License 
- * you may obtain at
- * 
- * 		http://www.apache.org/licenses/LICENSE-2.0
- * 
- * You can redistribute, modify or publish any part of the code written within this file but as it 
- * is described in the License, the software distributed under the License is distributed on an 
- * "AS IS" BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
- * 
+ * You may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied.
+ *
  * See the License for the specific language governing permissions and limitations under the License.
- * =================================================================================================
+ * *************************************************************************************************
  */
 package universum.studios.android.officium.account;
 
@@ -36,23 +36,23 @@ import static org.mockito.Mockito.mock;
 public final class BaseAccountAuthenticatorTest extends RobolectricTestCase {
 
 	private static final String ACCOUNT_TYPE = "account@test.com";
-    
-    @Test
+
+	@Test
 	public void testInstantiation() {
-		new AccountAuthenticator(mApplication);
+		new TestAuthenticator(application);
 	}
 
 	@Test(expected = UnsupportedOperationException.class)
 	public void testEditProperties() {
-    	new AccountAuthenticator(mApplication).editProperties(
-    			mock(AccountAuthenticatorResponse.class),
-			    ACCOUNT_TYPE
-	    );
+		new TestAuthenticator(application).editProperties(
+				mock(AccountAuthenticatorResponse.class),
+				ACCOUNT_TYPE
+		);
 	}
 
 	@Test(expected = UnsupportedOperationException.class)
 	public void testAddAccount() throws Exception {
-		new AccountAuthenticator(mApplication).addAccount(
+		new TestAuthenticator(application).addAccount(
 				mock(AccountAuthenticatorResponse.class),
 				ACCOUNT_TYPE,
 				"oAuth",
@@ -63,50 +63,50 @@ public final class BaseAccountAuthenticatorTest extends RobolectricTestCase {
 
 	@Test(expected = UnsupportedOperationException.class)
 	public void testConfirmCredentials() throws Exception {
-    	new AccountAuthenticator(mApplication).confirmCredentials(
-			    mock(AccountAuthenticatorResponse.class),
-			    mock(Account.class),
-			    Bundle.EMPTY
-	    );
+		new TestAuthenticator(application).confirmCredentials(
+				mock(AccountAuthenticatorResponse.class),
+				mock(Account.class),
+				Bundle.EMPTY
+		);
 	}
 
 	@Test(expected = UnsupportedOperationException.class)
 	public void testGetAuthToken() throws Exception {
-    	new AccountAuthenticator(mApplication).getAuthToken(
-			    mock(AccountAuthenticatorResponse.class),
-			    mock(Account.class),
-			    "oAuth",
-			    Bundle.EMPTY
-	    );
+		new TestAuthenticator(application).getAuthToken(
+				mock(AccountAuthenticatorResponse.class),
+				mock(Account.class),
+				"oAuth",
+				Bundle.EMPTY
+		);
 	}
 
 	@Test(expected = UnsupportedOperationException.class)
 	public void testGetAuthTokenLabel() {
-    	new AccountAuthenticator(mApplication).getAuthTokenLabel(ACCOUNT_TYPE);
+		new TestAuthenticator(application).getAuthTokenLabel(ACCOUNT_TYPE);
 	}
 
 	@Test(expected = UnsupportedOperationException.class)
 	public void testUpdateCredentials() throws Exception {
-    	new AccountAuthenticator(mApplication).updateCredentials(
-			    mock(AccountAuthenticatorResponse.class),
-			    mock(Account.class),
-			    "oAuth",
-			    Bundle.EMPTY
-	    );
+		new TestAuthenticator(application).updateCredentials(
+				mock(AccountAuthenticatorResponse.class),
+				mock(Account.class),
+				"oAuth",
+				Bundle.EMPTY
+		);
 	}
 
 	@Test(expected = UnsupportedOperationException.class)
 	public void testHasFeatures() throws Exception {
-    	new AccountAuthenticator(mApplication).hasFeatures(
-			    mock(AccountAuthenticatorResponse.class),
-			    mock(Account.class),
-			    new String[]{}
-	    );
+		new TestAuthenticator(application).hasFeatures(
+				mock(AccountAuthenticatorResponse.class),
+				mock(Account.class),
+				new String[]{}
+		);
 	}
 
-	private static final class AccountAuthenticator extends BaseAccountAuthenticator {
+	private static final class TestAuthenticator extends BaseAccountAuthenticator {
 
-		AccountAuthenticator(@NonNull Context context) {
+		TestAuthenticator(@NonNull final Context context) {
 			super(context);
 		}
 	}

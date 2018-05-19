@@ -1,38 +1,35 @@
 /*
- * =================================================================================================
- *                             Copyright (C) 2016 Universum Studios
- * =================================================================================================
- *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
+ * *************************************************************************************************
+ *                                 Copyright 2016 Universum Studios
+ * *************************************************************************************************
+ *                  Licensed under the Apache License, Version 2.0 (the "License")
  * -------------------------------------------------------------------------------------------------
- * You may use this file only in compliance with the License. More details and copy of this License
- * you may obtain at
+ * You may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
  *
- * 		http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- * You can redistribute, modify or publish any part of the code written within this file but as it
- * is described in the License, the software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied.
  *
  * See the License for the specific language governing permissions and limitations under the License.
- * =================================================================================================
+ * *************************************************************************************************
  */
 package universum.studios.android.samples.officium.service.api;
 
 import android.support.annotation.NonNull;
 
-import universum.studios.android.samples.officium.service.request.SignInRequest;
-import universum.studios.android.samples.officium.service.response.SignInResponse;
 import universum.studios.android.officium.service.ServiceApi;
 import universum.studios.android.officium.service.ServiceManager;
 import universum.studios.android.officium.service.auth.AuthTokenProvider;
+import universum.studios.android.samples.officium.service.request.ApiSignInRequest;
+import universum.studios.android.samples.officium.service.response.ApiSignInResponse;
 
 /**
  * @author Martin Albedinsky
  */
 final class ApiImpl extends ServiceApi<ServiceManager> implements Api {
-
-	@SuppressWarnings("unused")
-	private static final String TAG = "Api";
 
 	ApiImpl() {
 		super(new ServiceManager(END_POINT));
@@ -42,13 +39,11 @@ final class ApiImpl extends ServiceApi<ServiceManager> implements Api {
 		configuration.invalidate();
 	}
 
-	void setAuthTokenProvider(@NonNull AuthTokenProvider tokenProvider) {
+	void setAuthTokenProvider(@NonNull final AuthTokenProvider tokenProvider) {
 		// todo: servicesConfiguration(Services.class).requestInterceptor(new AuthRequestInterceptor(tokenProvider));
 	}
 
-	@NonNull
-	@Override
-	public ApiCall<SignInResponse> signIn(@NonNull SignInRequest request) {
+	@Override @NonNull public ApiCall<ApiSignInResponse> signIn(@NonNull final ApiSignInRequest request) {
 		return new ApiCall<>(services(Services.class).signIn(request)).withServiceId(SIGN_IN);
 	}
 }
