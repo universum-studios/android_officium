@@ -1,22 +1,23 @@
 /*
- * =================================================================================================
- *                             Copyright (C) 2017 Universum Studios
- * =================================================================================================
- *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
+ * *************************************************************************************************
+ *                                 Copyright 2017 Universum Studios
+ * *************************************************************************************************
+ *                  Licensed under the Apache License, Version 2.0 (the "License")
  * -------------------------------------------------------------------------------------------------
- * You may use this file only in compliance with the License. More details and copy of this License 
- * you may obtain at
- * 
- * 		http://www.apache.org/licenses/LICENSE-2.0
- * 
- * You can redistribute, modify or publish any part of the code written within this file but as it 
- * is described in the License, the software distributed under the License is distributed on an 
- * "AS IS" BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
- * 
+ * You may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied.
+ *
  * See the License for the specific language governing permissions and limitations under the License.
- * =================================================================================================
+ * *************************************************************************************************
  */
-package universum.studios.android.officium.service; 
+package universum.studios.android.officium.service;
+
 import org.junit.Test;
 
 import universum.studios.android.test.local.LocalTestCase;
@@ -28,56 +29,63 @@ import static org.hamcrest.core.Is.is;
  * @author Martin Albedinsky
  */
 public final class BaseServiceObjectTest extends LocalTestCase {
-    
-	@Test
-	public void testAssociateWith() {
+
+	@Test public void testInstantiation() {
+		// Act:
 		final TestObject object = new TestObject();
+		// Assert:
+		assertThat(object.getServiceId(), is(BaseServiceObject.NO_SERVICE));
+		assertThat(object.getRequestId(), is(BaseServiceObject.NO_REQUEST));
+	}
+
+	@Test public void testAssociateWith() {
+		// Arrange:
+		final TestObject object = new TestObject();
+		// Act:
 		BaseServiceObject.associateWith(object, 1, "2");
+		// Assert:
 		assertThat(object.getServiceId(), is(1));
 		assertThat(object.getRequestId(), is("2"));
 	}
 
-	@Test
-	public void testAssociateWithWhenAlreadyAssociated() {
+	@Test public void testAssociateWithWhenAlreadyAssociated() {
+		// Arrange:
 		final TestObject object = new TestObject();
 		BaseServiceObject.associateWith(object, 1, "2");
+		// Act:
 		BaseServiceObject.associateWith(object, 3, "4");
+		// Assert:
 		assertThat(object.getServiceId(), is(1));
 		assertThat(object.getRequestId(), is("2"));
 	}
 
-	@Test
-	public void testAssociateWithNullValues() {
+	@Test public void testAssociateWithNullValues() {
+		// Arrange:
 		final TestObject object = new TestObject();
+		// Act:
 		BaseServiceObject.associateWith(object, null, null);
+		// Assert:
 		assertThat(object.getServiceId(), is(BaseServiceObject.NO_SERVICE));
 		assertThat(object.getRequestId(), is(BaseServiceObject.NO_REQUEST));
 	}
 
 	@Test(expected = UnsupportedOperationException.class)
 	public void testSetServiceIdWhenAlreadyAssociated() {
+		// Arrange:
 		final TestObject object = new TestObject();
 		BaseServiceObject.associateWith(object, 1, "2");
+		// Act:
 		object.setServiceId(3);
-	}
-
-    @Test
-	public void testGetServiceIdDefault() {
-	    assertThat(new TestObject().getServiceId(), is(BaseServiceObject.NO_SERVICE));
 	}
 
 	@Test(expected = UnsupportedOperationException.class)
 	public void testSetRequestIdWhenAlreadyAssociated() {
+		// Arrange:
 		final TestObject object = new TestObject();
 		BaseServiceObject.associateWith(object, 1, "2");
+		// Act:
 		object.setRequestId("4");
 	}
 
-    @Test
-	public void testGetRequestIdDefault() {
-	    assertThat(new TestObject().getRequestId(), is(BaseServiceObject.NO_REQUEST));
-	}
-
-	private static final class TestObject extends BaseServiceObject {
-	}
+	private static final class TestObject extends BaseServiceObject {}
 }

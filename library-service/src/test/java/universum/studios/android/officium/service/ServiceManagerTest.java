@@ -1,22 +1,23 @@
 /*
- * =================================================================================================
- *                             Copyright (C) 2017 Universum Studios
- * =================================================================================================
- *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
+ * *************************************************************************************************
+ *                                 Copyright 2017 Universum Studios
+ * *************************************************************************************************
+ *                  Licensed under the Apache License, Version 2.0 (the "License")
  * -------------------------------------------------------------------------------------------------
- * You may use this file only in compliance with the License. More details and copy of this License 
- * you may obtain at
- * 
- * 		http://www.apache.org/licenses/LICENSE-2.0
- * 
- * You can redistribute, modify or publish any part of the code written within this file but as it 
- * is described in the License, the software distributed under the License is distributed on an 
- * "AS IS" BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
- * 
+ * You may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied.
+ *
  * See the License for the specific language governing permissions and limitations under the License.
- * =================================================================================================
+ * *************************************************************************************************
  */
-package universum.studios.android.officium.service; 
+package universum.studios.android.officium.service;
+
 import org.junit.Test;
 
 import universum.studios.android.test.local.LocalTestCase;
@@ -31,38 +32,47 @@ import static org.junit.Assert.assertSame;
  * @author Martin Albedinsky
  */
 public final class ServiceManagerTest extends LocalTestCase {
-    
-    @Test
-	public void testInstantiation() {
-		assertThat(new ServiceManager().getEndPoint(), is(nullValue()));
-    }
 
-	@Test
-	public void testInstantiationWithEndPoint() {
-		final EndPoint endPoint = new SimpleEndPoint("");
-		assertThat(new ServiceManager(endPoint).getEndPoint(), is(endPoint));
+	@Test public void testInstantiation() {
+		// Act:
+		final ServiceManager manager = new ServiceManager();
+		// Assert:
+		assertThat(manager.getEndPoint(), is(nullValue()));
 	}
 
-	@Test
-	public void testSetGetEndPoint() {
+	@Test public void testInstantiationWithEndPoint() {
+		// Arrange:
+		final EndPoint endPoint = new SimpleEndPoint("");
+		// Act:
+		final ServiceManager manager = new ServiceManager(endPoint);
+		// Assert:
+		assertThat(manager.getEndPoint(), is(endPoint));
+	}
+
+	@Test public void testEndPoint() {
+		// Arrange:
 		final EndPoint endPoint = new SimpleEndPoint("");
 		final ServiceManager manager = new ServiceManager();
+		// Act + Assert:
 		manager.setEndPoint(endPoint);
 		assertThat(manager.getEndPoint(), is(endPoint));
 	}
 
-	@Test
 	@SuppressWarnings("ConstantConditions")
-	public void testSetEndPointAsBaseUrl() {
+	@Test public void testSetEndPointAsBaseUrl() {
+		// Arrange:
 		final ServiceManager manager = new ServiceManager();
+		// Act:
 		manager.setEndPoint("https://www.google.com/");
+		// Assert:
 		assertThat(manager.getEndPoint(), is(notNullValue()));
 		assertThat(manager.getEndPoint().getBaseUrl(), is("https://www.google.com/"));
 	}
 
-	@Test
-	public void testServices() {
+	@Test public void testServices() {
+		// Arrange:
 		final ServiceManager manager = new ServiceManager(new SimpleEndPoint("https://www.google.com/"));
+		// Act + Assert:
 		assertThat(manager.services(TestPrimaryServices.class), is(notNullValue()));
 		assertSame(manager.services(TestPrimaryServices.class), manager.services(TestPrimaryServices.class));
 		assertThat(manager.services(TestSecondaryServices.class), is(notNullValue()));
@@ -71,9 +81,10 @@ public final class ServiceManagerTest extends LocalTestCase {
 		assertSame(manager.services(TestTertiaryServices.class), manager.services(TestTertiaryServices.class));
 	}
 
-	@Test
-	public void testServicesConfiguration() {
+	@Test public void testServicesConfiguration() {
+		// Arrange:
 		final ServiceManager manager = new ServiceManager(new SimpleEndPoint("https://www.google.com/"));
+		// Act + Assert:
 		assertThat(manager.servicesConfiguration(TestPrimaryServices.class), is(notNullValue()));
 		assertSame(manager.servicesConfiguration(TestPrimaryServices.class), manager.servicesConfiguration(TestPrimaryServices.class));
 		assertThat(manager.servicesConfiguration(TestSecondaryServices.class), is(notNullValue()));
@@ -84,16 +95,15 @@ public final class ServiceManagerTest extends LocalTestCase {
 
 	@Test(expected = IllegalStateException.class)
 	public void testServicesConfigurationWhenThereIsNoEndPointSpecified() {
+		// Arrange:
 		final ServiceManager manager = new ServiceManager();
+		// Act:
 		manager.servicesConfiguration(TestPrimaryServices.class).retrofit().baseUrl();
 	}
 
-	interface TestPrimaryServices {
-	}
+	interface TestPrimaryServices {}
 
-	interface TestSecondaryServices {
-	}
+	interface TestSecondaryServices {}
 
-	interface TestTertiaryServices {
-	}
+	interface TestTertiaryServices {}
 }
