@@ -1,20 +1,20 @@
 /*
- * =================================================================================================
- *                             Copyright (C) 2016 Universum Studios
- * =================================================================================================
- *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
+ * *************************************************************************************************
+ *                                 Copyright 2016 Universum Studios
+ * *************************************************************************************************
+ *                  Licensed under the Apache License, Version 2.0 (the "License")
  * -------------------------------------------------------------------------------------------------
- * You may use this file only in compliance with the License. More details and copy of this License
- * you may obtain at
+ * You may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
  *
- * 		http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- * You can redistribute, modify or publish any part of the code written within this file but as it
- * is described in the License, the software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied.
  *
  * See the License for the specific language governing permissions and limitations under the License.
- * =================================================================================================
+ * *************************************************************************************************
  */
 package universum.studios.android.samples.officium.service.api;
 
@@ -28,8 +28,6 @@ import universum.studios.android.officium.service.auth.AuthTokenProvider;
  */
 public final class ApiProvider extends ServiceApiProvider<Api> {
 
-	@SuppressWarnings("unused")
-	private static final String TAG = "ApiProvider";
 	private static final Object LOCK = new Object();
 
 	private static volatile ApiProvider instance;
@@ -37,11 +35,9 @@ public final class ApiProvider extends ServiceApiProvider<Api> {
 	private AuthTokenProvider mAuthTokenProvider;
 	private boolean mAuthTokenProviderChanged;
 
-	private ApiProvider() {
-	}
+	private ApiProvider() {}
 
-	@NonNull
-	public static ApiProvider get() {
+	@NonNull public static ApiProvider get() {
 		if (instance == null) {
 			synchronized (LOCK) {
 				instance = new ApiProvider();
@@ -50,20 +46,16 @@ public final class ApiProvider extends ServiceApiProvider<Api> {
 		return instance;
 	}
 
-	public void setAuthTokenProvider(@NonNull AuthTokenProvider tokenProvider) {
+	public void setAuthTokenProvider(@NonNull final AuthTokenProvider tokenProvider) {
 		this.mAuthTokenProvider = tokenProvider;
 		this.mAuthTokenProviderChanged = true;
 	}
 
-	@NonNull
-	@Override
-	protected Api onCreateApi() {
+	@Override @NonNull protected Api onCreateApi() {
 		return new ApiImpl();
 	}
 
-	@NonNull
-	@Override
-	protected Api onPrepareApi(@NonNull Api api) {
+	@Override @NonNull protected Api onPrepareApi(@NonNull final Api api) {
 		super.onPrepareApi(api);
 		if (mAuthTokenProviderChanged) {
 			((ApiImpl) api).setAuthTokenProvider(mAuthTokenProvider);

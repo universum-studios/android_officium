@@ -1,20 +1,20 @@
 /*
- * =================================================================================================
- *                             Copyright (C) 2017 Universum Studios
- * =================================================================================================
- *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
+ * *************************************************************************************************
+ *                                 Copyright 2018 Universum Studios
+ * *************************************************************************************************
+ *                  Licensed under the Apache License, Version 2.0 (the "License")
  * -------------------------------------------------------------------------------------------------
- * You may use this file only in compliance with the License. More details and copy of this License 
- * you may obtain at
- * 
- * 		http://www.apache.org/licenses/LICENSE-2.0
- * 
- * You can redistribute, modify or publish any part of the code written within this file but as it 
- * is described in the License, the software distributed under the License is distributed on an 
- * "AS IS" BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
- * 
+ * You may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied.
+ *
  * See the License for the specific language governing permissions and limitations under the License.
- * =================================================================================================
+ * *************************************************************************************************
  */
 package universum.studios.android.test.local;
 
@@ -39,34 +39,23 @@ import org.robolectric.annotation.Config;
 public abstract class RobolectricTestCase extends LocalTestCase {
 
 	/**
-	 * Log TAG.
-	 */
-	@SuppressWarnings("unused")
-	private static final String TAG = "RobolectricTestCase";
-
-	/**
 	 * Application instance accessible via {@link RuntimeEnvironment#application}.
 	 * <p>
 	 * It is always valid between calls to {@link #beforeTest()} and {@link #afterTest()}.
 	 */
-	@NonNull
-	protected Application mApplication;
+	@NonNull protected Application application;
 
 	/**
 	 */
-	@Override
-	@CallSuper
-	public void beforeTest() throws Exception {
+	@Override @CallSuper public void beforeTest() throws Exception {
 		super.beforeTest();
-		this.mApplication = RuntimeEnvironment.application;
+		this.application = RuntimeEnvironment.application;
 	}
 
 	/**
 	 */
-	@Override
-	@CallSuper
-	public void afterTest() throws Exception {
+	@Override @CallSuper public void afterTest() throws Exception {
 		super.afterTest();
-		this.mApplication = null;
+		this.application = null;
 	}
 }

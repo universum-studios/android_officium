@@ -1,20 +1,20 @@
 /*
- * =================================================================================================
- *                             Copyright (C) 2016 Universum Studios
- * =================================================================================================
- *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
+ * *************************************************************************************************
+ *                                 Copyright 2017 Universum Studios
+ * *************************************************************************************************
+ *                  Licensed under the Apache License, Version 2.0 (the "License")
  * -------------------------------------------------------------------------------------------------
- * You may use this file only in compliance with the License. More details and copy of this License
- * you may obtain at
+ * You may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
  *
- * 		http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- * You can redistribute, modify or publish any part of the code written within this file but as it
- * is described in the License, the software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied.
  *
  * See the License for the specific language governing permissions and limitations under the License.
- * =================================================================================================
+ * *************************************************************************************************
  */
 package universum.studios.android.officium.event;
 
@@ -31,6 +31,7 @@ import com.squareup.otto.Bus;
  * on the Main UI thread.
  *
  * @author Martin Albedinsky
+ * @since 1.2
  */
 public class MainEventBus extends SimpleEventBus {
 
@@ -58,7 +59,7 @@ public class MainEventBus extends SimpleEventBus {
 	/**
 	 * Handler used to post events on the Main thread.
 	 */
-	private final Handler mHandler;
+	private final Handler handler;
 
 	/*
 	 * Constructors ================================================================================
@@ -79,7 +80,7 @@ public class MainEventBus extends SimpleEventBus {
 	 */
 	public MainEventBus(@NonNull final Bus bus) {
 		super(bus);
-		this.mHandler = new Handler(Looper.getMainLooper());
+		this.handler = new Handler(Looper.getMainLooper());
 	}
 
 	/*
@@ -88,19 +89,18 @@ public class MainEventBus extends SimpleEventBus {
 
 	/**
 	 */
-	@Override
-	public void post(@NonNull final Object event) {
+	@Override public void post(@NonNull final Object event) {
 		// If caller is posting on the Main thread, delegate directly to the bus, otherwise use handler.
 		if (Looper.getMainLooper().getThread().equals(Thread.currentThread())) {
-			mBus.post(event);
+			bus.post(event);
 		} else {
-			mHandler.post(new Runnable() {
+			handler.post(new Runnable() {
 
 				/**
 				 */
 				@Override
 				public void run() {
-					mBus.post(event);
+					bus.post(event);
 				}
 			});
 		}

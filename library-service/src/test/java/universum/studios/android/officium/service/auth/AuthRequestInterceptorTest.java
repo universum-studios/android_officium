@@ -1,20 +1,20 @@
 /*
- * =================================================================================================
- *                             Copyright (C) 2017 Universum Studios
- * =================================================================================================
- *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
+ * *************************************************************************************************
+ *                                 Copyright 2017 Universum Studios
+ * *************************************************************************************************
+ *                  Licensed under the Apache License, Version 2.0 (the "License")
  * -------------------------------------------------------------------------------------------------
- * You may use this file only in compliance with the License. More details and copy of this License 
- * you may obtain at
- * 
- * 		http://www.apache.org/licenses/LICENSE-2.0
- * 
- * You can redistribute, modify or publish any part of the code written within this file but as it 
- * is described in the License, the software distributed under the License is distributed on an 
- * "AS IS" BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
- * 
+ * You may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied.
+ *
  * See the License for the specific language governing permissions and limitations under the License.
- * =================================================================================================
+ * *************************************************************************************************
  */
 package universum.studios.android.officium.service.auth;
 
@@ -41,17 +41,19 @@ import static org.mockito.Mockito.when;
  */
 public final class AuthRequestInterceptorTest extends LocalTestCase {
 
-    @Test
-	public void testHEADER_NAME() {
+	@Test public void testConstants() {
+		// Act + Assert:
 		assertThat(AuthRequestInterceptor.HEADER_NAME, is("Authorization"));
 	}
 
-	@Test
-	public void testInterceptWithoutToken() throws IOException {
+	@Test public void testInterceptWithoutToken() throws IOException {
+		// Arrange:
 		final AuthTokenProvider mockTokenProvider = mock(AuthTokenProvider.class);
 		final AuthRequestInterceptor interceptor = new AuthRequestInterceptor(mockTokenProvider);
 		final Request request = new Request.Builder().url("https://google.com").build();
+		// Act:
 		final Response response = interceptor.intercept(new TestChain(request));
+		// Assert:
 		assertThat(response, is(notNullValue()));
 		final Request responseRequest = response.request();
 		assertThat(responseRequest, is(request));
@@ -60,13 +62,15 @@ public final class AuthRequestInterceptorTest extends LocalTestCase {
 		assertThat(headers.get(AuthRequestInterceptor.HEADER_NAME), is(nullValue()));
 	}
 
-	@Test
-	public void testInterceptWithToken() throws IOException {
+	@Test public void testInterceptWithToken() throws IOException {
+		// Arrange:
 		final AuthTokenProvider mockTokenProvider = mock(AuthTokenProvider.class);
 		when(mockTokenProvider.peekToken()).thenReturn("81297a2ee021a840a160551409407615f0d05b15");
 		final AuthRequestInterceptor interceptor = new AuthRequestInterceptor(mockTokenProvider);
 		final Request request = new Request.Builder().url("https://google.com").build();
+		// Act:
 		final Response response = interceptor.intercept(new TestChain(request));
+		// Assert:
 		assertThat(response, is(notNullValue()));
 		final Request responseRequest = response.request();
 		assertThat(responseRequest, is(not(request)));

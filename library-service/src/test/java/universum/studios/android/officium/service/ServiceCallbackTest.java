@@ -1,22 +1,23 @@
 /*
- * =================================================================================================
- *                             Copyright (C) 2017 Universum Studios
- * =================================================================================================
- *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
+ * *************************************************************************************************
+ *                                 Copyright 2017 Universum Studios
+ * *************************************************************************************************
+ *                  Licensed under the Apache License, Version 2.0 (the "License")
  * -------------------------------------------------------------------------------------------------
- * You may use this file only in compliance with the License. More details and copy of this License 
- * you may obtain at
- * 
- * 		http://www.apache.org/licenses/LICENSE-2.0
- * 
- * You can redistribute, modify or publish any part of the code written within this file but as it 
- * is described in the License, the software distributed under the License is distributed on an 
- * "AS IS" BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
- * 
+ * You may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied.
+ *
  * See the License for the specific language governing permissions and limitations under the License.
- * =================================================================================================
+ * *************************************************************************************************
  */
-package universum.studios.android.officium.service; 
+package universum.studios.android.officium.service;
+
 import android.support.annotation.NonNull;
 
 import org.junit.Test;
@@ -36,44 +37,50 @@ import static org.mockito.Mockito.mock;
  * @author Martin Albedinsky
  */
 public final class ServiceCallbackTest extends LocalTestCase {
-    
-    @Test
-	public void testOnResponseThatIsSuccessful() {
-	    final TestCallback<TestServiceResult> callback = new TestCallback<>();
-	    callback.setServiceId(1);
-	    callback.setRequestId("request:1");
-	    final TestServiceResult responseBody = new TestServiceResult();
-	    final Response<TestServiceResult> response = Response.success(responseBody);
-	    callback.onResponse(mock(TestServiceCall.class), response);
-	    assertThat(callback.onDispatchResponseCalled, is(true));
-	    assertThat(callback.onDispatchErrorCalled, is(false));
-	    assertThat(callback.onDispatchResponseBody, is(responseBody));
-	    assertThat(callback.getServiceId(), is(1));
-	    assertThat(callback.getRequestId(), is("request:1"));
-    }
 
-    @Test
-	public void testOnResponseThatIsSuccessfulWithBodyThatIsNotServiceObject() {
-	    final TestCallback<TestResult> callback = new TestCallback<>();
-	    callback.setServiceId(1);
-	    callback.setRequestId("request:1");
-	    final TestResult responseBody = new TestResult();
-	    final Response<TestResult> response = Response.success(responseBody);
-	    callback.onResponse(mock(TestCall.class), response);
-	    assertThat(callback.onDispatchResponseCalled, is(true));
-	    assertThat(callback.onDispatchErrorCalled, is(false));
-	    assertThat(callback.onDispatchResponseBody, is(responseBody));
-	    assertThat(callback.getServiceId(), is(1));
-	    assertThat(callback.getRequestId(), is("request:1"));
-    }
+	@Test public void testOnResponseThatIsSuccessful() {
+		// Arrange:
+		final TestCallback<TestServiceResult> callback = new TestCallback<>();
+		callback.setServiceId(1);
+		callback.setRequestId("request:1");
+		final TestServiceResult responseBody = new TestServiceResult();
+		final Response<TestServiceResult> response = Response.success(responseBody);
+		// Act:
+		callback.onResponse(mock(TestServiceCall.class), response);
+		// Assert:
+		assertThat(callback.onDispatchResponseCalled, is(true));
+		assertThat(callback.onDispatchErrorCalled, is(false));
+		assertThat(callback.onDispatchResponseBody, is(responseBody));
+		assertThat(callback.getServiceId(), is(1));
+		assertThat(callback.getRequestId(), is("request:1"));
+	}
 
-	@Test
-	public void testOnResponseThatIsError() {
+	@Test public void testOnResponseThatIsSuccessfulWithBodyThatIsNotServiceObject() {
+		// Arrange:
+		final TestCallback<TestResult> callback = new TestCallback<>();
+		callback.setServiceId(1);
+		callback.setRequestId("request:1");
+		final TestResult responseBody = new TestResult();
+		final Response<TestResult> response = Response.success(responseBody);
+		// Act:
+		callback.onResponse(mock(TestCall.class), response);
+		// Assert:
+		assertThat(callback.onDispatchResponseCalled, is(true));
+		assertThat(callback.onDispatchErrorCalled, is(false));
+		assertThat(callback.onDispatchResponseBody, is(responseBody));
+		assertThat(callback.getServiceId(), is(1));
+		assertThat(callback.getRequestId(), is("request:1"));
+	}
+
+	@Test public void testOnResponseThatIsError() {
+		// Arrange:
 		final TestCallback<TestResult> callback = new TestCallback<>();
 		callback.setServiceId(1);
 		callback.setRequestId("request:1");
 		final Response<TestResult> errorResponse = Response.error(400, ResponseBody.create(MediaType.parse("json"), "{}"));
+		// Act:
 		callback.onResponse(mock(TestCall.class), errorResponse);
+		// Assert:
 		assertThat(callback.onDispatchResponseCalled, is(false));
 		assertThat(callback.onDispatchErrorCalled, is(true));
 		assertThat(callback.onDispatchError, is(notNullValue()));
@@ -84,13 +91,15 @@ public final class ServiceCallbackTest extends LocalTestCase {
 		assertThat(callback.getRequestId(), is("request:1"));
 	}
 
-	@Test
-	public void testOnFailure() {
+	@Test public void testOnFailure() {
+		// Arrange:
 		final TestCallback<TestResult> callback = new TestCallback<>();
 		callback.setServiceId(1);
 		callback.setRequestId("request:1");
 		final Throwable mockFailure = mock(Throwable.class);
+		// Act:
 		callback.onFailure(mock(TestCall.class), mockFailure);
+		// Assert:
 		assertThat(callback.onDispatchResponseCalled, is(false));
 		assertThat(callback.onDispatchErrorCalled, is(true));
 		assertThat(callback.onDispatchError, is(notNullValue()));
@@ -101,26 +110,22 @@ public final class ServiceCallbackTest extends LocalTestCase {
 		assertThat(callback.getRequestId(), is("request:1"));
 	}
 
-	private static final class TestResult {
-	}
+	private static final class TestResult {}
 
-	private static final class TestServiceResult extends ServiceResponse {
-	}
+	private static final class TestServiceResult extends ServiceResponse {}
 
 	private static abstract class TestCall implements Call<TestResult> {
 
-		@Override
 		@SuppressWarnings("CloneDoesntCallSuperClone")
-		public Call<TestResult> clone() {
+		@Override public Call<TestResult> clone() {
 			return null;
 		}
 	}
 
 	private static abstract class TestServiceCall implements Call<TestServiceResult> {
 
-		@Override
 		@SuppressWarnings("CloneDoesntCallSuperClone")
-		public Call<TestServiceResult> clone() {
+		@Override public Call<TestServiceResult> clone() {
 			return null;
 		}
 	}
@@ -131,17 +136,14 @@ public final class ServiceCallbackTest extends LocalTestCase {
 		T onDispatchResponseBody;
 		ServiceError onDispatchError;
 
-		@Override
-		protected void onDispatchResponse(@NonNull T responseBody) {
+		@Override protected void onDispatchResponse(@NonNull final T responseBody) {
 			this.onDispatchResponseCalled = true;
 			this.onDispatchResponseBody = responseBody;
 		}
 
-		@Override
-		protected void onDispatchError(@NonNull ServiceError error) {
+		@Override protected void onDispatchError(@NonNull final ServiceError error) {
 			this.onDispatchErrorCalled = true;
 			this.onDispatchError = error;
 		}
 	}
 }
-

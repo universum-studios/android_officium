@@ -1,20 +1,20 @@
 /*
- * =================================================================================================
- *                             Copyright (C) 2017 Universum Studios
- * =================================================================================================
- *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
+ * *************************************************************************************************
+ *                                 Copyright 2017 Universum Studios
+ * *************************************************************************************************
+ *                  Licensed under the Apache License, Version 2.0 (the "License")
  * -------------------------------------------------------------------------------------------------
- * You may use this file only in compliance with the License. More details and copy of this License 
- * you may obtain at
- * 
- * 		http://www.apache.org/licenses/LICENSE-2.0
- * 
- * You can redistribute, modify or publish any part of the code written within this file but as it 
- * is described in the License, the software distributed under the License is distributed on an 
- * "AS IS" BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
- * 
+ * You may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied.
+ *
  * See the License for the specific language governing permissions and limitations under the License.
- * =================================================================================================
+ * *************************************************************************************************
  */
 package universum.studios.android.officium.service.adapter;
 
@@ -45,54 +45,65 @@ public final class ServiceCallAdapterFactoryTest extends LocalTestCase {
 
 	private static final Annotation[] EMPTY_ANNOTATIONS = new Annotation[0];
 
-	private Retrofit mRetrofit;
+	private Retrofit retrofit;
 
-	@Override
-	public void beforeTest() throws Exception {
+	@Override public void beforeTest() throws Exception {
 		super.beforeTest();
-		this.mRetrofit = new Retrofit.Builder().baseUrl("https://www.google.com/").build();
+		this.retrofit = new Retrofit.Builder().baseUrl("https://www.google.com/").build();
 	}
 
-	@Test
-	public void testCreate() {
+	@Test public void testCreate() {
+		// Act:
 		final ServiceCallAdapterFactory factory = ServiceCallAdapterFactory.create();
+		// Assert:
 		assertThat(factory, is(notNullValue()));
 		assertThat(factory, is(not(ServiceCallAdapterFactory.create())));
 	}
 
-	@Test
 	@SuppressWarnings("ConstantConditions")
-	public void testGetForParametrizedServiceCallType() {
-		final CallAdapter<?, ?> adapter = ServiceCallAdapterFactory.create().get(
+	@Test public void testGetForParametrizedServiceCallType() {
+		// Arrange:
+		final ServiceCallAdapterFactory factory = ServiceCallAdapterFactory.create();
+		// Act:
+		final CallAdapter<?, ?> adapter = factory.get(
 				obtainMethodReturnType(TestServices.class, "parametrizedServiceCall"),
 				EMPTY_ANNOTATIONS,
-				mRetrofit
+				retrofit
 		);
+		// Assert:
 		assertThat(adapter, is(notNullValue()));
 		assertEquals(adapter.responseType(), String.class);
 	}
 
 	@Test(expected = IllegalStateException.class)
 	public void testGetForNotParametrizedServiceCallType() {
-		assertThat(ServiceCallAdapterFactory.create().get(
+		// Arrange:
+		final ServiceCallAdapterFactory factory = ServiceCallAdapterFactory.create();
+		// Act:
+		final CallAdapter<?, ?> adapter = factory.get(
 				obtainMethodReturnType(TestServices.class, "notParametrizedServiceCall"),
 				EMPTY_ANNOTATIONS,
-				mRetrofit
-		), is(nullValue()));
+				retrofit
+		);
+		// Assert:
+		assertThat(adapter, is(nullValue()));
 	}
 
-	@Test
-	public void testGetForNotServiceCallType() {
-		assertThat(ServiceCallAdapterFactory.create().get(
+	@Test public void testGetForNotServiceCallType() {
+		// Arrange:
+		final ServiceCallAdapterFactory factory = ServiceCallAdapterFactory.create();
+		// Act:
+		final CallAdapter<?, ?> adapter = factory.get(
 				obtainMethodReturnType(TestServices.class, "notServiceCall"),
 				EMPTY_ANNOTATIONS,
-				mRetrofit
-		), is(nullValue()));
+				retrofit
+		);
+		// Assert:
+		assertThat(adapter, is(nullValue()));
 	}
 
-	@NonNull
 	@SuppressWarnings("unchecked")
-	private static Type obtainMethodReturnType(Class ownerClass, String methodName) {
+	@NonNull private static Type obtainMethodReturnType(Class ownerClass, String methodName) {
 		try {
 			return ownerClass.getMethod(methodName).getGenericReturnType();
 		} catch (NoSuchMethodException e) {

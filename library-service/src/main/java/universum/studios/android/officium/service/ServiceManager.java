@@ -1,20 +1,20 @@
 /*
- * =================================================================================================
- *                             Copyright (C) 2016 Universum Studios
- * =================================================================================================
- *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
+ * *************************************************************************************************
+ *                                 Copyright 2016 Universum Studios
+ * *************************************************************************************************
+ *                  Licensed under the Apache License, Version 2.0 (the "License")
  * -------------------------------------------------------------------------------------------------
- * You may use this file only in compliance with the License. More details and copy of this License
- * you may obtain at
+ * You may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
  *
- * 		http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- * You can redistribute, modify or publish any part of the code written within this file but as it
- * is described in the License, the software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied.
  *
  * See the License for the specific language governing permissions and limitations under the License.
- * =================================================================================================
+ * *************************************************************************************************
  */
 package universum.studios.android.officium.service;
 
@@ -41,6 +41,7 @@ import retrofit2.Retrofit;
  * corresponding services interface.
  *
  * @author Martin Albedinsky
+ * @since 1.0
  */
 public class ServiceManager {
 
@@ -68,12 +69,12 @@ public class ServiceManager {
 	/**
 	 * Map containing services configuration objects mapped to class of services that they configure.
 	 */
-	private final Map<Class<?>, ServicesConfiguration> mServices = new HashMap<>(1);
+	private final Map<Class<?>, ServicesConfiguration> services = new HashMap<>(1);
 
 	/**
 	 * End point for services managed by this manager.
 	 */
-	private EndPoint mEndPoint;
+	private EndPoint endPoint;
 
 	/*
 	 * Constructors ================================================================================
@@ -85,7 +86,7 @@ public class ServiceManager {
 	 * @see #setEndPoint(EndPoint)
 	 */
 	public ServiceManager() {
-		this.mEndPoint = null;
+		this.endPoint = null;
 	}
 
 	/**
@@ -96,7 +97,7 @@ public class ServiceManager {
 	 * @see #getEndPoint()
 	 */
 	public ServiceManager(@NonNull final EndPoint endPoint) {
-		this.mEndPoint = endPoint;
+		this.endPoint = endPoint;
 	}
 
 	/*
@@ -114,9 +115,7 @@ public class ServiceManager {
 
 			/**
 			 */
-			@NonNull
-			@Override
-			public String getBaseUrl() {
+			@Override @NonNull public String getBaseUrl() {
 				return baseUrl;
 			}
 		});
@@ -134,7 +133,7 @@ public class ServiceManager {
 	 * @see #getEndPoint()
 	 */
 	public void setEndPoint(@NonNull final EndPoint endPoint) {
-		this.mEndPoint = endPoint;
+		this.endPoint = endPoint;
 	}
 
 	/**
@@ -143,9 +142,8 @@ public class ServiceManager {
 	 * @return This manager's end point used for services configuration or {@code null} if no end
 	 * point has been specified.
 	 */
-	@Nullable
-	public EndPoint getEndPoint() {
-		return mEndPoint;
+	@Nullable public EndPoint getEndPoint() {
+		return endPoint;
 	}
 
 	/**
@@ -160,11 +158,10 @@ public class ServiceManager {
 	 * @return PROXY for the desired services interface ready for services invocation.
 	 * @see #servicesConfiguration(Class)
 	 */
-	@NonNull
 	@SuppressWarnings("unchecked")
-	public <S> S services(@NonNull final Class<S> servicesInterface) {
+	@NonNull public <S> S services(@NonNull final Class<S> servicesInterface) {
 		this.ensureHasServicesConfiguration(servicesInterface);
-		return (S) mServices.get(servicesInterface).services();
+		return (S) services.get(servicesInterface).services();
 	}
 
 	/**
@@ -176,11 +173,10 @@ public class ServiceManager {
 	 * @see ServicesConfiguration
 	 * @see #services(Class)
 	 */
-	@NonNull
 	@SuppressWarnings("unchecked")
-	public <S> ServicesConfiguration<S> servicesConfiguration(@NonNull final Class<S> servicesInterface) {
+	@NonNull public <S> ServicesConfiguration<S> servicesConfiguration(@NonNull final Class<S> servicesInterface) {
 		this.ensureHasServicesConfiguration(servicesInterface);
-		return mServices.get(servicesInterface);
+		return services.get(servicesInterface);
 	}
 
 	/**
@@ -190,9 +186,9 @@ public class ServiceManager {
 	 *                          is not created yet.
 	 */
 	private void ensureHasServicesConfiguration(final Class<?> servicesInterface) {
-		synchronized (mServices) {
-			final ServicesConfiguration servicesConfiguration = mServices.get(servicesInterface);
-			if (servicesConfiguration == null) mServices.put(
+		synchronized (services) {
+			final ServicesConfiguration servicesConfiguration = services.get(servicesInterface);
+			if (servicesConfiguration == null) services.put(
 					servicesInterface,
 					onCreateServicesConfiguration(servicesInterface)
 			);
@@ -213,11 +209,9 @@ public class ServiceManager {
 	 *                          object.
 	 * @return New services configuration for the services interface.
 	 */
-	@NonNull
-	@CallSuper
-	protected ServicesConfiguration onCreateServicesConfiguration(@NonNull final Class<?> servicesInterface) {
+	@CallSuper @NonNull protected ServicesConfiguration onCreateServicesConfiguration(@NonNull final Class<?> servicesInterface) {
 		final ServicesConfiguration configuration = new ServicesConfiguration<>(servicesInterface);
-		if (mEndPoint != null) configuration.retrofitBuilder().baseUrl(mEndPoint.getBaseUrl());
+		if (endPoint != null) configuration.retrofitBuilder().baseUrl(endPoint.getBaseUrl());
 		return configuration;
 	}
 
@@ -297,8 +291,7 @@ public class ServiceManager {
 		 * @return Retrofit builder that may be used to configure services PROXY associated with this
 		 * configuration and may be obtained via {@link ServiceManager#services(Class)}.
 		 */
-		@NonNull
-		public Retrofit.Builder retrofitBuilder() {
+		@NonNull public Retrofit.Builder retrofitBuilder() {
 			return mBuilder;
 		}
 
@@ -309,8 +302,7 @@ public class ServiceManager {
 		 * @see #retrofitBuilder()
 		 * @see #invalidate()
 		 */
-		@NonNull
-		public Retrofit retrofit() {
+		@NonNull public Retrofit retrofit() {
 			this.ensureValid();
 			return retrofit;
 		}
@@ -321,8 +313,7 @@ public class ServiceManager {
 		 *
 		 * @return Services PROXY configured according to this configuration.
 		 */
-		@NonNull
-		S services() {
+		@NonNull S services() {
 			this.ensureValid();
 			return services;
 		}
