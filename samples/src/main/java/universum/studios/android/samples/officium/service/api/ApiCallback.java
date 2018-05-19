@@ -30,10 +30,10 @@ import universum.studios.android.officium.service.ServiceError;
 public final class ApiCallback<R> extends ServiceCallback<R> {
 
 	@Override protected void onDispatchResponse(@NonNull final R responseBody) {
-		EventBusProvider.getBusForContext(EventBusProvider.UI).post(responseBody);
+		EventBusProvider.getBusForContext(EventBusProvider.MAIN).post(responseBody);
 	}
 
 	@Override protected void onDispatchError(@NonNull final ServiceError error) {
-		EventBusProvider.getBusForContext(EventBusProvider.UI).post(error);
+		EventBusProvider.getBusForContext(EventBusProvider.MAIN).post(error);
 	}
 }

@@ -20,10 +20,9 @@ package universum.studios.android.samples.officium.service.api;
 
 import android.support.annotation.NonNull;
 
-import universum.studios.android.samples.officium.service.request.ApiSignInRequest;
-import universum.studios.android.samples.officium.service.response.ApiSignInResponse;
-import universum.studios.android.officium.service.EndPoint;
-import universum.studios.android.officium.sync.SyncTask;
+import okhttp3.HttpUrl;
+import universum.studios.android.samples.officium.service.api.request.ApiSignInRequest;
+import universum.studios.android.samples.officium.service.api.response.ApiSignInResponse;
 
 /**
  * @author Martin Albedinsky
@@ -34,27 +33,17 @@ public interface Api {
 	 * CONFIGURATION ===============================================================================
 	 */
 
-	EndPoint END_POINT = ApiEndPoint.get();
-
-	/*
-	 * IDS OF PROVIDED SYNCHRONIZATION SERVICES ====================================================
-	 */
-
-	int SYNCHRONIZE_GLOBAL      = SyncTask.DEFAULT_ID;
-	int SYNCHRONIZE_MESSAGES    = 0x0001;
+	HttpUrl BASE_URL = HttpUrl.parse("https://www.android.com/api/v1/");
 
 	/*
 	 * IDS OF PROVIDED SERVICES ====================================================================
 	 */
 
-	int SIGN_UP                = 0x1001;
-	int SIGN_IN                = 0x1002;
-	int FORGOT_PASSWORD        = 0x1003;
+	int SIGN_IN                = 0x1001;
 
 	/*
 	 * PROVIDED SERVICES ===========================================================================
 	 */
 
-	@NonNull
-	ApiCall<ApiSignInResponse> signIn(@NonNull ApiSignInRequest request);
+	@NonNull ApiCall<ApiSignInResponse> signIn(@NonNull ApiSignInRequest request);
 }

@@ -21,7 +21,6 @@ package universum.studios.android.samples.officium.service.api;
 import android.support.annotation.NonNull;
 
 import universum.studios.android.officium.service.ServiceApiProvider;
-import universum.studios.android.officium.service.auth.AuthTokenProvider;
 
 /**
  * @author Martin Albedinsky
@@ -31,9 +30,6 @@ public final class ApiProvider extends ServiceApiProvider<Api> {
 	private static final Object LOCK = new Object();
 
 	private static volatile ApiProvider instance;
-
-	private AuthTokenProvider mAuthTokenProvider;
-	private boolean mAuthTokenProviderChanged;
 
 	private ApiProvider() {}
 
@@ -46,20 +42,12 @@ public final class ApiProvider extends ServiceApiProvider<Api> {
 		return instance;
 	}
 
-	public void setAuthTokenProvider(@NonNull final AuthTokenProvider tokenProvider) {
-		this.mAuthTokenProvider = tokenProvider;
-		this.mAuthTokenProviderChanged = true;
-	}
-
 	@Override @NonNull protected Api onCreateApi() {
 		return new ApiImpl();
 	}
 
 	@Override @NonNull protected Api onPrepareApi(@NonNull final Api api) {
 		super.onPrepareApi(api);
-		if (mAuthTokenProviderChanged) {
-			((ApiImpl) api).setAuthTokenProvider(mAuthTokenProvider);
-		}
 		return api;
 	}
 }

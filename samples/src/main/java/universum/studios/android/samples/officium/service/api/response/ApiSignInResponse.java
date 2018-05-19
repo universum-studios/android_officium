@@ -16,26 +16,14 @@
  * See the License for the specific language governing permissions and limitations under the License.
  * *************************************************************************************************
  */
-package universum.studios.android.samples.officium.service.api;
+package universum.studios.android.samples.officium.service.api.response;
 
-import android.support.annotation.NonNull;
-
-import universum.studios.android.officium.service.EndPoint;
+import universum.studios.android.samples.officium.service.api.model.RemoteAccount;
 
 /**
  * @author Martin Albedinsky
  */
-final class ApiEndPoint implements EndPoint {
+public final class ApiSignInResponse {
 
-	private static final ApiEndPoint INSTANCE = new ApiEndPoint();
-
-	private ApiEndPoint() {}
-
-	@NonNull static ApiEndPoint get() {
-		return INSTANCE;
-	}
-
-	@Override @NonNull public String getBaseUrl() {
-		return "https://service.endpoint.org/api/v1/";
-	}
+	public RemoteAccount account;
 }

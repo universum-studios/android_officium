@@ -20,8 +20,8 @@ package universum.studios.android.samples.officium.service.api;
 
 import android.support.annotation.NonNull;
 
-import universum.studios.android.samples.officium.service.request.ApiSignInRequest;
-import universum.studios.android.samples.officium.service.response.ApiSignInResponse;
+import universum.studios.android.samples.officium.service.api.request.ApiSignInRequest;
+import universum.studios.android.samples.officium.service.api.response.ApiSignInResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -36,7 +36,5 @@ interface Services {
 	 * AUTHENTICATION ==============================================================================
 	 */
 
-	@POST("user/signIn") Call<ApiSignInResponse> signIn(
-			@Body @NonNull ApiSignInRequest request
-	);
+	@POST("user/signIn") Call<ApiSignInResponse> signIn(@Body @NonNull ApiSignInRequest request);
 }

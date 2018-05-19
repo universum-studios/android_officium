@@ -22,26 +22,15 @@ import android.support.annotation.NonNull;
 
 import universum.studios.android.officium.service.ServiceApi;
 import universum.studios.android.officium.service.ServiceManager;
-import universum.studios.android.officium.service.auth.AuthTokenProvider;
-import universum.studios.android.samples.officium.service.request.ApiSignInRequest;
-import universum.studios.android.samples.officium.service.response.ApiSignInResponse;
+import universum.studios.android.samples.officium.service.api.request.ApiSignInRequest;
+import universum.studios.android.samples.officium.service.api.response.ApiSignInResponse;
 
 /**
  * @author Martin Albedinsky
  */
 final class ApiImpl extends ServiceApi<ServiceManager> implements Api {
 
-	ApiImpl() {
-		super(new ServiceManager(END_POINT));
-		final ServiceManager.ServicesConfiguration configuration = mManager.servicesConfiguration(Services.class);
-		configuration.retrofitBuilder();
-		configuration.retrofit();
-		configuration.invalidate();
-	}
-
-	void setAuthTokenProvider(@NonNull final AuthTokenProvider tokenProvider) {
-		// todo: servicesConfiguration(Services.class).requestInterceptor(new AuthRequestInterceptor(tokenProvider));
-	}
+	ApiImpl() { super(new ServiceManager(BASE_URL)); }
 
 	@Override @NonNull public ApiCall<ApiSignInResponse> signIn(@NonNull final ApiSignInRequest request) {
 		return new ApiCall<>(services(Services.class).signIn(request)).withServiceId(SIGN_IN);

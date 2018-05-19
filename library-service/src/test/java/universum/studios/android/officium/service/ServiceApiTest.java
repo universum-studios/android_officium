@@ -27,12 +27,23 @@ import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 /**
  * @author Martin Albedinsky
  */
 public final class ServiceApiTest extends LocalTestCase {
+
+	@Test public void testInstantiation() {
+		// Arrange:
+		final ServiceManager mockManager = mock(ServiceManager.class);
+		// Act:
+		final ServiceApi<ServiceManager> api = new ServiceApi<>(mockManager);
+		// Assert:
+		assertThat(api.getManager(), is(mockManager));
+		verifyZeroInteractions(mockManager);
+	}
 
 	@Test public void testServices() {
 		// Arrange:
