@@ -26,19 +26,20 @@ import android.support.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
+import okhttp3.HttpUrl;
 import retrofit2.Retrofit;
 
 /**
  * Manager that may be used for accessing of multiple instances of services (theirs PROXYies) and
- * also of theirs configuration. Each instance of ServiceManager should have its end point specified
- * via {@link #setEndPoint(EndPoint)}. This end point is than attached to each {@link ServiceConnection}
- * object that is created whenever a desired services PROXY instance is requested via {@link #services(Class)}
- * or its configuration is requested via {@link #servicesConfiguration(Class)}.
+ * also of their configurations. Each instance of ServiceManager must have its base url specified
+ * via {@link #ServiceManager(String)} constructor. This base url is than attached to each
+ * {@link ServiceConnection} object that is created whenever a desired services PROXY instance is
+ * requested via {@link #services(Class)} or its configuration is requested via {@link #servicesConfiguration(Class)}.
  * <p>
  * As it is described in {@link ServicesConfiguration} class, each services configuration object
  * caches its services PROXY instance and re-creates it only in case of configuration change. Also
- * ServiceManager caches each instance of these configuration objects and maps them to theirs
- * corresponding services interface.
+ * ServiceManager caches each instance of these configuration objects and maps them to their
+ * corresponding services interface class.
  *
  * @author Martin Albedinsky
  * @since 1.0
@@ -67,37 +68,78 @@ public class ServiceManager {
 	 */
 
 	/**
+	 * Base url specified for services accessible via this manager.
+	 */
+	// todo: make final in final production release of version 2.0.0
+	private HttpUrl baseUrl;
+
+	/**
 	 * Map containing services configuration objects mapped to class of services that they configure.
 	 */
 	private final Map<Class<?>, ServicesConfiguration> services = new HashMap<>(1);
 
 	/**
 	 * End point for services managed by this manager.
+	 *
+	 * @deprecated Use {@link #baseUrl} instead.
 	 */
-	private EndPoint endPoint;
+	@Deprecated private EndPoint endPoint;
 
 	/*
 	 * Constructors ================================================================================
 	 */
 
 	/**
-	 * Creates a new instance of ServiceManager without specified end point.
+	 * Same as {@link #ServiceManager(HttpUrl)} where the specified <var>baseUrl</var> string will
+	 * be used to create {@link HttpUrl} via {@link HttpUrl#parse(String)}.
 	 *
-	 * @see #setEndPoint(EndPoint)
+	 * @param baseUrl The desired base url for services to be accessible via this manager.
 	 */
-	public ServiceManager() {
-		this.endPoint = null;
+	public ServiceManager(@NonNull final String baseUrl) {
+		this(HttpUrl.parse(baseUrl));
 	}
 
 	/**
+	 * Creates a new instance of ServiceManager with the specified <var>baseUrl</var>.
+	 *
+	 * @param baseUrl The desired base url for services to be accessible via this manager.
+	 *
+	 * @see Retrofit.Builder#baseUrl(String)
+	 */
+	public ServiceManager(@NonNull final HttpUrl baseUrl) {
+		this.baseUrl = baseUrl;
+	}
+
+	/**
+	 * <b>This constructor is deprecated and will be removed in the final production release of version 2.0.0.</b>
+	 * <p>
 	 * Creates a new instance of ServiceManager with the specified <var>endPoint</var>.
 	 *
 	 * @param endPoint The desired end point. This end point will be attached to each services
 	 *                 configuration created via {@link #onCreateServicesConfiguration(Class)}.
 	 * @see #getEndPoint()
+	 *
+	 * @deprecated Use {@link #ServiceManager(HttpUrl)} instead.
 	 */
+	@Deprecated
 	public ServiceManager(@NonNull final EndPoint endPoint) {
 		this.endPoint = endPoint;
+		this.baseUrl = HttpUrl.parse(endPoint.getBaseUrl());
+	}
+
+	/**
+	 * <b>This constructor is deprecated and will be removed in the final production release of version 2.0.0.</b>
+	 * <p>
+	 * Creates a new instance of ServiceManager without specified end point.
+	 *
+	 * @see #setEndPoint(EndPoint)
+	 *
+	 * @deprecated Use {@link #ServiceManager(HttpUrl)} instead.
+	 */
+	@Deprecated
+	public ServiceManager() {
+		this.endPoint = null;
+		this.baseUrl = null;
 	}
 
 	/*
@@ -105,12 +147,23 @@ public class ServiceManager {
 	 */
 
 	/**
+	 * Returns the base url specified for this manager's services.
+	 *
+	 * @return The base url.
+	 */
+	@NonNull public HttpUrl getBaseUrl() {
+		return baseUrl;
+	}
+
+	/**
 	 * Same as {@link #setEndPoint(EndPoint)} with EndPoint instance providing the given <var>baseUrl</var>
 	 * as its base url via {@link EndPoint#getBaseUrl()}.
 	 *
 	 * @param baseUrl Base url of the desired end point.
+	 *
+	 * @deprecated Use {@link #ServiceManager(HttpUrl)} instead.
 	 */
-	public void setEndPoint(@NonNull final String baseUrl) {
+	@Deprecated public void setEndPoint(@NonNull final String baseUrl) {
 		setEndPoint(new EndPoint() {
 
 			/**
@@ -131,9 +184,12 @@ public class ServiceManager {
 	 *
 	 * @param endPoint The desired end point.
 	 * @see #getEndPoint()
+	 *
+	 * @deprecated Use {@link #ServiceManager(String)} instead.
 	 */
-	public void setEndPoint(@NonNull final EndPoint endPoint) {
+	@Deprecated public void setEndPoint(@NonNull final EndPoint endPoint) {
 		this.endPoint = endPoint;
+		this.baseUrl = HttpUrl.parse(endPoint.getBaseUrl());
 	}
 
 	/**
@@ -141,8 +197,10 @@ public class ServiceManager {
 	 *
 	 * @return This manager's end point used for services configuration or {@code null} if no end
 	 * point has been specified.
+	 *
+	 * @deprecated Use {@link #getBaseUrl()} instead.
 	 */
-	@Nullable public EndPoint getEndPoint() {
+	@Deprecated @Nullable public EndPoint getEndPoint() {
 		return endPoint;
 	}
 
@@ -158,10 +216,8 @@ public class ServiceManager {
 	 * @return PROXY for the desired services interface ready for services invocation.
 	 * @see #servicesConfiguration(Class)
 	 */
-	@SuppressWarnings("unchecked")
 	@NonNull public <S> S services(@NonNull final Class<S> servicesInterface) {
-		this.ensureHasServicesConfiguration(servicesInterface);
-		return (S) services.get(servicesInterface).services();
+		return ensureServicesConfiguration(servicesInterface).services();
 	}
 
 	/**
@@ -173,10 +229,8 @@ public class ServiceManager {
 	 * @see ServicesConfiguration
 	 * @see #services(Class)
 	 */
-	@SuppressWarnings("unchecked")
 	@NonNull public <S> ServicesConfiguration<S> servicesConfiguration(@NonNull final Class<S> servicesInterface) {
-		this.ensureHasServicesConfiguration(servicesInterface);
-		return services.get(servicesInterface);
+		return ensureServicesConfiguration(servicesInterface);
 	}
 
 	/**
@@ -185,13 +239,15 @@ public class ServiceManager {
 	 * @param servicesInterface The services interface for which to create new configuration if it
 	 *                          is not created yet.
 	 */
-	private void ensureHasServicesConfiguration(final Class<?> servicesInterface) {
+	@SuppressWarnings("unchecked")
+	private <S> ServicesConfiguration<S> ensureServicesConfiguration(final Class<S> servicesInterface) {
 		synchronized (services) {
-			final ServicesConfiguration servicesConfiguration = services.get(servicesInterface);
-			if (servicesConfiguration == null) services.put(
-					servicesInterface,
-					onCreateServicesConfiguration(servicesInterface)
-			);
+			ServicesConfiguration<S> servicesConfiguration = (ServicesConfiguration<S>) services.get(servicesInterface);
+			if (servicesConfiguration == null) {
+				servicesConfiguration = onCreateServicesConfiguration(servicesInterface);
+				services.put(servicesInterface, servicesConfiguration);
+			}
+			return servicesConfiguration;
 		}
 	}
 
@@ -209,9 +265,9 @@ public class ServiceManager {
 	 *                          object.
 	 * @return New services configuration for the services interface.
 	 */
-	@CallSuper @NonNull protected ServicesConfiguration onCreateServicesConfiguration(@NonNull final Class<?> servicesInterface) {
-		final ServicesConfiguration configuration = new ServicesConfiguration<>(servicesInterface);
-		if (endPoint != null) configuration.retrofitBuilder().baseUrl(endPoint.getBaseUrl());
+	@CallSuper @NonNull protected <S> ServicesConfiguration<S> onCreateServicesConfiguration(@NonNull final Class<S> servicesInterface) {
+		final ServicesConfiguration<S> configuration = new ServicesConfiguration<>(servicesInterface);
+		configuration.retrofitBuilder().baseUrl(baseUrl);
 		return configuration;
 	}
 
@@ -238,7 +294,7 @@ public class ServiceManager {
 		 * Builder used to create an instance of {@link #retrofit} for the current configuration
 		 * parameters.
 		 */
-		private final Retrofit.Builder mBuilder = new Retrofit.Builder();
+		private final Retrofit.Builder builder = new Retrofit.Builder();
 
 		/**
 		 * Class of services interface used to create {@link #services} PROXY by {@link #retrofit}.
@@ -254,7 +310,7 @@ public class ServiceManager {
 		private S services;
 
 		/**
-		 * Retrofit instance created by {@link #mBuilder} for the current configuration parameters.
+		 * Retrofit instance created by {@link #builder} for the current configuration parameters.
 		 * This retrofit instance is used to create an instance of services PROXY whenever
 		 * {@link #services()} is invoked and there has been registered configuration change.
 		 *
@@ -292,7 +348,7 @@ public class ServiceManager {
 		 * configuration and may be obtained via {@link ServiceManager#services(Class)}.
 		 */
 		@NonNull public Retrofit.Builder retrofitBuilder() {
-			return mBuilder;
+			return builder;
 		}
 
 		/**
@@ -324,8 +380,8 @@ public class ServiceManager {
 		 */
 		private void ensureValid() {
 			if (changed) {
-				synchronized (mBuilder) {
-					this.retrofit = mBuilder.build();
+				synchronized (builder) {
+					this.retrofit = builder.build();
 					this.services = retrofit.create(servicesInterface);
 					this.changed = false;
 				}

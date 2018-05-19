@@ -30,66 +30,54 @@ import android.support.annotation.NonNull;
  * // Api interface that is visible across whole application.
  * public interface Api {
  *
- *      String END_POINT = "http://messenger.com";
+ *      String BASE_URL = "https://www.android.com/";
  *      String VERSION = "1";
- *      String URL = "/api/v" + VERSION;
+ *      String URL = "api/v" + VERSION;
  *
- *      void signIn(&#64;NonNull SignInRequest request);
+ *      Single&lt;SignInResponse&gt; signIn(&#64;NonNull SignInRequest request);
  *
- *      void forgotPassword(&#64;NonNull ForgotPasswordRequest request);
+ *      Single&lt;SignOutResponse&gt; signOut(&#64;NonNull SignOutRequest request);
  * }
  *
  * // Retrofit services definition interface.
  * interface Services {
  *
  *      &#64;POST(Api.URL + "/signIn")
- *      void signIn(
- *          &#64;Body &#64;NonNull SignInRequest request,
- *          &#64;NonNull Callback&lt;SignInResponse&gt; callback
- *      );
+ *      Single&lt;SignInResponse&gt; signIn(&#64;Body &#64;NonNull SignInRequest request);
  *
- *      &#64;POST(Api.URL + "/forgotPassword")
- *      void forgotPassword(
- *          &#64;Body &#64;NonNull ForgotPasswordRequest request,
- *          &#64;NonNull Callback&lt;ForgotPasswordResponse&gt; callback
- *      );
+ *      &#64;POST(Api.URL + "/signOut")
+ *      Single&lt;SignOutResponse&gt; forgotPassword(&#64;Body &#64;NonNull SignOutRequest request);
  * }
  *
  * // Api implementation provided by ApiProvider.
- * final class ApiImpl implements Api {
+ * final class ApiImpl extends ServiceApi&lt;ServiceManager&gt; implements Api {
  *
- *      ApiImpl(&#64;NonNull Bus bus) {
- *          super(new ServiceManager(), bus);
+ *      ApiImpl(&#64;NonNull ServiceManager manager) {
+ *          super(manager);
  *      }
  *
  *      &#64;Override
- *      public void signIn(&#64;NonNull SignInRequest request) {
- *          services(Services.class).signIn(
- *              request,
- *              new ServiceCallback&lt;SignInResponse&gt;(1, mBus)
- *          );
+ *      public Single&lt;SignInResponse&gt; signIn(&#64;NonNull SignInRequest request) {
+ *          return services(Services.class).signIn(request);
  *      }
  *
  *      &#64;Override
- *      public void forgotPassword(&#64;NonNull ForgotPasswordRequest request) {
- *          services(Services.class).forgotPassword(
- *              request,
- *              new ServiceCallback&lt;ForgotPasswordResponse&gt;(2, mBus)
- *          );
+ *      public Single&lt;SignOutResponse&gt; forgotPassword(&#64;NonNull ForgotPasswordRequest request) {
+ *          return services(Services.class).forgotPassword(request);
  *      }
  * }
  *
- * // Provider that provides instance of ApiImpl for application clients.
+ * // Provider that provides instance of Api for application clients.
  * public final class ApiProvider extends ServiceApiProvider&lt;Api&gt; {
  *
- *     public ApiProvider(&#64;NonNull Bus bus) {
- *         super(bus);
+ *     public ApiProvider() {
+ *         super();
  *     }
  *
  *     &#64;NonNull
  *     &#64;Override
- *     protected Api onCreateApi(@NonNull Bus bus) {
- *          return new ApiImpl(bus);
+ *     protected Api onCreateApi() {
+ *          return new ApiImpl();
  *     }
  * }
  * </pre>
@@ -126,9 +114,12 @@ public class ServiceApi<M extends ServiceManager> {
 
 	/**
 	 * Instance of {@link ServiceManager} used to configure and access services provided by this API.
+	 *
+	 * @deprecated Use {@link #getManager()} instead.
 	 */
 	@NonNull
 	@Deprecated
+	// todo: make private in final production release ...
 	protected final M mManager;
 
 	/*
@@ -148,7 +139,14 @@ public class ServiceApi<M extends ServiceManager> {
 	 * Methods =====================================================================================
 	 */
 
-	// todo: implement protected final M getManager() ....
+	/**
+	 * Returns the service manager used by this api implementation.
+	 *
+	 * @return Service manager of this api.
+	 */
+	@NonNull protected final M getManager() {
+		return mManager;
+	}
 
 	/**
 	 * Returns an instance of services PROXY for the specified <var>servicesInterface</var>.

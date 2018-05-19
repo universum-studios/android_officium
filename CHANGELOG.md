@@ -10,6 +10,7 @@ More **detailed changelog** for each respective version may be viewed by pressin
 > ??.??.2018
 
 - Resolved [Issue #33](https://github.com/universum-studios/android_officium/issues/33).
+- Resolved [Issue #34](https://github.com/universum-studios/android_officium/issues/34).
 
 ## Version 1.x ##
 

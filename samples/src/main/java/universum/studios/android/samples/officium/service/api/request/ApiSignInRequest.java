@@ -16,14 +16,9 @@
  * See the License for the specific language governing permissions and limitations under the License.
  * *************************************************************************************************
  */
-package universum.studios.android.samples.officium.service.response;
-
-import universum.studios.android.samples.officium.service.model.RemoteAccount;
+package universum.studios.android.samples.officium.service.api.request;
 
 /**
  * @author Martin Albedinsky
  */
-public final class ApiSignInResponse {
-
-	public RemoteAccount account;
-}
+public final class ApiSignInRequest {}
