@@ -1,6 +1,6 @@
 /*
  * *************************************************************************************************
- *                                 Copyright 2018 Universum Studios
+ *                                 Copyright 2017 Universum Studios
  * *************************************************************************************************
  *                  Licensed under the Apache License, Version 2.0 (the "License")
  * -------------------------------------------------------------------------------------------------
@@ -18,24 +18,16 @@
  */
 package universum.studios.android.officium.account;
 
-import android.support.test.runner.AndroidJUnit4;
-
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-import universum.studios.android.test.instrumented.InstrumentedTestCase;
+import universum.studios.android.test.local.RobolectricTestCase;
 
 /**
  * @author Martin Albedinsky
  */
-@RunWith(AndroidJUnit4.class)
-public final class BaseAccountAuthenticatorTest extends InstrumentedTestCase {
+public final class UserAccountTest extends RobolectricTestCase {
 
-	@SuppressWarnings("unused")
-	private static final String TAG = "BaseAccountAuthenticatorTest";
-
-	@Test
-	public void test() {
+	@Test public void testInstantiation() {
 		// todo: implement test
 	}
 }

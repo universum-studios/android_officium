@@ -18,24 +18,16 @@
  */
 package universum.studios.android.officium.account;
 
-import android.support.test.runner.AndroidJUnit4;
-
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-import universum.studios.android.test.instrumented.InstrumentedTestCase;
+import universum.studios.android.test.local.RobolectricTestCase;
 
 /**
  * @author Martin Albedinsky
  */
-@RunWith(AndroidJUnit4.class)
-public final class UserAccountTest extends InstrumentedTestCase {
+public final class UserAccountManagerTest extends RobolectricTestCase {
 
-	@SuppressWarnings("unused")
-	private static final String TAG = "UserAccountTest";
-
-	@Test
-	public void test() {
+	@Test public void testInstantiation() {
 		// todo: implement test
 	}
 }
