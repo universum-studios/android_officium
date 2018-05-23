@@ -28,10 +28,11 @@ import universum.studios.android.officium.service.ServiceApiProvider;
 public final class ApiProvider extends ServiceApiProvider<Api> {
 
 	private static final Object LOCK = new Object();
-
 	private static volatile ApiProvider instance;
 
-	private ApiProvider() {}
+	private ApiProvider() {
+		super(new ApiImpl.ApiFactory());
+	}
 
 	@NonNull public static ApiProvider get() {
 		if (instance == null) {
@@ -40,14 +41,5 @@ public final class ApiProvider extends ServiceApiProvider<Api> {
 			}
 		}
 		return instance;
-	}
-
-	@Override @NonNull protected Api onCreateApi() {
-		return new ApiImpl();
-	}
-
-	@Override @NonNull protected Api onPrepareApi(@NonNull final Api api) {
-		super.onPrepareApi(api);
-		return api;
 	}
 }

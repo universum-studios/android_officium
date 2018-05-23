@@ -28,6 +28,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.notNullValue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verifyZeroInteractions;
 
 /**
  * @author Martin Albedinsky
@@ -36,15 +38,25 @@ public final class ServiceApiProviderTest extends LocalTestCase {
 
 	@Test public void testApi() {
 		// Arrange:
-		final ServiceApiProvider<TestApiImpl> provider = new TestProvider();
+		final ServiceApiProvider<TestApi> provider = new TestProvider();
 		// Act + Assert:
 		assertThat(provider.getApi(), is(notNullValue()));
 		assertThat(provider.getApi(), is(provider.getApi()));
 	}
 
+	@Test public void testPrepareApi() {
+		// Arrange:
+		final TestApi mockApi = mock(TestApi.class);
+		final ServiceApiProvider<TestApi> provider = new TestProvider();
+		// Act:
+		provider.onPrepareApi(mockApi);
+		// Assert:
+		verifyZeroInteractions(mockApi);
+	}
+
 	@Test public void testInvalidateApi() {
 		// Arrange:
-		final ServiceApiProvider<TestApiImpl> provider = new TestProvider();
+		final ServiceApiProvider<TestApi> provider = new TestProvider();
 		final TestApi api = provider.getApi();
 		// Act:
 		provider.invalidateApi();
@@ -61,12 +73,26 @@ public final class ServiceApiProviderTest extends LocalTestCase {
 
 	private interface TestApi {}
 
-	private final class TestApiImpl implements TestApi {}
+	private final class TestApiImpl extends ServiceApi<ServiceManager> implements TestApi {
 
-	private final class TestProvider extends ServiceApiProvider<TestApiImpl> {
+		TestApiImpl() {
+			super(new ServiceManager("https://www.android.com/"));
+		}
+	}
 
-		@Override @NonNull protected TestApiImpl onCreateApi() {
-			return new TestApiImpl();
+	private final class TestProvider extends ServiceApiProvider<TestApi> {
+
+		TestProvider() {
+			this(new ServiceApi.Factory<TestApi>() {
+
+				@Override @NonNull public TestApi create() {
+					return new TestApiImpl();
+				}
+			});
+		}
+
+		TestProvider(@NonNull final ServiceApi.Factory<TestApi> apiFactory) {
+			super(apiFactory);
 		}
 	}
 }

@@ -30,6 +30,13 @@ import universum.studios.android.samples.officium.service.api.response.ApiSignIn
  */
 final class ApiImpl extends ServiceApi<ServiceManager> implements Api {
 
+	static final class ApiFactory implements ServiceApi.Factory<Api> {
+
+		@Override @NonNull public Api create() {
+			return new ApiImpl();
+		}
+	}
+
 	ApiImpl() { super(new ServiceManager(BASE_URL)); }
 
 	@Override @NonNull public ApiCall<ApiSignInResponse> signIn(@NonNull final ApiSignInRequest request) {

@@ -21,24 +21,22 @@ package universum.studios.android.officium.service;
 import android.support.annotation.NonNull;
 
 /**
- * ServiceApiProvider represents a provider that can provide an instance of {@link ServiceApi}
- * implementation. Each instance of ServiceApiProvider implementation can provide only single instance
- * of a specific ServiceApi. Already created api instance is cached within api provider due to
- * performance reasons. An instance of api can be obtained via {@link #getApi()}.
+ * ServiceApiProvider represents a provider that can provide a single instance of {@link ServiceApi}
+ * implementation. Already created api instance is cached within api provider due to performance
+ * reasons. Instance of api can be obtained via {@link #getApi()}.
  * <p>
- * Implementations of ServiceApiProvider are required to implement {@link #onCreateApi()} to
- * create a new instance of api that is specific for them. If there is required some additional set
- * up of api instance before it is returned to its users via {@link #getApi()} than such set up
- * may be accomplished via {@link #onPrepareApi(Object)} method.
- * <p>
- * Whenever an existing instance of api becomes invalid that api instance may be invalidated via call
- * to {@link #invalidateApi()} which will result in call to {@link #onCreateApi()} when
- * {@link #getApi()} is next time invoked.
+ * Each ServiceApiProvider instance need to be created with {@link ServiceApi.Factory} via
+ * {@link #ServiceApiProvider(ServiceApi.Factory)} that is used by the provider to create instance
+ * of the associated api when such api is first time requested. Implementations of ServiceApiProvider
+ * are allowed to override {@link #onPrepareApi(Object)} method which may be used for additional
+ * preparation of the api before it is returned to the caller.
  *
- * @param <A> Type of the API provided by the ServiceApiProvider implementation.
  * @author Martin Albedinsky
+ * @since 1.0
+ *
+ * @param <A> Type of the API provided by this provider.
  */
-public abstract class ServiceApiProvider<A> {
+public class ServiceApiProvider<A> {
 
 	/*
 	 * Constants ===================================================================================
@@ -63,17 +61,43 @@ public abstract class ServiceApiProvider<A> {
 
 	/**
 	 * Lock used for synchronized operations.
+	 *
+	 * @deprecated Use {@link #apiFactory} instead as synchronization lock.
 	 */
-	private final Object LOCK = new Object();
+	@Deprecated private final Object LOCK = new Object();
+
+	/**
+	 * Factory that is used by this provider to create single api instance.
+	 */
+	private ServiceApi.Factory<A> apiFactory;
 
 	/**
 	 * Cached api implementation created via {@link #onCreateApi()}.
 	 */
-	private volatile A mApi;
+	private volatile A api;
 
 	/*
 	 * Constructors ================================================================================
 	 */
+
+	/**
+	 * Creates a new instance of ServiceApiProvider.
+	 *
+	 * @deprecated Use {@link #ServiceApiProvider(ServiceApi.Factory)} instead.
+	 */
+	@Deprecated public ServiceApiProvider() {
+		super();
+	}
+
+	/**
+	 * Creates a new instance of ServiceApiProvider with the given <var>apiFactory</var>.
+	 *
+	 * @param apiFactory The desired factory that will be used by the new provider to create a single
+	 *                   instance of the api when it is first time requested via {@link #getApi()}.
+	 */
+	public ServiceApiProvider(@NonNull final ServiceApi.Factory<A> apiFactory) {
+		this.apiFactory = apiFactory;
+	}
 
 	/*
 	 * Methods =====================================================================================
@@ -86,14 +110,25 @@ public abstract class ServiceApiProvider<A> {
 	 *
 	 * @return Instance of api ready to be used for service requests execution.
 	 */
-	@NonNull
-	public final A getApi() {
-		if (mApi == null) {
+	@SuppressWarnings("deprecation")
+	@NonNull public final A getApi() {
+		if (api == null) {
 			synchronized (LOCK) {
-				this.mApi = onCreateApi();
+				this.api = onCreateApi();
 			}
 		}
-		return onPrepareApi(mApi);
+		return onPrepareApi(api);
+	}
+
+	/**
+	 * Invoked whenever {@link #getApi()} is called in order to allow to make some additional
+	 * preparation of the given <var>api</var> instance before it is returned to the caller.
+	 *
+	 * @param api The api instance provided by this provider.
+	 * @return The passed api prepared to be used.
+	 */
+	@NonNull protected A onPrepareApi(@NonNull final A api) {
+		return api;
 	}
 
 	/**
@@ -103,21 +138,15 @@ public abstract class ServiceApiProvider<A> {
 	 *
 	 * @return New instance of api implementation specific for this provider.
 	 * @see #onPrepareApi(Object)
-	 */
-	@NonNull
-	protected abstract A onCreateApi();
-
-	/**
-	 * Invoked whenever {@link #getApi()} is called to make some additional preparation of the given
-	 * <var>api</var> instance before it is returned to the user.
 	 *
-	 * @param api The current api instance cached or just created by this provider.
-	 * @return The passed api prepared to be used.
-	 * @see #onCreateApi()
+	 * @deprecated Use {@link #ServiceApiProvider(ServiceApi.Factory)} instead.
 	 */
-	@NonNull
-	protected A onPrepareApi(@NonNull final A api) {
-		return api;
+	@Deprecated @NonNull protected A onCreateApi() {
+		// todo: move instantiation of the api to the getApi() method when final production release of version 2.0.0 is ready
+		if (apiFactory == null) {
+			throw new IllegalStateException("No api factory provided!");
+		}
+		return apiFactory.create();
 	}
 
 	/**
@@ -125,11 +154,13 @@ public abstract class ServiceApiProvider<A> {
 	 * is next time called a new instance of api will be requested via {@link #onCreateApi()}.
 	 *
 	 * @see #onPrepareApi(Object)
+	 *
+	 * @deprecated Api cannot be invalidated but rather its state changed.
 	 */
-	protected void invalidateApi() {
-		if (mApi != null) {
+	@Deprecated protected void invalidateApi() {
+		if (api != null) {
 			synchronized (LOCK) {
-				this.mApi = null;
+				this.api = null;
 			}
 		}
 	}
