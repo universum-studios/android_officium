@@ -218,6 +218,7 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 			PERMISSION_GET_ACCOUNTS,
 			PERMISSION_AUTHENTICATE_ACCOUNTS
 	})
+	@Deprecated
 	public boolean setAccountPassword(@Nullable final String password) {
 		final Account account = acquireAccount();
 		if (account == null) return false;
@@ -242,6 +243,7 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 			PERMISSION_GET_ACCOUNTS,
 			PERMISSION_AUTHENTICATE_ACCOUNTS
 	})
+	@Deprecated
 	public String getAccountPassword() {
 		final Account account = acquireAccount();
 		return account == null ? null : getAccountPassword(account);
@@ -263,6 +265,7 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 			PERMISSION_GET_ACCOUNTS,
 			PERMISSION_MANAGE_ACCOUNTS
 	})
+	@Deprecated
 	public boolean clearAccountPassword() {
 		final Account account = acquireAccount();
 		if (account == null) return false;
@@ -289,6 +292,7 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 			PERMISSION_GET_ACCOUNTS,
 			PERMISSION_AUTHENTICATE_ACCOUNTS
 	})
+	@Deprecated
 	public boolean setAccountData(@NonNull final String key, @Nullable final String value) {
 		final Account account = acquireAccount();
 		if (account == null) return false;
@@ -314,6 +318,7 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 			PERMISSION_GET_ACCOUNTS,
 			PERMISSION_AUTHENTICATE_ACCOUNTS
 	})
+	@Deprecated
 	public String getAccountData(@NonNull final String key) {
 		final Account account = acquireAccount();
 		return account == null ? null : getAccountData(account, key);
@@ -336,6 +341,7 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 			PERMISSION_GET_ACCOUNTS,
 			PERMISSION_AUTHENTICATE_ACCOUNTS
 	})
+	@Deprecated
 	public boolean setAccountDataBundle(@NonNull final Bundle dataBundle) {
 		final Account account = acquireAccount();
 		if (account == null) return false;
@@ -361,6 +367,7 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 			PERMISSION_GET_ACCOUNTS,
 			PERMISSION_AUTHENTICATE_ACCOUNTS
 	})
+	@Deprecated
 	public Bundle getAccountDataBundle(@NonNull final String... keys) {
 		final Account account = acquireAccount();
 		return account == null ? null : getAccountDataBundle(account, keys);
@@ -382,7 +389,7 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 	@Nullable
 	@RequiresPermission(PERMISSION_GET_ACCOUNTS)
 	protected Account acquireAccount() {
-		final Account[] accounts = mManager.getAccountsByType(mAccountType);
+		final Account[] accounts = systemManager.getAccountsByType(accountType);
 		// We assume here that there can be only one user account available/created (if any).
 		return accounts.length > 0 ? accounts[0] : null;
 	}

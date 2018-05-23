@@ -164,21 +164,21 @@ public abstract class UserAccountManager<A extends UserAccount> {
 
 	/**
 	 * Account manager used to create/update/delete accounts of the type specified for this manager.
+	 *
+	 * @deprecated Use {@link #getSystemManager()} instead.
 	 */
-	@NonNull
-	protected final AccountManager mManager;
+	@Deprecated
+	@NonNull protected final AccountManager systemManager;
 
 	/**
-	 * Context used to access {@link #mManager} and other needed application data about accounts.
+	 * Context used to access {@link #systemManager} and other needed application data about accounts.
 	 */
-	@NonNull
-	private final Context mContext;
+	@NonNull private final Context context;
 
 	/**
 	 * Type of accounts that can be managed by this manager.
 	 */
-	@NonNull
-	final String mAccountType;
+	@NonNull final String accountType;
 
 	/**
 	 * Handler that is used to dispatch callbacks on the Ui thread.
@@ -193,19 +193,19 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	private final List<AccountWatcher<A>> mWatchers = new ArrayList<>();
 
 	/**
-	 * Encrypto implementation that is used to encrypt keys of accounts data managed by this manager.
-	 *
-	 * @see #encryptKey(String)
-	 */
-	private Encrypto mKeyEncrypto;
-
-	/**
 	 * Crypto implementation that is used to encrypt and decrypt accounts data managed by this manager.
 	 *
 	 * @see #encryptData(String)
 	 * @see #decryptData(String)
 	 */
-	private Crypto mDataCrypto;
+	private Crypto dataCrypto;
+
+	/**
+	 * Encrypto implementation that is used to encrypt keys of accounts data managed by this manager.
+	 *
+	 * @see #encryptKey(String)
+	 */
+	private Encrypto dataKeyEncrypto;
 
 	/*
 	 * Constructors ================================================================================
@@ -218,9 +218,9 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 * @param accountType The desired type of accounts that can be managed by the new manager.
 	 */
 	public UserAccountManager(@NonNull final Context context, @NonNull final String accountType) {
-		this.mManager = AccountManager.get(context);
-		this.mContext = context;
-		this.mAccountType = accountType;
+		this.systemManager = AccountManager.get(context);
+		this.context = context;
+		this.accountType = accountType;
 		this.mUiHandler = new Handler(Looper.getMainLooper());
 	}
 
@@ -236,7 +236,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 */
 	@NonNull
 	public final Context getContext() {
-		return mContext;
+		return context;
 	}
 
 	/**
@@ -247,40 +247,16 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 */
 	@NonNull
 	public final String getAccountType() {
-		return mAccountType;
+		return accountType;
 	}
 
 	/**
-	 * Registers a watcher to be notified whenever a new user account is created or an old one
-	 * deleted.
+	 * todo:
 	 *
-	 * @param watcher The desired watcher to register.
-	 * @see #unregisterWatcher(AccountWatcher)
+	 * @return
 	 */
-	public void registerWatcher(@NonNull final AccountWatcher<A> watcher) {
-		if (!mWatchers.contains(watcher)) mWatchers.add(watcher);
-	}
-
-	/**
-	 * Unregisters the given <var>watcher</var> from the registered ones.
-	 *
-	 * @param watcher The desired watcher to unregister.
-	 * @see #registerWatcher(AccountWatcher)
-	 */
-	public void unregisterWatcher(@NonNull final AccountWatcher<A> watcher) {
-		mWatchers.remove(watcher);
-	}
-
-	/**
-	 * Sets an implementation of {@link Encrypto} that should be used by this account manager to
-	 * perform account data keys encryption operation.
-	 *
-	 * @param encrypto The desired encrypto implementation. May be {@code null} to not perform keys
-	 *                 encryption.
-	 * @see #setDataCrypto(Crypto)
-	 */
-	public final void setKeyEncrypto(@Nullable final Encrypto encrypto) {
-		this.mKeyEncrypto = encrypto;
+	@NonNull protected final AccountManager getSystemManager() {
+		return systemManager;
 	}
 
 	/**
@@ -298,7 +274,34 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 * @see #getAccountDataBundle(Account, String...)
 	 */
 	public final void setDataCrypto(@Nullable final Crypto crypto) {
-		this.mDataCrypto = crypto;
+		this.dataCrypto = crypto;
+	}
+
+	/**
+	 * Sets an implementation of {@link Encrypto} that should be used by this account manager to
+	 * perform account data keys encryption operation.
+	 *
+	 * @param encrypto The desired encrypto implementation. May be {@code null} to not perform keys
+	 *                 encryption.
+	 * @see #setDataCrypto(Crypto)
+	 *
+	 * @deprecated Use {@link #setDataKeyEncrypto(Encrypto)} instead.
+	 */
+	@Deprecated
+	public final void setKeyEncrypto(@Nullable final Encrypto encrypto) {
+		setDataKeyEncrypto(encrypto);
+	}
+
+	/**
+	 * Sets an implementation of {@link Encrypto} that should be used by this account manager to
+	 * perform account data keys encryption operation.
+	 *
+	 * @param encrypto The desired encrypto implementation. May be {@code null} to not perform keys
+	 *                 encryption.
+	 * @see #setDataCrypto(Crypto)
+	 */
+	public final void setDataKeyEncrypto(@Nullable final Encrypto encrypto) {
+		this.dataKeyEncrypto = encrypto;
 	}
 
 	/**
@@ -322,33 +325,54 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	}
 
 	/**
-	 * Encrypts the specified <var>key</var> using {@link #mKeyEncrypto}, if presented.
+	 * Encrypts the specified <var>key</var> using {@link #dataKeyEncrypto}, if presented.
 	 *
 	 * @param key The desired key to be encrypted.
 	 * @return Encrypted key or the same key if there is no cryptographic tool specified.
 	 */
 	private String encryptKey(final String key) {
-		return mKeyEncrypto == null ? key : CryptographyUtils.encrypt(key, mKeyEncrypto);
+		return dataKeyEncrypto == null ? key : CryptographyUtils.encrypt(key, dataKeyEncrypto);
 	}
 
 	/**
-	 * Encrypts the specified <var>value</var> using {@link #mDataCrypto}, if presented.
+	 * Encrypts the specified <var>value</var> using {@link #dataCrypto}, if presented.
 	 *
 	 * @param value The desired data value to be encrypted.
 	 * @return Encrypted data value or the same value if there is no cryptographic tool specified.
 	 */
-	private String encryptData(final String value) {
-		return mDataCrypto == null ? value : CryptographyUtils.encrypt(value, mDataCrypto);
+	@NonNull protected final String encryptData(@NonNull final String value) {
+		return dataCrypto == null ? value : CryptographyUtils.encrypt(value, dataCrypto);
 	}
 
 	/**
-	 * Decrypts the specified <var>value</var> using {@link #mDataCrypto}, if presented.
+	 * Decrypts the specified <var>value</var> using {@link #dataCrypto}, if presented.
 	 *
 	 * @param value The desired data value to be decrypted.
 	 * @return Decrypted data value or the same value if there is no cryptographic tool specified.
 	 */
-	private String decryptData(final String value) {
-		return mDataCrypto == null ? value : CryptographyUtils.decrypt(value, mDataCrypto);
+	@NonNull protected final String decryptData(@NonNull final String value) {
+		return dataCrypto == null ? value : CryptographyUtils.decrypt(value, dataCrypto);
+	}
+
+	/**
+	 * Registers a watcher to be notified whenever a new user account is created or an old one
+	 * deleted.
+	 *
+	 * @param watcher The desired watcher to register.
+	 * @see #unregisterWatcher(AccountWatcher)
+	 */
+	public void registerWatcher(@NonNull final AccountWatcher<A> watcher) {
+		if (!mWatchers.contains(watcher)) mWatchers.add(watcher);
+	}
+
+	/**
+	 * Unregisters the given <var>watcher</var> from the registered ones.
+	 *
+	 * @param watcher The desired watcher to unregister.
+	 * @see #registerWatcher(AccountWatcher)
+	 */
+	public void unregisterWatcher(@NonNull final AccountWatcher<A> watcher) {
+		mWatchers.remove(watcher);
 	}
 
 	/**
@@ -429,15 +453,15 @@ public abstract class UserAccountManager<A extends UserAccount> {
 			PERMISSION_AUTHENTICATE_ACCOUNTS
 	})
 	protected boolean onCreateAccount(@NonNull final A userAccount) {
-		final Account account = new Account(userAccount.getName(), mAccountType);
+		final Account account = new Account(userAccount.getName(), accountType);
 		// fixme: this should not be called implicitly but rather explicitly by users of this manager
 		onDeleteAccount(userAccount);
-		if (mManager.addAccountExplicitly(account, encryptData(userAccount.getPassword()), encryptBundle(userAccount.getDataBundle()))) {
+		if (systemManager.addAccountExplicitly(account, encryptData(userAccount.getPassword()), encryptBundle(userAccount.getDataBundle()))) {
 			final String[] authTokenTypes = userAccount.getAuthTokenTypes();
 			final Map<String, String> authTokens = userAccount.getAuthTokens();
 			if (authTokenTypes != null && authTokenTypes.length > 0 && authTokens != null && !authTokens.isEmpty()) {
 				for (final String authTokenType : authTokenTypes) {
-					mManager.setAuthToken(account, authTokenType, authTokens.get(authTokenType));
+					systemManager.setAuthToken(account, authTokenType, authTokens.get(authTokenType));
 				}
 			}
 		}
@@ -458,7 +482,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 */
 	@RequiresPermission(PERMISSION_AUTHENTICATE_ACCOUNTS)
 	public void setAccountAuthToken(@NonNull final Account account, @NonNull final String authTokenType, @Nullable final String authToken) {
-		mManager.setAuthToken(account, authTokenType, authToken);
+		systemManager.setAuthToken(account, authTokenType, authToken);
 	}
 
 	/**
@@ -499,7 +523,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	@Nullable
 	@RequiresPermission(PERMISSION_AUTHENTICATE_ACCOUNTS)
 	public String peekAccountAuthToken(@NonNull final Account account, @NonNull final String authTokenType) {
-		return mManager.peekAuthToken(account, authTokenType);
+		return systemManager.peekAuthToken(account, authTokenType);
 	}
 
 	/**
@@ -514,7 +538,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 */
 	@RequiresPermission(PERMISSION_MANAGE_ACCOUNTS)
 	public void invalidateAccountAuthToken(@NonNull final Account account, @NonNull final String authToken) {
-		mManager.invalidateAuthToken(account.type, authToken);
+		systemManager.invalidateAuthToken(account.type, authToken);
 	}
 
 	/**
@@ -527,10 +551,13 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 * @see #getAccountPassword(Account)
 	 * @see #clearAccountPassword(Account)
 	 * @see AccountManager#setPassword(Account, String)
+	 *
+	 * @deprecated Use directly {@link AccountManager} via {@link #getSystemManager()} instead.
 	 */
+	@Deprecated
 	@RequiresPermission(PERMISSION_AUTHENTICATE_ACCOUNTS)
 	public void setAccountPassword(@NonNull final Account account, @Nullable final String password) {
-		mManager.setPassword(account, encryptData(password));
+		systemManager.setPassword(account, encryptData(password));
 	}
 
 	/**
@@ -544,11 +571,14 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 * @see #setAccountPassword(Account, String)
 	 * @see #clearAccountPassword(Account)
 	 * @see AccountManager#getPassword(Account)
+	 *
+	 * @deprecated Use directly {@link AccountManager} via {@link #getSystemManager()} instead.
 	 */
+	@Deprecated
 	@Nullable
 	@RequiresPermission(PERMISSION_AUTHENTICATE_ACCOUNTS)
 	public String getAccountPassword(@NonNull final Account account) {
-		return decryptData(mManager.getPassword(account));
+		return decryptData(systemManager.getPassword(account));
 	}
 
 	/**
@@ -558,10 +588,13 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 *
 	 * @param account The account for which to clear its password.
 	 * @see AccountManager#clearPassword(Account)
+	 *
+	 * @deprecated Use directly {@link AccountManager} via {@link #getSystemManager()} instead.
 	 */
+	@Deprecated
 	@RequiresPermission(PERMISSION_MANAGE_ACCOUNTS)
 	public void clearAccountPassword(@NonNull final Account account) {
-		mManager.clearPassword(account);
+		systemManager.clearPassword(account);
 	}
 
 	/**
@@ -577,8 +610,8 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 * @see AccountManager#setUserData(Account, String, String)
 	 */
 	@RequiresPermission(PERMISSION_AUTHENTICATE_ACCOUNTS)
-	public void setAccountData(@NonNull final Account account, @NonNull final String key, @Nullable final String value) {
-		mManager.setUserData(account, encryptKey(key), encryptData(value));
+	protected void setAccountData(@NonNull final Account account, @NonNull final String key, @Nullable final String value) {
+		systemManager.setUserData(account, encryptKey(key), encryptData(value));
 	}
 
 	/**
@@ -595,8 +628,8 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 */
 	@Nullable
 	@RequiresPermission(PERMISSION_AUTHENTICATE_ACCOUNTS)
-	public String getAccountData(@NonNull final Account account, @NonNull final String key) {
-		return decryptData(mManager.getUserData(account, encryptKey(key)));
+	protected String getAccountData(@NonNull final Account account, @NonNull final String key) {
+		return decryptData(systemManager.getUserData(account, encryptKey(key)));
 	}
 
 	/**
@@ -610,14 +643,14 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 * @see #setAccountData(Account, String, String)
 	 */
 	@RequiresPermission(PERMISSION_AUTHENTICATE_ACCOUNTS)
-	public void setAccountDataBundle(@NonNull final Account account, @NonNull final Bundle dataBundle) {
+	protected void setAccountDataBundle(@NonNull final Account account, @NonNull final Bundle dataBundle) {
 		if (dataBundle.isEmpty()) return;
 		for (final String key : dataBundle.keySet()) {
 			final String data = dataBundle.getString(key);
 			if (data == null) {
 				continue;
 			}
-			mManager.setUserData(account, encryptKey(key), encryptData(data));
+			systemManager.setUserData(account, encryptKey(key), encryptData(data));
 		}
 	}
 
@@ -635,11 +668,11 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	 */
 	@NonNull
 	@RequiresPermission(PERMISSION_AUTHENTICATE_ACCOUNTS)
-	public Bundle getAccountDataBundle(@NonNull final Account account, @NonNull final String... keys) {
+	protected Bundle getAccountDataBundle(@NonNull final Account account, @NonNull final String... keys) {
 		final Bundle bundle = new Bundle();
 		if (keys.length > 0) {
 			for (final String key : keys) {
-				final String data = mManager.getUserData(account, encryptKey(key));
+				final String data = systemManager.getUserData(account, encryptKey(key));
 				if (data == null) {
 					continue;
 				}
@@ -739,9 +772,9 @@ public abstract class UserAccountManager<A extends UserAccount> {
 			boolean removed = false;
 			try {
 				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-					removed = mManager.removeAccount(account, null, null, null).getResult() != null;
+					removed = systemManager.removeAccount(account, null, null, null).getResult() != null;
 				} else {
-					removed = mManager.removeAccount(account, null, null).getResult();
+					removed = systemManager.removeAccount(account, null, null).getResult();
 				}
 			} catch (OperationCanceledException | IOException | AuthenticatorException e) {
 				OfficiumLogging.e(TAG, "Failed to remove account via framework's account manager.", e);
@@ -749,11 +782,11 @@ public abstract class UserAccountManager<A extends UserAccount> {
 			if (!removed) {
 				return false;
 			}
-			mManager.setPassword(account, null);
+			systemManager.setPassword(account, null);
 			final String[] authTokenTypes = userAccount.getAuthTokenTypes();
 			if (authTokenTypes != null && authTokenTypes.length > 0) {
 				for (final String authTokenType : authTokenTypes) {
-					mManager.invalidateAuthToken(account.type, mManager.peekAuthToken(account, authTokenType));
+					systemManager.invalidateAuthToken(account.type, systemManager.peekAuthToken(account, authTokenType));
 				}
 			}
 			return true;
@@ -777,7 +810,7 @@ public abstract class UserAccountManager<A extends UserAccount> {
 	@Nullable
 	@RequiresPermission(PERMISSION_GET_ACCOUNTS)
 	protected Account findAccountForUser(@NonNull final A userAccount) {
-		final Account[] accounts = mManager.getAccountsByType(mAccountType);
+		final Account[] accounts = systemManager.getAccountsByType(accountType);
 		if (accounts.length > 0) {
 			final String accountName = userAccount.getName();
 			for (final Account account : accounts) {

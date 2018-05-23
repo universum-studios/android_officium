@@ -42,6 +42,7 @@ import java.util.Map;
  * data from it and store it for the associated {@link Account} via {@link AccountManager#setAuthToken(Account, String, String)}.
  *
  * @author Martin Albedinsky
+ * @since 1.0
  */
 public class UserAccount {
 
