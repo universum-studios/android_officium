@@ -11,6 +11,7 @@ More **detailed changelog** for each respective version may be viewed by pressin
 
 - Resolved [Issue #33](https://github.com/universum-studios/android_officium/issues/33).
 - Resolved [Issue #34](https://github.com/universum-studios/android_officium/issues/34).
+- Resolved [Issue #35](https://github.com/universum-studios/android_officium/issues/35).
 
 ## Version 1.x ##
 
