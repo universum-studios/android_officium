@@ -29,6 +29,7 @@ import org.junit.Test;
 import universum.studios.android.test.local.RobolectricTestCase;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verifyZeroInteractions;
 
 /**
  * @author Martin Albedinsky
@@ -68,45 +69,58 @@ public final class BaseAccountAuthenticatorTest extends RobolectricTestCase {
 
 	@Test(expected = UnsupportedOperationException.class)
 	public void testConfirmCredentials() throws Exception {
-		new TestAuthenticator(application).confirmCredentials(
-				mock(AccountAuthenticatorResponse.class),
-				mock(Account.class),
-				Bundle.EMPTY
-		);
+		// Arrange:
+		final AccountAuthenticatorResponse mockResponse = mock(AccountAuthenticatorResponse.class);
+		final Account mockAccount = mock(Account.class);
+		final BaseAccountAuthenticator authenticator = new TestAuthenticator(application);
+		// Act:
+		authenticator.confirmCredentials(mockResponse, mockAccount, Bundle.EMPTY);
+		// Assert:
+		verifyZeroInteractions(mockResponse, mockAccount);
 	}
 
 	@Test(expected = UnsupportedOperationException.class)
 	public void testGetAuthToken() throws Exception {
-		new TestAuthenticator(application).getAuthToken(
-				mock(AccountAuthenticatorResponse.class),
-				mock(Account.class),
-				"oAuth",
-				Bundle.EMPTY
-		);
+		// Arrange:
+		final AccountAuthenticatorResponse mockResponse = mock(AccountAuthenticatorResponse.class);
+		final Account mockAccount = mock(Account.class);
+		final BaseAccountAuthenticator authenticator = new TestAuthenticator(application);
+		// Act:
+		authenticator.getAuthToken(mockResponse, mockAccount, "oAuth", Bundle.EMPTY);
+		// Assert:
+		verifyZeroInteractions(mockResponse, mockAccount);
 	}
 
 	@Test(expected = UnsupportedOperationException.class)
 	public void testGetAuthTokenLabel() {
-		new TestAuthenticator(application).getAuthTokenLabel(ACCOUNT_TYPE);
+		// Arrange:
+		final BaseAccountAuthenticator authenticator = new TestAuthenticator(application);
+		// Act:
+		authenticator.getAuthTokenLabel(ACCOUNT_TYPE);
 	}
 
 	@Test(expected = UnsupportedOperationException.class)
 	public void testUpdateCredentials() throws Exception {
-		new TestAuthenticator(application).updateCredentials(
-				mock(AccountAuthenticatorResponse.class),
-				mock(Account.class),
-				"oAuth",
-				Bundle.EMPTY
-		);
+		// Arrange:
+		final AccountAuthenticatorResponse mockResponse = mock(AccountAuthenticatorResponse.class);
+		final Account mockAccount = mock(Account.class);
+		final BaseAccountAuthenticator authenticator = new TestAuthenticator(application);
+		// Act:
+		authenticator.updateCredentials(mockResponse, mockAccount, "oAuth", Bundle.EMPTY);
+		// Assert:
+		verifyZeroInteractions(mockResponse, mockAccount);
 	}
 
 	@Test(expected = UnsupportedOperationException.class)
 	public void testHasFeatures() throws Exception {
-		new TestAuthenticator(application).hasFeatures(
-				mock(AccountAuthenticatorResponse.class),
-				mock(Account.class),
-				new String[]{}
-		);
+		// Arrange:
+		final AccountAuthenticatorResponse mockResponse = mock(AccountAuthenticatorResponse.class);
+		final Account mockAccount = mock(Account.class);
+		final BaseAccountAuthenticator authenticator = new TestAuthenticator(application);
+		// Act:
+		authenticator.hasFeatures(mockResponse, mockAccount, new String[]{});
+		// Assert:
+		verifyZeroInteractions(mockResponse, mockAccount);
 	}
 
 	private static final class TestAuthenticator extends BaseAccountAuthenticator {
