@@ -21,11 +21,15 @@ package universum.studios.android.officium.service;
 import android.support.annotation.NonNull;
 
 /**
+ * <b>This class is deprecated and will be removed in the final production release of version 2.0.0.</b>
+ * <p>
  * Simple implementation of {@link EndPoint}.
  *
  * @author Martin Albedinsky
+ *
+ * @deprecated Use simple base url instead.
  */
-public class SimpleEndPoint implements EndPoint {
+@Deprecated public class SimpleEndPoint implements EndPoint {
 
 	/*
 	 * Constants ===================================================================================

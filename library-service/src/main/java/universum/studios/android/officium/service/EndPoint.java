@@ -21,13 +21,16 @@ package universum.studios.android.officium.service;
 import android.support.annotation.NonNull;
 
 /**
+ * <b>This interface is deprecated and will be removed in the final production release of version 2.0.0.</b>
+ * <p>
  * End point that may be specified for {@link ServiceManager} to provide base url for all its
  * related services.
  *
  * @author Martin Albedinsky
+ *
+ * @deprecated Use simple base url instead.
  */
-// todo: deprecated this and rather allow to specify raw base url for service manager instead ...
-public interface EndPoint {
+@Deprecated public interface EndPoint {
 
 	/**
 	 * Returns the base url of this end point.

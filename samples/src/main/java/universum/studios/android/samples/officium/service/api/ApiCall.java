@@ -38,7 +38,7 @@ public final class ApiCall<T> extends ServiceCall<T> {
 	}
 
 	@NonNull public String enqueue() {
-		return enqueue(new ApiCallback<T>());
+		return enqueue(new ApiCallback<>());
 	}
 
 	@Override @NonNull protected String nextRequestId() {

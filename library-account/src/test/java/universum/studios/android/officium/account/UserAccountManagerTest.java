@@ -27,7 +27,7 @@ import universum.studios.android.test.local.RobolectricTestCase;
  */
 public final class UserAccountManagerTest extends RobolectricTestCase {
 
-	@Test public void test() {
+	@Test public void testInstantiation() {
 		// todo: implement test
 	}
 }

@@ -34,11 +34,11 @@ import universum.studios.android.officium.event.SimpleEventBus;
  */
 public final class EventBusProvider {
 
-	@IntDef({UI, SERVICES})
+	@IntDef({MAIN, SERVICES})
 	@Retention(RetentionPolicy.SOURCE)
 	public @interface BusContext {}
 
-	public static final int UI = 0x00;
+	public static final int MAIN = 0x00;
 	public static final int SERVICES = 0x01;
 
 	private static final SparseArray<EventBus> buses = new SparseArray<>(2);
@@ -49,7 +49,7 @@ public final class EventBusProvider {
 			bus = buses.get(busContext);
 			if (bus == null) {
 				switch (busContext) {
-					case UI:
+					case MAIN:
 						bus = new MainEventBus();
 						break;
 					default:

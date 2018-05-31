@@ -28,6 +28,6 @@ import universum.studios.android.samples.officium.event.EventBusProvider;
 final class SyncEventDispatcher implements SyncAdapter.EventDispatcher {
 
 	@Override public void dispatch(@NonNull final Object event) {
-		EventBusProvider.getBusForContext(EventBusProvider.UI).post(event);
+		EventBusProvider.getBusForContext(EventBusProvider.MAIN).post(event);
 	}
 }

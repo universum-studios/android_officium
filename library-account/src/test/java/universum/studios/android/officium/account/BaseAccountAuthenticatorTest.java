@@ -1,6 +1,6 @@
 /*
  * *************************************************************************************************
- *                                 Copyright 2017 Universum Studios
+ *                                 Copyright 2018 Universum Studios
  * *************************************************************************************************
  *                  Licensed under the Apache License, Version 2.0 (the "License")
  * -------------------------------------------------------------------------------------------------
@@ -35,25 +35,30 @@ import static org.mockito.Mockito.mock;
  */
 public final class BaseAccountAuthenticatorTest extends RobolectricTestCase {
 
-	private static final String ACCOUNT_TYPE = "account@test.com";
+	private static final String ACCOUNT_TYPE = "account.com";
 
-	@Test
-	public void testInstantiation() {
+	@Test public void testInstantiation() {
+		// Act:
 		new TestAuthenticator(application);
 	}
 
 	@Test(expected = UnsupportedOperationException.class)
 	public void testEditProperties() {
-		new TestAuthenticator(application).editProperties(
-				mock(AccountAuthenticatorResponse.class),
-				ACCOUNT_TYPE
-		);
+		// Arrange:
+		final AccountAuthenticatorResponse mockResponse = mock(AccountAuthenticatorResponse.class);
+		final BaseAccountAuthenticator authenticator = new TestAuthenticator(application);
+		// Act:
+		authenticator.editProperties(mockResponse, ACCOUNT_TYPE);
 	}
 
 	@Test(expected = UnsupportedOperationException.class)
 	public void testAddAccount() throws Exception {
-		new TestAuthenticator(application).addAccount(
-				mock(AccountAuthenticatorResponse.class),
+		// Arrange:
+		final AccountAuthenticatorResponse mockResponse = mock(AccountAuthenticatorResponse.class);
+		final BaseAccountAuthenticator authenticator = new TestAuthenticator(application);
+		// Act
+		authenticator.addAccount(
+				mockResponse,
 				ACCOUNT_TYPE,
 				"oAuth",
 				new String[]{},

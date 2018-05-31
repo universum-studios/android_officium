@@ -20,12 +20,12 @@ package universum.studios.android.officium.service;
 
 import org.junit.Test;
 
+import okhttp3.HttpUrl;
 import universum.studios.android.test.local.LocalTestCase;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
-import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertSame;
 
 /**
@@ -33,45 +33,64 @@ import static org.junit.Assert.assertSame;
  */
 public final class ServiceManagerTest extends LocalTestCase {
 
+	private static final String BASE_URL = "https://www.android.com/";
+
+	@SuppressWarnings("ConstantConditions")
 	@Test public void testInstantiation() {
+		// Arrange:
+		final HttpUrl baseUrl = HttpUrl.parse(BASE_URL);
 		// Act:
-		final ServiceManager manager = new ServiceManager();
+		final ServiceManager manager = new ServiceManager(baseUrl);
 		// Assert:
-		assertThat(manager.getEndPoint(), is(nullValue()));
+		assertThat(manager.getBaseUrl(), is(baseUrl));
+		assertThat(manager.getBaseUrl().toString(), is(BASE_URL));
+	}
+
+	@Test public void testInstantiationWithBaseUrlString() {
+		// Act:
+		final ServiceManager manager = new ServiceManager(BASE_URL);
+		// Assert:
+		assertThat(manager.getBaseUrl(), is(notNullValue()));
 	}
 
 	@Test public void testInstantiationWithEndPoint() {
 		// Arrange:
-		final EndPoint endPoint = new SimpleEndPoint("");
+		final EndPoint endPoint = new SimpleEndPoint(BASE_URL);
 		// Act:
 		final ServiceManager manager = new ServiceManager(endPoint);
 		// Assert:
 		assertThat(manager.getEndPoint(), is(endPoint));
+		assertThat(manager.getBaseUrl(), is(notNullValue()));
+		assertThat(manager.getBaseUrl().toString(), is(BASE_URL));
 	}
 
 	@Test public void testEndPoint() {
 		// Arrange:
-		final EndPoint endPoint = new SimpleEndPoint("");
+		final EndPoint endPoint = new SimpleEndPoint(BASE_URL);
 		final ServiceManager manager = new ServiceManager();
 		// Act + Assert:
 		manager.setEndPoint(endPoint);
 		assertThat(manager.getEndPoint(), is(endPoint));
+		assertThat(manager.getBaseUrl(), is(notNullValue()));
+		assertThat(manager.getBaseUrl().toString(), is(BASE_URL));
 	}
 
 	@SuppressWarnings("ConstantConditions")
-	@Test public void testSetEndPointAsBaseUrl() {
+	@Test public void testEndPointAsBaseUrl() {
 		// Arrange:
 		final ServiceManager manager = new ServiceManager();
 		// Act:
-		manager.setEndPoint("https://www.google.com/");
+		manager.setEndPoint("https://www.android.com/");
 		// Assert:
 		assertThat(manager.getEndPoint(), is(notNullValue()));
-		assertThat(manager.getEndPoint().getBaseUrl(), is("https://www.google.com/"));
+		assertThat(manager.getEndPoint().getBaseUrl(), is("https://www.android.com/"));
+		assertThat(manager.getBaseUrl(), is(notNullValue()));
+		assertThat(manager.getBaseUrl().toString(), is(BASE_URL));
 	}
 
 	@Test public void testServices() {
 		// Arrange:
-		final ServiceManager manager = new ServiceManager(new SimpleEndPoint("https://www.google.com/"));
+		final ServiceManager manager = new ServiceManager(BASE_URL);
 		// Act + Assert:
 		assertThat(manager.services(TestPrimaryServices.class), is(notNullValue()));
 		assertSame(manager.services(TestPrimaryServices.class), manager.services(TestPrimaryServices.class));
@@ -83,7 +102,7 @@ public final class ServiceManagerTest extends LocalTestCase {
 
 	@Test public void testServicesConfiguration() {
 		// Arrange:
-		final ServiceManager manager = new ServiceManager(new SimpleEndPoint("https://www.google.com/"));
+		final ServiceManager manager = new ServiceManager(BASE_URL);
 		// Act + Assert:
 		assertThat(manager.servicesConfiguration(TestPrimaryServices.class), is(notNullValue()));
 		assertSame(manager.servicesConfiguration(TestPrimaryServices.class), manager.servicesConfiguration(TestPrimaryServices.class));
@@ -91,14 +110,6 @@ public final class ServiceManagerTest extends LocalTestCase {
 		assertSame(manager.servicesConfiguration(TestSecondaryServices.class), manager.servicesConfiguration(TestSecondaryServices.class));
 		assertThat(manager.servicesConfiguration(TestTertiaryServices.class), is(notNullValue()));
 		assertSame(manager.servicesConfiguration(TestTertiaryServices.class), manager.servicesConfiguration(TestTertiaryServices.class));
-	}
-
-	@Test(expected = IllegalStateException.class)
-	public void testServicesConfigurationWhenThereIsNoEndPointSpecified() {
-		// Arrange:
-		final ServiceManager manager = new ServiceManager();
-		// Act:
-		manager.servicesConfiguration(TestPrimaryServices.class).retrofit().baseUrl();
 	}
 
 	interface TestPrimaryServices {}

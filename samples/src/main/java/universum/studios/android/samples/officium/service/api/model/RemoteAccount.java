@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  * *************************************************************************************************
  */
-package universum.studios.android.samples.officium.service.model;
+package universum.studios.android.samples.officium.service.api.model;
 
 /**
  * @author Martin Albedinsky

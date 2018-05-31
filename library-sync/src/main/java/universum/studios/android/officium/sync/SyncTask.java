@@ -350,6 +350,7 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 
 	/**
 	 */
+	@SuppressWarnings("SimplifiableIfStatement")
 	@Override public boolean equals(@Nullable final Object other) {
 		if (other == this) return true;
 		if (!(other instanceof SyncTask)) return false;
@@ -357,9 +358,7 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 		if (task.id != id) {
 			return false;
 		}
-		final int requestHash = requestBody == null ? 0 : requestBody.hashCode();
-		final int otherRequestHash = task.requestBody == null ? 0 : task.requestBody.hashCode();
-		return requestHash == otherRequestHash;
+		return TextUtils.equals(requestBody, task.requestBody);
 	}
 
 	/**
