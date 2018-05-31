@@ -7,11 +7,11 @@ More **detailed changelog** for each respective version may be viewed by pressin
 ## Version 2.0 ##
 
 ### 2.0.0-beta1 ##
-> ??.??.2018
+> 31.05.2018
 
-- Resolved [Issue #33](https://github.com/universum-studios/android_officium/issues/33).
-- Resolved [Issue #34](https://github.com/universum-studios/android_officium/issues/34).
-- Resolved [Issue #35](https://github.com/universum-studios/android_officium/issues/35).
+- Resolved [Issue #33](https://github.com/universum-studios/android_officium/issues/33),
+  [Issue #34](https://github.com/universum-studios/android_officium/issues/34),
+  [Issue #35](https://github.com/universum-studios/android_officium/issues/35).
 - Deprecated some of delegate methods of `UserAccountManager` and `SingleUserAccountManager` which
   only delegated to the system `AccountManager`.
 
