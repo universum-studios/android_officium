@@ -6,7 +6,7 @@ More **detailed changelog** for each respective version may be viewed by pressin
 
 ## Version 2.0 ##
 
-### 2.0.0-beta1 ##
+### [2.0.0-beta1](https://github.com/universum-studios/android_officium/releases/tag/2.0.0-beta1) ###
 > 31.05.2018
 
 - Resolved [Issue #33](https://github.com/universum-studios/android_officium/issues/33),
