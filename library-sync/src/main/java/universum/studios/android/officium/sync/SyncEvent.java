@@ -1,20 +1,20 @@
 /*
- * =================================================================================================
- *                             Copyright (C) 2016 Universum Studios
- * =================================================================================================
- *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
+ * *************************************************************************************************
+ *                                 Copyright 2016 Universum Studios
+ * *************************************************************************************************
+ *                  Licensed under the Apache License, Version 2.0 (the "License")
  * -------------------------------------------------------------------------------------------------
- * You may use this file only in compliance with the License. More details and copy of this License
- * you may obtain at
+ * You may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
  *
- * 		http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- * You can redistribute, modify or publish any part of the code written within this file but as it
- * is described in the License, the software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied.
  *
  * See the License for the specific language governing permissions and limitations under the License.
- * =================================================================================================
+ * *************************************************************************************************
  */
 package universum.studios.android.officium.sync;
 
@@ -38,6 +38,7 @@ import java.lang.annotation.RetentionPolicy;
  * only.
  *
  * @author Martin Albedinsky
+ * @since 1.0
  */
 public final class SyncEvent {
 
@@ -71,14 +72,6 @@ public final class SyncEvent {
 	public static final int FAILURE = 0x04;
 
 	/**
-	 * Type flag for {@link SyncEvent} determining <b>error</b> occurred during synchronization.
-	 *
-	 * @deprecated Use {@link #FAILURE} instead.
-	 */
-	@Deprecated
-	public static final int ERROR = FAILURE;
-
-	/**
 	 * Defines an annotation for determining set of available types for {@link SyncEvent}.
 	 *
 	 * <h3>Available types</h3>
@@ -91,8 +84,7 @@ public final class SyncEvent {
 	 */
 	@IntDef({START, PROGRESS, FINISH, FAILURE})
 	@Retention(RetentionPolicy.SOURCE)
-	public @interface Type {
-	}
+	public @interface Type {}
 
 	/*
 	 * Interface ===================================================================================
@@ -108,14 +100,6 @@ public final class SyncEvent {
 
 	/**
 	 * Id of the synchronization task for which has been this synchronization event fired.
-	 *
-	 * @deprecated Use {@link #taskId} instead.
-	 */
-	@Deprecated
-	public final int id;
-
-	/**
-	 * Id of the synchronization task for which has been this synchronization event fired.
 	 */
 	public final int taskId;
 
@@ -123,8 +107,7 @@ public final class SyncEvent {
 	 * Type of this synchronization event. One of {@link #START}, {@link #PROGRESS}, {@link #FINISH}
 	 * or {@link #FAILURE} or some custom specified type.
 	 */
-	@Type
-	public final int type;
+	@Type public final int type;
 
 	/**
 	 * Current progress of synchronization task with id of{@link #taskId}.
@@ -134,20 +117,17 @@ public final class SyncEvent {
 	/**
 	 * Error that has occurred during execution of synchronization task with id of {@link #taskId}.
 	 */
-	@Nullable
-	public final Exception error;
+	@Nullable public final Exception error;
 
 	/**
 	 * Account used during execution of synchronization task with id of {@link #taskId}.
 	 */
-	@Nullable
-	public final Account account;
+	@Nullable public final Account account;
 
 	/**
 	 * Bundle with additional extra information.
 	 */
-	@Nullable
-	public final Bundle extras;
+	@Nullable public final Bundle extras;
 
 	/*
 	 * Constructors ================================================================================
@@ -160,7 +140,6 @@ public final class SyncEvent {
 	 */
 	@SuppressWarnings("WeakerAccess")
 	SyncEvent(@NonNull final Builder builder) {
-		this.id = builder.taskId;
 		this.taskId = builder.taskId;
 		this.type = builder.type;
 		this.progress = builder.progress;
@@ -292,8 +271,7 @@ public final class SyncEvent {
 		 *
 		 * @return New instance of SyncEvent with data specified for this builder.
 		 */
-		@NonNull
-		public SyncEvent build() {
+		@NonNull public SyncEvent build() {
 			return new SyncEvent(this);
 		}
 	}

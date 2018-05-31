@@ -1,20 +1,20 @@
 /*
- * =================================================================================================
- *                             Copyright (C) 2016 Universum Studios
- * =================================================================================================
- *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
+ * *************************************************************************************************
+ *                                 Copyright 2016 Universum Studios
+ * *************************************************************************************************
+ *                  Licensed under the Apache License, Version 2.0 (the "License")
  * -------------------------------------------------------------------------------------------------
- * You may use this file only in compliance with the License. More details and copy of this License
- * you may obtain at
+ * You may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
  *
- * 		http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- * You can redistribute, modify or publish any part of the code written within this file but as it
- * is described in the License, the software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied.
  *
  * See the License for the specific language governing permissions and limitations under the License.
- * =================================================================================================
+ * *************************************************************************************************
  */
 package universum.studios.android.officium.service;
 
@@ -40,6 +40,7 @@ import retrofit2.Response;
  * also {@link #clone()} method.
  *
  * @author Martin Albedinsky
+ * @since 1.2
  */
 public class ServiceCall<T> implements Call<T> {
 
@@ -67,12 +68,12 @@ public class ServiceCall<T> implements Call<T> {
 	/**
 	 * Original Retrofit call to which this service call delegates all its methods.
 	 */
-	@VisibleForTesting final Call<T> mCall;
+	@VisibleForTesting final Call<T> call;
 
 	/**
 	 * Id of the service with which is this call associated.
 	 */
-	@VisibleForTesting Integer mServiceId;
+	@VisibleForTesting Integer serviceId;
 
 	/*
 	 * Constructors ================================================================================
@@ -84,7 +85,7 @@ public class ServiceCall<T> implements Call<T> {
 	 * @param call The Retrofit call to which will be this service call delegating its methods.
 	 */
 	public ServiceCall(@NonNull final Call<T> call) {
-		this.mCall = call;
+		this.call = call;
 	}
 
 	/*
@@ -101,8 +102,8 @@ public class ServiceCall<T> implements Call<T> {
 	 * @throws UnsupportedOperationException If service id for this call has been already specified.
 	 */
 	public ServiceCall<T> withServiceId(final int serviceId) {
-		if (mServiceId == null) {
-			this.mServiceId = serviceId;
+		if (this.serviceId == null) {
+			this.serviceId = serviceId;
 			return this;
 		}
 		throw new UnsupportedOperationException("Service id is already specified!");
@@ -110,9 +111,8 @@ public class ServiceCall<T> implements Call<T> {
 
 	/**
 	 */
-	@Override
-	public Response<T> execute() throws IOException {
-		return mCall.execute();
+	@Override public Response<T> execute() throws IOException {
+		return call.execute();
 	}
 
 	/**
@@ -129,10 +129,9 @@ public class ServiceCall<T> implements Call<T> {
 	 * @see ServiceObject#getServiceId()
 	 * @see ServiceObject#getRequestId()
 	 */
-	@NonNull
-	public String enqueue(@NonNull final ServiceCallback<T> callback) {
+	@NonNull public String enqueue(@NonNull final ServiceCallback<T> callback) {
 		final String requestId = nextRequestId();
-		ServiceCallback.associateWith(callback, mServiceId, requestId);
+		ServiceCallback.associateWith(callback, serviceId, requestId);
 		enqueue((Callback<T>) callback);
 		return requestId;
 	}
@@ -146,55 +145,48 @@ public class ServiceCall<T> implements Call<T> {
 	 *
 	 * @return Unique id for the current request that will be attached to the service callback.
 	 */
-	@NonNull
-	protected String nextRequestId() {
+	@NonNull protected String nextRequestId() {
 		return Long.toString(System.currentTimeMillis());
 	}
 
 	/**
 	 */
-	@Override
-	public void enqueue(@NonNull final Callback<T> callback) {
-		mCall.enqueue(callback);
+	@Override public void enqueue(@NonNull final Callback<T> callback) {
+		this.call.enqueue(callback);
 	}
 
 	/**
 	 */
-	@Override
-	public boolean isExecuted() {
-		return mCall.isExecuted();
+	@Override public boolean isExecuted() {
+		return call.isExecuted();
 	}
 
 	/**
 	 */
-	@Override
-	public void cancel() {
-		mCall.cancel();
+	@Override public void cancel() {
+		this.call.cancel();
 	}
 
 	/**
 	 */
-	@Override
-	public boolean isCanceled() {
-		return mCall.isCanceled();
+	@Override public boolean isCanceled() {
+		return call.isCanceled();
 	}
 
 	/**
 	 */
-	@Override
-	public Request request() {
-		return mCall.request();
+	@Override public Request request() {
+		return call.request();
 	}
 
 	/**
 	 * Creates a new clone of this service call with the original <b>Retrofit</b> call also cloned
 	 * and with the same service id as specified via {@link #withServiceId(int)} (if any).
 	 */
-	@Override
 	@SuppressWarnings("CloneDoesntCallSuperClone")
-	public ServiceCall<T> clone() {
-		final ServiceCall<T> serviceCall = new ServiceCall<>(mCall.clone());
-		serviceCall.mServiceId = mServiceId;
+	@Override public ServiceCall<T> clone() {
+		final ServiceCall<T> serviceCall = new ServiceCall<>(call.clone());
+		serviceCall.serviceId = serviceId;
 		return serviceCall;
 	}
 

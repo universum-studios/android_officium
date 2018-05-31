@@ -1,13 +1,13 @@
 // Defines dependencies used across the library project.
 def versions = [
         android    : [
-                support            : '27.1.0',
-                supportTest        : '1.0.1',
-                supportTestEspresso: '3.0.1',
+                support            : '27.1.1',
+                supportTest        : '1.0.2',
+                supportTestEspresso: '3.0.2'
         ],
         test       : [
                 junit      : '4.12',
-                mockito    : '2.16.0',
+                mockito    : '2.18.0',
                 robolectric: '3.8'
         ],
         butterknife: '8.8.1'

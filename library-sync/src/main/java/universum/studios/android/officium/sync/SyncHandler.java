@@ -1,20 +1,20 @@
 /*
- * =================================================================================================
- *                             Copyright (C) 2016 Universum Studios
- * =================================================================================================
- *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
+ * *************************************************************************************************
+ *                                 Copyright 2016 Universum Studios
+ * *************************************************************************************************
+ *                  Licensed under the Apache License, Version 2.0 (the "License")
  * -------------------------------------------------------------------------------------------------
- * You may use this file only in compliance with the License. More details and copy of this License
- * you may obtain at
+ * You may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
  *
- * 		http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- * You can redistribute, modify or publish any part of the code written within this file but as it
- * is described in the License, the software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied.
  *
  * See the License for the specific language governing permissions and limitations under the License.
- * =================================================================================================
+ * *************************************************************************************************
  */
 package universum.studios.android.officium.sync;
 
@@ -40,11 +40,13 @@ import universum.studios.android.officium.OfficiumLogging;
  * internally by SyncHandler class. Any exception thrown further from {@link #onSyncError(Context, SyncOperation, SyncTask.Request, Exception)}
  * method will be dispatched to the calling synchronization context (by default {@link BaseSyncAdapter}).
  *
+ * @author Martin Albedinsky
+ * @since 1.0
+ *
  * @param <Request> Type of the request that the SyncHandler implementation needs to perform its
  *                  specific synchronization process.
  * @param <Result>  Type of the result returned by the SyncHandler implementation whenever
  *                  {@link #handleSync(Context, SyncOperation)} finishes without any error.
- * @author Martin Albedinsky
  */
 public abstract class SyncHandler<Request extends SyncTask.Request, Result> {
 
@@ -74,13 +76,13 @@ public abstract class SyncHandler<Request extends SyncTask.Request, Result> {
 	 *
 	 * @see #handleSync(Context, SyncOperation)
 	 */
-	private final int mTaskId;
+	private final int taskId;
 
 	/**
 	 * Class of synchronization request that will be delivered by instance of associated {@link SyncTask}
 	 * to this handler whenever {@link #handleSync(Context, SyncOperation)} is invoked.
 	 */
-	private final Class<Request> mRequestClass;
+	private final Class<Request> requestClass;
 
 	/*
 	 * Constructors ================================================================================
@@ -96,8 +98,8 @@ public abstract class SyncHandler<Request extends SyncTask.Request, Result> {
 	 * @param taskId Id of the {@link SyncTask} associated with this handler.
 	 */
 	protected SyncHandler(final int taskId) {
-		this.mTaskId = taskId;
-		this.mRequestClass = null;
+		this.taskId = taskId;
+		this.requestClass = null;
 	}
 
 	/**
@@ -110,8 +112,8 @@ public abstract class SyncHandler<Request extends SyncTask.Request, Result> {
 	 * @see SyncTask#getRequest(Class)
 	 */
 	protected SyncHandler(final int taskId, @Nullable final Class<Request> classOfRequest) {
-		this.mTaskId = taskId;
-		this.mRequestClass = classOfRequest;
+		this.taskId = taskId;
+		this.requestClass = classOfRequest;
 	}
 
 	/*
@@ -125,7 +127,7 @@ public abstract class SyncHandler<Request extends SyncTask.Request, Result> {
 	 * @see #handleSync(Context, SyncOperation)
 	 */
 	public final int getTaskId() {
-		return mTaskId;
+		return taskId;
 	}
 
 	/**
@@ -147,10 +149,9 @@ public abstract class SyncHandler<Request extends SyncTask.Request, Result> {
 	 * does not return any result or synchronization has failed and this handler did not throw any
 	 * additional exceptions.
 	 */
-	@Nullable
 	@SuppressWarnings("unchecked")
-	public final Result handleSync(@NonNull final Context context, @NonNull final SyncOperation syncOperation) {
-		final Request syncRequest = mRequestClass == null ? null : (Request) syncOperation.task.getRequest(mRequestClass);
+	@Nullable public final Result handleSync(@NonNull final Context context, @NonNull final SyncOperation syncOperation) {
+		final Request syncRequest = requestClass == null ? null : (Request) syncOperation.task.getRequest(requestClass);
 		try {
 			return onHandleSync(context, syncOperation, syncRequest);
 		} catch (Exception error) {
@@ -181,8 +182,7 @@ public abstract class SyncHandler<Request extends SyncTask.Request, Result> {
 	 * @throws Exception The exception occurred during synchronization handling specific for this
 	 *                   handler.
 	 */
-	@Nullable
-	protected abstract Result onHandleSync(@NonNull Context context, @NonNull SyncOperation syncOperation, @Nullable Request syncRequest) throws Exception;
+	@Nullable protected abstract Result onHandleSync(@NonNull Context context, @NonNull SyncOperation syncOperation, @Nullable Request syncRequest) throws Exception;
 
 	/**
 	 * Invoked whenever {@link #onHandleSync(Context, SyncOperation, SyncTask.Request)} is invoked

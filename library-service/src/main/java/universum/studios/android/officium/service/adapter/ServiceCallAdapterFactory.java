@@ -1,20 +1,20 @@
 /*
- * =================================================================================================
- *                             Copyright (C) 2017 Universum Studios
- * =================================================================================================
- *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
+ * *************************************************************************************************
+ *                                 Copyright 2017 Universum Studios
+ * *************************************************************************************************
+ *                  Licensed under the Apache License, Version 2.0 (the "License")
  * -------------------------------------------------------------------------------------------------
- * You may use this file only in compliance with the License. More details and copy of this License 
- * you may obtain at
- * 
- * 		http://www.apache.org/licenses/LICENSE-2.0
- * 
- * You can redistribute, modify or publish any part of the code written within this file but as it 
- * is described in the License, the software distributed under the License is distributed on an 
- * "AS IS" BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
- * 
+ * You may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied.
+ *
  * See the License for the specific language governing permissions and limitations under the License.
- * =================================================================================================
+ * *************************************************************************************************
  */
 package universum.studios.android.officium.service.adapter;
 
@@ -35,10 +35,11 @@ import universum.studios.android.officium.service.ServiceCall;
  * that can adapt {@link Call} to {@link ServiceCall}.
  *
  * @author Martin Albedinsky
+ * @since 1.2
  */
 public final class ServiceCallAdapterFactory extends CallAdapter.Factory {
 
-    /*
+	/*
 	 * Constants ===================================================================================
 	 */
 
@@ -47,7 +48,7 @@ public final class ServiceCallAdapterFactory extends CallAdapter.Factory {
 	 */
 	// private static final String TAG = "ServiceCallAdapterFactory";
 
-    /*
+	/*
 	 * Interface ===================================================================================
 	 */
 
@@ -58,7 +59,7 @@ public final class ServiceCallAdapterFactory extends CallAdapter.Factory {
 	/*
 	 * Members =====================================================================================
 	 */
-	 
+
 	/*
 	 * Constructors ================================================================================
 	 */
@@ -68,7 +69,6 @@ public final class ServiceCallAdapterFactory extends CallAdapter.Factory {
 	 */
 	private ServiceCallAdapterFactory() {
 		super();
-		// Instances of this class cannot be instantiated via constructor but via create() method.
 	}
 
 	/*
@@ -80,16 +80,13 @@ public final class ServiceCallAdapterFactory extends CallAdapter.Factory {
 	 *
 	 * @return Instance of call adapter factory ready to be used.
 	 */
-	@NonNull
-	public static ServiceCallAdapterFactory create() {
+	@NonNull public static ServiceCallAdapterFactory create() {
 		return new ServiceCallAdapterFactory();
 	}
 
 	/**
 	 */
-	@Nullable
-	@Override
-	public CallAdapter<?, ?> get(@NonNull final Type returnType, @NonNull final Annotation[] annotations, @NonNull final Retrofit retrofit) {
+	@Override @Nullable public CallAdapter<?, ?> get(@NonNull final Type returnType, @NonNull final Annotation[] annotations, @NonNull final Retrofit retrofit) {
 		final Class<?> rawType = getRawType(returnType);
 		if (!rawType.equals(ServiceCall.class)) {
 			return null;
@@ -101,7 +98,7 @@ public final class ServiceCallAdapterFactory extends CallAdapter.Factory {
 		}
 		return new ServiceCallAdapter<>(getParameterUpperBound(0, (ParameterizedType) returnType));
 	}
-	 
+
 	/*
 	 * Inner classes ===============================================================================
 	 */

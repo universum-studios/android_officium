@@ -1,20 +1,20 @@
 /*
- * =================================================================================================
- *                             Copyright (C) 2016 Universum Studios
- * =================================================================================================
- *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
+ * *************************************************************************************************
+ *                                 Copyright 2016 Universum Studios
+ * *************************************************************************************************
+ *                  Licensed under the Apache License, Version 2.0 (the "License")
  * -------------------------------------------------------------------------------------------------
- * You may use this file only in compliance with the License. More details and copy of this License
- * you may obtain at
+ * You may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
  *
- * 		http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- * You can redistribute, modify or publish any part of the code written within this file but as it
- * is described in the License, the software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied.
  *
  * See the License for the specific language governing permissions and limitations under the License.
- * =================================================================================================
+ * *************************************************************************************************
  */
 package universum.studios.android.officium.sync;
 
@@ -51,8 +51,10 @@ import java.lang.annotation.RetentionPolicy;
  * constructors along with {@link #intoExtras(Bundle)} method to perform custom instantiation logic
  * via custom implementation of {@link Builder} or from/into extras {@link Bundle}.
  *
- * @param <R> Type of the request specific for the SyncTask implementation.
  * @author Martin Albedinsky
+ * @since 1.0
+ *
+ * @param <R> Type of the request specific for the SyncTask implementation.
  */
 public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 
@@ -134,8 +136,7 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 			CANCELED
 	})
 	@Retention(RetentionPolicy.SOURCE)
-	public @interface State {
-	}
+	public @interface State {}
 
 	/**
 	 * Default id for synchronization task. This id may be used to identify <b>global synchronization task</b>.
@@ -151,8 +152,7 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	 *
 	 * @author Martin Albedinsky
 	 */
-	public interface Request {
-	}
+	public interface Request {}
 
 	/**
 	 * A {@link Request} implementation that may be used for {@link SyncHandler SyncHandlers} that
@@ -181,7 +181,7 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	public static final SyncTask<EmptyRequest> EMPTY = new SyncTask<>();
 
 	/**
-	 * Instance of Gson used to parse {@link #mRequestBody} into {@link #mRequest} instance and
+	 * Instance of Gson used to parse {@link #requestBody} into {@link #request} instance and
 	 * vice versa.
 	 */
 	private static final Gson GSON = new Gson();
@@ -193,12 +193,12 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	/**
 	 * Id specified for this task.
 	 */
-	private final int mId;
+	private final int id;
 
 	/**
 	 * Request specified for this task. May be {@code null}.
 	 */
-	private R mRequest;
+	private R request;
 
 	/**
 	 * Json data of request obtained from {@link Bundle} when this task is created from synchronization
@@ -207,13 +207,13 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	 *
 	 * @see #getRequest(Class)
 	 */
-	private final String mRequestBody;
+	private final String requestBody;
 
 	/**
 	 * Current state of this synchronization task. May be one of states defined by {@link State @State}
 	 * annotation.
 	 */
-	private int mState = IDLE;
+	private int state = IDLE;
 
 	/*
 	 * Constructors ================================================================================
@@ -223,8 +223,8 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	 * Creates an empty instance of SyncTask.
 	 */
 	private SyncTask() {
-		this.mId = -1;
-		this.mRequestBody = null;
+		this.id = -1;
+		this.requestBody = null;
 	}
 
 	/**
@@ -233,9 +233,9 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	 * @param builder The builder containing data for the new SyncTask instance.
 	 */
 	protected SyncTask(@NonNull final Builder<R> builder) {
-		this.mId = builder.id;
-		this.mRequest = builder.request;
-		this.mRequestBody = mRequest == null ? null : GSON.toJson(mRequest);
+		this.id = builder.id;
+		this.request = builder.request;
+		this.requestBody = request == null ? null : GSON.toJson(request);
 	}
 
 	/**
@@ -250,9 +250,9 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	 * @see #intoExtras(Bundle)
 	 */
 	protected SyncTask(@NonNull final Bundle extras) {
-		this.mId = extras.getInt(SyncExtras.EXTRA_TASK_ID, DEFAULT_ID);
-		this.mRequestBody = extras.getString(SyncExtras.EXTRA_TASK_REQUEST_BODY);
-		this.mState = extras.getInt(SyncExtras.EXTRA_TASK_STATE, mState);
+		this.id = extras.getInt(SyncExtras.EXTRA_TASK_ID, DEFAULT_ID);
+		this.requestBody = extras.getString(SyncExtras.EXTRA_TASK_REQUEST_BODY);
+		this.state = extras.getInt(SyncExtras.EXTRA_TASK_STATE, state);
 	}
 
 	/**
@@ -261,9 +261,9 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	 * @param other The other sync task of which data to copy to the new one.
 	 */
 	protected SyncTask(@NonNull final SyncTask other) {
-		this.mId = other.mId;
-		this.mRequestBody = other.mRequestBody;
-		this.mState = other.mState;
+		this.id = other.id;
+		this.requestBody = other.requestBody;
+		this.state = other.state;
 	}
 
 	/*
@@ -276,7 +276,7 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	 * @return Id specified for this task.
 	 */
 	public final int getId() {
-		return mId;
+		return id;
 	}
 
 	/**
@@ -287,7 +287,7 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	 * @see #getState()
 	 */
 	final void setState(@State final int state) {
-		this.mState = state;
+		this.state = state;
 	}
 
 	/**
@@ -295,9 +295,8 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	 *
 	 * @return This task's state. May be one of states defined by {@link State @State} annotation.
 	 */
-	@State
-	public final int getState() {
-		return mState;
+	@State public final int getState() {
+		return state;
 	}
 
 	/**
@@ -309,12 +308,11 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	 *                       is request body available.
 	 * @return This task's request or {@code null} if there is no request specified.
 	 */
-	@Nullable
-	public final R getRequest(@NonNull final Class<R> classOfRequest) {
-		if (mRequest == null) {
-			this.mRequest = TextUtils.isEmpty(mRequestBody) ? null : GSON.fromJson(mRequestBody, classOfRequest);
+	@Nullable public final R getRequest(@NonNull final Class<R> classOfRequest) {
+		if (request == null) {
+			this.request = TextUtils.isEmpty(requestBody) ? null : GSON.fromJson(requestBody, classOfRequest);
 		}
-		return mRequest;
+		return request;
 	}
 
 	/**
@@ -322,9 +320,8 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	 *
 	 * @return This task's request body in Json format or {@code null} if there is not request specified.
 	 */
-	@Nullable
-	public final String getRequestBody() {
-		return mRequestBody;
+	@Nullable public final String getRequestBody() {
+		return requestBody;
 	}
 
 	/**
@@ -334,53 +331,48 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	 * @param extras The synchronization extras Bundle into which to put data of this task.
 	 * @return The given extras Bundle with this task's data.
 	 */
-	@NonNull
-	public Bundle intoExtras(@NonNull final Bundle extras) {
-		extras.putInt(SyncExtras.EXTRA_TASK_ID, mId);
-		extras.putString(SyncExtras.EXTRA_TASK_REQUEST_BODY, mRequestBody);
-		extras.putInt(SyncExtras.EXTRA_TASK_STATE, mState);
+	@NonNull public Bundle intoExtras(@NonNull final Bundle extras) {
+		extras.putInt(SyncExtras.EXTRA_TASK_ID, id);
+		extras.putString(SyncExtras.EXTRA_TASK_REQUEST_BODY, requestBody);
+		extras.putInt(SyncExtras.EXTRA_TASK_STATE, state);
 		return extras;
 	}
 
 	/**
 	 */
-	@Override
-	public int hashCode() {
-		int hash = mId;
-		if (!TextUtils.isEmpty(mRequestBody)) {
-			hash = 31 * hash + mRequestBody.hashCode();
+	@Override public int hashCode() {
+		int hash = id;
+		if (!TextUtils.isEmpty(requestBody)) {
+			hash = 31 * hash + requestBody.hashCode();
 		}
 		return hash;
 	}
 
 	/**
 	 */
-	@Override
-	public boolean equals(@Nullable final Object other) {
+	@SuppressWarnings("SimplifiableIfStatement")
+	@Override public boolean equals(@Nullable final Object other) {
 		if (other == this) return true;
 		if (!(other instanceof SyncTask)) return false;
 		final SyncTask task = (SyncTask) other;
-		if (task.mId != mId) {
+		if (task.id != id) {
 			return false;
 		}
-		final int requestHash = mRequestBody == null ? 0 : mRequestBody.hashCode();
-		final int otherRequestHash = task.mRequestBody == null ? 0 : task.mRequestBody.hashCode();
-		return requestHash == otherRequestHash;
+		return TextUtils.equals(requestBody, task.requestBody);
 	}
 
 	/**
 	 */
-	@Override
 	@SuppressWarnings("StringBufferReplaceableByString")
-	public String toString() {
+	@Override public String toString() {
 		final StringBuilder builder = new StringBuilder(64);
 		builder.append(getClass().getSimpleName());
 		builder.append("{id: ");
-		builder.append(mId);
+		builder.append(id);
 		builder.append(", state: ");
-		builder.append(getStateName(mState));
+		builder.append(getStateName(state));
 		builder.append(", request: ");
-		builder.append(mRequest == null ? mRequestBody : GSON.toJson(mRequest));
+		builder.append(request == null ? requestBody : GSON.toJson(request));
 		return builder.append("}").toString();
 	}
 
@@ -406,11 +398,10 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	 * Makes a clone of this task with the same id and request body but with the initial state, which
 	 * is {@link #IDLE}.
 	 */
-	@Override
 	@SuppressWarnings({"CloneDoesntDeclareCloneNotSupportedException", "CloneDoesntCallSuperClone"})
-	public SyncTask<R> clone() {
+	@Override public SyncTask<R> clone() {
 		final SyncTask<R> clone = new SyncTask<>(this);
-		clone.mState = IDLE;
+		clone.state = IDLE;
 		return clone;
 	}
 
@@ -426,12 +417,12 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 	public static class Builder<R extends Request> {
 
 		/**
-		 * See {@link SyncTask#mId}.
+		 * See {@link SyncTask#id}.
 		 */
 		private final int id;
 
 		/**
-		 * See {@link SyncTask#mRequest}.
+		 * See {@link SyncTask#request}.
 		 */
 		private R request;
 
@@ -462,8 +453,7 @@ public class SyncTask<R extends SyncTask.Request> implements Cloneable {
 		 *
 		 * @return New instance of SyncTask with data specified for this builder.
 		 */
-		@NonNull
-		public SyncTask<R> build() {
+		@NonNull public SyncTask<R> build() {
 			return new SyncTask<>(this);
 		}
 	}
