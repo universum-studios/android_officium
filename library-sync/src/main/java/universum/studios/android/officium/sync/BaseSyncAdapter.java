@@ -1,20 +1,20 @@
 /*
- * =================================================================================================
- *                             Copyright (C) 2016 Universum Studios
- * =================================================================================================
- *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
+ * *************************************************************************************************
+ *                                 Copyright 2016 Universum Studios
+ * *************************************************************************************************
+ *                  Licensed under the Apache License, Version 2.0 (the "License")
  * -------------------------------------------------------------------------------------------------
- * You may use this file only in compliance with the License. More details and copy of this License
- * you may obtain at
+ * You may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
  *
- * 		http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- * You can redistribute, modify or publish any part of the code written within this file but as it
- * is described in the License, the software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied.
  *
  * See the License for the specific language governing permissions and limitations under the License.
- * =================================================================================================
+ * *************************************************************************************************
  */
 package universum.studios.android.officium.sync;
 
@@ -109,6 +109,8 @@ import universum.studios.android.officium.OfficiumLogging;
  * each specific {@link SyncHandler} implementation</b>.
  *
  * @author Martin Albedinsky
+ * @since 1.0
+ *
  * @see BaseSyncManager
  * @see SyncHandler
  * @see SyncEvent
@@ -159,19 +161,19 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	/**
 	 * Listener that are notified about state change of a particular {@link SyncTask}.
 	 */
-	private OnSyncTaskStateChangeListener mTaskStateChangeListener;
+	private OnSyncTaskStateChangeListener taskStateChangeListener;
 
 	/**
 	 * Dispatcher that is used to dispatch synchronization events.
 	 */
-	private EventDispatcher mEventDispatcher;
+	private EventDispatcher eventDispatcher;
 
 	/**
 	 * Handler that is responsible for global synchronization handling.
 	 *
 	 * @see #onPerformGlobalSync(SyncOperation)
 	 */
-	private SyncHandler mGlobalSyncHandler;
+	private SyncHandler globalSyncHandler;
 
 	/**
 	 * Array map containing registered handlers that are responsible for synchronization handling
@@ -180,7 +182,7 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 *
 	 * @see #onPerformSync(SyncOperation)
 	 */
-	private SparseArray<SyncHandler> mTaskHandlers;
+	private SparseArray<SyncHandler> taskHandlers;
 
 	/*
 	 * Constructors ================================================================================
@@ -218,7 +220,7 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * @see SyncTask#getState()
 	 */
 	protected final void setOnTaskStateChangeListener(@Nullable final OnSyncTaskStateChangeListener listener) {
-		this.mTaskStateChangeListener = listener;
+		this.taskStateChangeListener = listener;
 	}
 
 	/**
@@ -231,7 +233,7 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * @see #dispatchSyncEvent(Object)
 	 */
 	protected final void setEventDispatcher(@Nullable final EventDispatcher dispatcher) {
-		this.mEventDispatcher = dispatcher;
+		this.eventDispatcher = dispatcher;
 	}
 
 	/**
@@ -240,9 +242,8 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * @return This adapter's event dispatcher.
 	 * @see #setEventDispatcher(EventDispatcher)
 	 */
-	@Nullable
-	protected final EventDispatcher getEventDispatcher() {
-		return mEventDispatcher;
+	@Nullable protected final EventDispatcher getEventDispatcher() {
+		return eventDispatcher;
 	}
 
 	/**
@@ -254,7 +255,7 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * @see #getGlobalSyncHandler()
 	 */
 	protected void setGlobalSyncHandler(@Nullable final SyncHandler handler) {
-		this.mGlobalSyncHandler = handler;
+		this.globalSyncHandler = handler;
 	}
 
 	/**
@@ -263,9 +264,8 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * @return This adapter's global sync handler.
 	 * @see #setGlobalSyncHandler(SyncHandler)
 	 */
-	@Nullable
-	protected SyncHandler getGlobalSyncHandler() {
-		return mGlobalSyncHandler;
+	@Nullable protected SyncHandler getGlobalSyncHandler() {
+		return globalSyncHandler;
 	}
 
 	/**
@@ -286,10 +286,10 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * @see #unregisterTaskHandler(SyncHandler)
 	 */
 	protected void registerTaskHandler(@NonNull final SyncHandler handler) {
-		if (mTaskHandlers == null) {
-			this.mTaskHandlers = new SparseArray<>();
+		if (taskHandlers == null) {
+			this.taskHandlers = new SparseArray<>();
 		}
-		mTaskHandlers.append(handler.getTaskId(), handler);
+		taskHandlers.append(handler.getTaskId(), handler);
 	}
 
 	/**
@@ -301,7 +301,7 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * @see #onPerformSync(SyncOperation)
 	 */
 	protected void unregisterTaskHandler(@NonNull final SyncHandler handler) {
-		if (mTaskHandlers != null && mTaskHandlers.size() > 0) mTaskHandlers.remove(handler.getTaskId());
+		if (taskHandlers != null && taskHandlers.size() > 0) taskHandlers.remove(handler.getTaskId());
 	}
 
 	/**
@@ -309,9 +309,7 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * @see #onPerformGlobalSync(SyncOperation)
 	 * @see #onPerformSync(SyncOperation)
 	 */
-	@Override
-	@SuppressWarnings("unchecked")
-	public void onPerformSync(
+	@Override public void onPerformSync(
 			@NonNull final Account account,
 			@NonNull final Bundle extras,
 			@NonNull final String authority,
@@ -341,8 +339,7 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * @param extras The synchronization extras passed to {@link #onPerformSync(Account, Bundle, String, ContentProviderClient, SyncResult)}.
 	 * @return New instance of SyncTask with data parsed from the given extras.
 	 */
-	@NonNull
-	protected SyncTask createTaskFromExtras(@NonNull final Bundle extras) {
+	@NonNull protected SyncTask createTaskFromExtras(@NonNull final Bundle extras) {
 		return new SyncTask(extras);
 	}
 
@@ -357,9 +354,8 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * @see #onGlobalSyncFinished(SyncOperation)
 	 * @see #onGlobalSyncFailed(SyncOperation, Exception)
 	 */
-	@SuppressWarnings("unchecked")
 	protected void onPerformGlobalSync(@NonNull final SyncOperation syncOperation) {
-		if (mGlobalSyncHandler == null) {
+		if (globalSyncHandler == null) {
 			OfficiumLogging.w(TAG, "No global synchronization handler found. Skipping synchronization.");
 			return;
 		}
@@ -370,7 +366,7 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 						.build()
 		);
 		try {
-			mGlobalSyncHandler.handleSync(getContext(), syncOperation);
+			globalSyncHandler.handleSync(getContext(), syncOperation);
 			changeTaskStateToAndNotify(syncOperation, SyncTask.FINISHED);
 			onGlobalSyncFinished(syncOperation);
 		} catch (Exception error) {
@@ -421,9 +417,8 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * @see #onSyncFinished(SyncOperation)
 	 * @see #onSyncFailed(SyncOperation, Exception)
 	 */
-	@SuppressWarnings("unchecked")
 	protected void onPerformSync(@NonNull final SyncOperation syncOperation) {
-		final SyncHandler taskHandler = mTaskHandlers == null ? null : mTaskHandlers.get(syncOperation.task.getId());
+		final SyncHandler taskHandler = taskHandlers == null ? null : taskHandlers.get(syncOperation.task.getId());
 		if (taskHandler == null) {
 			OfficiumLogging.e(TAG, "No synchronization handler found for task with id(" + syncOperation.task.getId() + "). Skipping synchronization.");
 			return;
@@ -487,12 +482,11 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * @param state         The new state for the task. Should be one of states defined by {@link SyncTask.State @State}
 	 *                      annotation.
 	 */
-	@VisibleForTesting
-	void changeTaskStateToAndNotify(final SyncOperation syncOperation, @SyncTask.State final int state) {
+	@VisibleForTesting void changeTaskStateToAndNotify(final SyncOperation syncOperation, @SyncTask.State final int state) {
 		if (syncOperation.task.getState() != state) {
 			syncOperation.task.setState(state);
-			if (mTaskStateChangeListener != null) {
-				mTaskStateChangeListener.onSyncTaskStateChanged(syncOperation.task, syncOperation.account);
+			if (taskStateChangeListener != null) {
+				taskStateChangeListener.onSyncTaskStateChanged(syncOperation.task, syncOperation.account);
 			}
 		}
 	}
@@ -509,7 +503,7 @@ public abstract class BaseSyncAdapter extends AbstractThreadedSyncAdapter {
 	 * @param event The synchronization event to be dispatched.
 	 */
 	protected void dispatchSyncEvent(@NonNull final Object event) {
-		if (mEventDispatcher != null) mEventDispatcher.dispatch(event);
+		if (eventDispatcher != null) eventDispatcher.dispatch(event);
 	}
 
 	/*

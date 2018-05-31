@@ -1,20 +1,20 @@
 /*
- * =================================================================================================
- *                             Copyright (C) 2016 Universum Studios
- * =================================================================================================
- *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
+ * *************************************************************************************************
+ *                                 Copyright 2016 Universum Studios
+ * *************************************************************************************************
+ *                  Licensed under the Apache License, Version 2.0 (the "License")
  * -------------------------------------------------------------------------------------------------
- * You may use this file only in compliance with the License. More details and copy of this License
- * you may obtain at
+ * You may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
  *
- * 		http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- * You can redistribute, modify or publish any part of the code written within this file but as it
- * is described in the License, the software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied.
  *
  * See the License for the specific language governing permissions and limitations under the License.
- * =================================================================================================
+ * *************************************************************************************************
  */
 package universum.studios.android.officium.account;
 
@@ -28,13 +28,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 /**
- * A {@link AbstractAccountAuthenticator} implementation that can be used as base for custom implementations
- * of account authenticator.
+ * A {@link AbstractAccountAuthenticator} implementation that may be used as base for custom
+ * implementations of account authenticator.
  * <p>
- * Each and every abstract method of {@link AbstractAccountAuthenticator} is implemented by this
- * base authenticator class and throws {@link UnsupportedOperationException}.
+ * Each and every abstract method of {@link AbstractAccountAuthenticator} implemented by this base
+ * authenticator throws {@link UnsupportedOperationException}.
  *
  * @author Martin Albedinsky
+ * @since 1.0
  */
 public abstract class BaseAccountAuthenticator extends AbstractAccountAuthenticator {
 
@@ -79,9 +80,7 @@ public abstract class BaseAccountAuthenticator extends AbstractAccountAuthentica
 
 	/**
 	 */
-	@Nullable
-	@Override
-	public Bundle editProperties(
+	@Override @Nullable public Bundle editProperties(
 			@NonNull final AccountAuthenticatorResponse response,
 			@NonNull final String accountType
 	) {
@@ -90,9 +89,7 @@ public abstract class BaseAccountAuthenticator extends AbstractAccountAuthentica
 
 	/**
 	 */
-	@Nullable
-	@Override
-	public Bundle addAccount(
+	@Override @Nullable public Bundle addAccount(
 			@NonNull final AccountAuthenticatorResponse response,
 			@NonNull final String accountType,
 			@Nullable final String authTokenType,
@@ -104,9 +101,7 @@ public abstract class BaseAccountAuthenticator extends AbstractAccountAuthentica
 
 	/**
 	 */
-	@Nullable
-	@Override
-	public Bundle confirmCredentials(
+	@Override @Nullable public Bundle confirmCredentials(
 			@NonNull final AccountAuthenticatorResponse response,
 			@NonNull final Account account,
 			@Nullable final Bundle options
@@ -116,9 +111,7 @@ public abstract class BaseAccountAuthenticator extends AbstractAccountAuthentica
 
 	/**
 	 */
-	@Nullable
-	@Override
-	public Bundle getAuthToken(
+	@Override @Nullable public Bundle getAuthToken(
 			@NonNull final AccountAuthenticatorResponse response,
 			@NonNull final Account account,
 			@NonNull final String authTokenType,
@@ -129,16 +122,13 @@ public abstract class BaseAccountAuthenticator extends AbstractAccountAuthentica
 
 	/**
 	 */
-	@Override
-	public String getAuthTokenLabel(@NonNull final String authTokenType) {
+	@Override @Nullable public String getAuthTokenLabel(@NonNull final String authTokenType) {
 		throw new UnsupportedOperationException();
 	}
 
 	/**
 	 */
-	@Nullable
-	@Override
-	public Bundle updateCredentials(
+	@Override @Nullable public Bundle updateCredentials(
 			@NonNull final AccountAuthenticatorResponse response,
 			@NonNull final Account account,
 			@Nullable final String authTokenType,
@@ -149,9 +139,7 @@ public abstract class BaseAccountAuthenticator extends AbstractAccountAuthentica
 
 	/**
 	 */
-	@Nullable
-	@Override
-	public Bundle hasFeatures(
+	@Override @Nullable public Bundle hasFeatures(
 			@NonNull final AccountAuthenticatorResponse response,
 			@NonNull final Account account,
 			@NonNull final String[] features

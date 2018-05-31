@@ -1,20 +1,20 @@
 /*
- * =================================================================================================
- *                             Copyright (C) 2016 Universum Studios
- * =================================================================================================
- *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
+ * *************************************************************************************************
+ *                                 Copyright 2016 Universum Studios
+ * *************************************************************************************************
+ *                  Licensed under the Apache License, Version 2.0 (the "License")
  * -------------------------------------------------------------------------------------------------
- * You may use this file only in compliance with the License. More details and copy of this License
- * you may obtain at
+ * You may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
  *
- * 		http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- * You can redistribute, modify or publish any part of the code written within this file but as it
- * is described in the License, the software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied.
  *
  * See the License for the specific language governing permissions and limitations under the License.
- * =================================================================================================
+ * *************************************************************************************************
  */
 package universum.studios.android.officium.account;
 
@@ -218,6 +218,7 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 			PERMISSION_GET_ACCOUNTS,
 			PERMISSION_AUTHENTICATE_ACCOUNTS
 	})
+	@Deprecated
 	public boolean setAccountPassword(@Nullable final String password) {
 		final Account account = acquireAccount();
 		if (account == null) return false;
@@ -242,6 +243,7 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 			PERMISSION_GET_ACCOUNTS,
 			PERMISSION_AUTHENTICATE_ACCOUNTS
 	})
+	@Deprecated
 	public String getAccountPassword() {
 		final Account account = acquireAccount();
 		return account == null ? null : getAccountPassword(account);
@@ -263,6 +265,7 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 			PERMISSION_GET_ACCOUNTS,
 			PERMISSION_MANAGE_ACCOUNTS
 	})
+	@Deprecated
 	public boolean clearAccountPassword() {
 		final Account account = acquireAccount();
 		if (account == null) return false;
@@ -289,6 +292,7 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 			PERMISSION_GET_ACCOUNTS,
 			PERMISSION_AUTHENTICATE_ACCOUNTS
 	})
+	@Deprecated
 	public boolean setAccountData(@NonNull final String key, @Nullable final String value) {
 		final Account account = acquireAccount();
 		if (account == null) return false;
@@ -314,6 +318,7 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 			PERMISSION_GET_ACCOUNTS,
 			PERMISSION_AUTHENTICATE_ACCOUNTS
 	})
+	@Deprecated
 	public String getAccountData(@NonNull final String key) {
 		final Account account = acquireAccount();
 		return account == null ? null : getAccountData(account, key);
@@ -336,6 +341,7 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 			PERMISSION_GET_ACCOUNTS,
 			PERMISSION_AUTHENTICATE_ACCOUNTS
 	})
+	@Deprecated
 	public boolean setAccountDataBundle(@NonNull final Bundle dataBundle) {
 		final Account account = acquireAccount();
 		if (account == null) return false;
@@ -361,6 +367,7 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 			PERMISSION_GET_ACCOUNTS,
 			PERMISSION_AUTHENTICATE_ACCOUNTS
 	})
+	@Deprecated
 	public Bundle getAccountDataBundle(@NonNull final String... keys) {
 		final Account account = acquireAccount();
 		return account == null ? null : getAccountDataBundle(account, keys);
@@ -382,7 +389,7 @@ public class SingleUserAccountManager<A extends UserAccount> extends UserAccount
 	@Nullable
 	@RequiresPermission(PERMISSION_GET_ACCOUNTS)
 	protected Account acquireAccount() {
-		final Account[] accounts = mManager.getAccountsByType(mAccountType);
+		final Account[] accounts = systemManager.getAccountsByType(accountType);
 		// We assume here that there can be only one user account available/created (if any).
 		return accounts.length > 0 ? accounts[0] : null;
 	}

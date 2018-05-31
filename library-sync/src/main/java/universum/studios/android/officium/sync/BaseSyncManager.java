@@ -1,20 +1,20 @@
 /*
- * =================================================================================================
- *                             Copyright (C) 2016 Universum Studios
- * =================================================================================================
- *         Licensed under the Apache License, Version 2.0 or later (further "License" only).
+ * *************************************************************************************************
+ *                                 Copyright 2016 Universum Studios
+ * *************************************************************************************************
+ *                  Licensed under the Apache License, Version 2.0 (the "License")
  * -------------------------------------------------------------------------------------------------
- * You may use this file only in compliance with the License. More details and copy of this License
- * you may obtain at
+ * You may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
  *
- * 		http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- * You can redistribute, modify or publish any part of the code written within this file but as it
- * is described in the License, the software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES or CONDITIONS OF ANY KIND.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied.
  *
  * See the License for the specific language governing permissions and limitations under the License.
- * =================================================================================================
+ * *************************************************************************************************
  */
 package universum.studios.android.officium.sync;
 
@@ -42,10 +42,11 @@ import universum.studios.android.officium.OfficiumLogging;
  * Base synchronization manager class implements also some configuration methods like to start/stop
  * automatic synchronization via {@link #startAutomaticSync()} and {@link #stopAutomaticSync()} or
  * to check whether there are some synchronization operations pending or active via {@link #isSyncPedning()}
- * and {@link #isSyncPedning()}. Any additional methods may be freely implemented by the inheritance
+ * and {@link #isSyncPending()}. Any additional methods may be freely implemented by the inheritance
  * hierarchies.
  *
  * @author Martin Albedinsky
+ * @since 1.0
  */
 @SuppressWarnings("ResourceType")
 public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
@@ -89,13 +90,13 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	/**
 	 * Context with which has been this manager created.
 	 */
-	private final Context mContext;
+	private final Context context;
 
 	/**
 	 * Content authority with which has been this manager created. This authority is used to set up
 	 * all synchronization requests via {@link ContentResolver}.
 	 */
-	private final String mAuthority;
+	private final String authority;
 
 	/*
 	 * Constructors ================================================================================
@@ -112,8 +113,8 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	 * @see #getAuthority()
 	 */
 	public BaseSyncManager(@NonNull final Context context, @NonNull final String authority) {
-		this.mContext = context;
-		this.mAuthority = authority;
+		this.context = context;
+		this.authority = authority;
 	}
 
 	/*
@@ -126,9 +127,8 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	 * @return The associated context.
 	 * @see #BaseSyncManager(Context, String)
 	 */
-	@NonNull
-	public final Context getContext() {
-		return mContext;
+	@NonNull public final Context getContext() {
+		return context;
 	}
 
 	/**
@@ -138,9 +138,8 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	 * @return The associated content authority.
 	 * @see #BaseSyncManager(Context, String)
 	 */
-	@NonNull
-	public final String getAuthority() {
-		return mAuthority;
+	@NonNull public final String getAuthority() {
+		return authority;
 	}
 
 	/**
@@ -170,7 +169,7 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	@RequiresPermission(PERMISSION_READ_SYNC_SETTINGS)
 	public boolean isAutomaticSyncRunning() {
 		final Account account = pickAccountForSync();
-		return account != null && ContentResolver.getSyncAutomatically(account, mAuthority);
+		return account != null && ContentResolver.getSyncAutomatically(account, authority);
 	}
 
 	/**
@@ -194,7 +193,7 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	 */
 	private void setAutomaticSyncEnabled(final boolean enabled) {
 		final Account account = pickAccountForSync();
-		if (account != null) ContentResolver.setSyncAutomatically(account, mAuthority, enabled);
+		if (account != null) ContentResolver.setSyncAutomatically(account, authority, enabled);
 	}
 
 	/**
@@ -234,7 +233,7 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 			extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
 			extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
 			OfficiumLogging.i(TAG, "Requesting synchronization for task(" + syncTask + ").");
-			ContentResolver.requestSync(account, mAuthority, extras);
+			ContentResolver.requestSync(account, authority, extras);
 		}
 	}
 
@@ -257,30 +256,8 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 
 	/**
 	 */
-	@Override
-	@CallSuper
-	public void onSyncTaskStateChanged(@NonNull final SyncTask syncTask, @NonNull final Account account) {
+	@Override @CallSuper public void onSyncTaskStateChanged(@NonNull final SyncTask syncTask, @NonNull final Account account) {
 		// May be implemented by the inheritance hierarchies.
-	}
-
-	/**
-	 * <b>This method has been deprecated and will be removed in the next release.</b>
-	 * <p>
-	 * Checks whether there are any pending synchronizations for the content authority specified for
-	 * this manager and account picked for synchronization by this manager implementation.
-	 * <p>
-	 * This method requires the caller to hold <b>{@link #PERMISSION_READ_SYNC_STATS}</b> permission.
-	 *
-	 * @return {@code True} if there are some synchronizations pending, {@code false} otherwise.
-	 * @see ContentResolver#isSyncPending(Account, String)
-	 * @see #isSyncActive()
-	 * @see #cancelSync()
-	 * @deprecated Use {@link #isSyncPending()} instead.
-	 */
-	@Deprecated
-	@RequiresPermission(PERMISSION_READ_SYNC_STATS)
-	public boolean isSyncPedning() {
-		return isSyncPending();
 	}
 
 	/**
@@ -297,7 +274,7 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	@RequiresPermission(PERMISSION_READ_SYNC_STATS)
 	public boolean isSyncPending() {
 		final Account account = pickAccountForSync();
-		return account != null && ContentResolver.isSyncPending(account, mAuthority);
+		return account != null && ContentResolver.isSyncPending(account, authority);
 	}
 
 	/**
@@ -308,13 +285,13 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	 *
 	 * @return {@code True} if synchronization is active at this time, {@code false} otherwise.
 	 * @see ContentResolver#isSyncActive(Account, String)
-	 * @see #isSyncPedning()
+	 * @see #isSyncPending()
 	 * @see #cancelSync()
 	 */
 	@RequiresPermission(PERMISSION_READ_SYNC_STATS)
 	public boolean isSyncActive() {
 		final Account account = pickAccountForSync();
-		return account != null && ContentResolver.isSyncActive(account, mAuthority);
+		return account != null && ContentResolver.isSyncActive(account, authority);
 	}
 
 	/**
@@ -323,7 +300,7 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	 *
 	 * @see ContentResolver#cancelSync(Account, String)
 	 * @see #isSyncActive()
-	 * @see #isSyncPedning()
+	 * @see #isSyncPending()
 	 */
 	public void cancelSync() {
 		final Account account = pickAccountForSync();
@@ -339,7 +316,7 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	 * @param account The account picked via {@link #pickAccountForSync()}.
 	 */
 	protected void onCancelSync(@NonNull final Account account) {
-		ContentResolver.cancelSync(account, mAuthority);
+		ContentResolver.cancelSync(account, authority);
 	}
 
 	/**
@@ -348,10 +325,9 @@ public abstract class BaseSyncManager implements OnSyncTaskStateChangeListener {
 	 *
 	 * @return Account for which should be performed synchronization request, whether {@link #startAutomaticSync()},
 	 * {@link #stopAutomaticSync()}, {@link #requestGlobalSync()}, {@link #requestSync(SyncTask)},
-	 * {@link #isSyncActive()}, {@link #isSyncPedning()}, {@link #cancelSync()}.
+	 * {@link #isSyncActive()}, {@link #isSyncPending()}, {@link #cancelSync()}.
 	 */
-	@Nullable
-	protected abstract Account pickAccountForSync();
+	@Nullable protected abstract Account pickAccountForSync();
 
 	/*
 	 * Inner classes ===============================================================================
