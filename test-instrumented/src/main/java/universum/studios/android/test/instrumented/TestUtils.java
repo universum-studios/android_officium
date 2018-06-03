@@ -26,6 +26,7 @@ import android.support.annotation.NonNull;
  *
  * @author Martin Albedinsky
  */
+@SuppressWarnings("unused")
 public final class TestUtils {
 
 	/**
@@ -47,6 +48,7 @@ public final class TestUtils {
 	 * @param context The context of which package name to check.
 	 * @return {@code True} if the context's package name is the same as the library's root one,
 	 * {@code false} otherwise.
+	 *
 	 * @see #isLibraryRootPackageName(String)
 	 */
 	public static boolean hasLibraryRootPackageName(@NonNull final Context context) {

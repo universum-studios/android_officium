@@ -141,6 +141,7 @@ public final class TestResources {
 	 * @param resourceName Name of the resource for which to resolve its identifier.
 	 * @return Resolved identifier which may be used to obtain value of the desired resource from
 	 * resources or {@link #NO_RESOURCE} if no such resource was found.
+	 *
 	 * @see Resources#getIdentifier(String, String, String)
 	 */
 	public static int resourceIdentifier(@NonNull final Context context, @ResourceType final String resourceType, @NonNull final String resourceName) {
