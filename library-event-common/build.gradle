@@ -21,6 +21,10 @@ android {
     lintOptions {
         abortOnError false
     }
+
+    testOptions {
+        unitTests.includeAndroidResources = true
+    }
 }
 
 /**
@@ -33,9 +37,9 @@ repositories {
 
 dependencies {
     // PRODUCTION ----------------------------------------------------------------------------------
-    implementation deps.android.support.annotations
-    implementation deps.other.squareupOtto
-    releaseImplementation deps.modules.libraryEventCore
+    implementation deps.androidx.annotation.annotation
+    implementation deps.other.squareup.otto
+    releaseImplementation deps.library.eventCore
 
     // DEVELOPMENT ---------------------------------------------------------------------------------
     debugApi project(':library-event-core')

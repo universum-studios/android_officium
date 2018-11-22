@@ -20,16 +20,15 @@ package universum.studios.android.officium.sync;
 
 import android.accounts.Account;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
-import org.hamcrest.core.Is;
 import org.junit.Test;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import universum.studios.android.test.local.RobolectricTestCase;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
 
 /**
  * @author Martin Albedinsky
@@ -41,15 +40,15 @@ public final class BaseSyncManagerTest extends RobolectricTestCase {
 
 	@Test public void testInstantiation() {
 		// Act:
-		final TestManager manager = new TestManager(application, TEST_AUTHORITY);
+		final TestManager manager = new TestManager(context, TEST_AUTHORITY);
 		// Assert:
-		assertThat(manager.getContext(), Is.<Context>is(application));
+		assertThat(manager.getContext(), is(context));
 		assertThat(manager.getAuthority(), is(TEST_AUTHORITY));
 	}
 
 	@Test public void testStartAutomaticSync() {
 		// Arrange:
-		final TestManager manager = new TestManager(application, TEST_AUTHORITY);
+		final TestManager manager = new TestManager(context, TEST_AUTHORITY);
 		// Act:
 		manager.startAutomaticSync();
 		// Assert:
@@ -58,7 +57,7 @@ public final class BaseSyncManagerTest extends RobolectricTestCase {
 
 	@Test public void testStartAutomaticSyncWithoutAccount() {
 		// Arrange:
-		final TestManager manager = new TestManager(application, TEST_AUTHORITY);
+		final TestManager manager = new TestManager(context, TEST_AUTHORITY);
 		manager.accountForSync = null;
 		// Act:
 		manager.startAutomaticSync();
@@ -68,7 +67,7 @@ public final class BaseSyncManagerTest extends RobolectricTestCase {
 
 	@Test public void testStopAutomaticSync() {
 		// Arrange:
-		final TestManager manager = new TestManager(application, TEST_AUTHORITY);
+		final TestManager manager = new TestManager(context, TEST_AUTHORITY);
 		manager.startAutomaticSync();
 		// Act:
 		manager.stopAutomaticSync();
@@ -78,7 +77,7 @@ public final class BaseSyncManagerTest extends RobolectricTestCase {
 
 	@Test public void testStopAutomaticSyncWithoutAccount() {
 		// Arrange:
-		final TestManager manager = new TestManager(application, TEST_AUTHORITY);
+		final TestManager manager = new TestManager(context, TEST_AUTHORITY);
 		manager.accountForSync = null;
 		manager.startAutomaticSync();
 		// Act:
@@ -89,7 +88,7 @@ public final class BaseSyncManagerTest extends RobolectricTestCase {
 
 	@Test public void testRequestGlobalSync() {
 		// Arrange:
-		final TestManager manager = new TestManager(application, TEST_AUTHORITY);
+		final TestManager manager = new TestManager(context, TEST_AUTHORITY);
 		// Act:
 		manager.requestGlobalSync();
 		// Assert:
@@ -99,7 +98,7 @@ public final class BaseSyncManagerTest extends RobolectricTestCase {
 
 	@Test public void testRequestSync() {
 		// Arrange:
-		final TestManager manager = new TestManager(application, TEST_AUTHORITY);
+		final TestManager manager = new TestManager(context, TEST_AUTHORITY);
 		final SyncTask syncTask = new SyncTask.Builder<>(1).build();
 		// Act:
 		manager.requestSync(syncTask);
@@ -111,7 +110,7 @@ public final class BaseSyncManagerTest extends RobolectricTestCase {
 
 	@Test public void testRequestSyncForTaskWhichShouldNotRun() {
 		// Arrange:
-		final TestManager manager = new TestManager(application, TEST_AUTHORITY);
+		final TestManager manager = new TestManager(context, TEST_AUTHORITY);
 		final SyncTask syncTask = new SyncTask.Builder<>(-1).build();
 		// Act:
 		manager.requestSync(syncTask);
@@ -122,7 +121,7 @@ public final class BaseSyncManagerTest extends RobolectricTestCase {
 
 	@Test public void testRequestSyncWithoutAccount() {
 		// Arrange:
-		final TestManager manager = new TestManager(application, TEST_AUTHORITY);
+		final TestManager manager = new TestManager(context, TEST_AUTHORITY);
 		manager.accountForSync = null;
 		// Act:
 		manager.requestSync(new SyncTask.Builder<>(SyncTask.DEFAULT_ID).build());
@@ -132,7 +131,7 @@ public final class BaseSyncManagerTest extends RobolectricTestCase {
 
 	@Test public void testShouldRequestSync() {
 		// Arrange:
-		final TestManager manager = new TestManager(application, TEST_AUTHORITY);
+		final TestManager manager = new TestManager(context, TEST_AUTHORITY);
 		// Act:
 		final boolean result = manager.shouldRequestSync(new SyncTask.Builder<>(SyncTask.DEFAULT_ID).build(), manager.accountForSync);
 		// Assert:
@@ -141,7 +140,7 @@ public final class BaseSyncManagerTest extends RobolectricTestCase {
 
 	@Test public void testIsSyncPendingWithoutAccount() {
 		// Arrange:
-		final TestManager manager = new TestManager(application, TEST_AUTHORITY);
+		final TestManager manager = new TestManager(context, TEST_AUTHORITY);
 		manager.accountForSync = null;
 		// Act + Assert:
 		assertThat(manager.isSyncPending(), is(false));
@@ -149,14 +148,14 @@ public final class BaseSyncManagerTest extends RobolectricTestCase {
 
 	@Test public void testIsSyncActive() {
 		// Arrange:
-		final TestManager manager = new TestManager(application, TEST_AUTHORITY);
+		final TestManager manager = new TestManager(context, TEST_AUTHORITY);
 		// Act + Assert:
 		assertThat(manager.isSyncActive(), is(false));
 	}
 
 	@Test public void testIsSyncActiveWithoutAccount() {
 		// Arrange:
-		final TestManager manager = new TestManager(application, TEST_AUTHORITY);
+		final TestManager manager = new TestManager(context, TEST_AUTHORITY);
 		manager.accountForSync = null;
 		// Act + Assert:
 		assertThat(manager.isSyncActive(), is(false));
@@ -164,7 +163,7 @@ public final class BaseSyncManagerTest extends RobolectricTestCase {
 
 	@Test public void testCancelSync() {
 		// Arrange:
-		final TestManager manager = new TestManager(application, TEST_AUTHORITY);
+		final TestManager manager = new TestManager(context, TEST_AUTHORITY);
 		// Act:
 		manager.cancelSync();
 		// Assert:
@@ -173,7 +172,7 @@ public final class BaseSyncManagerTest extends RobolectricTestCase {
 
 	@Test public void testCancelSyncWithoutAccount() {
 		// Arrange:
-		final TestManager manager = new TestManager(application, TEST_AUTHORITY);
+		final TestManager manager = new TestManager(context, TEST_AUTHORITY);
 		manager.accountForSync = null;
 		// Act:
 		manager.cancelSync();

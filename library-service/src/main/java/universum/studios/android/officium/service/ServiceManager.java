@@ -19,13 +19,13 @@
 package universum.studios.android.officium.service;
 
 import android.content.ServiceConnection;
-import android.support.annotation.CallSuper;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import androidx.annotation.CallSuper;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import okhttp3.HttpUrl;
 import retrofit2.Retrofit;
 

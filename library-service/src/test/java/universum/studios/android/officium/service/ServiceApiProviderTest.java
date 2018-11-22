@@ -18,16 +18,15 @@
  */
 package universum.studios.android.officium.service;
 
-import android.support.annotation.NonNull;
-
 import org.junit.Test;
 
+import androidx.annotation.NonNull;
 import universum.studios.android.test.local.LocalTestCase;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNot.not;
-import static org.hamcrest.core.IsNull.notNullValue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyZeroInteractions;
 

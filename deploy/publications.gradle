@@ -56,7 +56,7 @@ publishing {
             groupId config.pom.groupId
             artifactId project.property('maven.pom.artifactId')
             version config.pom.version
-            artifact bundleRelease
+            artifact bundleReleaseAar
             artifact classesJar
             artifact javadocJar
             artifact sourcesJar

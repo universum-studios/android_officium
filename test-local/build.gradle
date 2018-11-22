@@ -27,8 +27,9 @@ android {
  */
 dependencies {
     api deps.test.junit
-    api deps.test.mockitoCore
-    api deps.test.robolectric
-    api deps.test.robolectricShadowsSupportV4
-    api deps.android.support.annotations
+    api deps.test.mockito.core
+    api deps.test.robolectric.robolectric
+    api deps.androidx.test.core
+    implementation deps.androidx.annotation.annotation
+    implementation deps.androidx.legacy.supportV4
 }

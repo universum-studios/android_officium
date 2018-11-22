@@ -18,11 +18,12 @@
  */
 package universum.studios.android.test.instrumented;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.test.rule.ActivityTestRule;
 import android.widget.FrameLayout;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
+import androidx.test.rule.ActivityTestRule;
 
 /**
  * Simple activity that may be used in <b>Android instrumented tests</b> in order to set up
@@ -30,7 +31,7 @@ import android.widget.FrameLayout;
  *
  * @author Martin Albedinsky
  */
-public class TestActivity extends Activity {
+public class TestActivity extends FragmentActivity {
 
 	/**
 	 * Id of the TestActivity's content view.

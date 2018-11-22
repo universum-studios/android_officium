@@ -20,15 +20,17 @@ package universum.studios.android.test.instrumented;
 
 import android.app.Instrumentation;
 import android.content.Context;
-import android.support.annotation.CallSuper;
-import android.support.annotation.NonNull;
-import android.support.annotation.WorkerThread;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
+
+import androidx.annotation.CallSuper;
+import androidx.annotation.NonNull;
+import androidx.annotation.WorkerThread;
+import androidx.test.core.app.ApplicationProvider;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 /**
  * Class that may be used to group suite of <b>Android instrumented tests</b>.
@@ -40,11 +42,9 @@ import org.junit.runner.RunWith;
 public abstract class InstrumentedTestCase {
 
 	/**
-	 * Target context obtained from the {@link InstrumentationRegistry}.
+	 * Application context instance obtained via {@link ApplicationProvider#getApplicationContext}.
 	 * <p>
 	 * It is always valid between calls to {@link #beforeTest()} and {@link #afterTest()}.
-	 *
-	 * @see InstrumentationRegistry#getTargetContext()
 	 */
 	@NonNull protected Context context;
 
@@ -53,7 +53,7 @@ public abstract class InstrumentedTestCase {
 	 */
 	@Before @CallSuper public void beforeTest() throws Exception {
 		// Inheritance hierarchies may for example acquire here resources needed for each test.
-		this.context = InstrumentationRegistry.getTargetContext();
+		this.context = ApplicationProvider.getApplicationContext();
 	}
 
 	/**

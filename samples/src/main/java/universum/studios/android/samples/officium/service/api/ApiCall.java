@@ -18,11 +18,9 @@
  */
 package universum.studios.android.samples.officium.service.api;
 
-import android.support.annotation.NonNull;
-
-import universum.studios.android.officium.service.ServiceCall;
-
+import androidx.annotation.NonNull;
 import retrofit2.Call;
+import universum.studios.android.officium.service.ServiceCall;
 
 /**
  * @author Martin Albedinsky

@@ -20,9 +20,10 @@ package universum.studios.android.officium.event;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.NonNull;
 
 import com.squareup.otto.Bus;
+
+import androidx.annotation.NonNull;
 
 /**
  * A {@link SimpleEventBus} implementation that may be used for event buses that should post their

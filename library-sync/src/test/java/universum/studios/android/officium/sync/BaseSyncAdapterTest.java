@@ -21,22 +21,22 @@ package universum.studios.android.officium.sync;
 import android.accounts.Account;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import universum.studios.android.test.local.RobolectricTestCase;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsInstanceOf.instanceOf;
-import static org.hamcrest.core.IsNot.not;
-import static org.hamcrest.core.IsNull.notNullValue;
-import static org.hamcrest.core.IsNull.nullValue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -48,7 +48,7 @@ public final class BaseSyncAdapterTest extends RobolectricTestCase {
 
 	@Test public void testEventDispatcher() {
 		// Arrange:
-		final TestAdapter adapter = new TestAdapter(application);
+		final TestAdapter adapter = new TestAdapter(context);
 		final BaseSyncAdapter.EventDispatcher mockDispatcher = mock(BaseSyncAdapter.EventDispatcher.class);
 		// Act + Assert:
 		adapter.setEventDispatcher(mockDispatcher);
@@ -57,7 +57,7 @@ public final class BaseSyncAdapterTest extends RobolectricTestCase {
 
 	@Test public void testGlobalSyncHandler() {
 		// Arrange:
-		final TestAdapter adapter = new TestAdapter(application);
+		final TestAdapter adapter = new TestAdapter(context);
 		final SyncHandler mockHandler = mock(SyncHandler.class);
 		// Act + Assert:
 		adapter.setGlobalSyncHandler(mockHandler);
@@ -66,7 +66,7 @@ public final class BaseSyncAdapterTest extends RobolectricTestCase {
 
 	@Test public void testRegisterTaskHandler() {
 		// Arrange:
-		final TestAdapter adapter = new TestAdapter(application);
+		final TestAdapter adapter = new TestAdapter(context);
 		final TestSyncHandler handler = new TestSyncHandler(12);
 		// Act:
 		adapter.registerTaskHandler(handler);
@@ -77,7 +77,7 @@ public final class BaseSyncAdapterTest extends RobolectricTestCase {
 
 	@Test public void testRegisterTaskHandlerWhenAlreadyRegistered() {
 		// Arrange:
-		final TestAdapter adapter = new TestAdapter(application);
+		final TestAdapter adapter = new TestAdapter(context);
 		final TestSyncHandler handler = new TestSyncHandler(12);
 		// Act:
 		adapter.registerTaskHandler(handler);
@@ -90,7 +90,7 @@ public final class BaseSyncAdapterTest extends RobolectricTestCase {
 
 	@Test public void testUnregisterTaskHandler() {
 		// Arrange:
-		final TestAdapter adapter = new TestAdapter(application);
+		final TestAdapter adapter = new TestAdapter(context);
 		final TestSyncHandler handler = new TestSyncHandler(12);
 		adapter.registerTaskHandler(handler);
 		// Act:
@@ -102,7 +102,7 @@ public final class BaseSyncAdapterTest extends RobolectricTestCase {
 
 	@Test public void testUnregisterTaskHandlerWhenAlreadyUnregistered() {
 		// Arrange:
-		final TestAdapter adapter = new TestAdapter(application);
+		final TestAdapter adapter = new TestAdapter(context);
 		final TestSyncHandler handler = new TestSyncHandler(12);
 		adapter.registerTaskHandler(handler);
 		// Act:
@@ -115,7 +115,7 @@ public final class BaseSyncAdapterTest extends RobolectricTestCase {
 
 	@Test public void testUnregisterTaskHandlerWhenNotRegistered() {
 		// Arrange:
-		final TestAdapter adapter = new TestAdapter(application);
+		final TestAdapter adapter = new TestAdapter(context);
 		// Act:
 		adapter.unregisterTaskHandler(new TestSyncHandler(12));
 	}
@@ -123,7 +123,7 @@ public final class BaseSyncAdapterTest extends RobolectricTestCase {
 	@SuppressWarnings("ConstantConditions")
 	@Test public void testOnPerformSyncAsGlobal() {
 		// Arrange:
-		final TestAdapter adapter = new TestAdapter(application);
+		final TestAdapter adapter = new TestAdapter(context);
 		final TestTaskStateChangeListener taskStateChangeListener = new TestTaskStateChangeListener();
 		adapter.setOnTaskStateChangeListener(taskStateChangeListener);
 		final Account account = new Account("TestName", "TestType");
@@ -150,7 +150,7 @@ public final class BaseSyncAdapterTest extends RobolectricTestCase {
 	@SuppressWarnings("ConstantConditions")
 	@Test public void testOnPerformSyncAsSecondary() {
 		// Arrange:
-		final TestAdapter adapter = new TestAdapter(application);
+		final TestAdapter adapter = new TestAdapter(context);
 		final TestTaskStateChangeListener taskStateChangeListener = new TestTaskStateChangeListener();
 		adapter.setOnTaskStateChangeListener(taskStateChangeListener);
 		final Account account = new Account("TestName", "TestType");
@@ -176,7 +176,7 @@ public final class BaseSyncAdapterTest extends RobolectricTestCase {
 
 	@Test public void testCreateTaskFromExtras() {
 		// Arrange:
-		final TestAdapter adapter = new TestAdapter(application);
+		final TestAdapter adapter = new TestAdapter(context);
 		final Bundle extras = new Bundle();
 		extras.putInt(SyncExtras.EXTRA_TASK_ID, 3);
 		extras.putString(SyncExtras.EXTRA_TASK_REQUEST_BODY, "{count: 15}");
@@ -190,7 +190,7 @@ public final class BaseSyncAdapterTest extends RobolectricTestCase {
 
 	@Test public void testOnPerformGlobalSyncForOperation() {
 		// Arrange:
-		final TestAdapter adapter = new TestAdapter(application);
+		final TestAdapter adapter = new TestAdapter(context);
 		final TestSyncHandler handler = new TestSyncHandler(SyncTask.DEFAULT_ID);
 		adapter.setGlobalSyncHandler(handler);
 		final TestTaskStateChangeListener taskStateChangeListener = new TestTaskStateChangeListener();
@@ -240,7 +240,7 @@ public final class BaseSyncAdapterTest extends RobolectricTestCase {
 
 	@Test public void testOnPerformGlobalSyncForOperationWhichFails() {
 		// Arrange:
-		final TestAdapter adapter = new TestAdapter(application);
+		final TestAdapter adapter = new TestAdapter(context);
 		final TestSyncHandler handler = new TestSyncHandler(SyncTask.DEFAULT_ID);
 		handler.exceptionToThrow = new IllegalStateException();
 		adapter.setGlobalSyncHandler(handler);
@@ -273,7 +273,7 @@ public final class BaseSyncAdapterTest extends RobolectricTestCase {
 
 	@Test public void testOnPerformGlobalSyncForOperationWithoutRegisteredHandler() {
 		// Arrange:
-		final TestAdapter adapter = new TestAdapter(application);
+		final TestAdapter adapter = new TestAdapter(context);
 		final TestTaskStateChangeListener taskStateChangeListener = new TestTaskStateChangeListener();
 		adapter.setOnTaskStateChangeListener(taskStateChangeListener);
 		final SyncOperation operation = createSyncOperation(SyncTask.DEFAULT_ID);
@@ -288,7 +288,7 @@ public final class BaseSyncAdapterTest extends RobolectricTestCase {
 
 	@Test public void testOnGlobalSyncFinished() {
 		// Arrange:
-		final TestAdapter adapter = new TestAdapter(application);
+		final TestAdapter adapter = new TestAdapter(context);
 		final TestEventDispatcher dispatcher = new TestEventDispatcher();
 		adapter.setEventDispatcher(dispatcher);
 		final SyncOperation syncOperation = createSyncOperation(1);
@@ -305,7 +305,7 @@ public final class BaseSyncAdapterTest extends RobolectricTestCase {
 
 	@Test public void testOnGlobalSyncFailed() {
 		// Arrange:
-		final TestAdapter adapter = new TestAdapter(application);
+		final TestAdapter adapter = new TestAdapter(context);
 		final TestEventDispatcher dispatcher = new TestEventDispatcher();
 		adapter.setEventDispatcher(dispatcher);
 		final SyncOperation syncOperation = createSyncOperation(1);
@@ -322,7 +322,7 @@ public final class BaseSyncAdapterTest extends RobolectricTestCase {
 
 	@Test public void testOnPerformSyncForOperation() {
 		// Arrange:
-		final TestAdapter adapter = new TestAdapter(application);
+		final TestAdapter adapter = new TestAdapter(context);
 		final TestSyncHandler firstHandler = new TestSyncHandler(11);
 		final TestSyncHandler secondHandler = new TestSyncHandler(12);
 		adapter.registerTaskHandler(firstHandler);
@@ -398,7 +398,7 @@ public final class BaseSyncAdapterTest extends RobolectricTestCase {
 
 	@Test public void testOnPerformSyncForOperationWhichFails() {
 		// Arrange:
-		final TestAdapter adapter = new TestAdapter(application);
+		final TestAdapter adapter = new TestAdapter(context);
 		final TestSyncHandler handler = new TestSyncHandler(12);
 		handler.exceptionToThrow = new IllegalStateException();
 		adapter.registerTaskHandler(handler);
@@ -431,7 +431,7 @@ public final class BaseSyncAdapterTest extends RobolectricTestCase {
 
 	@Test public void testOnPerformSyncForOperationWithoutRegisteredHandler() {
 		// Arrange:
-		final TestAdapter adapter = new TestAdapter(application);
+		final TestAdapter adapter = new TestAdapter(context);
 		final TestTaskStateChangeListener taskStateChangeListener = new TestTaskStateChangeListener();
 		adapter.setOnTaskStateChangeListener(taskStateChangeListener);
 		final SyncOperation operation = createSyncOperation(12);
@@ -446,7 +446,7 @@ public final class BaseSyncAdapterTest extends RobolectricTestCase {
 
 	@Test public void testOnSyncFinished() {
 		// Arrange:
-		final TestAdapter adapter = new TestAdapter(application);
+		final TestAdapter adapter = new TestAdapter(context);
 		final TestEventDispatcher dispatcher = new TestEventDispatcher();
 		adapter.setEventDispatcher(dispatcher);
 		final SyncOperation syncOperation = createSyncOperation(1);
@@ -463,7 +463,7 @@ public final class BaseSyncAdapterTest extends RobolectricTestCase {
 
 	@Test public void testOnSyncFailed() {
 		// Arrange:
-		final TestAdapter adapter = new TestAdapter(application);
+		final TestAdapter adapter = new TestAdapter(context);
 		final TestEventDispatcher dispatcher = new TestEventDispatcher();
 		adapter.setEventDispatcher(dispatcher);
 		final SyncOperation syncOperation = createSyncOperation(1);
@@ -481,7 +481,7 @@ public final class BaseSyncAdapterTest extends RobolectricTestCase {
 	@Test public void testChangeTaskStateToAndNotify() {
 		// Arrange:
 		final OnSyncTaskStateChangeListener mockListener = mock(OnSyncTaskStateChangeListener.class);
-		final TestAdapter adapter = new TestAdapter(application);
+		final TestAdapter adapter = new TestAdapter(context);
 		adapter.setOnTaskStateChangeListener(mockListener);
 		final SyncOperation syncOperation = createSyncOperation(1);
 		// Act:
@@ -496,7 +496,7 @@ public final class BaseSyncAdapterTest extends RobolectricTestCase {
 
 	@Test public void testChangeTaskStateToAndNotifyWithoutListener() {
 		// Arrange:
-		final TestAdapter adapter = new TestAdapter(application);
+		final TestAdapter adapter = new TestAdapter(context);
 		final SyncOperation syncOperation = createSyncOperation(1);
 		// Act + Assert:
 		adapter.changeTaskStateToAndNotify(syncOperation, SyncTask.PENDING);
@@ -507,7 +507,7 @@ public final class BaseSyncAdapterTest extends RobolectricTestCase {
 
 	@Test public void testDispatchSyncEvent() {
 		// Arrange:
-		final TestAdapter adapter = new TestAdapter(application);
+		final TestAdapter adapter = new TestAdapter(context);
 		final BaseSyncAdapter.EventDispatcher mockDispatcher = mock(BaseSyncAdapter.EventDispatcher.class);
 		adapter.setEventDispatcher(mockDispatcher);
 		// Act:
@@ -519,7 +519,7 @@ public final class BaseSyncAdapterTest extends RobolectricTestCase {
 
 	@Test public void testDispatchSyncEventWithoutDispatcher() {
 		// Arrange:
-		final TestAdapter adapter = new TestAdapter(application);
+		final TestAdapter adapter = new TestAdapter(context);
 		// Act:
 		adapter.dispatchSyncEvent("Event");
 	}

@@ -19,8 +19,9 @@
 package universum.studios.android.officium.sync;
 
 import android.accounts.Account;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
 
 /**
  * SyncOperation contains data that are describing a specific synchronization request to be executed

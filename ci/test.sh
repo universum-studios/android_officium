@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-./gradlew :library:testDebugUnitTest
+./gradlew :library:testReleaseUnitTest

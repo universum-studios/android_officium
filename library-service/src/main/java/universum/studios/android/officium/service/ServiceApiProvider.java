@@ -18,7 +18,7 @@
  */
 package universum.studios.android.officium.service;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * ServiceApiProvider represents a provider that can provide a single instance of {@link ServiceApi}

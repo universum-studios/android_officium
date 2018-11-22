@@ -36,15 +36,15 @@
   </issueManagement>
   <dependencies>
     <dependency>
-      <groupId>com.android.support</groupId>
-      <artifactId>support-annotations</artifactId>
-      <version>27.1.1</version>
+      <groupId>androidx.annotation</groupId>
+      <artifactId>annotation</artifactId>
+      <version>1.0.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>universum.studios.android</groupId>
       <artifactId>logger</artifactId>
-      <version>1.0.1</version>
+      <version>1.1.0</version>
       <type>aar</type>
       <scope>compile</scope>
       <exclusions>

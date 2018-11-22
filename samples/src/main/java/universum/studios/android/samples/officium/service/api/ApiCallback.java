@@ -18,11 +18,10 @@
  */
 package universum.studios.android.samples.officium.service.api;
 
-import android.support.annotation.NonNull;
-
-import universum.studios.android.samples.officium.event.EventBusProvider;
+import androidx.annotation.NonNull;
 import universum.studios.android.officium.service.ServiceCallback;
 import universum.studios.android.officium.service.ServiceError;
+import universum.studios.android.samples.officium.event.EventBusProvider;
 
 /**
  * @author Martin Albedinsky

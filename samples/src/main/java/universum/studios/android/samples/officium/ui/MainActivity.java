@@ -18,10 +18,10 @@
  */
 package universum.studios.android.samples.officium.ui;
 
-import android.support.annotation.NonNull;
 import android.view.MenuItem;
 
-import universum.studios.android.support.samples.ui.SamplesNavigationActivity;
+import androidx.annotation.NonNull;
+import universum.studios.android.samples.ui.SamplesNavigationActivity;
 
 /**
  * @author Martin Albedinsky

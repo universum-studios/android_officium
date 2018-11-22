@@ -36,9 +36,9 @@
   </issueManagement>
   <dependencies>
     <dependency>
-      <groupId>com.android.support</groupId>
-      <artifactId>support-annotations</artifactId>
-      <version>27.1.1</version>
+      <groupId>androidx.annotation</groupId>
+      <artifactId>annotation</artifactId>
+      <version>1.0.0</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>

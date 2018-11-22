@@ -21,11 +21,10 @@ package universum.studios.android.officium.account;
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorResponse;
 import android.content.Context;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
 
 import org.junit.Test;
 
+import androidx.annotation.NonNull;
 import universum.studios.android.test.local.RobolectricTestCase;
 
 import static org.mockito.Mockito.mock;
@@ -40,14 +39,14 @@ public final class BaseAccountAuthenticatorTest extends RobolectricTestCase {
 
 	@Test public void testInstantiation() {
 		// Act:
-		new TestAuthenticator(application);
+		new TestAuthenticator(context);
 	}
 
 	@Test(expected = UnsupportedOperationException.class)
 	public void testEditProperties() {
 		// Arrange:
 		final AccountAuthenticatorResponse mockResponse = mock(AccountAuthenticatorResponse.class);
-		final BaseAccountAuthenticator authenticator = new TestAuthenticator(application);
+		final BaseAccountAuthenticator authenticator = new TestAuthenticator(context);
 		// Act:
 		authenticator.editProperties(mockResponse, ACCOUNT_TYPE);
 	}

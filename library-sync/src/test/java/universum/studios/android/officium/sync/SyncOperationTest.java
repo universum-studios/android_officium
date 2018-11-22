@@ -24,8 +24,8 @@ import org.junit.Test;
 
 import universum.studios.android.test.local.RobolectricTestCase;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
 
 /**
  * @author Martin Albedinsky

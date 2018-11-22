@@ -18,7 +18,7 @@
  */
 package universum.studios.android.officium.event;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * Unified interface for event bus that may be used to wrap a specific implementation of bus.

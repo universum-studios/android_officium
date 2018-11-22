@@ -4,7 +4,8 @@ Android Officium
 [![CircleCI](https://circleci.com/gh/universum-studios/android_officium.svg?style=shield)](https://circleci.com/gh/universum-studios/android_officium)
 [![Codecov](https://codecov.io/gh/universum-studios/android_officium/branch/master/graph/badge.svg)](https://codecov.io/gh/universum-studios/android_officium)
 [![Codacy](https://api.codacy.com/project/badge/Grade/b46e219849d04733ab3cb29beeb0cfaf)](https://www.codacy.com/app/universum-studios/android_officium?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=universum-studios/android_officium&amp;utm_campaign=Badge_Grade)
-[![Android](https://img.shields.io/badge/android-8.1-blue.svg)](https://developer.android.com/about/versions/oreo/android-8.1.html)
+[![Android](https://img.shields.io/badge/android-9.0-blue.svg)](https://developer.android.com/about/versions/pie/android-9.0)
+[![Android Jetpack](https://img.shields.io/badge/Android-Jetpack-brightgreen.svg)](https://developer.android.com/jetpack)
 
 Account, synchronization, services and events management for the Android platform.
 
@@ -30,14 +31,15 @@ Supported down to the **Android [API Level 14](http://developer.android.com/abou
 
 ### Dependencies ###
 
-- [`com.android.support:support-annotations`](https://developer.android.com/topic/libraries/support-library/packages.html#annotations)
-- [`com.squareup:otto`](http://square.github.io/otto/)
+- [`androidx.annotation:annotation`](https://developer.android.com/jetpack/androidx)
+- [`com.google.code.gson:gson`](https://github.com/google/gson)
 - [`com.squareup.okio:okio`](https://github.com/square/okio)
 - [`com.squareup.okhttp3:okhttp`](http://square.github.io/okhttp/)
 - [`com.squareup.retrofit2:retrofit`](http://square.github.io/retrofit/)
-- [`com.google.code.gson:gson`](https://github.com/google/gson)
-- [`universum.studios.android:logger`](https://github.com/universum-studios/android_logger)
+- [`com.squareup:otto`](http://square.github.io/otto/)
 - [`universum.studios.android:crypto`](https://github.com/universum-studios/android_crypto)
+- [`universum.studios.android:logger`](https://github.com/universum-studios/android_logger)
+- [`universum.studios.android:utils`](https://github.com/universum-studios/android_utils)
 
 ## [License](https://github.com/universum-studios/android_officium/blob/master/LICENSE.md) ##
 

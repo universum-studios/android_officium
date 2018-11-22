@@ -18,13 +18,12 @@
  */
 package universum.studios.android.officium.service.adapter;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import retrofit2.Call;
 import retrofit2.CallAdapter;
 import retrofit2.Retrofit;

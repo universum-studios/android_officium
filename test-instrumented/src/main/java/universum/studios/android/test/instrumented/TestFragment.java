@@ -1,6 +1,6 @@
 /*
  * *************************************************************************************************
- *                                 Copyright 2016 Universum Studios
+ *                                 Copyright 2018 Universum Studios
  * *************************************************************************************************
  *                  Licensed under the Apache License, Version 2.0 (the "License")
  * -------------------------------------------------------------------------------------------------
@@ -16,23 +16,39 @@
  * See the License for the specific language governing permissions and limitations under the License.
  * *************************************************************************************************
  */
-package universum.studios.android.samples.officium.service.api;
+package universum.studios.android.test.instrumented;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
-import retrofit2.Call;
-import retrofit2.http.Body;
-import retrofit2.http.POST;
-import universum.studios.android.samples.officium.service.api.request.ApiSignInRequest;
-import universum.studios.android.samples.officium.service.api.response.ApiSignInResponse;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 /**
+ * Simple fragment that may be used in <b>Android instrumented tests</b>.
+ *
  * @author Martin Albedinsky
  */
-interface Services {
+public class TestFragment extends Fragment {
 
-	/*
-	 * AUTHENTICATION ==============================================================================
+	/**
+	 * Id of the TestFragment's content view.
 	 */
+	public static final int VIEW_ID = android.R.id.empty;
 
-	@POST("user/signIn") Call<ApiSignInResponse> signIn(@Body @NonNull ApiSignInRequest request);
+	/**
+	 */
+	@Override @NonNull public View onCreateView(
+			@NonNull final LayoutInflater inflater,
+			@Nullable final ViewGroup container,
+			@Nullable final Bundle savedInstanceState
+	) {
+		final FrameLayout contentView = new FrameLayout(inflater.getContext());
+		contentView.setId(VIEW_ID);
+		return contentView;
+	}
 }
