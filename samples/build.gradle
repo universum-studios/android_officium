@@ -15,35 +15,40 @@ android {
         targetSdkVersion config.build.targetSdkVersion
     }
 
-    final String keystoreDirPath = "${System.getenv('ANDROID_UNIVERSUM_KEYSTORE')}/sample"
-    final File keystoreFile = new File("${keystoreDirPath}/keystore.jks")
-    final File keyPropertiesFile = new File("${keystoreDirPath}/key.properties")
-    if (keystoreFile.exists() && keyPropertiesFile.exists()) {
-        final Properties keyProperties = new Properties()
-        keyProperties.load(new FileInputStream(keyPropertiesFile))
-        //
-        // The key.properties file should contain following data (each property at a single line):
-        // <pre>
-        // store.password=STORE_PASSWORD
-        // key.alias=ALIAS_OF_THE_KEY
-        // key.password=KEY_PASSWORD
-        // </pre>
-        //
-        signingConfigs {
-            production {
+    signingConfigs {
+        sample {
+            final String keystoreDirPath = "${System.getenv('ANDROID_UNIVERSUM_KEYSTORE')}/sample"
+            final File keystoreFile = new File("${keystoreDirPath}/keystore.jks")
+            final File keyPropertiesFile = new File("${keystoreDirPath}/key.properties")
+            if (keystoreFile.exists() && keyPropertiesFile.exists()) {
+                final Properties keyProperties = new Properties()
+                keyProperties.load(new FileInputStream(keyPropertiesFile))
+                //
+                // The key.properties file should contain following data (each property at a single line):
+                // <pre>
+                // store.password=STORE_PASSWORD
+                // key.alias=ALIAS_OF_THE_KEY
+                // key.password=KEY_PASSWORD
+                // </pre>
+                //
                 storeFile keystoreFile
                 storePassword keyProperties['store.password']
                 keyAlias keyProperties['key.alias']
                 keyPassword keyProperties['key.password']
+            } else {
+                storeFile file("signing/debug.keystore")
+                storePassword 'android'
+                keyAlias 'androiddebugkey'
+                keyPassword 'android'
             }
         }
+    }
 
-        buildTypes {
-            release {
-                signingConfig signingConfigs.production
-                minifyEnabled true
-                proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            }
+    buildTypes {
+        release {
+            signingConfig signingConfigs.sample
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
@@ -67,20 +72,25 @@ repositories {
 
 dependencies {
     implementation project(':library')
-    implementation deps.android.support.design
-    implementation deps.android.support.vectorDrawable
-    implementation deps.android.support.recyclerView
-    implementation deps.other.butterknife
-    annotationProcessor deps.other.butterknifeProcessor
-    implementation deps.universum.studios.support.samples
+    implementation deps.androidx.annotation.annotation
+    implementation deps.androidx.appcompat.appcompat
+    implementation deps.androidx.drawerlayout.drawerlayout
+    implementation deps.androidx.recyclerview.recyclerview
+    implementation deps.androidx.vectordrawable.vectordrawable
+    implementation deps.google.android.material.material
+    implementation deps.google.gson
+    implementation deps.universum.studios.crypto
     implementation deps.universum.studios.logger
     implementation deps.universum.studios.utils
-    implementation deps.universum.studios.crypto
-    implementation deps.other.squareupOtto
-    implementation deps.other.squareupOkio
-    implementation deps.other.squareupOkhttp
-    implementation(deps.other.squareupRetrofit) {
+    implementation deps.universum.studios.samples
+    implementation deps.universum.studios.widgetAdapters
+    implementation deps.universum.studios.fragments
+    implementation deps.other.squareup.otto
+    implementation deps.other.squareup.okio
+    implementation deps.other.squareup.okhttp
+    implementation(deps.other.squareup.retrofit) {
         exclude module: 'okhttp'
     }
-    implementation deps.other.googleGson
+    implementation deps.other.butterknife.butterknife
+    annotationProcessor deps.other.butterknife.processor
 }

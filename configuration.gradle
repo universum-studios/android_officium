@@ -20,20 +20,21 @@
 def libraryConfig = [
         name   : 'officium',
         version: [
-                production : '2.0.0-beta1',
-                development: '2.0.0-beta1'
+                production : '2.0.0-beta2',
+                development: '2.0.0-beta2'
         ]
 ]
 
 def buildConfig = [
-        compileSdkVersion: 27,
+        compileSdkVersion: 28,
         minSdkVersion    : 14,
-        targetSdkVersion : 27,
-        buildToolsVersion: '27.0.3'
+        targetSdkVersion : 28,
+        buildToolsVersion: '28.0.3'
 ]
 
 def testConfig = [
-        instrumentationRunner: [androidJUnit: 'android.support.test.runner.AndroidJUnitRunner']
+        instrumentationRunner: [androidJUnit: 'android.support.test.runner.AndroidJUnitRunner'],
+        coverageToolVersion  : '0.8.2'
 ]
 
 def githubConfig = [
@@ -84,9 +85,7 @@ def javadocConfig = [
         reference: [online: "https://universum-studios.github.io/android_${libraryConfig.name}/reference/1.x"]
 ]
 
-def mavenConfig = [
-        localUrl: System.getenv('MAVEN_URL_LOCAL')
-]
+def mavenConfig = [localUrl: System.getenv('MAVEN_URL_LOCAL')]
 
 def bintrayConfig = [
         publish: false,
@@ -97,7 +96,7 @@ def bintrayConfig = [
                 vcsUrl            : "${pomConfig.project.url}.git",
                 labels            : ['android', 'account', 'synchronization', 'service', 'event'],
                 versionName       : pomConfig.version,
-                versionDescription: 'Major beta-1 release.',
+                versionDescription: 'Major beta-2 release with regular dependencies update.',
                 versionTag        : "v${pomConfig.version}"
         ]
 ]

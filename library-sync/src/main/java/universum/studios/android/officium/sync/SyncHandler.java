@@ -19,9 +19,9 @@
 package universum.studios.android.officium.sync;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import universum.studios.android.officium.OfficiumLogging;
 
 /**

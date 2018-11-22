@@ -18,10 +18,10 @@
  */
 package universum.studios.android.officium;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import universum.studios.android.logging.Logger;
 import universum.studios.android.logging.SimpleLogger;
 

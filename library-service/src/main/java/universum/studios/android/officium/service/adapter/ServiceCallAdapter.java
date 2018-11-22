@@ -18,10 +18,9 @@
  */
 package universum.studios.android.officium.service.adapter;
 
-import android.support.annotation.NonNull;
-
 import java.lang.reflect.Type;
 
+import androidx.annotation.NonNull;
 import retrofit2.Call;
 import retrofit2.CallAdapter;
 import universum.studios.android.officium.service.ServiceCall;

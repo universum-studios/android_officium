@@ -18,14 +18,15 @@
  */
 package universum.studios.android.test.local;
 
-import android.app.Application;
-import android.support.annotation.CallSuper;
-import android.support.annotation.NonNull;
+import android.content.Context;
 
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
+
+import androidx.annotation.CallSuper;
+import androidx.annotation.NonNull;
+import androidx.test.core.app.ApplicationProvider;
 
 /**
  * Class that may be used to group <b>suite of Android tests</b> to be executed on a local <i>JVM</i>
@@ -39,23 +40,23 @@ import org.robolectric.annotation.Config;
 public abstract class RobolectricTestCase extends LocalTestCase {
 
 	/**
-	 * Application instance accessible via {@link RuntimeEnvironment#application}.
+	 * Application context instance obtained via {@link ApplicationProvider#getApplicationContext}.
 	 * <p>
 	 * It is always valid between calls to {@link #beforeTest()} and {@link #afterTest()}.
 	 */
-	@NonNull protected Application application;
+	@NonNull protected Context context;
 
 	/**
 	 */
 	@Override @CallSuper public void beforeTest() throws Exception {
 		super.beforeTest();
-		this.application = RuntimeEnvironment.application;
+		this.context = ApplicationProvider.getApplicationContext();
 	}
 
 	/**
 	 */
 	@Override @CallSuper public void afterTest() throws Exception {
 		super.afterTest();
-		this.application = null;
+		this.context = null;
 	}
 }

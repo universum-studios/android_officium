@@ -18,11 +18,10 @@
  */
 package universum.studios.android.officium.service;
 
-import android.support.annotation.NonNull;
-
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import androidx.annotation.NonNull;
 import okhttp3.Call;
 import okhttp3.Connection;
 import okhttp3.Interceptor;

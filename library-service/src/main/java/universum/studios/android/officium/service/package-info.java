@@ -21,5 +21,6 @@
  * server. This layer may be then used by the rest of an Android application.
  *
  * @author Martin Albedinsky
+ * @since 1.0
  */
 package universum.studios.android.officium.service;

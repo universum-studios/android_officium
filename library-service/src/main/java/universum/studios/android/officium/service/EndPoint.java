@@ -18,7 +18,7 @@
  */
 package universum.studios.android.officium.service;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * <b>This interface is deprecated and will be removed in the final production release of version 2.0.0.</b>

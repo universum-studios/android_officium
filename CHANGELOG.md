@@ -1,10 +1,15 @@
 Change-Log
 ===============
-> Regular configuration update: _27.03.2018_
+> Regular configuration update: _01.11.2018_
 
 More **detailed changelog** for each respective version may be viewed by pressing on a desired _version's name_.
 
 ## Version 2.0 ##
+
+### 2.0.0-beta2 ###
+> upcoming
+
+- Regular **dependencies update** (mainly to use new artifacts from **Android Jetpack**).
 
 ### [2.0.0-beta1](https://github.com/universum-studios/android_officium/releases/tag/2.0.0-beta1) ###
 > 31.05.2018
