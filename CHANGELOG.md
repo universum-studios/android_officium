@@ -6,8 +6,8 @@ More **detailed changelog** for each respective version may be viewed by pressin
 
 ## Version 2.0 ##
 
-### 2.0.0-beta2 ###
-> upcoming
+### [2.0.0-beta2](https://github.com/universum-studios/android_officium/releases/tag/2.0.0-beta2) ###
+> 22.11.2018
 
 - Regular **dependencies update** (mainly to use new artifacts from **Android Jetpack**).
 
