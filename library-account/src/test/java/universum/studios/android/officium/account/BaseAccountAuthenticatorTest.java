@@ -21,6 +21,7 @@ package universum.studios.android.officium.account;
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorResponse;
 import android.content.Context;
+import android.os.Bundle;
 
 import org.junit.Test;
 
@@ -55,7 +56,7 @@ public final class BaseAccountAuthenticatorTest extends RobolectricTestCase {
 	public void testAddAccount() throws Exception {
 		// Arrange:
 		final AccountAuthenticatorResponse mockResponse = mock(AccountAuthenticatorResponse.class);
-		final BaseAccountAuthenticator authenticator = new TestAuthenticator(application);
+		final BaseAccountAuthenticator authenticator = new TestAuthenticator(context);
 		// Act
 		authenticator.addAccount(
 				mockResponse,
@@ -71,7 +72,7 @@ public final class BaseAccountAuthenticatorTest extends RobolectricTestCase {
 		// Arrange:
 		final AccountAuthenticatorResponse mockResponse = mock(AccountAuthenticatorResponse.class);
 		final Account mockAccount = mock(Account.class);
-		final BaseAccountAuthenticator authenticator = new TestAuthenticator(application);
+		final BaseAccountAuthenticator authenticator = new TestAuthenticator(context);
 		// Act:
 		authenticator.confirmCredentials(mockResponse, mockAccount, Bundle.EMPTY);
 		// Assert:
@@ -83,7 +84,7 @@ public final class BaseAccountAuthenticatorTest extends RobolectricTestCase {
 		// Arrange:
 		final AccountAuthenticatorResponse mockResponse = mock(AccountAuthenticatorResponse.class);
 		final Account mockAccount = mock(Account.class);
-		final BaseAccountAuthenticator authenticator = new TestAuthenticator(application);
+		final BaseAccountAuthenticator authenticator = new TestAuthenticator(context);
 		// Act:
 		authenticator.getAuthToken(mockResponse, mockAccount, "oAuth", Bundle.EMPTY);
 		// Assert:
@@ -93,7 +94,7 @@ public final class BaseAccountAuthenticatorTest extends RobolectricTestCase {
 	@Test(expected = UnsupportedOperationException.class)
 	public void testGetAuthTokenLabel() {
 		// Arrange:
-		final BaseAccountAuthenticator authenticator = new TestAuthenticator(application);
+		final BaseAccountAuthenticator authenticator = new TestAuthenticator(context);
 		// Act:
 		authenticator.getAuthTokenLabel(ACCOUNT_TYPE);
 	}
@@ -103,7 +104,7 @@ public final class BaseAccountAuthenticatorTest extends RobolectricTestCase {
 		// Arrange:
 		final AccountAuthenticatorResponse mockResponse = mock(AccountAuthenticatorResponse.class);
 		final Account mockAccount = mock(Account.class);
-		final BaseAccountAuthenticator authenticator = new TestAuthenticator(application);
+		final BaseAccountAuthenticator authenticator = new TestAuthenticator(context);
 		// Act:
 		authenticator.updateCredentials(mockResponse, mockAccount, "oAuth", Bundle.EMPTY);
 		// Assert:
@@ -115,7 +116,7 @@ public final class BaseAccountAuthenticatorTest extends RobolectricTestCase {
 		// Arrange:
 		final AccountAuthenticatorResponse mockResponse = mock(AccountAuthenticatorResponse.class);
 		final Account mockAccount = mock(Account.class);
-		final BaseAccountAuthenticator authenticator = new TestAuthenticator(application);
+		final BaseAccountAuthenticator authenticator = new TestAuthenticator(context);
 		// Act:
 		authenticator.hasFeatures(mockResponse, mockAccount, new String[]{});
 		// Assert:

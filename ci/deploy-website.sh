@@ -6,7 +6,7 @@ set -ex
 TEMP_DIR=website-temp
 LIBRARY_NAME=officium
 LIBRARY_ARTIFACT_NAME="${LIBRARY_NAME//_/-}"
-LIBRARY_VERSION=2.0.0-beta2
+LIBRARY_VERSION=2.0.0-beta3
 LIBRARY_REPO="git@github.com:universum-studios/android_${LIBRARY_NAME}.git"
 LIBRARY_DIR_ARTIFACTS=../artifacts/universum/studios/android/${LIBRARY_ARTIFACT_NAME}/${LIBRARY_VERSION}/
 LIBRARY_JAVADOC_FILE_NAME="${LIBRARY_ARTIFACT_NAME}-${LIBRARY_VERSION}-javadoc.jar"

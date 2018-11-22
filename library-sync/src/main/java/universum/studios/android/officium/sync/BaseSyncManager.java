@@ -41,7 +41,7 @@ import universum.studios.android.officium.OfficiumLogging;
  * method. If a global synchronization should be performed, call {@link #requestGlobalSync()}.
  * Base synchronization manager class implements also some configuration methods like to start/stop
  * automatic synchronization via {@link #startAutomaticSync()} and {@link #stopAutomaticSync()} or
- * to check whether there are some synchronization operations pending or active via {@link #isSyncPedning()}
+ * to check whether there are some synchronization operations pending or active via {@link #isSyncPending()}
  * and {@link #isSyncPending()}. Any additional methods may be freely implemented by the inheritance
  * hierarchies.
  *

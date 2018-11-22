@@ -20,7 +20,7 @@
 def libraryConfig = [
         name   : 'officium',
         version: [
-                production : '2.0.0-beta2',
+                production : '2.0.0-beta3',
                 development: '2.0.0-beta3'
         ]
 ]
@@ -96,7 +96,7 @@ def bintrayConfig = [
                 vcsUrl            : "${pomConfig.project.url}.git",
                 labels            : ['android', 'account', 'synchronization', 'service', 'event'],
                 versionName       : pomConfig.version,
-                versionDescription: 'Major beta-2 release with regular dependencies update.',
+                versionDescription: 'Major beta-3 release with regular dependencies update.',
                 versionTag        : "v${pomConfig.version}"
         ]
 ]
