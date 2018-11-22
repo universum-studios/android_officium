@@ -20,15 +20,15 @@ package universum.studios.android.officium.sync;
 
 import android.accounts.Account;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import org.junit.Test;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import universum.studios.android.test.instrumented.InstrumentedTestCase;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
 
 /**
  * @author Martin Albedinsky

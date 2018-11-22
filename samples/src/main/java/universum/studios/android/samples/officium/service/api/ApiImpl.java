@@ -18,8 +18,7 @@
  */
 package universum.studios.android.samples.officium.service.api;
 
-import android.support.annotation.NonNull;
-
+import androidx.annotation.NonNull;
 import universum.studios.android.officium.service.ServiceApi;
 import universum.studios.android.officium.service.ServiceManager;
 import universum.studios.android.samples.officium.service.api.request.ApiSignInRequest;

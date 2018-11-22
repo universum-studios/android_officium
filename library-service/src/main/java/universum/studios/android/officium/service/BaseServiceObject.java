@@ -18,13 +18,14 @@
  */
 package universum.studios.android.officium.service;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * Base implementation of {@link ServiceObject} for objects associated to services.
  *
  * @author Martin Albedinsky
+ * @since 1.0
  */
 public abstract class BaseServiceObject implements ServiceObject {
 

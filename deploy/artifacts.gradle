@@ -21,12 +21,21 @@ final boolean isModule = project.name.startsWith('library-') && !project.name.en
 final boolean isPrimaryModule = project.name == 'library'
 
 /**
+ * Prepares (copies and renames classes.jar) file for classesJar task for extraction.
+ */
+task prepareClassesZip(type: Copy) {
+    from "${buildDir}/intermediates/packaged-classes/release/classes.jar"
+    into "${buildDir}/tmp/release"
+    rename { fileName -> fileName.replace('.jar', '.zip')}
+}
+
+/**
  * Bundles project's classes into a .jar! file.
  */
-task classesJar(type: Jar, dependsOn: ":${project.name}:bundleRelease") {
+task classesJar(type: Jar, dependsOn: [":${project.name}:bundleReleaseAar", prepareClassesZip]) {
     group 'artifact'
     description "Bundles classes into 'artifact.jar' like file."
-    from "${buildDir}/intermediates/classes/release"
+    from zipTree("${buildDir}/tmp/release/classes.zip")
 }
 
 /**
@@ -43,15 +52,15 @@ task generateJavadoc(type: Javadoc) {
             links config.javadoc.reference.online
         }
         links 'https://docs.oracle.com/javase/8/docs/api'
-        links 'https://developer.android.com/reference'
-        links 'https://developer.android.com/reference/android/support'
-        links 'http://square.github.io/otto/1.x/otto'
+        links 'https://developer.android.com/reference/packages'
+        links 'https://developer.android.com/reference/androidx/packages'
         links 'https://square.github.io/okhttp/3.x/okhttp'
         links 'https://square.github.io/retrofit/2.x/retrofit'
+        links 'http://square.github.io/otto/1.x/otto'
         links 'https://www.javadoc.io/doc/com.google.code.gson/gson/2.8.2'
+        links 'https://universum-studios.github.io/android_crypto/reference/0.x'
         links 'https://universum-studios.github.io/android_logger/reference/1.x'
         links 'https://universum-studios.github.io/android_utils/reference/2.x'
-        links 'https://universum-studios.github.io/android_crypto/reference/0.x'
     }
     // Append class path with dependencies.
     classpath += files(android.getBootClasspath().join(File.pathSeparator))

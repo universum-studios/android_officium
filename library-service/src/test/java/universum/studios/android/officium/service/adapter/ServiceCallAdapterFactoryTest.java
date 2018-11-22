@@ -18,24 +18,23 @@
  */
 package universum.studios.android.officium.service.adapter;
 
-import android.support.annotation.NonNull;
-
 import org.junit.Test;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
+import androidx.annotation.NonNull;
 import retrofit2.Call;
 import retrofit2.CallAdapter;
 import retrofit2.Retrofit;
 import universum.studios.android.officium.service.ServiceCall;
 import universum.studios.android.test.local.LocalTestCase;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNot.not;
-import static org.hamcrest.core.IsNull.notNullValue;
-import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertEquals;
 
 /**

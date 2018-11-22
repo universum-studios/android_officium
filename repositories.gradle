@@ -1,18 +1,16 @@
 // Defines repositories used across the library project.
-def projectRepos = [
-        artifacts: "${rootProject.rootDir}/artifacts"
-]
+def projectRepos = [artifacts: "${rootProject.rootDir}/artifacts"]
 
 def bintrayRepos = [
         typesafeMavenReleases: 'http://dl.bintray.com/typesafe/maven-releases',
         universum            : [studios: [
                 android: 'http://dl.bintray.com/universum-studios/android',
-                gradle : 'http://dl.bintray.com/universum-studios/gradle',
+                gradle : 'http://dl.bintray.com/universum-studios/gradle'
         ]]
 ]
 
 ext.repos = [
         "project": projectRepos,
         "bintray": bintrayRepos,
-        "jitpack": 'https://jitpack.io',
+        "jitpack": 'https://jitpack.io'
 ]

@@ -18,11 +18,10 @@
  */
 package universum.studios.android.officium.service;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
 import java.io.IOException;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import okhttp3.ResponseBody;
 import retrofit2.Converter;
 

@@ -6,7 +6,7 @@
 #-keepnames class ** { *; }
 
 # BASE SETUP =======================================================================================
--keepattributes Signature, Exceptions, InnerClasses, EnclosingMethod, *Annotation*
+-keepattributes Signature, Exceptions, InnerClasses, EnclosingMethod
 # Remove all none release loggs.
 -assumenosideeffects class android.util.Log {
     public static *** d(...);

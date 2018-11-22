@@ -18,14 +18,12 @@
  */
 package universum.studios.android.samples.officium.service.api;
 
-import android.support.annotation.NonNull;
-
-import universum.studios.android.samples.officium.service.api.request.ApiSignInRequest;
-import universum.studios.android.samples.officium.service.api.response.ApiSignInResponse;
-
+import androidx.annotation.NonNull;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
+import universum.studios.android.samples.officium.service.api.request.ApiSignInRequest;
+import universum.studios.android.samples.officium.service.api.response.ApiSignInResponse;
 
 /**
  * @author Martin Albedinsky

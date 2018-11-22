@@ -18,7 +18,7 @@
  */
 package universum.studios.android.officium.service;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * ServiceApi represents a <b>facade</b> for services provided by a remote server.

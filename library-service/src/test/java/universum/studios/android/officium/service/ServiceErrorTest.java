@@ -18,24 +18,23 @@
  */
 package universum.studios.android.officium.service;
 
-import android.support.annotation.NonNull;
-
 import com.google.gson.Gson;
 
 import org.junit.Test;
 
 import java.io.IOException;
 
+import androidx.annotation.NonNull;
 import okhttp3.MediaType;
 import okhttp3.ResponseBody;
 import retrofit2.Converter;
 import universum.studios.android.test.local.LocalTestCase;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.notNullValue;
-import static org.hamcrest.core.IsNull.nullValue;
-import static org.hamcrest.core.StringStartsWith.startsWith;
 
 /**
  * @author Martin Albedinsky

@@ -55,6 +55,10 @@ android {
     lintOptions {
         abortOnError false
     }
+
+    testOptions {
+        unitTests.includeAndroidResources = true
+    }
 }
 
 /**
@@ -67,17 +71,17 @@ repositories {
 
 dependencies {
     // PRODUCTION ----------------------------------------------------------------------------------
-    implementation deps.android.support.annotations
+    implementation deps.androidx.annotation.annotation
+    implementation deps.google.gson
     implementation deps.universum.studios.logger
     implementation deps.universum.studios.utils
     implementation deps.universum.studios.crypto
-    implementation deps.other.squareupOtto
-    implementation deps.other.squareupOkio
-    implementation deps.other.squareupOkhttp
-    implementation(deps.other.squareupRetrofit) {
+    implementation deps.other.squareup.otto
+    implementation deps.other.squareup.okio
+    implementation deps.other.squareup.okhttp
+    implementation(deps.other.squareup.retrofit) {
         exclude module: 'okhttp'
     }
-    implementation deps.other.googleGson
 
     // DEVELOPMENT ---------------------------------------------------------------------------------
     // None.

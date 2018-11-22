@@ -21,6 +21,10 @@ android {
     lintOptions {
         abortOnError false
     }
+
+    testOptions {
+        unitTests.includeAndroidResources = true
+    }
 }
 
 /**
@@ -33,9 +37,9 @@ repositories {
 
 dependencies {
     // PRODUCTION ----------------------------------------------------------------------------------
-    implementation deps.android.support.annotations
-    implementation deps.other.googleGson
-    releaseImplementation deps.modules.libraryCore
+    implementation deps.androidx.annotation.annotation
+    implementation deps.google.gson
+    releaseImplementation deps.library.core
 
     // DEVELOPMENT ---------------------------------------------------------------------------------
     debugApi project(':library-core')

@@ -19,7 +19,8 @@
 package universum.studios.android.officium.sync;
 
 import android.accounts.Account;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 /**
  * Listener that may be used to receive callback whenever a state of a particular {@link SyncTask}
