@@ -20,17 +20,17 @@ package universum.studios.android.officium.sync;
 
 import android.accounts.Account;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import org.junit.Test;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import universum.studios.android.test.local.RobolectricTestCase;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.notNullValue;
-import static org.hamcrest.core.IsNull.nullValue;
 
 /**
  * @author Martin Albedinsky
@@ -60,7 +60,7 @@ public final class SyncHandlerTest extends RobolectricTestCase {
 				.task(new SyncTask.Builder<TestRequest>(1).request(new TestRequest(12)).build())
 				.build();
 		// Act:
-		handler.handleSync(application, operation);
+		handler.handleSync(context, operation);
 		// Assert:
 		assertThat(handler.hasBeenOnHandleSyncInvoked(), is(true));
 		assertThat(handler.hasBeenOnSyncErrorInvoked(), is(false));
@@ -78,7 +78,7 @@ public final class SyncHandlerTest extends RobolectricTestCase {
 				.task(SyncTask.EMPTY)
 				.build();
 		// Act:
-		handler.handleSync(application, operation);
+		handler.handleSync(context, operation);
 		// Assert:
 		assertThat(handler.hasBeenOnHandleSyncInvoked(), is(true));
 		assertThat(handler.hasBeenOnSyncErrorInvoked(), is(false));
@@ -95,7 +95,7 @@ public final class SyncHandlerTest extends RobolectricTestCase {
 				.task(SyncTask.EMPTY)
 				.build();
 		// Act:
-		handler.handleSync(application, operation);
+		handler.handleSync(context, operation);
 		// Assert:
 		assertThat(handler.hasBeenOnHandleSyncInvoked(), is(true));
 		assertThat(handler.hasBeenOnSyncErrorInvoked(), is(true));

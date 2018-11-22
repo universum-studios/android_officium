@@ -30,9 +30,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresPermission;
 import android.text.TextUtils;
 
 import java.io.IOException;
@@ -41,6 +38,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresPermission;
 import universum.studios.android.crypto.Crypto;
 import universum.studios.android.crypto.Encrypto;
 import universum.studios.android.crypto.util.CryptographyUtils;

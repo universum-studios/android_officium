@@ -18,9 +18,9 @@
  */
 package universum.studios.android.officium.event;
 
-import android.support.annotation.NonNull;
-
 import com.squareup.otto.Bus;
+
+import androidx.annotation.NonNull;
 
 /**
  * An {@link EventBus} implementation that wraps {@link Bus} provided by the <b><a href="http://square.github.io/otto/">Otto</a></b>

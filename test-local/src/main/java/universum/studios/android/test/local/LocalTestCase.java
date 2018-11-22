@@ -18,10 +18,10 @@
  */
 package universum.studios.android.test.local;
 
-import android.support.annotation.CallSuper;
-
 import org.junit.After;
 import org.junit.Before;
+
+import androidx.annotation.CallSuper;
 
 /**
  * Class that may be used to group <b>suite of tests</b> to be executed on a local <i>JVM</i>.

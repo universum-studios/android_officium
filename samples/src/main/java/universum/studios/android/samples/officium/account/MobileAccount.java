@@ -18,9 +18,8 @@
  */
 package universum.studios.android.samples.officium.account;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import universum.studios.android.officium.account.UserAccount;
 
 /**
@@ -28,11 +27,11 @@ import universum.studios.android.officium.account.UserAccount;
  */
 public final class MobileAccount extends UserAccount {
 
-	public MobileAccount(@NonNull String name) {
+	public MobileAccount(@NonNull final String name) {
 		this(name, null);
 	}
 
-	public MobileAccount(@NonNull String name, @Nullable String password) {
+	public MobileAccount(@NonNull final String name, @Nullable final String password) {
 		super(name, password);
 	}
 }

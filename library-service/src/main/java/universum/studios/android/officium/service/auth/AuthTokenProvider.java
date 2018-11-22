@@ -18,7 +18,7 @@
  */
 package universum.studios.android.officium.service.auth;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 /**
  * Interface for providers that can provide an instance of authorization token.

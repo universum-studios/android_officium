@@ -18,8 +18,7 @@
  */
 package universum.studios.android.samples.officium.sync;
 
-import android.support.annotation.NonNull;
-
+import androidx.annotation.NonNull;
 import universum.studios.android.samples.officium.event.EventBusProvider;
 
 /**

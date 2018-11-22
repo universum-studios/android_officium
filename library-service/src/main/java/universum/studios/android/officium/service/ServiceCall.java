@@ -18,11 +18,10 @@
  */
 package universum.studios.android.officium.service;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.VisibleForTesting;
-
 import java.io.IOException;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 import okhttp3.Request;
 import retrofit2.Call;
 import retrofit2.Callback;

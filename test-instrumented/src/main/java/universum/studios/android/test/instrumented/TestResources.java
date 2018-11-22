@@ -20,11 +20,12 @@ package universum.studios.android.test.instrumented;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.support.annotation.NonNull;
-import android.support.annotation.StringDef;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.StringDef;
 
 /**
  * Utility class for instrumented tests which provides methods that may be used to access test resources.
@@ -141,6 +142,7 @@ public final class TestResources {
 	 * @param resourceName Name of the resource for which to resolve its identifier.
 	 * @return Resolved identifier which may be used to obtain value of the desired resource from
 	 * resources or {@link #NO_RESOURCE} if no such resource was found.
+	 *
 	 * @see Resources#getIdentifier(String, String, String)
 	 */
 	public static int resourceIdentifier(@NonNull final Context context, @ResourceType final String resourceType, @NonNull final String resourceName) {

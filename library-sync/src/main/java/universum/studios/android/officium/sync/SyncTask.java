@@ -22,16 +22,17 @@ import android.accounts.Account;
 import android.content.ContentProviderClient;
 import android.content.SyncResult;
 import android.os.Bundle;
-import android.support.annotation.IntDef;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.VisibleForTesting;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+
+import androidx.annotation.IntDef;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 
 /**
  * Task that can be used to request synchronization via implementation of {@link BaseSyncManager}.

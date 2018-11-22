@@ -12,9 +12,9 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.0'
-        classpath 'com.vanniktech:gradle-android-junit-jacoco-plugin:0.11.0'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0'
+        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.vanniktech:gradle-android-junit-jacoco-plugin:0.13.0'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
         classpath 'universum.studios.gradle:github-plugin:1.1.2'
     }
 }
@@ -32,11 +32,21 @@ allprojects {
 /**
  * All projects global tasks =======================================================================
  */
+
 /**
  * Task that cleans build directory of the root project.
  */
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+/**
+ * Task that assembles release variant of all library modules.
+ */
+task assembleReleaseLibrary() {
+    group 'build'
+    description 'Assembles release variant of all library modules.'
+    subprojects.findAll { if (it.name.startsWith("library")) dependsOn ":${it.name}:assembleRelease" }
 }
 
 /**
@@ -74,7 +84,7 @@ task deployToBintray() {
 /**
  * Task that deploys (uploads) the primary library module up to the GitHub repository.
  */
-task deployToGitHub(dependsOn: ':library:githubUploadProductionRelease') {
+task deployToGitHub(dependsOn: ':library:githubUploadBetaRelease') {
     group 'deploy'
     description 'Deploys primary artifact of the library up to the GitHub repository.'
 }

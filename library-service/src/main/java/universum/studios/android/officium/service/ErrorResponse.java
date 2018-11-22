@@ -18,7 +18,7 @@
  */
 package universum.studios.android.officium.service;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * A {@link ServiceResponse} that may be used to parse body of response send by a server that

@@ -50,8 +50,8 @@ github {
                 overwrite true
             }
             beta {
-                tagName "${config.pom.version}-beta1"
-                releaseName "${config.pom.version}-beta1"
+                tagName "${config.pom.version}-beta2"
+                releaseName "${config.pom.version}-beta2"
                 releaseBody file("${projectDir}/github/release-body-beta.md").text
                 draft true
                 preRelease true

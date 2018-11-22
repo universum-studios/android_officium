@@ -20,12 +20,13 @@ package universum.studios.android.officium.sync;
 
 import android.accounts.Account;
 import android.os.Bundle;
-import android.support.annotation.IntDef;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+
+import androidx.annotation.IntDef;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * Event that can be fired/post for receivers that listen for state of a concrete synchronization

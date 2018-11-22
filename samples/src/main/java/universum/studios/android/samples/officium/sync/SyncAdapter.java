@@ -19,8 +19,8 @@
 package universum.studios.android.samples.officium.sync;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 
+import androidx.annotation.NonNull;
 import universum.studios.android.officium.sync.BaseSyncAdapter;
 
 /**

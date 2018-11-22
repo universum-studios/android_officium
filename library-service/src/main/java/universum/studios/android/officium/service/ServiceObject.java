@@ -18,7 +18,7 @@
  */
 package universum.studios.android.officium.service;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * Interface for objects that may be associated with services and theirs requests. A service to which
