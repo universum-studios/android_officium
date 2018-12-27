@@ -7,6 +7,12 @@ Android Officium
 [![Android](https://img.shields.io/badge/android-9.0-blue.svg)](https://developer.android.com/about/versions/pie/android-9.0)
 [![Android Jetpack](https://img.shields.io/badge/Android-Jetpack-brightgreen.svg)](https://developer.android.com/jetpack)
 
+## ! MOVED ! ##
+
+**> This library has been moved to a new [location](https://bitbucket.org/android-universum/officium). <**
+
+---
+
 Account, synchronization, services and events management for the Android platform.
 
 For more information please visit the **[Wiki](https://github.com/universum-studios/android_officium/wiki)**.
